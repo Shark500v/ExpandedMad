@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">ExpandedMad</string>
+    <string name="app_name">Mad Expenses</string>
     <string name="title_expense_detail">Expense Detail</string>
 </resources>
