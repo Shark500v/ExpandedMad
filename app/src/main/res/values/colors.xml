@@ -1,6 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary1">#3F51B5</color>
+    <color name="colorPrimaryDark1">#303F9F</color>
+    <color name="colorAccent1">#FF4081</color>
+    <!--ho aggiunto le paletts di colori create da AleCatto-->
+    <color name="colorPrimary">#6fa7db</color>
+    <color name="colorPrimaryDark">#2d70ab</color>
+    <color name="colorAccent">#FFc778</color>
+    <!--colori opachi-->
+    <color name="colorPrimary2">#1D52FF</color>
+    <color name="colorPrimaryDark2">#002293</color>
+    <color name="colorAccent2">#FFb000</color>
+    <!--colori pastello-->
+    <color name="colorPrimary3">#7ab6d0</color>
+    <color name="colorPrimaryDark3">#5194b1</color>
+    <color name="colorAccent3">#FFcb91</color>
+    <!--colori scuri-->
+    <color name="colorPrimary4">#091d5d</color>
+    <color name="colorPrimaryDark4">#041343</color>
+    <color name="colorAccent4">#895f00</color>
+    <!--colori brillanti-->
+    <color name="colorPrimary5">#007bcc</color>
+    <color name="colorPrimaryDark5">#005b97</color>
+    <color name="colorAccent5">#FF8e00</color>
+    <!--colori chiari-->
+    <color name="colorPrimary6">#b3d8ef</color>
+    <color name="colorPrimaryDark6">#85b9da</color>
+    <color name="colorAccent6">#FFe1bb</color>
+    <!--suggerito da google-->
+    <color name="colorPrimary7">#3f52b5</color>
+    <color name="colorPrimaryDark7">#2036aa</color>
+    <color name="colorAccent7">#FFc841</color>
+
 </resources>
