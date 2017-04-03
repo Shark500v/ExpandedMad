@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.polito.madinblack.expandedmad.dummy.DummyContent;
+import com.polito.madinblack.expandedmad.dummy.Group;
 
 /**
  * A fragment representing a single Expense detail screen.
@@ -17,6 +18,8 @@ import com.polito.madinblack.expandedmad.dummy.DummyContent;
  * in two-pane mode (on tablets) or a {@link ExpenseDetailActivity}
  * on handsets.
  */
+
+//ho fatto dei cambiamenti anche in questa classe, non ho ben capito come funziona e come si incastra con le altre
 public class ExpenseDetailFragment extends Fragment {
     /**
      * The fragment argument representing the item ID that this fragment
@@ -27,7 +30,7 @@ public class ExpenseDetailFragment extends Fragment {
     /**
      * The dummy content this fragment is presenting.
      */
-    private DummyContent.DummyItem mItem;
+    private Group.GroupElements mItem;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -44,7 +47,7 @@ public class ExpenseDetailFragment extends Fragment {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
+            mItem = Group.Group_MAP.get(getArguments().getString(ARG_ITEM_ID));
 
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
@@ -55,8 +58,7 @@ public class ExpenseDetailFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.expense_detail, container, false);
 
         // Show the dummy content as text in a TextView.

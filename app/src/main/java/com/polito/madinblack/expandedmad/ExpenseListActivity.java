@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 
 import com.polito.madinblack.expandedmad.dummy.DummyContent;
+import com.polito.madinblack.expandedmad.dummy.Group;
 
 import java.util.List;
 
@@ -47,8 +48,8 @@ public class ExpenseListActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                //qui bisogna aggiungere un nuovo gruppo, in questo momento lo faccio nel modo semplice
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
         });
 
@@ -65,50 +66,48 @@ public class ExpenseListActivity extends AppCompatActivity {
             // If this view is present, then the
             // activity should be in two-pane mode.
             mTwoPane = true;
-        }
+        }   //sugli smartphone dentro l'if non si entra mai !!!!
     }
 
     //tecnicamente si poteva anche gestire sopra questa funzione, direttamente nel main
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(DummyContent.ITEMS));
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(Group.Groups));
     }
 
-    //questa calsse la usa per fare il managing della lista che deve mostrare
+    //questa classe la usa per fare il managing della lista che deve mostrare
     public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<DummyContent.DummyItem> mValues;
+        private final List<Group.GroupElements> mValues;
 
-        public SimpleItemRecyclerViewAdapter(List<DummyContent.DummyItem> items) {
-            mValues = items;
+        public SimpleItemRecyclerViewAdapter(List<Group.GroupElements> groups) {
+            mValues = groups;
         }
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.expense_list_content, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.expense_list_content, parent, false);
             return new ViewHolder(view);
         }
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mItem = mValues.get(position);
+            holder.mItem = mValues.get(position);   //mValues.get(position) rappresenta un singolo elemento della nostra lista di gruppi
             holder.mIdView.setText(mValues.get(position).id);
             holder.mContentView.setText(mValues.get(position).content);
+            //sopra vengono settati i tre campi che costituisco le informazioni di ogni singolo gruppo, tutti pronti per essere mostriti nella gui
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mTwoPane) {
+                    if (mTwoPane) { //per i tablet
                         Bundle arguments = new Bundle();
                         arguments.putString(ExpenseDetailFragment.ARG_ITEM_ID, holder.mItem.id);
                         ExpenseDetailFragment fragment = new ExpenseDetailFragment();
                         fragment.setArguments(arguments);
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.expense_detail_container, fragment)
-                                .commit();
-                    } else {
+                        getSupportFragmentManager().beginTransaction().replace(R.id.expense_detail_container, fragment).commit();
+                    } else { //questo di sotto vale per gli smartphone (sia potrait che landscape mode)
                         Context context = v.getContext();
-                        Intent intent = new Intent(context, ExpenseDetailActivity.class);
+                        Intent intent = new Intent(context, ExpenseDetailActivity.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
                         intent.putExtra(ExpenseDetailFragment.ARG_ITEM_ID, holder.mItem.id);
 
                         context.startActivity(intent);
@@ -120,13 +119,14 @@ public class ExpenseListActivity extends AppCompatActivity {
         @Override
         public int getItemCount() {
             return mValues.size();
-        }
+        }   //ritorna il numero di elementi nella lista
 
+        //questa è una classe di supporto che viene usata per creare la vista a schermo, non ho ben capito come funziona
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
             public final TextView mIdView;
             public final TextView mContentView;
-            public DummyContent.DummyItem mItem;
+            public Group.GroupElements mItem;
 
             public ViewHolder(View view) {
                 super(view);

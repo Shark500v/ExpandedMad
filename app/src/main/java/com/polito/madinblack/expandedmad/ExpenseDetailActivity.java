@@ -16,6 +16,7 @@ import android.view.MenuItem;
  * item details are presented side-by-side with a list of items
  * in a {@link ExpenseListActivity}.
  */
+//questa classe viene richiamata dopo che clicco su di un gruppo
 public class ExpenseDetailActivity extends AppCompatActivity {
 
     @Override
@@ -29,8 +30,7 @@ public class ExpenseDetailActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
         });
 
@@ -53,13 +53,10 @@ public class ExpenseDetailActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(ExpenseDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(ExpenseDetailFragment.ARG_ITEM_ID));
+            arguments.putString(ExpenseDetailFragment.ARG_ITEM_ID, getIntent().getStringExtra(ExpenseDetailFragment.ARG_ITEM_ID));
             ExpenseDetailFragment fragment = new ExpenseDetailFragment();
             fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.expense_detail_container, fragment)
-                    .commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.expense_detail_container, fragment).commit();
         }
     }
 
