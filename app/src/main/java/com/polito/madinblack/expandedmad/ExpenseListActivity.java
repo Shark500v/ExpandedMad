@@ -50,8 +50,12 @@ public class ExpenseListActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //qui bisogna aggiungere un nuovo gruppo, in questo momento lo faccio nel modo semplice
                 Group.AddNewGroup();
-                //la funzione non funziona, secondo me bisogna fare il refresh della lista a video
+                //devo njotificare la vista che qualcosa è cambiato
+                RecyclerView recyclerView = (RecyclerView)findViewById(R.id.expense_list);
+                recyclerView.getAdapter().notifyDataSetChanged();
+                //questo stampa al fondo la scritta
                 Snackbar.make(view, "New Group added!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+
             }
         });
 
