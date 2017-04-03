@@ -13,6 +13,9 @@ import java.util.Map;
  */
 public class DummyContent {
 
+    //classe che non deve essere usata, la sto tenendo come prova per capire come gestire il tutto
+    //ho creato la classe Group dove sto gestendo i gruppi per la prima pagina da mostrare
+
     /**
      * An array of sample (dummy) items.
      */
