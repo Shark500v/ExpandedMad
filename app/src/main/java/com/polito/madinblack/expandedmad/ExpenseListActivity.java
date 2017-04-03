@@ -49,6 +49,7 @@ public class ExpenseListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //qui bisogna aggiungere un nuovo gruppo, in questo momento lo faccio nel modo semplice
+                Group.AddNewGroup();
                 Snackbar.make(view, "New Group added!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
         });

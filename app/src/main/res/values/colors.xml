@@ -4,10 +4,10 @@
     <color name="colorPrimaryDark1">#303F9F</color>
     <color name="colorAccent1">#FF4081</color>
     <!--ho aggiunto le paletts di colori create da AleCatto-->
-    <color name="colorPrimary">#6fa8db</color>
-    <color name="colorPrimaryDark">#4c8cc6</color>
-    <color name="colorPrimaryLight">#9ac5ec</color>
-    <color name="colorAccent">#FFc778</color>
+    <color name="colorPrimary8">#6fa8db</color>
+    <color name="colorPrimaryDark8">#4c8cc6</color>
+    <color name="colorPrimaryLight8">#9ac5ec</color>
+    <color name="colorAccent8">#FFc778</color>
     <color name="colorAccentLight">#FFd7a0</color>
     <!--colori opachi-->
     <color name="colorPrimary2">#1D52FF</color>
@@ -45,5 +45,14 @@
     <color name="colorPrimaryLight7">#5e6ec7</color>
     <color name="colorAccent7">#FFc841</color>
     <color name="colorAccentLight7">#ffd264</color>
+    <!--Palettes da google-->
+    <color name="colorPrimary">#009688</color>
+    <color name="colorPrimaryDark">#00796B</color>
+    <color name="colorPrimaryLight">#B2DFDB</color>
+    <color name="colorAccent">#FF9800</color>
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#757575</color>
+    <color name="icons">#FFFFFF</color>
+    <color name="divider">#BDBDBD</color>
 
 </resources>

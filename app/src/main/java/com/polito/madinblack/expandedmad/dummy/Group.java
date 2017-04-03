@@ -19,7 +19,7 @@ public class Group {
 
     private static final int COUNT = 30;    //mi dice quanti elementi mostrare nella lista che vado a creare
 
-    public int CountNewGrup = COUNT; //da usare quando aggiungo un nuovo gruppo
+    public static int CountNewGrup = COUNT; //da usare quando aggiungo un nuovo gruppo
 
     static {
         // Add some sample groups.
@@ -49,7 +49,7 @@ public class Group {
     }
 
     //aggiungo un nuovo elemento alla lista
-    public void AddNewGroup(){
+    public static void AddNewGroup(){
         addGroup(createNewGroup(++CountNewGrup));
     }
 
