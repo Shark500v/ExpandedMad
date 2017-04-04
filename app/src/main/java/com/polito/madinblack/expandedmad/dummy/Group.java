@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 /**
  * Created by Francesco on 03/04/2017.
@@ -13,9 +12,9 @@ import java.util.StringTokenizer;
 
 public class Group {
 
-    public static final List<GroupElements> Groups = new ArrayList<GroupElements>();
+    public static List<GroupElements> Groups = new ArrayList<GroupElements>();
 
-    public static final Map<String, GroupElements> Group_MAP = new HashMap<String, GroupElements>();
+    public static Map<String, GroupElements> Group_MAP = new HashMap<String, GroupElements>();
 
     private static final int COUNT = 30;    //mi dice quanti elementi mostrare nella lista che vado a creare
 
@@ -43,7 +42,7 @@ public class Group {
         StringBuilder builder = new StringBuilder();    //costruisce una stringa appendendo elementi
         builder.append("Details about Group: ").append(position);
 
-        builder.append("\n\nInsert here the Expenses list");
+        builder.append("\n\nInsert here the Expenses list.");
 
         return builder.toString();
     }
@@ -58,17 +57,24 @@ public class Group {
         public final String id;
         public final String content;
         public final String details;
+        private Expense ExpenseList;
 
         //costruttore
         public GroupElements(String id, String content, String details) {
             this.id = id;
             this.content = content;
             this.details = details;
+            this.ExpenseList = new Expense();   //each group should has an expenses list
         }
 
         @Override
         public String toString() {
             return content;
         }
+
+        public Expense getExpenseList() {
+            return ExpenseList;
+        }
+
     }
 }
