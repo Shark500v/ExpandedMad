@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.design.widget.FloatingActionButton;
@@ -51,8 +52,9 @@ public class ExpenseListActivity extends AppCompatActivity {
                 //prova di aggiunta spesa, da implementare
                 //Group.AddNewGroup();
                 //devo notificare la vista che qualcosa è cambiato
+                //accedo prima alla Recycler View e poi all'Adapter per notificare l'aggiunta
                 RecyclerView recyclerView = (RecyclerView)findViewById(R.id.expense_list);
-                recyclerView.getAdapter().notifyDataSetChanged();   //rendo visibili le modifiche apportate
+                recyclerView.getAdapter().notifyItemInserted(recyclerView.getAdapter().getItemCount());
                 //questo stampa al fondo la scritta
                 Snackbar.make(view, "New Group added!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
 
@@ -60,9 +62,10 @@ public class ExpenseListActivity extends AppCompatActivity {
         });
 
         //in questo punto il codice prende la lista principale e la mostra come recyclerview
-        View recyclerView = findViewById(R.id.expense_list);
+        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.expense_list);
         assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
+        setupRecyclerView(recyclerView);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         //questa riga di codice vale solo per gli schermi grandi, mi piacerebbe settare il fatto di poter vedere la doppia schermata quando
         //mettiamo lo schermo in landscape mode, secondo me i settaggi si mettono quì, ma ci sono cose più importanti da fare
