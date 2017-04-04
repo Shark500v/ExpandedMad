@@ -13,6 +13,7 @@ import java.util.StringTokenizer;
 
 public class Group {
 
+    //QUESTION: perché static & final?
     public static final List<GroupElements> Groups = new ArrayList<GroupElements>();
 
     public static final Map<String, GroupElements> Group_MAP = new HashMap<String, GroupElements>();
