@@ -18,6 +18,8 @@ public class Group {
     public Group(String name){
         this.name = name;
         this.id = counter++;
+
+
     }
 
     public void addExpense(Expense e){
@@ -30,6 +32,11 @@ public class Group {
     public void addUser(User user){
         users.put(user.getId(), user);
 
+
+    }
+
+    public Long getId(){
+        return id;
 
     }
 

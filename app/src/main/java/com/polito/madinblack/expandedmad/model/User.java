@@ -7,12 +7,18 @@ public class User {
     private static long counter = 0; /*counter to assign an id*/
     private final Long id;
 
+
+
     public User(String name, String surname){
         this.name = name;
         this.surname = surname;
         this.id = counter++;
         globalBalance = 0;
     }
+
+
+
+
 
     public String getName() {
         return name;
