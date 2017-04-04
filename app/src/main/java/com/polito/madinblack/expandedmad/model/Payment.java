@@ -17,7 +17,6 @@ public class Payment {
         this.paid    = paid;
         this.toPaid  = toPaid;
 
-
     }
 
     public User getUser() {

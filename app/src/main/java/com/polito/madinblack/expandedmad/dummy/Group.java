@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 /**
  * Created by Francesco on 03/04/2017.
@@ -58,12 +57,18 @@ public class Group {
         public final String id;
         public final String content;
         public final String details;
+        private Expense expensesList;
+
+        public Expense getList() {
+            return expensesList;
+        }
 
         //costruttore
         public GroupElements(String id, String content, String details) {
             this.id = id;
             this.content = content;
             this.details = details;
+            this.expensesList = new Expense();
         }
 
         @Override

@@ -1,9 +1,12 @@
 package com.polito.madinblack.expandedmad;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
@@ -11,12 +14,13 @@ import android.support.v7.widget.Toolbar;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-
-import com.polito.madinblack.expandedmad.dummy.DummyContent;
+import com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity;
+import com.polito.madinblack.expandedmad.dummy.Expense;
 import com.polito.madinblack.expandedmad.dummy.Group;
 
 import java.util.List;
@@ -37,29 +41,43 @@ public class ExpenseListActivity extends AppCompatActivity {
      */
     private boolean mTwoPane;
 
+    private Expense eItem;  //quello che vado a mostrare in questa activity è una lista di spese
+    private Group.GroupElements groupSelected;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expense_list);
+
+        Intent beginner = getIntent();
+        groupSelected = Group.Group_MAP.get(beginner.getStringExtra("index"));  //recupero l'id del gruppo selezionato, e quindi il gruppo stesso
+        eItem = (Expense) groupSelected.getList();
+
         //toolbar settings
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(groupSelected.content);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab2);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //prova di aggiunta spesa, da implementare
-                //Group.AddNewGroup();
+                eItem.AddNewExpense();
                 //devo notificare la vista che qualcosa è cambiato
                 //accedo prima alla Recycler View e poi all'Adapter per notificare l'aggiunta
                 RecyclerView recyclerView = (RecyclerView)findViewById(R.id.expense_list);
                 recyclerView.getAdapter().notifyItemInserted(recyclerView.getAdapter().getItemCount());
                 //questo stampa al fondo la scritta
-                Snackbar.make(view, "New Group added!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                Snackbar.make(view, "New Expense added!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
 
             }
         });
+
+        // Show the Up button in the action bar. (bottone indietro nella pagina 2 che è quella che mostra la lista delle spese)
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         //in questo punto il codice prende la lista principale e la mostra come recyclerview
         RecyclerView recyclerView = (RecyclerView)findViewById(R.id.expense_list);
@@ -78,18 +96,29 @@ public class ExpenseListActivity extends AppCompatActivity {
         }   //sugli smartphone dentro l'if non si entra mai !!!!
     }
 
+    //funzine relativa all'utilizzo della toolbar e dei pulsanti che sono su di essa
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {  //home è un id standard già predefinito
+            navigateUpTo(new Intent(this, GroupListActivity.class));    //definisco il parente verso cui devo tornare indietro
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     //tecnicamente si poteva anche gestire sopra questa funzione, direttamente nel main
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(Group.Groups));
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(eItem.list)); //secondo me crasha qui
     }
 
     //questa classe la usa per fare il managing della lista che deve mostrare
     public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<Group.GroupElements> mValues;
+        private final List<Expense.ExpenseElement> mValues;
 
-        public SimpleItemRecyclerViewAdapter(List<Group.GroupElements> groups) {
-            mValues = groups;
+        public SimpleItemRecyclerViewAdapter(List<Expense.ExpenseElement> expenses) {
+            mValues = expenses;
         }
 
         @Override
@@ -100,7 +129,7 @@ public class ExpenseListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mItem = mValues.get(position);   //mValues.get(position) rappresenta un singolo elemento della nostra lista di gruppi
+            holder.mItem = mValues.get(position);   //mValues.get(position) rappresenta un singolo elemento della nostra lista di spese
             holder.mIdView.setText(mValues.get(position).id);
             holder.mContentView.setText(mValues.get(position).content);
             //sopra vengono settati i tre campi che costituisco le informazioni di ogni singolo gruppo, tutti pronti per essere mostriti nella gui
@@ -135,7 +164,7 @@ public class ExpenseListActivity extends AppCompatActivity {
             public final View mView;
             public final TextView mIdView;
             public final TextView mContentView;
-            public Group.GroupElements mItem;
+            public Expense.ExpenseElement mItem;
 
             public ViewHolder(View view) {
                 super(view);

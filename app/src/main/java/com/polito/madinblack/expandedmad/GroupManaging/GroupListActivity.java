@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.polito.madinblack.expandedmad.ExpenseListActivity;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.dummy.Group;
 
@@ -58,6 +60,7 @@ public class GroupListActivity extends AppCompatActivity {
         View recyclerView = findViewById(R.id.group_list);
         assert recyclerView != null;
         setupRecyclerView((RecyclerView) recyclerView);
+
         /*
         //questa riga di codice vale solo per gli schermi grandi, mi piacerebbe settare il fatto di poter vedere la doppia schermata quando
         //mettiamo lo schermo in landscape mode, secondo me i settaggi si mettono quì, ma ci sono cose più importanti da fare
@@ -143,12 +146,12 @@ public class GroupListActivity extends AppCompatActivity {
                         context.startActivity(intent);
                     }
                     */
-                    /*da completare perchè non è implementata la classe dettagli
+                    //da completare perchè non è implementata la classe dettagli
                     Context context = v.getContext();
-                    Intent intent = new Intent(context, GroupDetailActivity.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
-                    intent.putExtra(GroupDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                    Intent intent = new Intent(context, ExpenseListActivity.class); //qui setto la nuova attività da mostrare a schermo dopo che clicco
+                    intent.putExtra("index", holder.mItem.id);    //passo alla nuova activity l'ide del gruppo chè l'utente ha selezionto
 
-                    context.startActivity(intent);*/
+                    context.startActivity(intent);
                 }
             });
         }

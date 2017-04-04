@@ -14,16 +14,16 @@ enum State{constest, accepted}
 public class Expense {
 
     //elementi per ogni lista di expenses
-    public static List<Expense.ExpenseElement> Groups;
-    public static Map<String, Expense.ExpenseElement> Group_MAP;
+    public  static List<Expense.ExpenseElement> list;
+    public  static Map<String, Expense.ExpenseElement> map;
     private static int COUNT;    //mi dice quanti elementi mostrare nella lista che vado a creare
-    public static int CountNewExpense; //da usare quando aggiungo un nuovo gruppo
+    private static int CountNewExpense; //da usare quando aggiungo un nuovo gruppo
 
     //constructor, in questo caso mi serve poichè per ogni gruppo ci sarà una ista di spese, quindi devo inizializzare il tutto
     public Expense() {
 
-        this.Groups = new ArrayList<Expense.ExpenseElement>();
-        this.Group_MAP = new HashMap<String, ExpenseElement>();
+        this.list = new ArrayList<Expense.ExpenseElement>();
+        this.map = new HashMap<String, ExpenseElement>();
         this.COUNT = 13;
         this.CountNewExpense = COUNT;
         //now I have to initialize the list with random elemets
@@ -39,8 +39,8 @@ public class Expense {
     }
 
     private static void addExpense(ExpenseElement e) {
-        Groups.add(e);
-        Group_MAP.put(e.id, e);
+        list.add(e);
+        map.put(e.id, e);
     }
 
     //constructor
@@ -59,7 +59,7 @@ public class Expense {
     }
 
     //aggiungo un nuovo elemento alla lista
-    public static void AddNewGroup(){
+    public static void AddNewExpense(){
         addExpense(createNewExpense(++CountNewExpense));
     }
 
