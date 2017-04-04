@@ -9,6 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".GroupManaging.GroupListActivity"
             android:label="@string/app_name"
@@ -19,6 +20,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".ExpenseListActivity"
             android:label="@string/title_expense_list"
@@ -28,6 +30,27 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity" />
         </activity>
+
+        <activity
+            android:name=".GroupManaging.GroupDetailActivity"
+            android:label="Group Details"
+            android:parentActivityName=".ExpenseListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.polito.madinblack.expandedmad.ExpenseListActivity" />
+        </activity>
+
+        <activity
+            android:name=".ExpenseDetailActivity"
+            android:label="Expense Details"
+            android:parentActivityName=".ExpenseListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.polito.madinblack.expandedmad.ExpenseListActivity" />
+        </activity>
+
     </application>
 
 </manifest>

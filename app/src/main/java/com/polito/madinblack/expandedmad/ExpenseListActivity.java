@@ -6,19 +6,24 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.polito.madinblack.expandedmad.GroupManaging.GroupDetailActivity;
+import com.polito.madinblack.expandedmad.GroupManaging.GroupDetailFragment;
 import com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.dummy.Expense;
 import com.polito.madinblack.expandedmad.dummy.Group;
@@ -40,6 +45,7 @@ public class ExpenseListActivity extends AppCompatActivity {
      * device.
      */
     private boolean mTwoPane;
+    private String index = "index";
 
     private Expense eItem;  //quello che vado a mostrare in questa activity è una lista di spese
     private Group.GroupElements groupSelected;
@@ -52,13 +58,14 @@ public class ExpenseListActivity extends AppCompatActivity {
         Intent beginner = getIntent();
         groupSelected = Group.Group_MAP.get(beginner.getStringExtra("index"));  //recupero l'id del gruppo selezionato, e quindi il gruppo stesso
         eItem = (Expense) groupSelected.getList();
+        index = beginner.getStringExtra("index");
 
         //toolbar settings
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(groupSelected.content);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab2);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,15 +103,37 @@ public class ExpenseListActivity extends AppCompatActivity {
         }   //sugli smartphone dentro l'if non si entra mai !!!!
     }
 
-    //funzine relativa all'utilizzo della toolbar e dei pulsanti che sono su di essa
-    @Override
+    @Override   //lo uso per le icone in alto a destra che posso selezionare
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {  //home è un id standard già predefinito
-            navigateUpTo(new Intent(this, GroupListActivity.class));    //definisco il parente verso cui devo tornare indietro
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                Intent intent = new Intent(this, GroupDetailActivity.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
+                intent.putExtra(GroupDetailFragment.ARG_ITEM_ID, index);
+                startActivity(intent);
+                return true;
+
+            case R.id.home:
+                navigateUpTo(new Intent(this, GroupListActivity.class));    //definisco il parente verso cui devo tornare indietro
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
         }
-        return super.onOptionsItemSelected(item);
+    }
+
+    @Override   //questo serve per il search button
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+
+        // Configure the search info and add any event listeners...
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     //tecnicamente si poteva anche gestire sopra questa funzione, direttamente nel main
