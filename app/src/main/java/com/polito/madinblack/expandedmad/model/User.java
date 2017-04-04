@@ -4,10 +4,13 @@ public class User {
     private String name;
     private String surname;
     private float globalBalance;
+    private static long counter = 0; /*counter to assign an id*/
+    private final Long id;
 
     public User(String name, String surname){
         this.name = name;
         this.surname = surname;
+        this.id = counter++;
         globalBalance = 0;
     }
 
@@ -34,4 +37,6 @@ public class User {
     public void setGlobalBalance(float globalBalance) {
         this.globalBalance = globalBalance;
     }
+
+    public Long getId() { return id; }
 }

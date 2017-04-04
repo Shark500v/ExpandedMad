@@ -1,25 +1,55 @@
 package com.polito.madinblack.expandedmad.model;
 
+import java.util.HashMap;
 import java.util.Map;
 
-enum State{constest, accepted}
-
-//ne creo una nuova con le regole date dal layoute che stiamo segurendo
 
 public class Expense {
+
+    public enum State{CONTEST, ACCEPTED}
+    public enum Tag{FOOD, WATER_BILL, GAS_BILL, LIGHT_BILL, OTHER}
+    public enum Currency{YEN, EURO, DOLLAR, GBP}
+
     private String name;
-    private String tag;
+    private Tag tag;
     private float cost;
     private String description;
-    private String currency;
+    private Currency currency;
     private State state;
-    //a map showing for each user the cost of the expense, maybe to change
-    private Map<User,Float> userCost;
+    private Group group;
 
-    public Expense(String name, String tag, float cost){
+
+
+    private Long id;
+
+
+    private static long counter = 0;
+
+
+    //list of all user partecipating to the Expensive
+    private Map<Long, User> users = new HashMap<>();
+
+    //a map showing for each user the cost of the Payment
+    private Map<Long, Payment> userCost = new HashMap<>();
+
+
+    public Expense(String name, Tag tag, float cost, Group group){
         this.name = name;
         this.tag = tag;
         this.cost = cost;
+        this.group = group;
+
+    }
+
+    public void addUser(User u){
+
+        users.put(u.getId(), u);
+
+    }
+
+    public void addUserCost(User u, Payment payment){
+        userCost.put(u.getId(), payment);
+
     }
 
     public String getName() {
@@ -30,11 +60,11 @@ public class Expense {
         this.name = name;
     }
 
-    public String getTag() {
+    public Tag getTag() {
         return tag;
     }
 
-    public void setTag(String tag) {
+    public void setTag(Tag tag) {
         this.tag = tag;
     }
 
@@ -54,11 +84,12 @@ public class Expense {
         this.description = description;
     }
 
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
-    public void setCurrency(String currency) {
+    /*to modify in order to change cost accordly to new currency*/
+    public void setCurrency(Currency currency) {
         this.currency = currency;
     }
 
@@ -70,11 +101,9 @@ public class Expense {
         this.state = state;
     }
 
-    public Map<User, Float> getUserCost() {
-        return userCost;
+    public Long getId() {
+        return id;
     }
 
-    public void setUserCost(Map<User, Float> userCost) {
-        this.userCost = userCost;
-    }
+
 }
