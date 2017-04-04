@@ -4,6 +4,8 @@ import java.util.Map;
 
 enum State{constest, accepted}
 
+//ne creo una nuova con le regole date dal layoute che stiamo segurendo
+
 public class Expense {
     private String name;
     private String tag;
