@@ -35,8 +35,8 @@
                 android:contentDescription="@string/bill"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
-                android:layout_marginStart="@dimen/text_margin"
+                android:layout_gravity="right"
+                android:layout_marginEnd="@dimen/text_margin"
                 app:srcCompat="@drawable/house_rent"
                 />
 
