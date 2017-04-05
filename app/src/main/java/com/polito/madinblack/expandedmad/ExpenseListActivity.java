@@ -25,6 +25,7 @@ import com.polito.madinblack.expandedmad.GroupManaging.GroupDetailFragment;
 import com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.dummy.Expense;
 import com.polito.madinblack.expandedmad.dummy.Group;
+import com.polito.madinblack.expandedmad.group_members.PersonalDebts;
 
 import java.util.List;
 
@@ -97,6 +98,8 @@ public class ExpenseListActivity extends AppCompatActivity {
 
             case R.id.action_debts:
                 //insert here the connection
+                Intent intent2 = new Intent(this, PersonalDebts.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
+                startActivity(intent2);
                 return true;
 
             default:
