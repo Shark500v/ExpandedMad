@@ -28,7 +28,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.polito.madinblack.expandedmad.ExpenseListActivity" />
+                android:value="com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity" />
         </activity>
 
         <activity
@@ -38,7 +38,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.polito.madinblack.expandedmad.GroupManaging.GroupDetailActivity" />
+                android:value="com.polito.madinblack.expandedmad.ExpenseListActivity" />
         </activity>
 
         <activity
@@ -48,7 +48,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.polito.madinblack.expandedmad.ExpenseDetailActivity" />
+                android:value="com.polito.madinblack.expandedmad.ExpenseListActivity" />
         </activity>
 
     </application>
