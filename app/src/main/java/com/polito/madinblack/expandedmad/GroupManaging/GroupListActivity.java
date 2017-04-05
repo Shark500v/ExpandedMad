@@ -35,8 +35,6 @@ import java.util.List;
 
 public class GroupListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
-    //private boolean mTwoPane;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,18 +71,6 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         View recyclerView = findViewById(R.id.group_list);
         assert recyclerView != null;
         setupRecyclerView((RecyclerView) recyclerView);
-
-        /*
-        //questa riga di codice vale solo per gli schermi grandi, mi piacerebbe settare il fatto di poter vedere la doppia schermata quando
-        //mettiamo lo schermo in landscape mode, secondo me i settaggi si mettono quì, ma ci sono cose più importanti da fare
-        if (findViewById(R.id.group_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
-            mTwoPane = true;
-        }   //sugli smartphone dentro l'if non si entra mai !!!!
-        */
     }
 
     //le due funzioni sottostanti servono al menù laterale che esce
@@ -115,6 +101,8 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
+
+        } else if (id == R.id.nav_addgroup){
 
         }
 
@@ -165,22 +153,6 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    /*
-                    if (mTwoPane) { //per i tablet
-                        Bundle arguments = new Bundle();
-                        arguments.putString(ExpenseDetailFragment.ARG_ITEM_ID, holder.mItem.id);
-                        ExpenseDetailFragment fragment = new ExpenseDetailFragment();
-                        fragment.setArguments(arguments);
-                        getSupportFragmentManager().beginTransaction().replace(R.id.expense_detail_container, fragment).commit();
-                    } else { //questo di sotto vale per gli smartphone (sia potrait che landscape mode)
-                        Context context = v.getContext();
-                        Intent intent = new Intent(context, ExpenseDetailActivity.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
-                        intent.putExtra(ExpenseDetailFragment.ARG_ITEM_ID, holder.mItem.id);
-
-                        context.startActivity(intent);
-                    }
-                    */
-                    //da completare perchè non è implementata la classe dettagli
                     Context context = v.getContext();
                     Intent intent = new Intent(context, ExpenseListActivity.class); //qui setto la nuova attività da mostrare a schermo dopo che clicco
                     intent.putExtra("index", holder.mItem.id);    //passo alla nuova activity l'ide del gruppo chè l'utente ha selezionto

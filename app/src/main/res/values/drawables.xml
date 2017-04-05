@@ -1,4 +1,5 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <item name="ic_menu_addgroup" type="drawable">@drawable/ic_add_circle</item>
     <item name="ic_menu_camera" type="drawable">@drawable/ic_camera</item>
     <item name="ic_menu_gallery" type="drawable">@drawable/ic_gallery</item>
     <item name="ic_menu_slideshow" type="drawable">@drawable/ic_slideshow</item>

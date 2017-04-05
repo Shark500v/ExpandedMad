@@ -24,6 +24,7 @@ public class GroupDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_detail);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
 
@@ -57,6 +58,7 @@ public class GroupDetailActivity extends AppCompatActivity {
             arguments.putString(ExpenseDetailFragment.ARG_ITEM_ID, getIntent().getStringExtra(ExpenseDetailFragment.ARG_ITEM_ID));
             ExpenseDetailFragment fragment = new ExpenseDetailFragment();
             fragment.setArguments(arguments);
+            //getSupportFragmentManager().beginTransaction().addToBackStack(null).commit();
             getSupportFragmentManager().beginTransaction().add(R.id.group_detail_container, fragment).commit();
         }
     }
@@ -65,13 +67,9 @@ public class GroupDetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            // This ID represents the Home or Up button. In the case of this
-            // activity, the Up button is shown. For
-            // more details, see the Navigation pattern on Android Design:
-            //
-            // http://developer.android.com/design/patterns/navigation.html#up-vs-back
-            //
-            navigateUpTo(new Intent(this, ExpenseListActivity.class));
+            Intent intent = new Intent(this, ExpenseListActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            navigateUpTo(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);

@@ -4,11 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class User {
+
     private String name;
     private String surname;
     private float globalBalance;
     private static long counter = 0; /*counter to assign an id*/
-    private final Long id;
+    private final Long id;          //unique Id for each user
 
     /*all groups for user*/
     private Map<Long, Group>groups = new HashMap<>();
@@ -20,8 +21,6 @@ public class User {
         this.id = counter++;
         globalBalance = 0;
     }
-
-
 
 
 

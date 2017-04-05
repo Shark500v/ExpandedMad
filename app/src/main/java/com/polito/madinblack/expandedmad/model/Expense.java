@@ -22,9 +22,6 @@ public class Expense {
     private User paying;
 
 
-
-
-
     private Long id;
 
 
