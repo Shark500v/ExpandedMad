@@ -34,6 +34,7 @@ import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 public class UserExpenses extends AppCompatActivity {
 
+    private String groupID = "";
     private String userID = "";
     private Expense eItem;  //quello che vado a mostrare in questa activity è una lista di spese
     private Group.GroupElements groupSelected;
@@ -91,7 +92,10 @@ public class UserExpenses extends AppCompatActivity {
 
             case R.id.action_details:
                 Intent intent = new Intent(this, UserDebts.class);
-                intent.putExtra(EXTRA_MESSAGE, userID);
+                Bundle extras = new Bundle();
+                extras.putString("GROUP_ID",groupID);
+                extras.putString("USER_ID",userID);
+                intent.putExtras(extras);
                 startActivity(intent);
                 return true;
 
