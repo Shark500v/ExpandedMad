@@ -1,54 +1,61 @@
 package com.polito.madinblack.expandedmad.group_members;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.polito.madinblack.expandedmad.ExpenseDetailActivity;
+import com.polito.madinblack.expandedmad.ExpenseDetailFragment;
+import com.polito.madinblack.expandedmad.ExpenseListActivity;
+import com.polito.madinblack.expandedmad.GroupManaging.GroupDetailActivity;
+import com.polito.madinblack.expandedmad.GroupManaging.GroupDetailFragment;
+import com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.R;
-import com.polito.madinblack.expandedmad.dummy.DummyContent;
 
 import java.util.List;
+
+import com.polito.madinblack.expandedmad.dummy.DummyContent;
+import com.polito.madinblack.expandedmad.dummy.Expense;
+import com.polito.madinblack.expandedmad.dummy.Group;
 
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 public class UserExpenses extends AppCompatActivity {
-    /**
-     * Whether or not the activity is in two-pane mode, i.e. running on a tablet
-     * device.
-     */
+
+    private String userID = "";
+    private Expense eItem;  //quello che vado a mostrare in questa activity è una lista di spese
+    private Group.GroupElements groupSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.alessio_user_expenses);
+        setContentView(R.layout.user_expenses);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.inflateMenu(R.menu.menu_detail_user);
 
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+        groupSelected = Group.Group_MAP.get(getIntent().getStringExtra(EXTRA_MESSAGE));  //recupero l'id del gruppo selezionato, e quindi il gruppo stesso
+        eItem = (Expense) groupSelected.getList();
 
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
@@ -62,77 +69,117 @@ public class UserExpenses extends AppCompatActivity {
                     .add(R.id.item_detail_container, fragment)
                     .commit();*/
             //Mostra il parametro passato come titolo
-            String message = getIntent().getStringExtra(EXTRA_MESSAGE);
-            actionBar.setTitle(message);
+            userID = getIntent().getStringExtra(EXTRA_MESSAGE);
+            actionBar.setTitle(userID);
 
 
-            View recyclerView = findViewById(R.id.item_list);
+            View recyclerView = findViewById(R.id.expense_list);
             assert recyclerView != null;
             setupRecyclerView((RecyclerView) recyclerView);
         }
 
     }
 
+
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new ItemListActivity.SimpleItemRecyclerViewAdapter(DummyContent.ITEMS));
+        recyclerView.setAdapter(new GroupMemebersActivity.SimpleItemRecyclerViewAdapter(DummyContent.ITEMS));
     }
 
-    public class SimpleItemRecyclerViewAdapter
-            extends RecyclerView.Adapter<ItemListActivity.SimpleItemRecyclerViewAdapter.ViewHolder> {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
 
-        private final List<DummyContent.DummyItem> mValues;
+            case R.id.action_details:
+                Intent intent = new Intent(this, UserDebts.class);
+                intent.putExtra(EXTRA_MESSAGE, userID);
+                startActivity(intent);
+                return true;
 
-        public SimpleItemRecyclerViewAdapter(List<DummyContent.DummyItem> items) {
-            mValues = items;
+            case R.id.home:
+                navigateUpTo(new Intent(this, GroupMemebersActivity.class));    //definisco il parente verso cui devo tornare indietro
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
         }
+    }
 
-        @Override
-        public ItemListActivity.SimpleItemRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.alessio_item_list_content, parent, false);
-            return new ItemListActivity.SimpleItemRecyclerViewAdapter.ViewHolder(view);
-        }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_detail_user, menu);
+        return true;
+    }
 
-        @Override
-        public void onBindViewHolder(final ItemListActivity.SimpleItemRecyclerViewAdapter.ViewHolder holder, int position) {
-            holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).id);
-            holder.mContentView.setText(mValues.get(position).content);
+    public void userMoreInfo(View view) {
+        Intent intent = new Intent(this, UserDebts.class);
+        intent.putExtra(EXTRA_MESSAGE, userID);
 
-            holder.mView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    /*Context context = v.getContext();
-                    Intent intent = new Intent(context, ItemDetailActivity.class);
-                    intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+        startActivity(intent);
+    }
 
-                    context.startActivity(intent);*/
-                }
-            });
-        }
 
-        @Override
-        public int getItemCount() {
-            return mValues.size();
-        }
+        //questa classe la usa per fare il managing della lista che deve mostrare
+        public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<UserExpenses.SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            public final View mView;
-            public final TextView mIdView;
-            public final TextView mContentView;
-            public DummyContent.DummyItem mItem;
+            private final List<Expense.ExpenseElement> mValues;
 
-            public ViewHolder(View view) {
-                super(view);
-                mView = view;
-                mIdView = (TextView) view.findViewById(R.id.id);
-                mContentView = (TextView) view.findViewById(R.id.content);
+            public SimpleItemRecyclerViewAdapter(List<Expense.ExpenseElement> expenses) {
+                mValues = expenses;
             }
 
             @Override
-            public String toString() {
-                return super.toString() + " '" + mContentView.getText() + "'";
+            public UserExpenses.SimpleItemRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.expense_list_content, parent, false);
+                return new UserExpenses.SimpleItemRecyclerViewAdapter.ViewHolder(view);
+            }
+
+            @Override
+            public void onBindViewHolder(final UserExpenses.SimpleItemRecyclerViewAdapter.ViewHolder holder, int position) {
+                holder.mItem = mValues.get(position);   //mValues.get(position) rappresenta un singolo elemento della nostra lista di spese
+                holder.mIdView.setText(mValues.get(position).id);
+                holder.mContentView.setText(mValues.get(position).content);
+                //sopra vengono settati i tre campi che costituisco le informazioni di ogni singolo gruppo, tutti pronti per essere mostriti nella gui
+
+                holder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        Context context = v.getContext();
+                        Intent intent = new Intent(context, ExpenseDetailActivity.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
+                        intent.putExtra(ExpenseDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+
+                        context.startActivity(intent);
+                    }
+                });
+            }
+
+            @Override
+            public int getItemCount() {
+                return mValues.size();
+            }   //ritorna il numero di elementi nella lista
+
+            //questa è una classe di supporto che viene usata per creare la vista a schermo, non ho ben capito come funziona
+            public class ViewHolder extends RecyclerView.ViewHolder {
+                public final View mView;
+                public final TextView mIdView;
+                public final TextView mContentView;
+                public Expense.ExpenseElement mItem;
+
+                public ViewHolder(View view) {
+                    super(view);
+                    mView = view;
+                    mIdView = (TextView) view.findViewById(R.id.id);
+                    mContentView = (TextView) view.findViewById(R.id.content);
+                }
+
+                @Override
+                public String toString() {
+                    return super.toString() + " '" + mContentView.getText() + "'";
+                }
             }
         }
-    }
 }

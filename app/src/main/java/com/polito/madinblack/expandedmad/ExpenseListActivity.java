@@ -25,9 +25,12 @@ import com.polito.madinblack.expandedmad.GroupManaging.GroupDetailFragment;
 import com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.dummy.Expense;
 import com.polito.madinblack.expandedmad.dummy.Group;
+import com.polito.madinblack.expandedmad.group_members.GroupMemebersActivity;
 import com.polito.madinblack.expandedmad.group_members.PersonalDebts;
 
 import java.util.List;
+
+import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 public class ExpenseListActivity extends AppCompatActivity {
 
@@ -92,14 +95,17 @@ public class ExpenseListActivity extends AppCompatActivity {
                 navigateUpTo(new Intent(this, GroupListActivity.class));    //definisco il parente verso cui devo tornare indietro
                 return true;
 
-            case R.id.action_Info:
+            case R.id.action_Members:
                 //insert here the connection
+                Intent intent2 = new Intent(this, GroupMemebersActivity.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
+                intent2.putExtra(EXTRA_MESSAGE, index);
+                startActivity(intent2);
                 return true;
 
             case R.id.action_debts:
                 //insert here the connection
-                Intent intent2 = new Intent(this, PersonalDebts.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
-                startActivity(intent2);
+                Intent intent3 = new Intent(this, PersonalDebts.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
+                startActivity(intent3);
                 return true;
 
             default:

@@ -1,21 +1,17 @@
 package com.polito.madinblack.expandedmad.group_members;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.polito.madinblack.expandedmad.ExpenseListActivity;
 import com.polito.madinblack.expandedmad.R;
 
 import java.util.List;
@@ -24,28 +20,18 @@ import com.polito.madinblack.expandedmad.dummy.DummyContent;
 
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
-/**
- * An activity representing a list of Items. This activity
- * has different presentations for handset and tablet-size devices. On
- * handsets, the activity presents a list of items, which when touched,
- * item details. On tablets, the activity presents the list of items and
- * item details side-by-side using two vertical panes.
- */
-public class GroupMemebersActivity extends AppCompatActivity {
+public class UserDebts extends AppCompatActivity {
 
-    /**
-     * Whether or not the activity is in two-pane mode, i.e. running on a tablet
-     * device.
-     */
-    private String groupID = "";
+    private String userID = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.users_of_group);
+        setContentView(R.layout.personal_debts);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
@@ -53,33 +39,42 @@ public class GroupMemebersActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        groupID = getIntent().getStringExtra(EXTRA_MESSAGE);
-        actionBar.setTitle("Group "+groupID);
+        if (savedInstanceState == null) {
+            // Create the detail fragment and add it to the activity
+            // using a fragment transaction.
+            /*Bundle arguments = new Bundle();
+            arguments.putString(ItemDetailFragment.ARG_ITEM_ID,
+                    getIntent().getStringExtra(ItemDetailFragment.ARG_ITEM_ID));
+            ItemDetailFragment fragment = new ItemDetailFragment();
+            fragment.setArguments(arguments);
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.item_detail_container, fragment)
+                    .commit();*/
+            //Mostra il parametro passato come titolo
+            userID = getIntent().getStringExtra(EXTRA_MESSAGE);
+            actionBar.setTitle(userID+" 2");
 
 
-        View recyclerView = findViewById(R.id.item_list);
-        assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            Intent intent = new Intent(this, ExpenseListActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            navigateUpTo(intent);
-            return true;
+            View recyclerView = findViewById(R.id.item_list);
+            assert recyclerView != null;
+            setupRecyclerView((RecyclerView) recyclerView);
         }
-        return super.onOptionsItemSelected(item);
+
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(DummyContent.ITEMS));
+        recyclerView.setAdapter(new GroupMemebersActivity.SimpleItemRecyclerViewAdapter(DummyContent.ITEMS));
     }
 
-    public static class SimpleItemRecyclerViewAdapter
-            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
+    public void userMoreInfo(View view) {
+        Intent intent = new Intent(this, UserDebts.class);
+        intent.putExtra(EXTRA_MESSAGE, userID);
+
+        startActivity(intent);
+    }
+
+    public class SimpleItemRecyclerViewAdapter
+            extends RecyclerView.Adapter<GroupMemebersActivity.SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final List<DummyContent.DummyItem> mValues;
 
@@ -88,14 +83,14 @@ public class GroupMemebersActivity extends AppCompatActivity {
         }
 
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public GroupMemebersActivity.SimpleItemRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.users_list_content, parent, false);
-            return new ViewHolder(view);
+            return new GroupMemebersActivity.SimpleItemRecyclerViewAdapter.ViewHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
+        public void onBindViewHolder(final GroupMemebersActivity.SimpleItemRecyclerViewAdapter.ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
             holder.mIdView.setText(mValues.get(position).id);
             holder.mContentView.setText(mValues.get(position).content);
@@ -103,11 +98,11 @@ public class GroupMemebersActivity extends AppCompatActivity {
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                        Context context = v.getContext();
-                        Intent intent = new Intent(context, UserExpenses.class);
-                        intent.putExtra(EXTRA_MESSAGE, holder.mItem.id);
+                    /*Context context = v.getContext();
+                    Intent intent = new Intent(context, ItemDetailActivity.class);
+                    intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, holder.mItem.id);
 
-                        context.startActivity(intent);
+                    context.startActivity(intent);*/
                 }
             });
         }
@@ -117,7 +112,7 @@ public class GroupMemebersActivity extends AppCompatActivity {
             return mValues.size();
         }
 
-        public static class ViewHolder extends RecyclerView.ViewHolder {
+        public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
             public final TextView mIdView;
             public final TextView mContentView;
@@ -136,4 +131,5 @@ public class GroupMemebersActivity extends AppCompatActivity {
             }
         }
     }
+
 }

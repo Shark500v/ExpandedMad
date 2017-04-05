@@ -61,6 +61,36 @@
                 android:value="com.polito.madinblack.expandedmad.ExpenseListActivity" />
         </activity>
 
+        <activity
+            android:name=".group_members.GroupMemebersActivity"
+            android:label="Personal Details"
+            android:parentActivityName=".ExpenseListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.polito.madinblack.expandedmad.ExpenseListActivity" />
+        </activity>
+
+        <activity
+            android:name=".group_members.UserExpenses"
+            android:label="Personal Details"
+            android:parentActivityName=".group_members.GroupMemebersActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.polito.madinblack.expandedmad.group_members.GroupMemebersActivity" />
+        </activity>
+
+        <activity
+            android:name=".group_members.UserDebts"
+            android:label="Personal Details"
+            android:parentActivityName=".group_members.UserExpenses"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.polito.madinblack.expandedmad.group_members.UserExpenses" />
+        </activity>
+
     </application>
 
 </manifest>
