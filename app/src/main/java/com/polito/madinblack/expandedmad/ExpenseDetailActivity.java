@@ -74,7 +74,10 @@ public class ExpenseDetailActivity extends AppCompatActivity {
             //
             // http://developer.android.com/design/patterns/navigation.html#up-vs-back
             //
-            navigateUpTo(new Intent(this, ExpenseListActivity.class));
+
+            // this takes the user 'back'
+            onBackPressed();
+            //navigateUpTo(new Intent(this, ExpenseListActivity.class));
             //NavUtils.navigateUpTo(this, new Intent(this, ExpenseListActivity.class));
             return true;
         }
