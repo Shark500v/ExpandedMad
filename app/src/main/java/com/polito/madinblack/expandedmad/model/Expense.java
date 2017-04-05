@@ -1,5 +1,6 @@
 package com.polito.madinblack.expandedmad.model;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -19,6 +20,8 @@ public class Expense {
     private State state;
     private Group group;
     private User paying;
+
+
 
 
 

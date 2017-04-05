@@ -21,10 +21,13 @@ public class MyApplication {
 
     public MyApplication(){
         myself = new User("MyName", "MySurname");
-        for(int i=0; i<35; i++) {
-            Group g = new Group("Group" + i);
-            groups.put(g.getId(), g);
-        }
+        
+
+            Group g1 = new Group("Group1");
+
+            //groups.put(g.getId(), g);
+
+
 
     }
 
