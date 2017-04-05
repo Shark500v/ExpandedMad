@@ -1,6 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:layout_alignParentTop="true"
+        >
+
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <TextView
+        android:id="@+id/textWho"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/app_bar"
+        android:text="@string/who"
+        android:textSize="20sp"
+        android:padding="15dp"
+
+        />
+
+
+    <Spinner
+        android:id="@+id/spinnerWho"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/app_bar"
+        android:layout_toRightOf="@id/textWho"
+        android:layout_alignBaseline="@id/textView"
+        android:layout_margin="15dp"
+        android:textSize="20sp"
+        android:entries="@array/tags"
+        android:spinnerMode="dropdown"
+        android:layout_alignParentRight="true"
+
+
+        />
+
+    <TextView
+        android:id="@+id/textHow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textWho"
+        android:text="@string/how"
+        android:textSize="20sp"
+        android:padding="15dp"
+
+        />
+
+
+    <EditText
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/spinnerWho"
+        android:layout_toRightOf="@id/textHow"
+        android:textSize="20sp"
+        />
+
+    <TextView
+        android:id="@+id/textDivide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textHow"
+        android:text="@string/partition"
+        android:textSize="20sp"
+        android:padding="15dp"
+
+        />
+
+
+    
 
 
 
