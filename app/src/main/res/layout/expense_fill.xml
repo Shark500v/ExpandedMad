@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/app_bar"
         android:layout_toRightOf="@id/textWho"
-        android:layout_alignBaseline="@id/textView"
+
         android:layout_margin="15dp"
         android:textSize="20sp"
         android:entries="@array/tags"

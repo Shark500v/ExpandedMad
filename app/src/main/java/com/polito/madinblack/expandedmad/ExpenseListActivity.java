@@ -116,6 +116,11 @@ public class ExpenseListActivity extends AppCompatActivity {
                 navigateUpTo(new Intent(this, GroupListActivity.class));    //definisco il parente verso cui devo tornare indietro
                 return true;
 
+            case R.id.action_Info:
+                //insert here the connection
+                return true;
+
+
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.

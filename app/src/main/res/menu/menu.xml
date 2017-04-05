@@ -17,4 +17,10 @@
         android:title="Settings"
         app:showAsAction="never"/>
 
+    <!--info button-->
+    <item
+        android:id="@+id/action_Info"
+        android:title="Info"
+        app:showAsAction="never"/>
+
 </menu>
