@@ -5,6 +5,13 @@
     <string name="action_search">Search</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="balance">Balance</string>
+    <string name="tag">Tag</string>
+    <string name="cost">Cost</string>
+    <string name="policy">Policy</string>
+    <string name="description">Description</string>
+    <string name="type_description_here">Type description here</string>
+    <string name="bill">Bill</string>
     <string-array name="currency">
         <item name="euro">Euro</item>
         <item name="pounds">Pounds</item>

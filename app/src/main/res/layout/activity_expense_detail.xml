@@ -1,4 +1,5 @@
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -29,6 +30,16 @@
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+            <ImageView
+                android:contentDescription="@string/bill"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginStart="@dimen/text_margin"
+                app:srcCompat="@drawable/house_rent"
+                />
+
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
@@ -61,7 +72,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="Balance"
+            android:text="@string/balance"
             android:textSize="25sp"/>
 
         <TextView
@@ -81,7 +92,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="Tag"
+            android:text="@string/tag"
             android:textSize="25sp"
             android:layout_below="@+id/balance"/>
 
@@ -101,7 +112,7 @@
             android:id="@+id/cost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cost"
+            android:text="@string/cost"
             android:textSize="25sp"
             android:layout_margin="16dp"
             android:layout_below="@+id/tag"/>
@@ -109,7 +120,7 @@
             android:id="@+id/policy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Policy"
+            android:text="@string/policy"
             android:textSize="25sp"
             android:layout_margin="16dp"
             android:layout_below="@+id/cost"
@@ -118,7 +129,7 @@
             android:id="@+id/description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Description"
+            android:text="@string/description"
             android:textSize="25sp"
             android:layout_margin="16dp"
             android:layout_below="@+id/policy"/>
@@ -155,8 +166,10 @@
             android:layout_alignTop="@+id/description"
             android:paddingRight="16dp"
             android:paddingLeft="16dp"
+            android:textColorHint="@color/secondary_text"
             android:layout_marginEnd="16dp"
-            />
+            android:hint="@string/type_description_here"
+            android:layout_alignBaseline="@+id/description"/>
 
         <Spinner
             android:layout_width="match_parent"
