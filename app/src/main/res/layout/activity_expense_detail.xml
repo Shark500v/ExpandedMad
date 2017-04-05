@@ -64,8 +64,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="365dp"
-        android:layout_gravity="bottom"
-        >
+        android:layout_gravity="bottom">
 
         <TextView
             android:id="@+id/balance"
@@ -84,8 +83,7 @@
             android:text="75"
             android:textSize="25sp"
             android:gravity="end"
-            android:layout_marginEnd="16dp"
-            />
+            android:layout_marginEnd="16dp"/>
 
         <TextView
             android:id="@+id/tag"
@@ -104,9 +102,7 @@
             android:layout_toEndOf="@+id/amount"
             android:layout_alignBottom="@+id/tag"
             android:layout_marginEnd="16dp"
-            android:entries="@array/tags"
-            >
-        </Spinner>
+            android:entries="@array/tags" />
 
         <TextView
             android:id="@+id/cost"
@@ -116,6 +112,7 @@
             android:textSize="25sp"
             android:layout_margin="16dp"
             android:layout_below="@+id/tag"/>
+
         <TextView
             android:id="@+id/policy"
             android:layout_width="wrap_content"
@@ -123,8 +120,8 @@
             android:text="@string/policy"
             android:textSize="25sp"
             android:layout_margin="16dp"
-            android:layout_below="@+id/cost"
-            />
+            android:layout_below="@+id/cost"/>
+
         <TextView
             android:id="@+id/description"
             android:layout_width="wrap_content"
@@ -133,6 +130,7 @@
             android:textSize="25sp"
             android:layout_margin="16dp"
             android:layout_below="@+id/policy"/>
+
         <TextView
             android:id="@+id/amount"
             android:layout_width="wrap_content"
@@ -143,8 +141,7 @@
             android:paddingStart="50dp"
             android:layout_alignBottom="@+id/cost"
             android:layout_alignTop="@+id/cost"
-            android:paddingEnd="16dp"
-            />
+            android:paddingEnd="16dp"/>
 
         <Spinner
             android:id="@+id/currency_spinner"
@@ -154,9 +151,7 @@
             android:layout_alignTop="@+id/cost"
             android:entries="@array/currency"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="16dp">
-
-        </Spinner>
+            android:layout_marginEnd="16dp"/>
 
         <TextView
             android:id="@+id/description_field"
@@ -179,9 +174,7 @@
             android:layout_toEndOf="@+id/amount"
             android:layout_marginEnd="16dp"
             android:entries="@array/policies"
-            >
-
-        </Spinner>
+            />
 
     </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>
