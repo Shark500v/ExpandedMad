@@ -55,8 +55,7 @@ public class UserExpenses extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        groupSelected = Group.Group_MAP.get(getIntent().getStringExtra(EXTRA_MESSAGE));  //recupero l'id del gruppo selezionato, e quindi il gruppo stesso
-        eItem = (Expense) groupSelected.getList();
+
 
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
@@ -75,6 +74,8 @@ public class UserExpenses extends AppCompatActivity {
             userID = extras.getString("USER_ID");
             actionBar.setTitle(userID);
 
+            groupSelected = Group.Group_MAP.get(groupID);  //recupero l'id del gruppo selezionato, e quindi il gruppo stesso
+            eItem = (Expense) groupSelected.getList();
 
             View recyclerView = findViewById(R.id.expense_list);
             assert recyclerView != null;
