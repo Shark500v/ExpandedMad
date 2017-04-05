@@ -9,7 +9,7 @@ import java.util.Map;
 public class Expense {
 
     public enum State{CONTEST, ACCEPTED}
-    public enum Tag{FOOD, WATER_BILL, GAS_BILL, LIGHT_BILL, OTHER}
+    public enum Tag{FOOD, WATER_BILL, GAS_BILL, LIGHT_BILL, FLY, OTHER}
     public enum Currency{YEN, EURO, DOLLAR, GBP}
 
     private String name;
@@ -28,22 +28,23 @@ public class Expense {
     private static long counter = 0;
 
 
-    //list of all user partecipating to the Expensive, use later
+    //list of all user partecipating to the Expensive
     private Map<Long, User> users = new HashMap<>();
 
     //a map showing for each user the cost of the Payment
     private Map<Long, Payment> userCost = new HashMap<>();
 
 
-    public Expense(String name, Tag tag, float cost, Group group, User paying){
-        this.name   = name;
-        this.tag    = tag;
-        this.cost   = cost;
-        this.group  = group;
-        this.paying = paying;
+    public Expense(String name, Tag tag, float cost, Currency currency, Group group, User paying){
+        this.name     = name;
+        this.tag      = tag;
+        this.cost     = cost;
+        this.currency = currency;
+        this.group    = group;
+        this.paying   = paying;
 
 
-        /*first implementation: divide equally the cost and everybody in the group will pay*/
+        /*first implementation: divide equally the cost and everybody in the group will pay
         Float toPaid = cost / group.getUsers().size();
         Iterator<User> us = group.getUsers().iterator();
         while(us.hasNext()) {
@@ -53,7 +54,7 @@ public class Expense {
             else
                 userCost.put(u.getId(), new Payment(u, this, cost, toPaid));
         }
-
+        */
 
     }
 
@@ -123,5 +124,11 @@ public class Expense {
 
     public Payment getPayment(Long id){ return userCost.get(id); }
 
+    public void addPayment(User user, Float paid, Float toPaid){
+
+        Payment p = new Payment(user, this, paid, toPaid);
+        userCost.put(getId(), p);
+
+    }
 
 }
