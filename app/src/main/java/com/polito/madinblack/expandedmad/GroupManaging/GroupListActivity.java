@@ -90,19 +90,12 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_addgroup) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_expenses) {
 
-        } else if (id == R.id.nav_slideshow) {
 
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        } else if (id == R.id.nav_addgroup){
+        } else if (id == R.id.nav_settings){
 
         }
 
@@ -123,7 +116,6 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         return super.onCreateOptionsMenu(menu);
     }
 
-    //tecnicamente si poteva anche gestire sopra questa funzione, direttamente nel main
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(Group.Groups));
     }

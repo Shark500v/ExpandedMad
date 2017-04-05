@@ -95,6 +95,9 @@ public class ExpenseListActivity extends AppCompatActivity {
                 //insert here the connection
                 return true;
 
+            case R.id.action_debts:
+                //insert here the connection
+                return true;
 
             default:
                 // If we got here, the user's action was not recognized.

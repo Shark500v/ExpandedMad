@@ -10,11 +10,16 @@
         app:showAsAction="always"
         app:actionViewClass="android.support.v7.widget.SearchView"/>
 
-    <!--detail button-->
+    <!--setting button-->
     <item
         android:id="@+id/action_settings"
         android:icon="@drawable/settings"
-        android:title="Settings"
+        android:title="Group settings"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_debts"
+        android:title="My debts"
         app:showAsAction="never"/>
 
     <!--info button-->
