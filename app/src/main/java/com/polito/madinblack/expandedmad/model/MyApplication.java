@@ -1,7 +1,10 @@
 package com.polito.madinblack.expandedmad.model;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+
 
 /**
  * Created by Ale on 04/04/2017.
@@ -9,19 +12,29 @@ import java.util.Map;
 
 public class MyApplication {
 
+    public static User myself;
+
     /*groupId --> group*/
-    private Map<Long, Group> groups = new HashMap<>();
+    private Map<Long, Group> groups = new LinkedHashMap<>();
+
+
 
     public MyApplication(){
+        myself = new User("MyName", "MySurname");
+        for(int i=0; i<35; i++) {
+            Group g = new Group("Group" + i);
+            groups.put(g.getId(), g);
+        }
 
     }
+
 
 
     public void addGroup(Group g){
         groups.put(g.getId(), g);
     }
 
-
+    public List<Group> getGroup(){ return new ArrayList<Group>(groups.values()); }
 
 
 

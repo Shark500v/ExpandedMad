@@ -1,5 +1,8 @@
 package com.polito.madinblack.expandedmad.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class User {
     private String name;
     private String surname;
@@ -7,6 +10,8 @@ public class User {
     private static long counter = 0; /*counter to assign an id*/
     private final Long id;
 
+    /*all groups for user*/
+    private Map<Long, Group>groups = new HashMap<>();
 
 
     public User(String name, String surname){

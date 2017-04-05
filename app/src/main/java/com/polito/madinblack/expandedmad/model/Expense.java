@@ -1,6 +1,7 @@
 package com.polito.madinblack.expandedmad.model;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 
@@ -17,6 +18,7 @@ public class Expense {
     private Currency currency;
     private State state;
     private Group group;
+    private User paying;
 
 
 
@@ -26,18 +28,32 @@ public class Expense {
     private static long counter = 0;
 
 
-    //list of all user partecipating to the Expensive
+    //list of all user partecipating to the Expensive, use later
     private Map<Long, User> users = new HashMap<>();
 
     //a map showing for each user the cost of the Payment
     private Map<Long, Payment> userCost = new HashMap<>();
 
 
-    public Expense(String name, Tag tag, float cost, Group group){
-        this.name = name;
-        this.tag = tag;
-        this.cost = cost;
-        this.group = group;
+    public Expense(String name, Tag tag, float cost, Group group, User paying){
+        this.name   = name;
+        this.tag    = tag;
+        this.cost   = cost;
+        this.group  = group;
+        this.paying = paying;
+
+
+        /*first implementation: divide equally the cost and everybody in the group will pay*/
+        Float toPaid = cost / group.getUsers().size();
+        Iterator<User> us = group.getUsers().iterator();
+        while(us.hasNext()) {
+            User u = us.next();
+            if(u.getId()!=paying.getId())
+                userCost.put(u.getId(), new Payment(u, this, 0F, toPaid));
+            else
+                userCost.put(u.getId(), new Payment(u, this, cost, toPaid));
+        }
+
 
     }
 
@@ -104,6 +120,8 @@ public class Expense {
     public Long getId() {
         return id;
     }
+
+    public Payment getPayment(Long id){ return userCost.get(id); }
 
 
 }
