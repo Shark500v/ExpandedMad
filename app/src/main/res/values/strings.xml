@@ -3,6 +3,8 @@
     <string name="title_expense_detail">Expense Detail</string>
     <string name="title_expense_list">Expenses List</string>
     <string name="action_search">Search</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
     <string-array name="currency">
         <item name="euro">Euro</item>
         <item name="pounds">Pounds</item>
