@@ -4,7 +4,7 @@
 
     <!--detail button-->
     <item
-        android:id="@+id/action_details"
+        android:id="@+id/confirm_expense"
         android:icon="@drawable/check"
         android:title="Settings"
         app:showAsAction="always"/>
