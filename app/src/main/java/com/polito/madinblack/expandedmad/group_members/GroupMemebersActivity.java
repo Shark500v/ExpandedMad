@@ -37,7 +37,7 @@ public class GroupMemebersActivity extends AppCompatActivity {
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
      */
-    private String groupID = "";
+    public static String groupID = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +105,10 @@ public class GroupMemebersActivity extends AppCompatActivity {
                 public void onClick(View v) {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, UserExpenses.class);
-                        intent.putExtra(EXTRA_MESSAGE, holder.mItem.id);
+                        Bundle extras = new Bundle();
+                        extras.putString("GROUP_ID",groupID);
+                        extras.putString("USER_ID",holder.mItem.id);
+                        intent.putExtras(extras);
 
                         context.startActivity(intent);
                 }

@@ -70,7 +70,9 @@ public class UserExpenses extends AppCompatActivity {
                     .add(R.id.item_detail_container, fragment)
                     .commit();*/
             //Mostra il parametro passato come titolo
-            userID = getIntent().getStringExtra(EXTRA_MESSAGE);
+            Bundle extras = getIntent().getExtras();
+            groupID = extras.getString("GROUP_ID");
+            userID = extras.getString("USER_ID");
             actionBar.setTitle(userID);
 
 
