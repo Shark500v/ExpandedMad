@@ -28,7 +28,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity" />
+                android:value="com.polito.madinblack.expandedmad.ExpenseListActivity" />
         </activity>
 
         <activity
