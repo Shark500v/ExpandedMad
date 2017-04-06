@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class MyApplication {
 
-    public static MyApplication myApplication = null;
+    //public static MyApplication myApplication = null;
 
     public static User myself;
 
@@ -90,13 +90,13 @@ public class MyApplication {
         g2.addExpense(e3);
     }
 
-
+    /*
     public static MyApplication getInstance(){
         if(myApplication==null)
             myApplication = new MyApplication();
         return myApplication;
     }
-
+    */
     public void addGroup(Group g){
         groups.put(g.getId(), g);
     }
