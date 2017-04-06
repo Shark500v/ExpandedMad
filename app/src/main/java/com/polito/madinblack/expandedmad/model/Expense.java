@@ -22,18 +22,12 @@ public class Expense {
     private User paying;
     private Long id;
 
-
-
     private int year;
     private int month;
     private int day;
 
 
     private static long counter = 1;
-
-
-    //list of all user partecipating to the Expensive
-    private Map<Long, User> users = new HashMap<>();
 
     //a map showing for each user the cost of the Payment
     private Map<Long, Payment> userCost = new HashMap<>();
@@ -63,12 +57,6 @@ public class Expense {
                 userCost.put(u.getId(), new Payment(u, this, cost, toPaid));
         }
         */
-
-    }
-
-    public void addUser(User u){
-
-        users.put(u.getId(), u);
 
     }
 
@@ -162,4 +150,7 @@ public class Expense {
         userCost.put(getId(), p);
     }
 
+    public String getPaying() {
+        return paying.getName() + " " + paying.getSurname();
+    }
 }
