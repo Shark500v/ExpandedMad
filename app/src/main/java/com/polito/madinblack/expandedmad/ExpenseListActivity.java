@@ -109,6 +109,7 @@ public class ExpenseListActivity extends AppCompatActivity {
             case R.id.action_debts:
                 //insert here the connection
                 Intent intent3 = new Intent(this, PersonalDebts.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
+                intent3.putExtra("index", index);
                 startActivity(intent3);
                 return true;
 

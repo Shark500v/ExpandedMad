@@ -34,10 +34,6 @@ public class Expense {
     private Map<Long, Payment> userCost = new HashMap<>();
 
 
-
-
-
-
     public Expense(String name, Tag tag, float cost, String description, Currency currency, Group group, User paying, int year, int month, int day){
         this.name        = name;
         this.tag         = tag;
@@ -156,9 +152,7 @@ public class Expense {
         if(!userCost.containsKey(MyApplication.myself.getId()))
             return -777f;
         return userCost.get(MyApplication.myself.getId()).getBalance();
-
     }
-
 
     public void addPayment(User user, Float paid, Float toPaid){
         Payment p = new Payment(user, this, paid, toPaid);
@@ -169,9 +163,6 @@ public class Expense {
         }else if(paying.getId()!=MyApplication.myself.getId() && user.getId()==MyApplication.myself.getId()){
             group.uplMyCreditDebit(paying, (paid-toPaid));
         }
-
-
-
     }
 
     public User getPaying() {
