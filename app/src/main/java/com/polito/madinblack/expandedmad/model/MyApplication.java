@@ -20,10 +20,10 @@ public class MyApplication {
     public static User myself;
 
     /*groupId --> group*/
-    public Map<Long, Group> groups = new LinkedHashMap<>();
+    private Map<Long, Group> groups = new LinkedHashMap<>();
 
     /*list of all users, can be seen as phonebook*/
-    public Map<Long, User> users = new LinkedHashMap<>();
+    private Map<Long, User> users = new LinkedHashMap<>();
 
 
 
