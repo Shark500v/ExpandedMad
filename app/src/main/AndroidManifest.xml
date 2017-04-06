@@ -63,7 +63,7 @@
 
         <activity
             android:name=".group_members.GroupMemebersActivity"
-            android:label="Personal Details"
+            android:label="Group Details"
             android:parentActivityName=".ExpenseListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -73,7 +73,7 @@
 
         <activity
             android:name=".group_members.UserExpenses"
-            android:label="Personal Details"
+            android:label="Group User Details"
             android:parentActivityName=".group_members.GroupMemebersActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -83,7 +83,7 @@
 
         <activity
             android:name=".group_members.UserDebts"
-            android:label="Personal Details"
+            android:label="User Details"
             android:parentActivityName=".group_members.UserExpenses"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
