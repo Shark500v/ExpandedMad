@@ -62,21 +62,21 @@ public class MyApplication {
         g3.addUser(u5);
         g3.addUser(u6);
 
-        Expense e1 = new Expense("Fly", Expense.Tag.FLY, 89.6f, null, Expense.Currency.EURO, g1, u1, 2017, 3, 16);
+        Expense e1 = new Expense("Flight", Expense.Tag.FLY, 89.6f, "Fligth to New York!", Expense.Currency.EURO, g1, u1, 2017, 3, 16);
         e1.addPayment(u1,    89.6f, 22.4f);
         e1.addPayment(u2,     0f, 22.4f);
         e1.addPayment(u3,     0f, 22.4f);
         e1.addPayment(myself, 0f, 22.4f);
         g1.addExpense(e1);
 
-        Expense e2 = new Expense("Light Bill", Expense.Tag.LIGHT_BILL, 128f, null, Expense.Currency.EURO, g1, myself, 2017, 1, 15);
+        Expense e2 = new Expense("Light Bill", Expense.Tag.LIGHT_BILL, 128f, "Torino house light bill", Expense.Currency.EURO, g1, myself, 2017, 1, 15);
         e2.addPayment(u1,       0f, 32f);
         e2.addPayment(u2,       0f, 32f);
         e2.addPayment(u3,       0f, 32f);
         e2.addPayment(myself, 128f, 32f);
         g1.addExpense(e2);
 
-        Expense e3 = new Expense("Cake", Expense.Tag.FOOD, 100f, null, Expense.Currency.EURO, g2, u5, 2017, 2, 26);
+        Expense e3 = new Expense("Cake", Expense.Tag.FOOD, 100f, "Cake for Ale birthday", Expense.Currency.EURO, g2, u5, 2017, 2, 26);
         e3.addPayment(u1,       20f, 20f);
         e3.addPayment(u2,       10f, 20f);
         e3.addPayment(u3,       20f, 20f);

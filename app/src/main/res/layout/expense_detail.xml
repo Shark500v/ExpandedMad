@@ -16,13 +16,14 @@
         android:textSize="25dp"/>
 
     <TextView
+        android:id="@+id/balance_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignBottom="@+id/balance"
         android:layout_alignTop="@+id/balance"
         android:layout_toEndOf="@+id/balance"
         android:text="75"
-        android:textSize="25dp"
+        android:textSize="22dp"
         android:gravity="end"
         android:layout_marginEnd="16dp"/>
 
@@ -36,7 +37,7 @@
         android:layout_marginEnd="16dp"
         android:text="Type"
         android:textAlignment="textEnd"
-        android:textSize="25dp"/>
+        android:textSize="22dp"/>
 
     <TextView
         android:id="@+id/tag"
@@ -66,7 +67,7 @@
         android:layout_marginEnd="16dp"
         android:text="Value"
         android:textAlignment="textEnd"
-        android:textSize="25dp"/>
+        android:textSize="22dp"/>
 
     <TextView
         android:id="@+id/buyer"
@@ -87,7 +88,7 @@
         android:layout_marginEnd="16dp"
         android:text="user"
         android:textAlignment="textEnd"
-        android:textSize="25dp"/>
+        android:textSize="22dp"/>
 
     <TextView
         android:id="@+id/currency_container"
@@ -99,7 +100,7 @@
         android:layout_marginEnd="16dp"
         android:text="Euro"
         android:textAlignment="textEnd"
-        android:textSize="25dp"/>
+        android:textSize="22dp"/>
 
     <TextView
         android:id="@+id/date"
@@ -120,7 +121,7 @@
         android:layout_marginEnd="16dp"
         android:text="dd/mm/yyyy"
         android:textAlignment="textEnd"
-        android:textSize="25dp"/>
+        android:textSize="22dp"/>
 
     <TextView
         android:id="@+id/currency"
