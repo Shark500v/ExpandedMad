@@ -6,11 +6,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-
-/**
- * Created by Ale on 04/04/2017.
- */
-
 public class MyApplication {
 
     //public static MyApplication myApplication = null;

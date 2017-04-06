@@ -13,9 +13,6 @@ import android.view.View;
 import com.polito.madinblack.expandedmad.ExpenseListActivity;
 import com.polito.madinblack.expandedmad.R;
 
-/**
- * Created by Francesco on 04/04/2017.
- */
 
 public class GroupDetailActivity extends AppCompatActivity {
 
@@ -41,15 +38,6 @@ public class GroupDetailActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        // savedInstanceState is non-null when there is fragment state
-        // saved from previous configurations of this activity
-        // (e.g. when rotating the screen from portrait to landscape).
-        // In this case, the fragment will automatically be re-added
-        // to its container so we don't need to manually add it.
-        // For more information, see the Fragments API guide at:
-        //
-        // http://developer.android.com/guide/components/fragments.html
-        //
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
@@ -57,7 +45,6 @@ public class GroupDetailActivity extends AppCompatActivity {
             arguments.putString(GroupDetailFragment.ARG_G_ID, getIntent().getStringExtra(GroupDetailFragment.ARG_G_ID));    //id del gruppo come stringa
             GroupDetailFragment fragment = new GroupDetailFragment();
             fragment.setArguments(arguments);
-            //getSupportFragmentManager().beginTransaction().addToBackStack(null).commit();
             getSupportFragmentManager().beginTransaction().add(R.id.group_detail_container, fragment).commit();
         }
     }

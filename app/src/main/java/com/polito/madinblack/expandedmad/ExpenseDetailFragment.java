@@ -52,7 +52,7 @@ public class ExpenseDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.expense_detail, container, false);
 
-        // Show the dummy content as text in a TextView.
+        // Show the content.
         if (mItem != null) {
             ((TextView) rootView.findViewById(R.id.description_field)).setText(mItem.getDescription());
         }
