@@ -5,7 +5,7 @@
     <!--detail button-->
     <item
         android:id="@+id/action_details"
-        android:icon="@drawable/details"
+        android:icon="@android:drawable/ic_dialog_info"
         android:title="Settings"
         app:showAsAction="always"/>
 </menu>
