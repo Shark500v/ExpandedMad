@@ -87,7 +87,7 @@ public class ExpenseListActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_settings:
                 Intent intent = new Intent(this, GroupDetailActivity.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
-                intent.putExtra(GroupDetailFragment.ARG_ITEM_ID, index);
+                intent.putExtra(GroupDetailFragment.ARG_G_ID, index);
                 startActivity(intent);
                 return true;
 
@@ -95,7 +95,7 @@ public class ExpenseListActivity extends AppCompatActivity {
                 navigateUpTo(new Intent(this, GroupListActivity.class));    //definisco il parente verso cui devo tornare indietro
                 return true;
 
-            case R.id.action_Members:
+            case R.id.action_members:
                 //insert here the connection
                 Intent intent2 = new Intent(this, GroupMemebersActivity.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
                 intent2.putExtra(EXTRA_MESSAGE, index);
@@ -162,6 +162,7 @@ public class ExpenseListActivity extends AppCompatActivity {
                     Context context = v.getContext();
                     Intent intent = new Intent(context, ExpenseDetailActivity.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
                     intent.putExtra(ExpenseDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                    intent.putExtra(ExpenseDetailFragment.ARG_GROUP_ID, index);         //così gli passo l'indice del gruppo di interesse
 
                     context.startActivity(intent);
                 }

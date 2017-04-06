@@ -12,27 +12,12 @@ import android.widget.TextView;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.dummy.Group;
 
-/**
- * Created by Francesco on 04/04/2017.
- */
-
 public class GroupDetailFragment extends Fragment {
 
-    /**
-     * The fragment argument representing the item ID that this fragment
-     * represents.
-     */
-    public static final String ARG_ITEM_ID = "item_id";
+    public static final String ARG_G_ID = "item_id";
 
-    /**
-     * The dummy content this fragment is presenting.
-     */
     private Group.GroupElements mItem;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
     public GroupDetailFragment() {
     }
 
@@ -40,11 +25,11 @@ public class GroupDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
+        if (getArguments().containsKey(ARG_G_ID)) {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            mItem = Group.Group_MAP.get(getArguments().getString(ARG_ITEM_ID));
+            mItem = Group.Group_MAP.get(getArguments().getString(ARG_G_ID));
 
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
@@ -65,5 +50,4 @@ public class GroupDetailFragment extends Fragment {
 
         return rootView;
     }
-
 }

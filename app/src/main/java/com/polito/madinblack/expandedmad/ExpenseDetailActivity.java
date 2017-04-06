@@ -58,9 +58,11 @@ public class ExpenseDetailActivity extends AppCompatActivity {
             // using a fragment transaction.
             Bundle arguments = new Bundle();
             arguments.putString(ExpenseDetailFragment.ARG_ITEM_ID, getIntent().getStringExtra(ExpenseDetailFragment.ARG_ITEM_ID));
-            ExpenseDetailFragment fragment = new ExpenseDetailFragment();
-            fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction().add(R.id.expense_detail_container, fragment).commit();
+            arguments.putString(ExpenseDetailFragment.ARG_GROUP_ID, getIntent().getStringExtra(ExpenseDetailFragment.ARG_GROUP_ID));
+            ExpenseDetailFragment fragmentExpense;
+            fragmentExpense = new ExpenseDetailFragment();
+            fragmentExpense.setArguments(arguments);
+            getSupportFragmentManager().beginTransaction().add(R.id.expense_detail_container, fragmentExpense).commit();
         }
     }
 

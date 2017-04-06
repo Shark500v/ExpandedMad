@@ -13,6 +13,7 @@ import android.view.View;
 import com.polito.madinblack.expandedmad.ExpenseDetailFragment;
 import com.polito.madinblack.expandedmad.ExpenseListActivity;
 import com.polito.madinblack.expandedmad.R;
+import com.polito.madinblack.expandedmad.dummy.Group;
 
 /**
  * Created by Francesco on 04/04/2017.
@@ -55,8 +56,8 @@ public class GroupDetailActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(ExpenseDetailFragment.ARG_ITEM_ID, getIntent().getStringExtra(ExpenseDetailFragment.ARG_ITEM_ID));
-            ExpenseDetailFragment fragment = new ExpenseDetailFragment();
+            arguments.putString(GroupDetailFragment.ARG_G_ID, getIntent().getStringExtra(GroupDetailFragment.ARG_G_ID));
+            GroupDetailFragment fragment = new GroupDetailFragment();
             fragment.setArguments(arguments);
             //getSupportFragmentManager().beginTransaction().addToBackStack(null).commit();
             getSupportFragmentManager().beginTransaction().add(R.id.group_detail_container, fragment).commit();

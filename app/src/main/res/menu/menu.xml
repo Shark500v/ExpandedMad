@@ -24,8 +24,8 @@
 
     <!--info button-->
     <item
-        android:id="@+id/action_Members"
-        android:title="Members"
+        android:id="@+id/action_members"
+        android:title="Group members"
         app:showAsAction="never"/>
 
 </menu>
