@@ -149,7 +149,7 @@ public class Expense {
             return 1;
         else if(e1.getMonth())
     */
-        return 0;
+        return 1;
     }
 
 
