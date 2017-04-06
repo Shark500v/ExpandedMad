@@ -17,8 +17,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        app:srcCompat="@drawable/businessman"
-        />
+        app:srcCompat="@drawable/businessman"/>
 
     <TextView
         android:id="@+id/textView2"
