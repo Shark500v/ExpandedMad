@@ -3,6 +3,7 @@ package com.polito.madinblack.expandedmad.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +46,19 @@ public class Group {
         users.put(user.getId(), user);
     }
 
+    public List<User> getUsersCreditsDebits (){
 
+        List<User> usersCD = new ArrayList<User>();
+
+        Iterator<Long> it = myCreditsDebits.keySet().iterator();
+
+        while(it.hasNext()) {
+            User u = users.get(it.next());
+            usersCD.add(u);
+        }
+
+        return usersCD;
+    }
 
     public List<User> getUsers(){ return new ArrayList<>(users.values());}
 
