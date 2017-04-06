@@ -159,13 +159,20 @@ public class Expense {
     }
 
 
-
     public void addPayment(User user, Float paid, Float toPaid){
         Payment p = new Payment(user, this, paid, toPaid);
         userCost.put(getId(), p);
+
+        if(paying.getId()==MyApplication.myself.getId() && user.getId()!=MyApplication.myself.getId()){
+            group.uplMyCreditDebit(user, (toPaid-paid));
+
+        }
+
+
+
     }
 
-    public String getPaying() {
-        return paying.getName() + " " + paying.getSurname();
+    public User getPaying() {
+        return paying;
     }
 }
