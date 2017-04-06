@@ -98,7 +98,7 @@ public class ExpenseListActivity extends AppCompatActivity {
             case R.id.action_members:
                 //insert here the connection
                 Intent intent2 = new Intent(this, GroupMemebersActivity.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
-                intent2.putExtra(EXTRA_MESSAGE, index);
+                intent2.putExtra("GROUP_ID",index);
                 startActivity(intent2);
                 return true;
 

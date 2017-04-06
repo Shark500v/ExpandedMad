@@ -58,12 +58,16 @@ public class GroupMemebersActivity extends AppCompatActivity {
         }
 
 
-        groupID = getIntent().getStringExtra(EXTRA_MESSAGE);
-        actionBar.setTitle("Group "+groupID);
+        if (savedInstanceState == null) {
 
-        View recyclerView = findViewById(R.id.item_list);
-        assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
+            groupID = getIntent().getStringExtra("GROUP_ID");
+            actionBar.setTitle("Group "+groupID);
+
+            View recyclerView = findViewById(R.id.item_list);
+            assert recyclerView != null;
+            setupRecyclerView((RecyclerView) recyclerView);
+        }
+
 
     }
 

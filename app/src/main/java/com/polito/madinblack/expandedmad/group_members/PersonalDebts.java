@@ -15,9 +15,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.polito.madinblack.expandedmad.ExpenseListActivity;
-import com.polito.madinblack.expandedmad.GroupManaging.GroupDetailActivity;
-import com.polito.madinblack.expandedmad.GroupManaging.GroupDetailFragment;
-import com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.R;
 
 import java.util.List;
