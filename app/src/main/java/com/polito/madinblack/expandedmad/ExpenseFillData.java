@@ -40,6 +40,8 @@ public class ExpenseFillData extends AppCompatActivity {
 
     private int myinteger = 0;
     private int numMembers = 0;
+    private int itemSelected;
+    private List<Group.GroupElements> mValues;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,14 +68,6 @@ public class ExpenseFillData extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.confirm_expense) {
-            // This ID represents the Home or Up button. In the case of this
-            // activity, the Up button is shown. For
-            // more details, see the Navigation pattern on Android Design:
-            //
-            // http://developer.android.com/design/patterns/navigation.html#up-vs-back
-            //
-
-            ///Ale qua cambia tu e metti quello che ti serve
 
             Intent intent = new Intent(this, GroupListActivity.class);
             //intent.putExtra(EXTRA_MESSAGE, userID);
@@ -108,17 +102,18 @@ public class ExpenseFillData extends AppCompatActivity {
         public void afterTextChanged(Editable editable) {
             switch (view.getId()) {
                 case R.id.input_amount:
-                    modifyProprtion();
+                    modifyProportion();
                     break;
             }
         }
     }
 
-    private void modifyProprtion() {
+    private void modifyProportion() {
 
     }
 
     public void increaseInteger(View view) {
+        RecyclerView rv = (RecyclerView)view;
         myinteger++;
         display(myinteger);
 
@@ -169,7 +164,6 @@ public class ExpenseFillData extends AppCompatActivity {
     //questa classe la usa per fare il managing della lista che deve mostrare
     public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseFillData.SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<Group.GroupElements> mValues;
 
         public SimpleItemRecyclerViewAdapter(List<Group.GroupElements> groups) {
 
@@ -188,7 +182,16 @@ public class ExpenseFillData extends AppCompatActivity {
             holder.mIdView.setText(mValues.get(position).id);
             //holder.mContentView.setText(mValues.get(position).content);
             //sopra vengono settati i tre campi che costituisco le informazioni di ogni singolo gruppo, tutti pronti per essere mostriti nella gui
+            holder.mView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Context context = v.getContext();
+                    Intent intent = new Intent(context, ExpenseListActivity.class); //qui setto la nuova attività da mostrare a schermo dopo che clicco
+                    intent.putExtra("index", holder.mItem.toString());    //passo alla nuova activity l'ide del gruppo chè l'utente ha selezionto
 
+                    context.startActivity(intent);
+                }
+            });
         }
 
         @Override
