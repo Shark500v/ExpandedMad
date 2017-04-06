@@ -39,7 +39,6 @@ public class Group {
     public void addExpense(Expense e){
         expenses.put(e.getId(), e);
 
-
     }
 
     public void addUser(User user){
@@ -80,5 +79,16 @@ public class Group {
     public Expense getSingleExpense(Long id) {
         return expenses.get(id);
     }
+
+    public void uplMyCreditDebit(User user, Float debitCredit){
+        if(!(myCreditsDebits.containsKey(user.getId()))){
+            myCreditsDebits.put(user.getId(), debitCredit);
+        }else{
+            Float previous = myCreditsDebits.get(user.getId());
+            myCreditsDebits.put(user.getId(), previous+debitCredit);
+        }
+
+    }
+
 
 }
