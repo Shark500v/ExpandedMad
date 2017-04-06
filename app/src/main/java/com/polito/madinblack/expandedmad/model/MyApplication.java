@@ -6,16 +6,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-
-/**
- * Created by Ale on 04/04/2017.
- */
-
 public class MyApplication {
 
     public static MyApplication myApplication = null;
-
-
 
     public static User myself;
 
@@ -65,36 +58,31 @@ public class MyApplication {
         g2.addUser(u3);
         g2.addUser(u5);
 
-
         g3.addUser(myself);
         g3.addUser(u5);
         g3.addUser(u6);
 
-        Expense e1 = new Expense("Fly", Expense.Tag.FLY, 89.6f, null, Expense.Currency.EURO, g1, u1, 2017, 3, 16);
+        Expense e1 = new Expense("Flight", Expense.Tag.FLY, 89.6f, "Fligth to New York!", Expense.Currency.EURO, g1, u1, 2017, 3, 16);
         e1.addPayment(u1,    89.6f, 22.4f);
         e1.addPayment(u2,     0f, 22.4f);
         e1.addPayment(u3,     0f, 22.4f);
         e1.addPayment(myself, 0f, 22.4f);
         g1.addExpense(e1);
 
-        Expense e2 = new Expense("Light Bill", Expense.Tag.LIGHT_BILL, 128f, null, Expense.Currency.EURO, g1, myself, 2017, 1, 15);
+        Expense e2 = new Expense("Light Bill", Expense.Tag.LIGHT_BILL, 128f, "Torino house light bill", Expense.Currency.EURO, g1, myself, 2017, 1, 15);
         e2.addPayment(u1,       0f, 32f);
         e2.addPayment(u2,       0f, 32f);
         e2.addPayment(u3,       0f, 32f);
         e2.addPayment(myself, 128f, 32f);
         g1.addExpense(e2);
 
-        Expense e3 = new Expense("Cake", Expense.Tag.FOOD, 100f, null, Expense.Currency.EURO, g2, u5, 2017, 2, 26);
+        Expense e3 = new Expense("Cake", Expense.Tag.FOOD, 100f, "Cake for Ale birthday", Expense.Currency.EURO, g2, u5, 2017, 2, 26);
         e3.addPayment(u1,       20f, 20f);
         e3.addPayment(u2,       10f, 20f);
         e3.addPayment(u3,       20f, 20f);
         e3.addPayment(myself,    0f, 20f);
         e3.addPayment(u5,       50f, 20f);
         g2.addExpense(e3);
-
-
-
-
     }
 
 
@@ -110,10 +98,8 @@ public class MyApplication {
 
     public List<Group> getGroup(){ return new ArrayList<Group>(groups.values()); }
 
-
-
-
-
-
+    public Group getSingleGroup(Long id) {
+        return groups.get(id);
+    }
 
 }

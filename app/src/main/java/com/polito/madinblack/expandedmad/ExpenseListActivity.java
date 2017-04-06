@@ -23,10 +23,11 @@ import android.widget.TextView;
 import com.polito.madinblack.expandedmad.GroupManaging.GroupDetailActivity;
 import com.polito.madinblack.expandedmad.GroupManaging.GroupDetailFragment;
 import com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity;
-import com.polito.madinblack.expandedmad.dummy.Expense;
-import com.polito.madinblack.expandedmad.dummy.Group;
 import com.polito.madinblack.expandedmad.group_members.GroupMemebersActivity;
 import com.polito.madinblack.expandedmad.group_members.PersonalDebts;
+import com.polito.madinblack.expandedmad.model.*;
+import com.polito.madinblack.expandedmad.model.Expense;
+import com.polito.madinblack.expandedmad.model.Group;
 
 import java.util.List;
 
@@ -34,38 +35,41 @@ import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 public class ExpenseListActivity extends AppCompatActivity {
 
+    private MyApplication ma;
+
     private String index = "index";
 
-    private Expense eItem;  //quello che vado a mostrare in questa activity è una lista di spese
-    private Group.GroupElements groupSelected;
+    private List<Expense> eItem;          //quello che vado a mostrare in questa activity è una lista di spese
+    private Group groupSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expense_list);
 
+        ma = MyApplication.getInstance();   //retrive del DB
+
         Intent beginner = getIntent();
-        groupSelected = Group.Group_MAP.get(beginner.getStringExtra("index"));  //recupero l'id del gruppo selezionato, e quindi il gruppo stesso
-        eItem = (Expense) groupSelected.getList();
-        index = beginner.getStringExtra("index");
+        groupSelected = ma.getSingleGroup(Long.valueOf(beginner.getStringExtra("index"))); //recupero l'id del gruppo selezionato, e quindi il gruppo stesso
+        eItem = groupSelected.getExpenses();
+        index = beginner.getStringExtra("index");   //id del gruppo, che devo considerare
 
         //toolbar settings
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(groupSelected.content);
+        toolbar.setTitle(groupSelected.getName());
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                eItem.AddNewExpense();
+                //eItem.AddNewExpense();
                 //devo notificare la vista che qualcosa è cambiato
                 //accedo prima alla Recycler View e poi all'Adapter per notificare l'aggiunta
-                RecyclerView recyclerView = (RecyclerView)findViewById(R.id.expense_list);
-                recyclerView.getAdapter().notifyItemInserted(recyclerView.getAdapter().getItemCount());
+                //RecyclerView recyclerView = (RecyclerView)findViewById(R.id.expense_list);
+                //recyclerView.getAdapter().notifyItemInserted(recyclerView.getAdapter().getItemCount());
                 //questo stampa al fondo la scritta
-                Snackbar.make(view, "New Expense added!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-
+                //Snackbar.make(view, "New Expense added!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
         });
 
@@ -87,7 +91,7 @@ public class ExpenseListActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_settings:
                 Intent intent = new Intent(this, GroupDetailActivity.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
-                intent.putExtra(GroupDetailFragment.ARG_G_ID, index);
+                intent.putExtra(GroupDetailFragment.ARG_G_ID, index);   //il tutto viene passato come stringa
                 startActivity(intent);
                 return true;
 
@@ -98,7 +102,7 @@ public class ExpenseListActivity extends AppCompatActivity {
             case R.id.action_members:
                 //insert here the connection
                 Intent intent2 = new Intent(this, GroupMemebersActivity.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
-                intent2.putExtra("GROUP_ID",index);
+                intent2.putExtra("GROUP_ID", index);
                 startActivity(intent2);
                 return true;
 
@@ -130,15 +134,15 @@ public class ExpenseListActivity extends AppCompatActivity {
 
     //tecnicamente si poteva anche gestire sopra questa funzione, direttamente nel main
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(eItem.list)); //secondo me crasha qui
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(eItem)); //secondo me crasha qui
     }
 
     //questa classe la usa per fare il managing della lista che deve mostrare
     public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<Expense.ExpenseElement> mValues;
+        private final List<Expense> mValues;
 
-        public SimpleItemRecyclerViewAdapter(List<Expense.ExpenseElement> expenses) {
+        public SimpleItemRecyclerViewAdapter(List<Expense> expenses) {
             mValues = expenses;
         }
 
@@ -151,8 +155,8 @@ public class ExpenseListActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);   //mValues.get(position) rappresenta un singolo elemento della nostra lista di spese
-            holder.mIdView.setText(mValues.get(position).id);
-            holder.mContentView.setText(mValues.get(position).content);
+            holder.mIdView.setText(mValues.get(position).getId().toString());
+            holder.mContentView.setText(mValues.get(position).getName());
             //sopra vengono settati i tre campi che costituisco le informazioni di ogni singolo gruppo, tutti pronti per essere mostriti nella gui
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -161,7 +165,7 @@ public class ExpenseListActivity extends AppCompatActivity {
 
                     Context context = v.getContext();
                     Intent intent = new Intent(context, ExpenseDetailActivity.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
-                    intent.putExtra(ExpenseDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                    intent.putExtra(ExpenseDetailFragment.ARG_ITEM_ID, holder.mItem.getId().toString());
                     intent.putExtra(ExpenseDetailFragment.ARG_GROUP_ID, index);         //così gli passo l'indice del gruppo di interesse
 
                     context.startActivity(intent);
@@ -179,7 +183,7 @@ public class ExpenseListActivity extends AppCompatActivity {
             public final View mView;
             public final TextView mIdView;
             public final TextView mContentView;
-            public Expense.ExpenseElement mItem;
+            public Expense mItem;
 
             public ViewHolder(View view) {
                 super(view);

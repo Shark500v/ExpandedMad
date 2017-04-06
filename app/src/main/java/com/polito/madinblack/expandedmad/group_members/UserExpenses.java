@@ -34,8 +34,8 @@ import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 public class UserExpenses extends AppCompatActivity {
 
-    private String groupID = "";
-    private String userID = "";
+    private String groupID = "init";
+    private String userID = "init";
     private Expense eItem;  //quello che vado a mostrare in questa activity è una lista di spese
     private Group.GroupElements groupSelected;
 
@@ -94,7 +94,8 @@ public class UserExpenses extends AppCompatActivity {
 
             case R.id.home:
                 //navigateUpTo(new Intent(this, GroupMemebersActivity.class));    //definisco il parente verso cui devo tornare indietro
-                Intent intent2 = new Intent(this, GroupMemebersActivity.class);
+                //Intent intent2 = new Intent(this, GroupMemebersActivity.class);
+                Intent intent2 = getParentActivityIntent();
                 intent2.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 navigateUpTo(intent2);
                 return true;
@@ -148,11 +149,6 @@ public class UserExpenses extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
 
-                        Context context = v.getContext();
-                        Intent intent = new Intent(context, ExpenseDetailActivity.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
-                        intent.putExtra(ExpenseDetailFragment.ARG_ITEM_ID, holder.mItem.id);
-
-                        context.startActivity(intent);
                     }
                 });
             }

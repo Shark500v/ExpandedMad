@@ -17,11 +17,15 @@ public class Group {
 
 
 
-    private static long counter = 0;
+    private static long counter = 1;
     //add image attribute
 
     private Map<Long, User>users = new HashMap<>();
+
     private Map<Long, Expense>expenses = new LinkedHashMap<>();
+
+    //map containing how money myself have to paid/received by users. + = received - = give 0 nothing
+    private Map<Long, Float> myCreditsDebits = new HashMap<>();
 
     public Group(String name){
         this.name = name;
@@ -31,16 +35,18 @@ public class Group {
 
     }
 
+    /*be carrefour: for now do this operation only after add all initial expenses*/
     public void addExpense(Expense e){
         expenses.put(e.getId(), e);
-        totDebit += e.getPayment(MyApplication.myself.getId()).getDebit();
-        totCredit += e.getPayment(MyApplication.myself.getId()).getCredit();
+
 
     }
 
     public void addUser(User user){
         users.put(user.getId(), user);
     }
+
+
 
     public List<User> getUsers(){ return new ArrayList<>(users.values());}
 
@@ -63,6 +69,16 @@ public class Group {
 
     public String getName(){ return name; }
 
+    public List<Expense> getExpenses() {
+        return new ArrayList<>(expenses.values());
+    }
 
+    public String getDetails(){
+        return "Insert here the Details of the Group.";
+    }
+
+    public Expense getSingleExpense(Long id) {
+        return expenses.get(id);
+    }
 
 }

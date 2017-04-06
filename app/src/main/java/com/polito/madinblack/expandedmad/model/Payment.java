@@ -72,7 +72,9 @@ public class Payment {
 
     }
 
-
+    public Float getBalance(){
+        return (paid-toPaid);
+    }
 
 
     @Override

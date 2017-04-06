@@ -13,18 +13,31 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:text="@string/balance"
-        android:textSize="25sp"/>
+        android:textSize="25dp"/>
 
     <TextView
+        android:id="@+id/balance_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignBottom="@+id/balance"
         android:layout_alignTop="@+id/balance"
-        android:layout_toEndOf="@+id/amount"
+        android:layout_toEndOf="@+id/balance"
         android:text="75"
-        android:textSize="25sp"
+        android:textSize="22dp"
         android:gravity="end"
         android:layout_marginEnd="16dp"/>
+
+    <TextView
+        android:id="@+id/tag_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tag"
+        android:layout_toEndOf="@+id/tag"
+        android:layout_alignBottom="@+id/tag"
+        android:layout_marginEnd="16dp"
+        android:text="Type"
+        android:textAlignment="textEnd"
+        android:textSize="22dp"/>
 
     <TextView
         android:id="@+id/tag"
@@ -32,34 +45,90 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:text="@string/tag"
-        android:textSize="25sp"
-        android:layout_below="@+id/balance"/>
-
-    <Spinner
-        android:id="@+id/tag_spinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/tag"
-        android:layout_toEndOf="@+id/amount"
-        android:layout_alignBottom="@+id/tag"
-        android:layout_marginEnd="16dp"
-        android:entries="@array/tags" />
+        android:textSize="25dp"
+        android:layout_below="@+id/buyer"/>
 
     <TextView
         android:id="@+id/cost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/cost"
-        android:textSize="25sp"
+        android:textSize="25dp"
+        android:layout_margin="16dp"
+        android:layout_below="@+id/balance"/>
+
+    <TextView
+        android:id="@+id/cost_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/cost"
+        android:layout_toEndOf="@+id/cost"
+        android:layout_alignBottom="@+id/cost"
+        android:layout_marginEnd="16dp"
+        android:text="Value"
+        android:textAlignment="textEnd"
+        android:textSize="22dp"/>
+
+    <TextView
+        android:id="@+id/buyer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Payed by"
+        android:textSize="25dp"
+        android:layout_margin="16dp"
+        android:layout_below="@+id/currency"/>
+
+    <TextView
+        android:id="@+id/buyer_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/buyer"
+        android:layout_toEndOf="@+id/buyer"
+        android:layout_alignBottom="@+id/buyer"
+        android:layout_marginEnd="16dp"
+        android:text="user"
+        android:textAlignment="textEnd"
+        android:textSize="22dp"/>
+
+    <TextView
+        android:id="@+id/currency_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/currency"
+        android:layout_toEndOf="@+id/currency"
+        android:layout_alignBottom="@+id/currency"
+        android:layout_marginEnd="16dp"
+        android:text="Euro"
+        android:textAlignment="textEnd"
+        android:textSize="22dp"/>
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Date"
+        android:textSize="25dp"
         android:layout_margin="16dp"
         android:layout_below="@+id/tag"/>
 
     <TextView
-        android:id="@+id/policy"
+        android:id="@+id/date_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/date"
+        android:layout_toEndOf="@+id/date"
+        android:layout_alignBottom="@+id/date"
+        android:layout_marginEnd="16dp"
+        android:text="dd/mm/yyyy"
+        android:textAlignment="textEnd"
+        android:textSize="22dp"/>
+
+    <TextView
+        android:id="@+id/currency"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/policy"
-        android:textSize="25sp"
+        android:text="Currency"
+        android:textSize="25dp"
         android:layout_margin="16dp"
         android:layout_below="@+id/cost"/>
 
@@ -68,31 +137,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/description"
-        android:textSize="25sp"
+        android:textSize="25dp"
         android:layout_margin="16dp"
-        android:layout_below="@+id/policy"/>
-
-    <TextView
-        android:id="@+id/amount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toStartOf="@+id/currency_spinner"
-        android:text="100"
-        android:textSize="25sp"
-        android:paddingStart="50dp"
-        android:layout_alignBottom="@+id/cost"
-        android:layout_alignTop="@+id/cost"
-        android:paddingEnd="16dp"/>
-
-    <Spinner
-        android:id="@+id/currency_spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/cost"
-        android:layout_alignTop="@+id/cost"
-        android:entries="@array/currency"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="16dp"/>
+        android:layout_below="@+id/date"/>
 
     <TextView
         android:id="@+id/description_field"
@@ -104,16 +151,8 @@
         android:paddingLeft="16dp"
         android:textColorHint="@color/secondary_text"
         android:layout_marginEnd="16dp"
-        android:hint="@string/type_description_here"
+        android:text="@string/type_description_here"
+        android:textSize="20dp"
         android:layout_alignBaseline="@+id/description"/>
-
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignBottom="@+id/policy"
-        android:layout_alignTop="@+id/policy"
-        android:layout_toEndOf="@+id/amount"
-        android:layout_marginEnd="16dp"
-        android:entries="@array/policies"/>
 
 </RelativeLayout>

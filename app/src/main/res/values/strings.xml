@@ -10,7 +10,7 @@
     <string name="cost">Cost</string>
     <string name="policy">Policy</string>
     <string name="description">Description</string>
-    <string name="type_description_here">Type description here</string>
+    <string name="type_description_here">Short description about the expense</string>
     <string name="bill">Bill</string>
     <string name="statistics">Statistics</string>
     <string-array name="currency">

@@ -23,20 +23,19 @@ public class Expense {
     private Long id;
 
 
-
     private int year;
     private int month;
     private int day;
 
 
-    private static long counter = 0;
-
-
-    //list of all user partecipating to the Expensive
-    private Map<Long, User> users = new HashMap<>();
+    private static long counter = 1;
 
     //a map showing for each user the cost of the Payment
     private Map<Long, Payment> userCost = new HashMap<>();
+
+
+
+
 
 
     public Expense(String name, Tag tag, float cost, String description, Currency currency, Group group, User paying, int year, int month, int day){
@@ -50,6 +49,7 @@ public class Expense {
         this.year        = year;
         this.month       = month;
         this.day         = day;
+        this.id          = counter++;
 
         /*first implementation: divide equally the cost and everybody in the group will pay
         Float toPaid = cost / group.getUsers().size();
@@ -65,11 +65,7 @@ public class Expense {
 
     }
 
-    public void addUser(User u){
 
-        users.put(u.getId(), u);
-
-    }
 
     public void addUserCost(User u, Payment payment){
         userCost.put(u.getId(), payment);
@@ -142,8 +138,6 @@ public class Expense {
     }
 
 
-
-
     public static int dateCompare(Expense e1, Expense e2){
         /*if(e1.getYear()>e2.getYear())
             return 1;
@@ -152,18 +146,26 @@ public class Expense {
         return 1;
     }
 
-
     public Long getId() {
         return id;
     }
 
     public Payment getPayment(Long id){ return userCost.get(id); }
 
-    public void addPayment(User user, Float paid, Float toPaid){
+    public Float getMyBalance(){
+        return userCost.get(MyApplication.myself.getId()).getBalance();
 
-        Payment p = new Payment(user, this, paid, toPaid);
-        userCost.put(getId(), p);
 
     }
 
+
+
+    public void addPayment(User user, Float paid, Float toPaid){
+        Payment p = new Payment(user, this, paid, toPaid);
+        userCost.put(getId(), p);
+    }
+
+    public String getPaying() {
+        return paying.getName() + " " + paying.getSurname();
+    }
 }
