@@ -2,6 +2,7 @@ package com.polito.madinblack.expandedmad;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.view.MenuItemCompat;
@@ -157,8 +158,18 @@ public class ExpenseListActivity extends AppCompatActivity {
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);   //mValues.get(position) rappresenta un singolo elemento della nostra lista di spese
             holder.mIdView.setText(mValues.get(position).getName());
-            holder.mContentView.setText(mValues.get(position).getName());
-            holder.mPaydBy.setText(mValues.get(position).getPaying().getName());
+            if(mValues.get(position).getMyBalance()>0) {
+                holder.mContentView.setText("+"+mValues.get(position).getMyBalance().toString());
+                holder.mContentView.setTextColor(Color.parseColor("#00c200"));
+            }else if(mValues.get(position).getMyBalance()<0) {
+                holder.mContentView.setText("-"+mValues.get(position).getMyBalance().toString());
+                holder.mContentView.setTextColor(Color.parseColor("#ff0000"));
+            }
+            else{
+                holder.mContentView.setText(mValues.get(position).getMyBalance().toString());
+            }
+
+                holder.mPaydBy.setText("Paid by " + mValues.get(position).getPaying().getName());
 
             //sopra vengono settati i tre campi che costituisco le informazioni di ogni singolo gruppo, tutti pronti per essere mostriti nella gui
 
