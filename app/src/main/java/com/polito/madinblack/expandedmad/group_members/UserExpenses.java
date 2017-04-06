@@ -58,17 +58,7 @@ public class UserExpenses extends AppCompatActivity {
 
 
         if (savedInstanceState == null) {
-            // Create the detail fragment and add it to the activity
-            // using a fragment transaction.
-            /*Bundle arguments = new Bundle();
-            arguments.putString(ItemDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(ItemDetailFragment.ARG_ITEM_ID));
-            ItemDetailFragment fragment = new ItemDetailFragment();
-            fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.item_detail_container, fragment)
-                    .commit();*/
-            //Mostra il parametro passato come titolo
+
             Bundle extras = getIntent().getExtras();
             groupID = extras.getString("GROUP_ID");
             userID = extras.getString("USER_ID");
@@ -86,7 +76,7 @@ public class UserExpenses extends AppCompatActivity {
 
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new GroupMemebersActivity.SimpleItemRecyclerViewAdapter(DummyContent.ITEMS));
+        recyclerView.setAdapter(new UserExpenses.SimpleItemRecyclerViewAdapter(eItem.list));
     }
 
     @Override
@@ -103,7 +93,10 @@ public class UserExpenses extends AppCompatActivity {
                 return true;
 
             case R.id.home:
-                navigateUpTo(new Intent(this, GroupMemebersActivity.class));    //definisco il parente verso cui devo tornare indietro
+                //navigateUpTo(new Intent(this, GroupMemebersActivity.class));    //definisco il parente verso cui devo tornare indietro
+                Intent intent2 = new Intent(this, GroupMemebersActivity.class);
+                intent2.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                navigateUpTo(intent2);
                 return true;
 
             default:
