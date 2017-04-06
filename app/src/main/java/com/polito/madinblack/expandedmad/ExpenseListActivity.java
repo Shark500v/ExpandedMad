@@ -162,7 +162,7 @@ public class ExpenseListActivity extends AppCompatActivity {
                 holder.mContentView.setText("+"+mValues.get(position).getMyBalance().toString());
                 holder.mContentView.setTextColor(Color.parseColor("#00c200"));
             }else if(mValues.get(position).getMyBalance()<0) {
-                holder.mContentView.setText("-"+mValues.get(position).getMyBalance().toString());
+                holder.mContentView.setText(mValues.get(position).getMyBalance().toString());
                 holder.mContentView.setTextColor(Color.parseColor("#ff0000"));
             }
             else{
