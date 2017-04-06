@@ -21,6 +21,8 @@ public class Expense {
     private Group group;
     private User paying;
     private Long id;
+    private Float myDebits;
+    private Float myCredits;
 
 
 
@@ -32,11 +34,13 @@ public class Expense {
     private static long counter = 1;
 
 
-    //list of all user partecipating to the Expensive
-    private Map<Long, User> users = new HashMap<>();
-
     //a map showing for each user the cost of the Payment
     private Map<Long, Payment> userCost = new HashMap<>();
+
+    //map containing how money myself have to paid/received by users. + = received - = give 0 nothing
+    private Map<Long, Float> myCreditsDebits = new HashMap<>();
+
+
 
 
     public Expense(String name, Tag tag, float cost, String description, Currency currency, Group group, User paying, int year, int month, int day){
@@ -66,11 +70,7 @@ public class Expense {
 
     }
 
-    public void addUser(User u){
 
-        users.put(u.getId(), u);
-
-    }
 
     public void addUserCost(User u, Payment payment){
         userCost.put(u.getId(), payment);
@@ -157,9 +157,21 @@ public class Expense {
 
     public Payment getPayment(Long id){ return userCost.get(id); }
 
+    public Float getMyBalance(){
+        return userCost.get(MyApplication.myself.getId()).getBalance();
+    }
+
+
     public void addPayment(User user, Float paid, Float toPaid){
         Payment p = new Payment(user, this, paid, toPaid);
         userCost.put(getId(), p);
+        /*
+        if( MyApplication.myself.getId()== this.paying.getId() && user.getId()!=MyApplication.myself.getId())
+            myCreditsDebits.put(user.getId(), (toPaid-paid));
+        else if(MyApplication.myself.getId()!= this.paying.getId() && user.getId()==MyApplication.myself.getId())
+        */
+
+
     }
 
 }
