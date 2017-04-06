@@ -36,8 +36,8 @@ public class MyApplication {
         Group g3 = new Group("Group3");
 
         groups.put(g1.getId(), g1);
-        groups.put(g2.getId(), g1);
-        groups.put(g3.getId(), g1);
+        groups.put(g2.getId(), g2);
+        groups.put(g3.getId(), g3);
 
 
         User u1 = new User("Francesco", "Pipito'");
@@ -52,39 +52,44 @@ public class MyApplication {
         users.put(u3.getId(), u3);
         users.put(u4.getId(), u4);
         users.put(u5.getId(), u5);
-        users.put(u5.getId(), u6);
+        users.put(u6.getId(), u6);
 
+        g1.addUser(myself);
         g1.addUser(u1);
         g1.addUser(u2);
         g1.addUser(u3);
 
+        g2.addUser(myself);
         g2.addUser(u1);
         g2.addUser(u2);
         g2.addUser(u3);
-        g2.addUser(u4);
         g2.addUser(u5);
 
+
+        g3.addUser(myself);
         g3.addUser(u5);
         g3.addUser(u6);
 
-        Expense e1 = new Expense("Fly", Expense.Tag.FLY, 67.2f, null, Expense.Currency.EURO, g1, u1, 2017, 3, 16);
-        e1.addPayment(u1, 67.2f, 22.4f);
-        e1.addPayment(u2,  0f, 22.4f);
-        e1.addPayment(u3,  0f, 22.4f);
+        Expense e1 = new Expense("Fly", Expense.Tag.FLY, 89.6f, null, Expense.Currency.EURO, g1, u1, 2017, 3, 16);
+        e1.addPayment(u1,    89.6f, 22.4f);
+        e1.addPayment(u2,     0f, 22.4f);
+        e1.addPayment(u3,     0f, 22.4f);
+        e1.addPayment(myself, 0f, 22.4f);
         g1.addExpense(e1);
 
-        Expense e2 = new Expense("Light Bill", Expense.Tag.LIGHT_BILL, 96f, null, Expense.Currency.EURO, g1, u2, 2017, 1, 15);
-        e2.addPayment(u1,  0f, 32f);
-        e2.addPayment(u2, 96f, 32f);
-        e2.addPayment(u3,  0f, 32f);
+        Expense e2 = new Expense("Light Bill", Expense.Tag.LIGHT_BILL, 128f, null, Expense.Currency.EURO, g1, myself, 2017, 1, 15);
+        e2.addPayment(u1,       0f, 32f);
+        e2.addPayment(u2,       0f, 32f);
+        e2.addPayment(u3,       0f, 32f);
+        e2.addPayment(myself, 128f, 32f);
         g1.addExpense(e2);
 
         Expense e3 = new Expense("Cake", Expense.Tag.FOOD, 100f, null, Expense.Currency.EURO, g2, u5, 2017, 2, 26);
-        e3.addPayment(u1,  20f, 20f);
-        e3.addPayment(u2,  10f, 20f);
-        e3.addPayment(u3,  20f, 20f);
-        e3.addPayment(u4,   0f, 20f);
-        e3.addPayment(u5,  50f, 20f);
+        e3.addPayment(u1,       20f, 20f);
+        e3.addPayment(u2,       10f, 20f);
+        e3.addPayment(u3,       20f, 20f);
+        e3.addPayment(myself,    0f, 20f);
+        e3.addPayment(u5,       50f, 20f);
         g2.addExpense(e3);
 
 
