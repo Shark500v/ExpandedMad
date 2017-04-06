@@ -72,6 +72,8 @@ public class Group {
         return "Insert here the Details of the Group.";
     }
 
-
+    public Expense getSingleExpense(Long id) {
+        return expenses.get(id);
+    }
 
 }

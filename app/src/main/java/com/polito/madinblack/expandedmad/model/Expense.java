@@ -143,8 +143,6 @@ public class Expense {
     }
 
 
-
-
     public static int dateCompare(Expense e1, Expense e2){
         /*if(e1.getYear()>e2.getYear())
             return 1;
@@ -153,7 +151,6 @@ public class Expense {
         return 1;
     }
 
-
     public Long getId() {
         return id;
     }
@@ -161,10 +158,8 @@ public class Expense {
     public Payment getPayment(Long id){ return userCost.get(id); }
 
     public void addPayment(User user, Float paid, Float toPaid){
-
         Payment p = new Payment(user, this, paid, toPaid);
         userCost.put(getId(), p);
-
     }
 
 }
