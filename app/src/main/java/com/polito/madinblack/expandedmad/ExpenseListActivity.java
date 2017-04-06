@@ -156,8 +156,9 @@ public class ExpenseListActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);   //mValues.get(position) rappresenta un singolo elemento della nostra lista di spese
-            holder.mIdView.setText(mValues.get(position).getId().toString());
+            holder.mIdView.setText(mValues.get(position).getName());
             holder.mContentView.setText(mValues.get(position).getName());
+            holder.mPaydBy.setText(mValues.get(position).getPaying().getName());
             //sopra vengono settati i tre campi che costituisco le informazioni di ogni singolo gruppo, tutti pronti per essere mostriti nella gui
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -183,6 +184,7 @@ public class ExpenseListActivity extends AppCompatActivity {
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
             public final TextView mIdView;
+            public final TextView mPaydBy;
             public final TextView mContentView;
             public Expense mItem;
 
@@ -190,7 +192,9 @@ public class ExpenseListActivity extends AppCompatActivity {
                 super(view);
                 mView = view;
                 mIdView = (TextView) view.findViewById(R.id.id);
+                mPaydBy = (TextView) view.findViewById(R.id.paidBy);
                 mContentView = (TextView) view.findViewById(R.id.content);
+
             }
 
             @Override
