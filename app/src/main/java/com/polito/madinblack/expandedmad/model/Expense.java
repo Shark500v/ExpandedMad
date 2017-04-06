@@ -154,6 +154,8 @@ public class Expense {
 
     public Float getMyBalance(){
         return userCost.get(MyApplication.myself.getId()).getBalance();
+
+
     }
 
 
