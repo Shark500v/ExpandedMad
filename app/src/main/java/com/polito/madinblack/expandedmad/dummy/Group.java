@@ -42,7 +42,7 @@ public class Group {
         StringBuilder builder = new StringBuilder();    //costruisce una stringa appendendo elementi
         builder.append("Details about Group: ").append(position);
 
-        builder.append("\n\nInsert here the Expenses list");
+        builder.append("\n\nInsert here the Group info here.");
 
         return builder.toString();
     }
