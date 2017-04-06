@@ -159,6 +159,7 @@ public class ExpenseListActivity extends AppCompatActivity {
             holder.mIdView.setText(mValues.get(position).getName());
             holder.mContentView.setText(mValues.get(position).getName());
             holder.mPaydBy.setText(mValues.get(position).getPaying().getName());
+
             //sopra vengono settati i tre campi che costituisco le informazioni di ogni singolo gruppo, tutti pronti per essere mostriti nella gui
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
