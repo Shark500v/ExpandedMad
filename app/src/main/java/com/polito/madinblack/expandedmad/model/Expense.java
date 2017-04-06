@@ -165,7 +165,8 @@ public class Expense {
 
         if(paying.getId()==MyApplication.myself.getId() && user.getId()!=MyApplication.myself.getId()){
             group.uplMyCreditDebit(user, (toPaid-paid));
-
+        }else if(paying.getId()!=MyApplication.myself.getId() && user.getId()==MyApplication.myself.getId()){
+            group.uplMyCreditDebit(paying, (paid-toPaid));
         }
 
 
