@@ -13,16 +13,21 @@ import java.util.Map;
 
 public class MyApplication {
 
+    public static MyApplication myApplication = null;
+
+
+
     public static User myself;
 
     /*groupId --> group*/
-    private Map<Long, Group> groups = new LinkedHashMap<>();
+    public Map<Long, Group> groups = new LinkedHashMap<>();
 
     /*list of all users, can be seen as phonebook*/
-    private Map<Long, User> users = new LinkedHashMap<>();
+    public Map<Long, User> users = new LinkedHashMap<>();
 
 
-    public MyApplication(){
+
+    private MyApplication(){
         myself = new User("MyName", "MySurname");
         
 
@@ -87,6 +92,11 @@ public class MyApplication {
     }
 
 
+    public static MyApplication getInstance(){
+        if(myApplication==null)
+            myApplication = new MyApplication();
+        return myApplication;
+    }
 
     public void addGroup(Group g){
         groups.put(g.getId(), g);
