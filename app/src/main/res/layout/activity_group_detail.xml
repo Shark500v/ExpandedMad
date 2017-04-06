@@ -30,6 +30,16 @@
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
+            <ImageView
+                android:contentDescription="GroupImage"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="right"
+                android:layout_marginEnd="@dimen/text_margin"
+                android:layout_marginTop="@dimen/text_margin"
+                app:srcCompat="@drawable/teamwork"
+                />
+
         </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>

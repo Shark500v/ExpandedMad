@@ -23,7 +23,6 @@ import android.widget.TextView;
 import com.polito.madinblack.expandedmad.GroupManaging.GroupDetailActivity;
 import com.polito.madinblack.expandedmad.GroupManaging.GroupDetailFragment;
 import com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity;
-import com.polito.madinblack.expandedmad.dummy.*;
 import com.polito.madinblack.expandedmad.group_members.GroupMemebersActivity;
 import com.polito.madinblack.expandedmad.group_members.PersonalDebts;
 import com.polito.madinblack.expandedmad.model.*;
@@ -53,7 +52,7 @@ public class ExpenseListActivity extends AppCompatActivity {
         Intent beginner = getIntent();
         groupSelected = ma.getSingleGroup(Long.valueOf(beginner.getStringExtra("index"))); //recupero l'id del gruppo selezionato, e quindi il gruppo stesso
         eItem = groupSelected.getExpenses();
-        index = beginner.getStringExtra("index");
+        index = beginner.getStringExtra("index");   //id del gruppo, che devo considerare
 
         //toolbar settings
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

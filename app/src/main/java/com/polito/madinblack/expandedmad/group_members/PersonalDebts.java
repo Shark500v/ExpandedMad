@@ -16,22 +16,26 @@ import android.widget.TextView;
 
 import com.polito.madinblack.expandedmad.ExpenseListActivity;
 import com.polito.madinblack.expandedmad.R;
-
 import java.util.List;
-
 import com.polito.madinblack.expandedmad.dummy.DummyContent;
+import com.polito.madinblack.expandedmad.model.Group;
+import com.polito.madinblack.expandedmad.model.MyApplication;
 
 public class PersonalDebts extends AppCompatActivity {
+
+    private MyApplication ma;
+    private Group groupSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.personal_debts);
 
+        ma = MyApplication.getInstance();
+        groupSelected = ma.getSingleGroup(Long.valueOf(getIntent().getStringExtra("index")));   //retrive del gruppo che mi serve
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.inflateMenu(R.menu.menu_detail_user);
-
 
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
