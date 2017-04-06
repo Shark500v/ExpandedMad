@@ -37,8 +37,7 @@ public class Expense {
     //a map showing for each user the cost of the Payment
     private Map<Long, Payment> userCost = new HashMap<>();
 
-    //map containing how money myself have to paid/received by users. + = received - = give 0 nothing
-    private Map<Long, Float> myCreditsDebits = new HashMap<>();
+
 
 
 
@@ -160,6 +159,7 @@ public class Expense {
     public Float getMyBalance(){
         return userCost.get(MyApplication.myself.getId()).getBalance();
     }
+
 
 
     public void addPayment(User user, Float paid, Float toPaid){
