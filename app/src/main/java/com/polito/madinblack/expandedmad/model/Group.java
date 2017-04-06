@@ -60,8 +60,11 @@ public class Group {
         return usersCD;
     }
 
-    public List<User> getUsers(){ return new ArrayList<>(users.values());}
+    public Map<Long, Float> getMyCreditsDebits() {
+        return myCreditsDebits;
+    }
 
+    public List<User> getUsers(){ return new ArrayList<>(users.values());}
 
 
     public Long getId(){

@@ -2,6 +2,7 @@ package com.polito.madinblack.expandedmad.group_members;
 
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
@@ -17,9 +18,9 @@ import android.widget.TextView;
 import com.polito.madinblack.expandedmad.ExpenseListActivity;
 import com.polito.madinblack.expandedmad.R;
 import java.util.List;
-import com.polito.madinblack.expandedmad.dummy.DummyContent;
 import com.polito.madinblack.expandedmad.model.Group;
 import com.polito.madinblack.expandedmad.model.MyApplication;
+import com.polito.madinblack.expandedmad.model.User;
 
 public class PersonalDebts extends AppCompatActivity {
 
@@ -54,7 +55,7 @@ public class PersonalDebts extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.item_detail_container, fragment)
                     .commit();*/
-            actionBar.setTitle("Me");
+            actionBar.setTitle("Me vs " + groupSelected.getName());
 
 
             View recyclerView = findViewById(R.id.item_list);
@@ -64,6 +65,7 @@ public class PersonalDebts extends AppCompatActivity {
 
     }
 
+    //back track
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -78,30 +80,36 @@ public class PersonalDebts extends AppCompatActivity {
 
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new PersonalDebts.SimpleItemRecyclerViewAdapter(DummyContent.ITEMS));
+        recyclerView.setAdapter(new PersonalDebts.SimpleItemRecyclerViewAdapter(groupSelected.getUsersCreditsDebits()));   //gli passo la lista di utenti
     }
 
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<PersonalDebts.SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<DummyContent.DummyItem> mValues;
+        private final List<User> mValues;
 
-        public SimpleItemRecyclerViewAdapter(List<DummyContent.DummyItem> items) {
-            mValues = items;
+        public SimpleItemRecyclerViewAdapter(List<User> users) {
+            mValues = users;
         }
 
         @Override
         public PersonalDebts.SimpleItemRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.users_list_content, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.users_list_content, parent, false);
             return new PersonalDebts.SimpleItemRecyclerViewAdapter.ViewHolder(view);
         }
 
         @Override
         public void onBindViewHolder(final PersonalDebts.SimpleItemRecyclerViewAdapter.ViewHolder holder, int position) {
-            holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).id);
-            holder.mContentView.setText(mValues.get(position).content);
+            holder.mItem = mValues.get(position);                           //singolo utente
+            holder.mIdView.setText(mValues.get(position).getName() + " " +mValues.get(position).getSurname());               //qui visualizzo nome e cognome
+            //qui invece quanto deve o meno
+            if (groupSelected.getMyCreditsDebits().get(mValues.get(position).getId())>=0){
+                holder.mContentView.setText("+" + Float.toString(groupSelected.getMyCreditsDebits().get(mValues.get(position).getId())));
+                holder.mContentView.setTextColor(Color.parseColor("#00c200"));
+            }else{
+                holder.mContentView.setText(Float.toString(groupSelected.getMyCreditsDebits().get(mValues.get(position).getId())));
+                holder.mContentView.setTextColor(Color.parseColor("#ff0000"));
+            }
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -124,7 +132,7 @@ public class PersonalDebts extends AppCompatActivity {
             public final View mView;
             public final TextView mIdView;
             public final TextView mContentView;
-            public DummyContent.DummyItem mItem;
+            public User mItem;
 
             public ViewHolder(View view) {
                 super(view);
