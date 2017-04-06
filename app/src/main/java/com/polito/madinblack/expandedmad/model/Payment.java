@@ -17,6 +17,7 @@ public class Payment {
         this.paid    = paid;
         this.toPaid  = toPaid;
 
+
     }
 
     public User getUser() {
@@ -71,6 +72,9 @@ public class Payment {
 
     }
 
+
+
+
     @Override
     public String toString() {
         if(paid > toPaid)
@@ -78,4 +82,8 @@ public class Payment {
         else
             return paid.toString()+"/"+toPaid.toString();
     }
+
+
+
+
 }

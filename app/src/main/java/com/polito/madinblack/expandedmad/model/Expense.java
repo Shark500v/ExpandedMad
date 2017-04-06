@@ -20,9 +20,13 @@ public class Expense {
     private State state;
     private Group group;
     private User paying;
-
-
     private Long id;
+
+
+
+    private int year;
+    private int month;
+    private int day;
 
 
     private static long counter = 0;
@@ -35,14 +39,17 @@ public class Expense {
     private Map<Long, Payment> userCost = new HashMap<>();
 
 
-    public Expense(String name, Tag tag, float cost, Currency currency, Group group, User paying){
-        this.name     = name;
-        this.tag      = tag;
-        this.cost     = cost;
-        this.currency = currency;
-        this.group    = group;
-        this.paying   = paying;
-
+    public Expense(String name, Tag tag, float cost, String description, Currency currency, Group group, User paying, int year, int month, int day){
+        this.name        = name;
+        this.tag         = tag;
+        this.cost        = cost;
+        this.description = description;
+        this.currency    = currency;
+        this.group       = group;
+        this.paying      = paying;
+        this.year        = year;
+        this.month       = month;
+        this.day         = day;
 
         /*first implementation: divide equally the cost and everybody in the group will pay
         Float toPaid = cost / group.getUsers().size();
@@ -117,6 +124,34 @@ public class Expense {
     public void setState(State state) {
         this.state = state;
     }
+
+    public String dateToString(){
+        return day+"/"+month+"/"+year;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public int getDay() {
+        return day;
+    }
+
+
+
+
+    public static int dateCompare(Expense e1, Expense e2){
+        /*if(e1.getYear()>e2.getYear())
+            return 1;
+        else if(e1.getMonth())
+    */
+        return 0;
+    }
+
 
     public Long getId() {
         return id;
