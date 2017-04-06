@@ -21,7 +21,7 @@ public class ExpenseDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_expense_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
-
+        /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -29,7 +29,7 @@ public class ExpenseDetailActivity extends AppCompatActivity {
                 //Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
         });
-
+        */
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
