@@ -63,6 +63,8 @@ public class Group {
         return totDebit;
     }
 
+    public User getUser(Long id) { return users.get(id);}
+
 
     public int getSize(){ return expenses.size();}
 
