@@ -15,12 +15,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.polito.madinblack.expandedmad.ExpenseDetailActivity;
+import com.polito.madinblack.expandedmad.ExpenseDetailFragment;
 import com.polito.madinblack.expandedmad.ExpenseListActivity;
 import com.polito.madinblack.expandedmad.R;
 
 import java.util.List;
 
 import com.polito.madinblack.expandedmad.dummy.DummyContent;
+import com.polito.madinblack.expandedmad.dummy.Expense;
+import com.polito.madinblack.expandedmad.dummy.Group;
 
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
@@ -37,7 +41,7 @@ public class GroupMemebersActivity extends AppCompatActivity {
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
      */
-    public static String groupID = "";
+    public String groupID = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,13 +57,14 @@ public class GroupMemebersActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+
         groupID = getIntent().getStringExtra(EXTRA_MESSAGE);
         actionBar.setTitle("Group "+groupID);
-
 
         View recyclerView = findViewById(R.id.item_list);
         assert recyclerView != null;
         setupRecyclerView((RecyclerView) recyclerView);
+
     }
 
     @Override
@@ -78,7 +83,7 @@ public class GroupMemebersActivity extends AppCompatActivity {
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(DummyContent.ITEMS));
     }
 
-    public static class SimpleItemRecyclerViewAdapter
+    public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final List<DummyContent.DummyItem> mValues;
@@ -120,7 +125,7 @@ public class GroupMemebersActivity extends AppCompatActivity {
             return mValues.size();
         }
 
-        public static class ViewHolder extends RecyclerView.ViewHolder {
+        public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
             public final TextView mIdView;
             public final TextView mContentView;
