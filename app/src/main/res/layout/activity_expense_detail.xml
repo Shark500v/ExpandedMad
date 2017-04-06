@@ -33,11 +33,12 @@
 
             <ImageView
                 android:contentDescription="@string/bill"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_gravity="right"
                 android:layout_marginEnd="@dimen/text_margin"
-                app:srcCompat="@drawable/house_rent"
+                android:layout_marginTop="@dimen/text_margin"
+                app:srcCompat="@drawable/file"
                 />
 
 
