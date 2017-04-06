@@ -169,6 +169,7 @@ public class ExpenseListActivity extends AppCompatActivity {
                 holder.mContentView.setText(mValues.get(position).getMyBalance().toString());
             }
 
+
                 holder.mPaydBy.setText("Paid by " + mValues.get(position).getPaying().getName());
 
             //sopra vengono settati i tre campi che costituisco le informazioni di ogni singolo gruppo, tutti pronti per essere mostriti nella gui
