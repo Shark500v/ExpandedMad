@@ -153,8 +153,9 @@ public class Expense {
     public Payment getPayment(Long id){ return userCost.get(id); }
 
     public Float getMyBalance(){
+        if(!userCost.containsKey(MyApplication.myself.getId()))
+            return -777f;
         return userCost.get(MyApplication.myself.getId()).getBalance();
-
 
     }
 

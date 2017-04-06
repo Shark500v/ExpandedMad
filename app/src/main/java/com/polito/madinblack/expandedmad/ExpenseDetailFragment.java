@@ -58,7 +58,7 @@ public class ExpenseDetailFragment extends Fragment {
             ((TextView) rootView.findViewById(R.id.tag_container)).setText(mItem.getTag().toString());
             ((TextView) rootView.findViewById(R.id.cost_container)).setText(Float.toString(mItem.getCost()));
             ((TextView) rootView.findViewById(R.id.currency_container)).setText(mItem.getCurrency().toString());
-            ((TextView) rootView.findViewById(R.id.buyer_container)).setText(mItem.getPaying());
+            ((TextView) rootView.findViewById(R.id.buyer_container)).setText(mItem.getPaying().toString());
             //((TextView) rootView.findViewById(R.id.balance_container)).setText(mItem.);
             ((TextView) rootView.findViewById(R.id.date_container)).setText(Integer.toString(mItem.getDay()) + "/" + Integer.toString(mItem.getMonth()) + "/" + Integer.toString(mItem.getYear()));
         }
