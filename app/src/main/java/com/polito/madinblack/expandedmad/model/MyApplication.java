@@ -28,7 +28,7 @@ public class MyApplication {
 
 
     private MyApplication(){
-        myself = new User("MyName", "MySurname");
+        myself = new User("Mario", "Rossi");
         
 
         Group g1 = new Group("Group1");
@@ -52,6 +52,7 @@ public class MyApplication {
         users.put(u3.getId(), u3);
         users.put(u4.getId(), u4);
         users.put(u5.getId(), u5);
+        users.put(u5.getId(), u6);
 
         g1.addUser(u1);
         g1.addUser(u2);
