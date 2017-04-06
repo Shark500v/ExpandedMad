@@ -15,8 +15,6 @@ public class MyApplication {
 
     public static MyApplication myApplication = null;
 
-
-
     public static User myself;
 
     /*groupId --> group*/
@@ -27,7 +25,7 @@ public class MyApplication {
 
 
 
-    private MyApplication(){
+    public MyApplication(){
         myself = new User("Mario", "Rossi");
         
 
@@ -65,7 +63,6 @@ public class MyApplication {
         g2.addUser(u3);
         g2.addUser(u5);
 
-
         g3.addUser(myself);
         g3.addUser(u5);
         g3.addUser(u6);
@@ -91,10 +88,6 @@ public class MyApplication {
         e3.addPayment(myself,    0f, 20f);
         e3.addPayment(u5,       50f, 20f);
         g2.addExpense(e3);
-
-
-
-
     }
 
 
@@ -109,6 +102,10 @@ public class MyApplication {
     }
 
     public List<Group> getGroup(){ return new ArrayList<Group>(groups.values()); }
+
+    public Group getSingleGroup(Long id) {
+        return groups.get(id);
+    }
 
 
 

@@ -37,18 +37,19 @@ import static android.provider.AlarmClock.EXTRA_MESSAGE;
  */
 public class GroupMemebersActivity extends AppCompatActivity {
 
-    /**
-     * Whether or not the activity is in two-pane mode, i.e. running on a tablet
-     * device.
-     */
-    public String groupID = "";
+    public String groupID = "init";
+    private String name = "hello";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.users_of_group);
 
+        groupID = getIntent().getStringExtra("GROUP_ID");
+        name = "Group " + groupID;
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(name);
         setSupportActionBar(toolbar);
 
         // Show the Up button in the action bar.
@@ -57,17 +58,9 @@ public class GroupMemebersActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-
-        if (savedInstanceState == null) {
-
-            groupID = getIntent().getStringExtra("GROUP_ID");
-            actionBar.setTitle("Group "+groupID);
-
-            View recyclerView = findViewById(R.id.item_list);
-            assert recyclerView != null;
-            setupRecyclerView((RecyclerView) recyclerView);
-        }
-
+        View recyclerView = findViewById(R.id.item_list);
+        assert recyclerView != null;
+        setupRecyclerView((RecyclerView) recyclerView);
 
     }
 
@@ -76,7 +69,7 @@ public class GroupMemebersActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == android.R.id.home) {
             Intent intent = new Intent(this, ExpenseListActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             navigateUpTo(intent);
             return true;
         }
@@ -87,8 +80,7 @@ public class GroupMemebersActivity extends AppCompatActivity {
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(DummyContent.ITEMS));
     }
 
-    public class SimpleItemRecyclerViewAdapter
-            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
+    public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final List<DummyContent.DummyItem> mValues;
 
@@ -98,8 +90,7 @@ public class GroupMemebersActivity extends AppCompatActivity {
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.users_list_content, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.users_list_content, parent, false);
             return new ViewHolder(view);
         }
 

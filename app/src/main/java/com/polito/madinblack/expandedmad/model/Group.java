@@ -17,10 +17,11 @@ public class Group {
 
 
 
-    private static long counter = 0;
+    private static long counter = 1;
     //add image attribute
 
     private Map<Long, User>users = new HashMap<>();
+
     private Map<Long, Expense>expenses = new LinkedHashMap<>();
 
     public Group(String name){
@@ -33,8 +34,8 @@ public class Group {
 
     public void addExpense(Expense e){
         expenses.put(e.getId(), e);
-        totDebit += e.getPayment(MyApplication.myself.getId()).getDebit();
-        totCredit += e.getPayment(MyApplication.myself.getId()).getCredit();
+        //totDebit += e.getPayment(MyApplication.myself.getId()).getDebit();
+        //totCredit += e.getPayment(MyApplication.myself.getId()).getCredit();
 
     }
 
@@ -62,6 +63,14 @@ public class Group {
     public int getSize(){ return expenses.size();}
 
     public String getName(){ return name; }
+
+    public List<Expense> getExpenses() {
+        return new ArrayList<>(expenses.values());
+    }
+
+    public String getDetails(){
+        return "Insert here the Details of the Group.";
+    }
 
 
 

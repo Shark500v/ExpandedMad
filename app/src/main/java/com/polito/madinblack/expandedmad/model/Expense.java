@@ -29,7 +29,7 @@ public class Expense {
     private int day;
 
 
-    private static long counter = 0;
+    private static long counter = 1;
 
 
     //list of all user partecipating to the Expensive
@@ -50,6 +50,7 @@ public class Expense {
         this.year        = year;
         this.month       = month;
         this.day         = day;
+        this.id          = counter++;
 
         /*first implementation: divide equally the cost and everybody in the group will pay
         Float toPaid = cost / group.getUsers().size();

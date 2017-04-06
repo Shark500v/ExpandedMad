@@ -10,13 +10,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.polito.madinblack.expandedmad.R;
-import com.polito.madinblack.expandedmad.dummy.Group;
+import com.polito.madinblack.expandedmad.model.*;
 
 public class GroupDetailFragment extends Fragment {
 
     public static final String ARG_G_ID = "item_id";
 
-    private Group.GroupElements mItem;
+    private Group mItem;
+
+    private MyApplication ma;
 
     public GroupDetailFragment() {
     }
@@ -25,16 +27,18 @@ public class GroupDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        ma = MyApplication.getInstance();   //retrive del DB
+
         if (getArguments().containsKey(ARG_G_ID)) {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            mItem = Group.Group_MAP.get(getArguments().getString(ARG_G_ID));
+            mItem = ma.getSingleGroup(Long.valueOf(getArguments().getString(ARG_G_ID)));    //I retrive the group of my interest
 
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
-                appBarLayout.setTitle(mItem.content);
+                appBarLayout.setTitle(mItem.getName());
             }
         }
     }
@@ -45,7 +49,7 @@ public class GroupDetailFragment extends Fragment {
 
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.group_detail)).setText(mItem.details);
+            ((TextView) rootView.findViewById(R.id.group_detail)).setText(mItem.getDetails());
         }
 
         return rootView;

@@ -8,7 +8,7 @@ public class User {
     private String name;
     private String surname;
     private float globalBalance;
-    private static long counter = 0; /*counter to assign an id*/
+    private static long counter = 1; /*counter to assign an id*/
     private final Long id;          //unique Id for each user
 
     /*all groups for user*/

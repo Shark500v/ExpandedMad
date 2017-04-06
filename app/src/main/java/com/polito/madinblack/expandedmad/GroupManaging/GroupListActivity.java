@@ -25,7 +25,8 @@ import android.widget.TextView;
 
 import com.polito.madinblack.expandedmad.ExpenseListActivity;
 import com.polito.madinblack.expandedmad.R;
-import com.polito.madinblack.expandedmad.dummy.Group;
+import com.polito.madinblack.expandedmad.model.MyApplication;
+import com.polito.madinblack.expandedmad.model.*;
 
 import java.util.List;
 
@@ -35,28 +36,32 @@ import java.util.List;
 
 public class GroupListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
+    private MyApplication ma;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.starting_layoute);
+
+        ma = MyApplication.getInstance();   //retrive del DB
+
         //toolbar settings
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //qui bisogna aggiungere un nuovo gruppo, in questo momento lo faccio nel modo semplice
-                Group.AddNewGroup();
                 //devo notificare la vista che qualcosa è cambiato
                 RecyclerView recyclerView = (RecyclerView)findViewById(R.id.group_list);
                 recyclerView.getAdapter().notifyDataSetChanged();   //rendo visibili le modifiche apportate
                 //questo stampa al fondo la scritta
                 Snackbar.make(view, "New Group added!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-
             }
-        });
+        });*/
 
         //le righe di codice di sotto servono al drower laterale che compare
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -117,15 +122,15 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(Group.Groups));
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(ma.getGroup()));
     }
 
     //questa classe la usa per fare il managing della lista che deve mostrare
     public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<Group.GroupElements> mValues;
+        private final List<Group> mValues;
 
-        public SimpleItemRecyclerViewAdapter(List<Group.GroupElements> groups) {
+        public SimpleItemRecyclerViewAdapter(List<Group> groups) {
             mValues = groups;
         }
 
@@ -138,8 +143,8 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         @Override
         public void onBindViewHolder(final SimpleItemRecyclerViewAdapter.ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);   //mValues.get(position) rappresenta un singolo elemento della nostra lista di gruppi
-            holder.mIdView.setText(mValues.get(position).id);
-            holder.mContentView.setText(mValues.get(position).content);
+            holder.mIdView.setText(mValues.get(position).getId().toString());
+            holder.mContentView.setText(mValues.get(position).getName());
             //sopra vengono settati i tre campi che costituisco le informazioni di ogni singolo gruppo, tutti pronti per essere mostriti nella gui
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -147,7 +152,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                 public void onClick(View v) {
                     Context context = v.getContext();
                     Intent intent = new Intent(context, ExpenseListActivity.class); //qui setto la nuova attività da mostrare a schermo dopo che clicco
-                    intent.putExtra("index", holder.mItem.id);    //passo alla nuova activity l'ide del gruppo chè l'utente ha selezionto
+                    intent.putExtra("index", holder.mItem.getId().toString());    //passo alla nuova activity l'ide del gruppo chè l'utente ha selezionto
 
                     context.startActivity(intent);
                 }
@@ -164,7 +169,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             public final View mView;
             public final TextView mIdView;
             public final TextView mContentView;
-            public Group.GroupElements mItem;
+            public Group mItem;
 
             public ViewHolder(View view) {
                 super(view);
