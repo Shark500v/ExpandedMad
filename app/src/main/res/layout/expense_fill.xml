@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -21,87 +21,113 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <TextView
-        android:id="@+id/textWho"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/app_bar"
-        android:text="@string/who"
-        android:textSize="20sp"
-        android:padding="15dp"
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        />
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:orientation="vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
 
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_layout_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <Spinner
-        android:id="@+id/spinnerWho"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/app_bar"
-        android:layout_toRightOf="@id/textWho"
+            <EditText
+                android:id="@+id/input_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:hint="@string/hint_title" />
+        </android.support.design.widget.TextInputLayout>
 
-        android:layout_margin="15dp"
-        android:textSize="20sp"
-        android:entries="@array/tags"
-        android:spinnerMode="dropdown"
-        android:layout_alignParentRight="true"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_amount"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
 
-
-        />
-
-    <TextView
-        android:id="@+id/textHow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textWho"
-        android:text="@string/how"
-        android:textSize="20sp"
-        android:padding="15dp"
-
-        />
-
-
-    <EditText
-        android:id="@+id/cost"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/spinnerWho"
-        android:layout_toRightOf="@id/textHow"
-        android:textSize="20sp"
-        />
-
-    <TextView
-        android:id="@+id/textPartition"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textHow"
-        android:text="@string/partition"
-        android:textSize="20sp"
-        android:padding="15dp"
-
-        />
-
-    <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/user_list"
-        android:name="com.polito.madinblack.expandedmad.ExpenseFillData"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_below="@id/cost"
-        android:layout_toRightOf="@id/textPartition"
-        app:layoutManager="LinearLayoutManager"
-        tools:context="com.polito.madinblack.expandedmad.GroupManaging.ExpenseFillData"
-        tools:listitem="@layout/expense_list_content" />
-
-    
+                <EditText
+                    android:id="@+id/input_amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
+                    android:hint="@string/hint_amount" />
+            </android.support.design.widget.TextInputLayout>
 
 
+            <TextView
+                android:id="@+id/paidBy"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="5dp"
+                android:text="EUR"/>
+
+        </LinearLayout>
 
 
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_layout_paidBy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
+            <EditText
+                android:id="@+id/input_paidBy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_paidby" />
+        </android.support.design.widget.TextInputLayout>
 
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_layout_tag"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
+            <Spinner
+                android:id="@+id/tag_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="13dp"
+                android:layout_marginBottom="13dp"
+                android:entries="@array/tags" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_layout_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/input_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="showDataPicker"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/users_list"
+            android:name="com.polito.madinblack.expandedmad.ExpenseFillData"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/cost"
+            app:layoutManager="LinearLayoutManager"
+            tools:context="com.polito.madinblack.expandedmad.GroupManaging.ExpenseFillData"
+            tools:listitem="@layout/user_for_new_expense" />
+
+    </LinearLayout>
+
+    </ScrollView>
 </RelativeLayout>
