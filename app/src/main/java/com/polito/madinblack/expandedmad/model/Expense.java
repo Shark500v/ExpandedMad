@@ -162,7 +162,7 @@ public class Expense {
 
     public void addPayment(User user, Float paid, Float toPaid){
         Payment p = new Payment(user, this, paid, toPaid);
-        userCost.put(getId(), p);
+        userCost.put(user.getId(), p);
 
         if(paying.getId()==MyApplication.myself.getId() && user.getId()!=MyApplication.myself.getId()){
             group.uplMyCreditDebit(user, (toPaid-paid));
