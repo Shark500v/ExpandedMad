@@ -21,7 +21,7 @@ public class Group {
     private static long counter = 1;
     //add image attribute
 
-    private Map<Long, User>users = new HashMap<>();
+    private Map<Long, User>users = new LinkedHashMap<>();
 
     private Map<Long, Expense>expenses = new LinkedHashMap<>();
 

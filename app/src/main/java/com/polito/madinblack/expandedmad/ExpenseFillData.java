@@ -28,16 +28,21 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity;
-import com.polito.madinblack.expandedmad.dummy.Expense;
-import com.polito.madinblack.expandedmad.dummy.Group;
+import com.polito.madinblack.expandedmad.model.Expense;
 import com.polito.madinblack.expandedmad.model.MyApplication;
+import com.polito.madinblack.expandedmad.model.User;
+import com.polito.madinblack.expandedmad.model.Expense.Tag;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
@@ -51,6 +56,8 @@ public class ExpenseFillData extends AppCompatActivity {
     private String groupID = "index";
     private com.polito.madinblack.expandedmad.model.Group groupSelected;
     private MyApplication ma;
+    private Map<Long, Float> userCost;
+    private List<User> users;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,9 +69,15 @@ public class ExpenseFillData extends AppCompatActivity {
 
         ma = MyApplication.getInstance();   //retrive del DB
 
+
+
+
         Intent beginner = getIntent();
         groupSelected = ma.getSingleGroup(Long.valueOf(beginner.getStringExtra("index"))); //recupero l'id del gruppo selezionato, e quindi il gruppo stesso
         groupID = beginner.getStringExtra("index");   //id del gruppo, che devo considerare
+
+        users = new ArrayList<>(groupSelected.getUsers());
+        userCost = new HashMap<>();
 
         //show current date
         showDate(new Date());
@@ -83,8 +96,11 @@ public class ExpenseFillData extends AppCompatActivity {
     private void populateSpinner() {
         // you need to have a list of data that you want the spinner to display
         List<String> spinnerArray =  new ArrayList<String>();
-        spinnerArray.add("item1");
-        spinnerArray.add("item2");
+        Iterator<User> us = groupSelected.getUsers().iterator();
+        while(us.hasNext()) {
+            User u = us.next();
+            spinnerArray.add(u.getName());
+        }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerArray);
 
@@ -100,10 +116,50 @@ public class ExpenseFillData extends AppCompatActivity {
 
 
             EditText inputTitle = (EditText)findViewById(R.id.input_title);
-            EditText inputAmout = (EditText)findViewById(R.id.input_amount);
-            Spinner inputPaidBy = (Spinner) findViewById(R.id.paidBy_spinner);
-            Spinner tag_spinner = (Spinner) findViewById(R.id.tag_spinner);
+            String title = inputTitle.getText().toString();
 
+            EditText inputAmout = (EditText)findViewById(R.id.input_amount);
+            String amountS = inputAmout.getText().toString();
+            Float amount = Float.valueOf(amountS);
+
+            Spinner inputPaidBy = (Spinner) findViewById(R.id.paidBy_spinner);
+            int index = inputPaidBy.getSelectedItemPosition();
+            User userSelect = groupSelected.getUsers().get(index);
+
+            Spinner tag_spinner = (Spinner) findViewById(R.id.tag_spinner);
+            String tagS = tag_spinner.getSelectedItem().toString();
+            Tag tag = Tag.valueOf(tagS);
+
+            TextView data = (TextView) findViewById(R.id.input_date);
+            String dataS = data.getText().toString();
+            String [] dayS = dataS.split("/");
+            int day = Integer.parseInt(dayS[0]);
+            int month = Integer.parseInt(dayS[1]);
+            int year = Integer.parseInt(dayS[2]);
+
+
+            Iterator<Long> userId = userCost.keySet().iterator();
+
+
+            for(int i=0; i<userCost.size(); i++){
+                user
+
+
+            }
+
+                /*
+            for(int i=0; i<....; i++){
+                TextView user = (TextView) findViewById(R.id.username);
+                TextView personal = (TextView) findViewById(R.id.personal_amount);
+
+            }
+            */
+
+            TextView description = (TextView) findViewById(R.id.input_description);
+            String descriptionS = description.getText().toString();
+
+
+            Expense newExpense = new Expense(title, tag, amount, descriptionS, Expense.Currency.EURO, groupSelected, userSelect, year, month, day);
 
 
 
@@ -166,7 +222,9 @@ public class ExpenseFillData extends AppCompatActivity {
         myinteger++;
         display(myinteger);*/
 
-    }public void decreaseInteger(View view) {
+    }
+
+    public void decreaseInteger(View view) {
         /*myinteger--;
         display(myinteger);*/
     }
@@ -251,7 +309,7 @@ public class ExpenseFillData extends AppCompatActivity {
             public final TextView mIdView;
             public final TextView mNumber;
             public final TextView partition;
-            public Group.GroupElements mItem;
+            public Group mItem;
 
             public ViewHolder(View view) {
                 super(view);
