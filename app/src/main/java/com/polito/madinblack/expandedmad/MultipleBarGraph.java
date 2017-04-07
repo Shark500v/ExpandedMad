@@ -12,15 +12,12 @@ import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
-/**
- * Created by AleCatto on 05/04/2017.
- */
-
 public class MultipleBarGraph extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.graph_layout);
+
         GraphView graphView = (GraphView) findViewById(R.id.graph1);
         initGraph(graphView);
     }

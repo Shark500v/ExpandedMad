@@ -8,32 +8,41 @@
 
 
     <TextView
-        android:id="@+id/balance"
+        android:id="@+id/paid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:text="@string/balance"
+        android:text="Paid/toPay"
         android:textSize="25dp"/>
 
     <TextView
-        android:id="@+id/balance_container"
+        android:id="@+id/paid_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/balance"
-        android:layout_toEndOf="@+id/balance"
-        android:text="75"
+        android:layout_alignBottom="@+id/paid"
+        android:layout_toEndOf="@+id/paid"
+        android:text="x/y"
         android:textSize="22dp"
         android:gravity="end"
         android:layout_marginEnd="16dp"/>
 
     <TextView
-        android:id="@+id/tag_container"
+        android:id="@+id/balance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="@string/balance"
+        android:textSize="25dp"
+        android:layout_below="@+id/paid"/>
+
+    <TextView
+        android:id="@+id/balance_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/tag"
-        android:layout_alignBottom="@+id/tag"
+        android:layout_toEndOf="@+id/balance"
+        android:layout_alignBottom="@+id/balance"
         android:layout_marginEnd="16dp"
-        android:text="Type"
+        android:text="75"
         android:textAlignment="textEnd"
         android:textSize="22dp"/>
 
@@ -45,6 +54,17 @@
         android:text="@string/tag"
         android:textSize="25dp"
         android:layout_below="@+id/buyer"/>
+
+    <TextView
+        android:id="@+id/tag_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/tag"
+        android:layout_alignBottom="@+id/tag"
+        android:layout_marginEnd="16dp"
+        android:text="Type"
+        android:textAlignment="textEnd"
+        android:textSize="22dp"/>
 
     <TextView
         android:id="@+id/cost"

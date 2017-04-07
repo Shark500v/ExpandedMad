@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.polito.madinblack.expandedmad.ExpenseListActivity;
+import com.polito.madinblack.expandedmad.MultipleBarGraph;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.*;
@@ -97,7 +98,6 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             // Handle the camera action
         } else if (id == R.id.nav_expenses) {
 
-
         } else if (id == R.id.nav_settings){
 
         }
@@ -141,7 +141,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         @Override
         public void onBindViewHolder(final SimpleItemRecyclerViewAdapter.ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);   //mValues.get(position) rappresenta un singolo elemento della nostra lista di gruppi
-            //holder.mIdView.setText(mValues.get(position).getId().toString());
+            holder.mNumView.setText(Integer.toString(mValues.get(position).getUsers().size()) + " members");
             holder.mContentView.setText(mValues.get(position).getName());
             //sopra vengono settati i tre campi che costituisco le informazioni di ogni singolo gruppo, tutti pronti per essere mostriti nella gui
 
@@ -165,14 +165,14 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         //questa è una classe di supporto che viene usata per creare la vista a schermo, non ho ben capito come funziona
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
-            //public final TextView mIdView;
+            public final TextView mNumView;
             public final TextView mContentView;
             public Group mItem;
 
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
-                //mIdView = (TextView) view.findViewById(R.id.id);
+                mNumView = (TextView) view.findViewById(R.id.num_members);
                 mContentView = (TextView) view.findViewById(R.id.content);
             }
 
