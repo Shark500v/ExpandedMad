@@ -212,9 +212,12 @@ public class ExpenseFillData extends AppCompatActivity {
     private void modifyProportion(String value) {
         float amount = value.equals("")?0:Float.parseFloat(value);
         float price = amount/userCost.size();
-        for(int i=0;i<userCost.keySet().size();i++){
-            Long key = userCost.keySet().;
-            userCost.put(i, price);
+        for(int i=0;i<users.size();i++){
+            Long key = users.get(i).getId();
+            if(userCost.containsKey(key)){
+                userCost.put(key, price);
+            }
+
             recyclerView.getAdapter().notifyItemChanged(i, userCost.get(i));
         }
     }
@@ -295,14 +298,13 @@ public class ExpenseFillData extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     float part = Float.parseFloat(holder.mNumber.getText().toString());
+                    part--;
+                    holder.mNumber.setText(Float.toString(part));
                     if(part == 1){
                         holder.mNumber.setEnabled(false);
                         userCost.remove(users.get(position).getId());
                     }
-                    else{
-                        part--;
-                        holder.mNumber.setText(Float.toString(part));
-                    }
+
 
                     recyclerView.getAdapter().notifyItemChanged(position, users.get(position));
                 }
