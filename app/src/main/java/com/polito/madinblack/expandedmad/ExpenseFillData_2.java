@@ -78,8 +78,7 @@ public class ExpenseFillData_2 extends AppCompatActivity {
 
         populateSpinner();
 
-        EditText inputAmount = (EditText)findViewById(R.id.input_amount);
-        inputAmount.addTextChangedListener(new MyTextWatcher(inputAmount));
+
 
 
 
@@ -120,7 +119,7 @@ public class ExpenseFillData_2 extends AppCompatActivity {
 
             Spinner tag_spinner = (Spinner) findViewById(R.id.tag_spinner);
             String tagS = tag_spinner.getSelectedItem().toString();
-            Tag tag = Tag.valueOf(tagS);
+            Tag tag = Tag.valueOf(tagS.toUpperCase());
 
             TextView data = (TextView) findViewById(R.id.input_date);
             String dataS = data.getText().toString();
@@ -148,7 +147,7 @@ public class ExpenseFillData_2 extends AppCompatActivity {
             Intent intent = new Intent(this, ExpenseListActivity.class);
 
 
-            //intent.putExtra(EXTRA_MESSAGE, userID);
+            intent.putExtra("index", groupID);
 
             startActivity(intent);
             return true;
@@ -168,51 +167,7 @@ public class ExpenseFillData_2 extends AppCompatActivity {
         return true;
     }
 
-    private class MyTextWatcher implements TextWatcher {
 
-        private View view;
-
-        private MyTextWatcher(View view) {
-            this.view = view;
-        }
-
-        @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        }
-
-        @Override
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        }
-
-        @Override
-        public void afterTextChanged(Editable editable) {
-            switch (view.getId()) {
-                case R.id.input_amount:
-                    modifyProportion(editable.toString());
-                    break;
-            }
-        }
-    }
-
-    private void modifyProportion(String value) {
-        float amount = value.equals("")?0:Float.parseFloat(value);
-        float price = amount/userCost.size();
-        for(int i=0;i<users.size();i++){
-            Long key = users.get(i).getId();
-            if(userCost.containsKey(key)){
-                userCost.put(key, price);
-            }
-
-            recyclerView.getAdapter().notifyItemChanged(i, userCost.get(i));
-        }
-    }
-
-    public void increaseInteger(View view) {
-        /*RecyclerView rv = (RecyclerView)view;
-        myinteger++;
-        display(myinteger);*/
-
-    }
 
     public void decreaseInteger(View view) {
         /*myinteger--;

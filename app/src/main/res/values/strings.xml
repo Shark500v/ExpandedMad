@@ -19,13 +19,15 @@
         <item name="US_Dollars">US Dollars</item>
     </string-array>
     <string-array name="tags">
-        <item name="water_bill">Water Bill</item>
-        <item name="light_bill">Light Bill</item>
+        <item name="water_bill">Water_Bill</item>
+        <item name="light_bill">Light_Bill</item>
+        <item name="gas_bill">Gas_Bill</item>
         <item name="flight">Flight</item>
         <item name="fuel">Fuel</item>
-        <item name="drinks">Drinks</item>
+        <item name="drinks">Drink</item>
         <item name="food">Food</item>
         <item name="hotel">Hotel</item>
+        <item name="other">Other</item>
     </string-array>
     <string-array name="policies">
         <item name="equal">Equal parts</item>

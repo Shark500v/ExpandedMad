@@ -9,7 +9,7 @@ import java.util.Map;
 public class Expense {
 
     public enum State{CONTEST, ACCEPTED}
-    public enum Tag{FOOD, WATER_BILL, GAS_BILL, LIGHT_BILL, FLY, OTHER}
+    public enum Tag{FOOD, WATER_BILL, GAS_BILL, LIGHT_BILL, FLIGHT, HOTEL, FUEL, DRINK, OTHER}
     public enum Currency{YEN, EURO, DOLLAR, GBP}
 
     private String name;
@@ -46,6 +46,7 @@ public class Expense {
         this.month       = month;
         this.day         = day;
         this.id          = counter++;
+        this.state       = State.ACCEPTED;
 
         /*first implementation: divide equally the cost and everybody in the group will pay
         Float toPaid = cost / group.getUsers().size();
