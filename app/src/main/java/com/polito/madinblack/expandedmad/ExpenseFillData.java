@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -29,6 +30,7 @@ import android.widget.TextView;
 
 import com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.model.Expense;
+import com.polito.madinblack.expandedmad.model.Group;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.User;
 import com.polito.madinblack.expandedmad.model.Expense.Tag;
@@ -51,7 +53,6 @@ public class ExpenseFillData extends AppCompatActivity {
     private int myinteger = 0;
     private int numMembers = 0;
     private int itemSelected;
-    private List<Group.GroupElements> mValues;
     private RecyclerView recyclerView;
     private String groupID = "index";
     private com.polito.madinblack.expandedmad.model.Group groupSelected;
@@ -210,10 +211,11 @@ public class ExpenseFillData extends AppCompatActivity {
 
     private void modifyProportion(String value) {
         float amount = value.equals("")?0:Float.parseFloat(value);
-        float price = amount/mValues.size();
-        for(int i=0;i<mValues.size();i++){
-            mValues.get(i).details = Float.toString(price);
-            recyclerView.getAdapter().notifyItemChanged(i, mValues.get(i));
+        float price = amount/userCost.size();
+        for(int i=0;i<userCost.keySet().size();i++){
+            Long key = userCost.keySet().;
+            userCost.put(i, price);
+            recyclerView.getAdapter().notifyItemChanged(i, userCost.get(i));
         }
     }
 
@@ -264,16 +266,16 @@ public class ExpenseFillData extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new ExpenseFillData.SimpleItemRecyclerViewAdapter(Group.Groups));
+        recyclerView.setAdapter(new ExpenseFillData.SimpleItemRecyclerViewAdapter(users));
     }
 
     //questa classe la usa per fare il managing della lista che deve mostrare
     public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseFillData.SimpleItemRecyclerViewAdapter.ViewHolder> {
 
 
-        public SimpleItemRecyclerViewAdapter(List<Group.GroupElements> groups) {
+        public SimpleItemRecyclerViewAdapter(List<User> userssGroup) {
 
-            mValues = groups;
+            users = userssGroup;
         }
 
         @Override
@@ -283,10 +285,28 @@ public class ExpenseFillData extends AppCompatActivity {
         }
 
         @Override
-        public void onBindViewHolder(final ExpenseFillData.SimpleItemRecyclerViewAdapter.ViewHolder holder, int position) {
-            holder.mItem = mValues.get(position);   //mValues.get(position) rappresenta un singolo elemento della nostra lista di gruppi
-            holder.mIdView.setText(mValues.get(position).id);
+        public void onBindViewHolder(final SimpleItemRecyclerViewAdapter.ViewHolder holder, final int position) {
+            holder.mItem = users.get(position);   //mValues.get(position) rappresenta un singolo elemento della nostra lista di gruppi
+            holder.mIdView.setText(userCost.values().get(position).id);
             holder.partition.setText(mValues.get(position).details);
+            holder.minus.setOnClickListener(new View.OnClickListener() {
+
+                //Minus button
+                @Override
+                public void onClick(View v) {
+                    float part = Float.parseFloat(holder.mNumber.getText().toString());
+                    if(part == 1){
+                        holder.mNumber.setEnabled(false);
+                        userCost.remove(users.get(position).getId());
+                    }
+                    else{
+                        part--;
+                        holder.mNumber.setText(Float.toString(part));
+                    }
+
+                    recyclerView.getAdapter().notifyItemChanged(position, users.get(position));
+                }
+            });
             //holder.mContentView.setText(mValues.get(position).content);
             //sopra vengono settati i tre campi che costituisco le informazioni di ogni singolo gruppo, tutti pronti per essere mostriti nella gui
             /*holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -300,7 +320,7 @@ public class ExpenseFillData extends AppCompatActivity {
 
         @Override
         public int getItemCount() {
-            return mValues.size();
+            return userCost.size();
         }   //ritorna il numero di elementi nella lista
 
         //questa è una classe di supporto che viene usata per creare la vista a schermo, non ho ben capito come funziona
@@ -309,7 +329,8 @@ public class ExpenseFillData extends AppCompatActivity {
             public final TextView mIdView;
             public final TextView mNumber;
             public final TextView partition;
-            public Group mItem;
+            public User mItem;
+            public final Button minus;
 
             public ViewHolder(View view) {
                 super(view);
@@ -317,6 +338,7 @@ public class ExpenseFillData extends AppCompatActivity {
                 mIdView = (TextView) view.findViewById(R.id.username);
                 mNumber = (TextView) view.findViewById(R.id.integer_number);
                 partition = (TextView) view.findViewById(R.id.personal_amount);
+                minus = (Button) view.findViewById(R.id.decrease);
             }
 
             @Override
