@@ -216,8 +216,7 @@ public class ExpenseFillData_2 extends AppCompatActivity {
 
 
 
-    private DatePickerDialog.OnDateSetListener myDateListener = new
-            DatePickerDialog.OnDateSetListener() {
+    private DatePickerDialog.OnDateSetListener myDateListener = new DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker arg0,int arg1, int arg2, int arg3) {
                     showDate(arg1, arg2+1, arg3);
