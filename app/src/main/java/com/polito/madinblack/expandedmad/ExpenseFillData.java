@@ -9,7 +9,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -33,6 +32,7 @@ import com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.model.Expense;
 import com.polito.madinblack.expandedmad.model.Group;
 import com.polito.madinblack.expandedmad.model.MyApplication;
+import com.polito.madinblack.expandedmad.model.Payment;
 import com.polito.madinblack.expandedmad.model.User;
 import com.polito.madinblack.expandedmad.model.Expense.Tag;
 
@@ -54,12 +54,12 @@ public class ExpenseFillData extends AppCompatActivity {
     private int myinteger = 0;
     private int numMembers = 0;
     private int itemSelected;
+    private RecyclerView recyclerView;
     private String groupID = "index";
     private Group groupSelected;
     private MyApplication ma;
-    private Map<Long, Float> userCost;
     private List<User> users;
-    public RecyclerView recyclerView;
+    private List<Payment> mValues;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,19 +71,11 @@ public class ExpenseFillData extends AppCompatActivity {
 
         ma = MyApplication.getInstance();   //retrive del DB
 
-        // Show the Up button
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-
-
         Intent beginner = getIntent();
         groupSelected = ma.getSingleGroup(Long.valueOf(beginner.getStringExtra("index"))); //recupero l'id del gruppo selezionato, e quindi il gruppo stesso
         groupID = beginner.getStringExtra("index");   //id del gruppo, che devo considerare
 
         users = new ArrayList<>(groupSelected.getUsers());
-        userCost = new HashMap<>();
 
         //show current date
         showDate(new Date());
@@ -166,14 +158,16 @@ public class ExpenseFillData extends AppCompatActivity {
 
 
             Expense newExpense = new Expense(title, tag, amount, descriptionS, Expense.Currency.EURO, groupSelected, userSelect, year, month, day);
-            Iterator<Long> userId = userCost.keySet().iterator();
-            while(userId.hasNext()){
-                Long idUser = userId.next();
-                newExpense.addPayment(groupSelected.getUser(idUser), 0f, userCost.get(userId));
 
+            for(int i=0;i<mValues.size();i++){
+                mValues.get(i).setExpense(newExpense);
             }
-            groupSelected.addExpense(newExpense);
 
+            for(int i=0;i<mValues.size();i++){
+                newExpense.addPayment(mValues.get(i));
+            }
+
+            groupSelected.addExpense(newExpense);
 
 
             Intent intent = new Intent(this, ExpenseListActivity.class);
@@ -182,11 +176,6 @@ public class ExpenseFillData extends AppCompatActivity {
             //intent.putExtra(EXTRA_MESSAGE, userID);
 
             startActivity(intent);
-            return true;
-        }else if(id == 16908332){   //questo è l'id del back button, non capisco perchè con R.id.home non ha lo stesso id
-            Intent intent3 = new Intent(this, ExpenseListActivity.class);
-            intent3.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            navigateUpTo(intent3);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -219,23 +208,18 @@ public class ExpenseFillData extends AppCompatActivity {
         public void afterTextChanged(Editable editable) {
             switch (view.getId()) {
                 case R.id.input_amount:
-                    //modifyProportion(editable.toString());
+                    modifyProportion(editable.toString());
                     break;
             }
         }
     }
 
-
     private void modifyProportion(String value) {
         float amount = value.equals("")?0:Float.parseFloat(value);
-        float price = amount/userCost.size();
-        for(int i=0;i<users.size();i++){
-            Long key = users.get(i).getId();
-            if(userCost.containsKey(key)){
-                userCost.put(key, price);
-            }
-
-            recyclerView.getAdapter().notifyItemChanged(i, userCost.get(i));
+        float price = amount/mValues.size();
+        for(int i=0;i<mValues.size();i++){
+            mValues.get(i).setToPaid(price);
+            recyclerView.getAdapter().notifyItemChanged(i, mValues.get(i));
         }
     }
 
@@ -269,7 +253,7 @@ public class ExpenseFillData extends AppCompatActivity {
             DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker arg0,int arg1, int arg2, int arg3) {
-                    showDate(arg1, arg2, arg3);
+                    showDate(arg1, arg2+1, arg3);
                 }
             };
 
@@ -286,16 +270,20 @@ public class ExpenseFillData extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new ExpenseFillData.SimpleItemRecyclerViewAdapter(users));
+        List<Payment> payment = new ArrayList<>();
+        for(int i=0;i<users.size();i++){
+            payment.add(new Payment(users.get(i),null, (float)0.00, (float)0.00));
+        }
+        recyclerView.setAdapter(new ExpenseFillData.SimpleItemRecyclerViewAdapter(payment));
     }
 
     //questa classe la usa per fare il managing della lista che deve mostrare
-    public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseFillData.SimpleItemRecyclerViewAdapter.ViewHolder> {
+    public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
 
-        public SimpleItemRecyclerViewAdapter(List<User> userssGroup) {
+        public SimpleItemRecyclerViewAdapter(List<Payment> groups) {
 
-            users = userssGroup;
+            mValues = groups;
         }
 
         @Override
@@ -305,28 +293,10 @@ public class ExpenseFillData extends AppCompatActivity {
         }
 
         @Override
-        public void onBindViewHolder(final SimpleItemRecyclerViewAdapter.ViewHolder holder, final int position) {
-            holder.mItem = users.get(position);   //mValues.get(position) rappresenta un singolo elemento della nostra lista di gruppi
-            holder.mIdView.setText(holder.mItem.getName());
-            holder.partition.setText(userCost.get(holder.mItem.getId()).toString());
-            holder.minus.setOnClickListener(new View.OnClickListener() {
-
-                //Minus button
-                @Override
-                public void onClick(View v) {
-                    float part = Float.parseFloat(holder.mNumber.getText().toString());
-                    part--;
-                    holder.mNumber.setText(Float.toString(part));
-                    if(part == 1){
-                        holder.mNumber.setEnabled(false);
-                        userCost.remove(users.get(position).getId());
-                    }
-
-
-                    recyclerView.getAdapter().notifyItemChanged(position, users.get(position));
-                }
-            });
-            //holder.mContentView.setText(mValues.get(position).content);
+        public void onBindViewHolder(final ExpenseFillData.SimpleItemRecyclerViewAdapter.ViewHolder holder, int position) {
+            holder.mItem = mValues.get(position);   //mValues.get(position) rappresenta un singolo elemento della nostra lista di gruppi
+            holder.mIdView.setText( holder.mItem.getUser().getName());
+            holder.partition.setText( holder.mItem.getToPaid().toString());
             //sopra vengono settati i tre campi che costituisco le informazioni di ogni singolo gruppo, tutti pronti per essere mostriti nella gui
             /*holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -339,25 +309,23 @@ public class ExpenseFillData extends AppCompatActivity {
 
         @Override
         public int getItemCount() {
-            return userCost.size();
-        }   //ritorna il numero di elementi nella lista
+            return mValues.size();
+        }
 
         //questa è una classe di supporto che viene usata per creare la vista a schermo, non ho ben capito come funziona
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
             public final TextView mIdView;
             public final TextView mNumber;
-            public final TextView partition;
-            public User mItem;
-            public final Button minus;
+            public final EditText partition;
+            public Payment mItem;
 
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
                 mIdView = (TextView) view.findViewById(R.id.username);
                 mNumber = (TextView) view.findViewById(R.id.integer_number);
-                partition = (TextView) view.findViewById(R.id.personal_amount);
-                minus = (Button) view.findViewById(R.id.decrease);
+                partition = (EditText) view.findViewById(R.id.personal_amount);
             }
 
             @Override
@@ -366,5 +334,6 @@ public class ExpenseFillData extends AppCompatActivity {
             }
         }
     }
-
 }
+
+
