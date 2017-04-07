@@ -57,6 +57,7 @@ public class ExpenseDetailFragment extends Fragment {
         // Show the content.
         if (mItem != null) {
             ((TextView) rootView.findViewById(R.id.description_field)).setText(mItem.getDescription());
+            ((TextView) rootView.findViewById(R.id.paid_container)).setText(mItem.toString());
             ((TextView) rootView.findViewById(R.id.tag_container)).setText(mItem.getTag().toString());
             ((TextView) rootView.findViewById(R.id.cost_container)).setText(Float.toString(mItem.getCost()));
             ((TextView) rootView.findViewById(R.id.currency_container)).setText(mItem.getCurrency().toString());
