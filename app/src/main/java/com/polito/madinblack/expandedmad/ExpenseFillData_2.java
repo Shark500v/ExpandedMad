@@ -120,12 +120,27 @@ public class ExpenseFillData_2 extends AppCompatActivity {
 
             EditText inputAmout = (EditText)findViewById(R.id.input_amount);
             String amountS = inputAmout.getText().toString();
-            if(amountS.isEmpty() || amountS==null || !android.text.TextUtils.isDigitsOnly(amountS)) {
+
+
+
+            if(amountS.isEmpty() || amountS==null ) {
                 intent = new Intent(this, ExpenseFillData_2.class);
                 intent.putExtra("index", groupID);
                 startActivity(intent);
                 return true;
             }
+
+            try {
+                Float amount = Float.valueOf(amountS);
+            } catch (NumberFormatException ex) {
+                intent = new Intent(this, ExpenseFillData_2.class);
+                intent.putExtra("index", groupID);
+                startActivity(intent);
+                return true;
+            }
+
+
+
             Float amount = Float.valueOf(amountS);
 
             Spinner inputPaidBy = (Spinner) findViewById(R.id.paidBy_spinner);
