@@ -40,9 +40,7 @@ public class Group {
     //le spese, cliccando su di una spesa arriviamo alla vista della spesa
     private static String makeDetails(int position) {
         StringBuilder builder = new StringBuilder();    //costruisce una stringa appendendo elementi
-        builder.append("Details about Group: ").append(position);
-
-        builder.append("\n\nInsert here the Group info here.");
+        builder.append("0.00").append(position);
 
         return builder.toString();
     }
@@ -56,7 +54,7 @@ public class Group {
     public static class GroupElements {
         public final String id;
         public final String content;
-        public final String details;
+        public String details;
         private Expense expensesList;
 
         public Expense getList() {

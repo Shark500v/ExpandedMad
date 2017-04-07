@@ -42,6 +42,7 @@ public class ExpenseFillData extends AppCompatActivity {
     private int numMembers = 0;
     private int itemSelected;
     private List<Group.GroupElements> mValues;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +60,7 @@ public class ExpenseFillData extends AppCompatActivity {
         inputAmount.addTextChangedListener(new MyTextWatcher(inputAmount));
 
         //in questo punto il codice prende la lista principale e la mostra come recyclerview
-        View recyclerView = findViewById(R.id.users_list);
+        recyclerView = (RecyclerView) findViewById(R.id.users_list);
         assert recyclerView != null;
         setupRecyclerView((RecyclerView) recyclerView);
     }
@@ -93,33 +94,41 @@ public class ExpenseFillData extends AppCompatActivity {
             this.view = view;
         }
 
+        @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
         }
 
+        @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
         }
 
+        @Override
         public void afterTextChanged(Editable editable) {
             switch (view.getId()) {
                 case R.id.input_amount:
-                    modifyProportion();
+                    modifyProportion(editable.toString());
                     break;
             }
         }
     }
 
-    private void modifyProportion() {
-
+    private void modifyProportion(String value) {
+        float amount = value.equals("")?0:Float.parseFloat(value);
+        float price = amount/mValues.size();
+        for(int i=0;i<mValues.size();i++){
+            mValues.get(i).details = Float.toString(price);
+            recyclerView.getAdapter().notifyItemChanged(i, mValues.get(i));
+        }
     }
 
     public void increaseInteger(View view) {
-        RecyclerView rv = (RecyclerView)view;
+        /*RecyclerView rv = (RecyclerView)view;
         myinteger++;
-        display(myinteger);
+        display(myinteger);*/
 
     }public void decreaseInteger(View view) {
-        myinteger--;
-        display(myinteger);
+        /*myinteger--;
+        display(myinteger);*/
     }
 
     public void showDataPicker(View view) {
@@ -160,7 +169,6 @@ public class ExpenseFillData extends AppCompatActivity {
         recyclerView.setAdapter(new ExpenseFillData.SimpleItemRecyclerViewAdapter(Group.Groups));
     }
 
-
     //questa classe la usa per fare il managing della lista che deve mostrare
     public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseFillData.SimpleItemRecyclerViewAdapter.ViewHolder> {
 
@@ -180,18 +188,16 @@ public class ExpenseFillData extends AppCompatActivity {
         public void onBindViewHolder(final ExpenseFillData.SimpleItemRecyclerViewAdapter.ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);   //mValues.get(position) rappresenta un singolo elemento della nostra lista di gruppi
             holder.mIdView.setText(mValues.get(position).id);
+            holder.partition.setText(mValues.get(position).details);
             //holder.mContentView.setText(mValues.get(position).content);
             //sopra vengono settati i tre campi che costituisco le informazioni di ogni singolo gruppo, tutti pronti per essere mostriti nella gui
-            holder.mView.setOnClickListener(new View.OnClickListener() {
+            /*holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Context context = v.getContext();
-                    Intent intent = new Intent(context, ExpenseListActivity.class); //qui setto la nuova attività da mostrare a schermo dopo che clicco
-                    intent.putExtra("index", holder.mItem.toString());    //passo alla nuova activity l'ide del gruppo chè l'utente ha selezionto
 
-                    context.startActivity(intent);
+                    holder.mIdView.setText("5");
                 }
-            });
+            });*/
         }
 
         @Override
@@ -203,12 +209,16 @@ public class ExpenseFillData extends AppCompatActivity {
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
             public final TextView mIdView;
+            public final TextView mNumber;
+            public final TextView partition;
             public Group.GroupElements mItem;
 
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
                 mIdView = (TextView) view.findViewById(R.id.username);
+                mNumber = (TextView) view.findViewById(R.id.integer_number);
+                partition = (TextView) view.findViewById(R.id.personal_amount);
             }
 
             @Override
