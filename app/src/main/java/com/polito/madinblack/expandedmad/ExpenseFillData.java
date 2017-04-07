@@ -21,15 +21,19 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity;
+import com.polito.madinblack.expandedmad.dummy.Expense;
 import com.polito.madinblack.expandedmad.dummy.Group;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -55,6 +59,7 @@ public class ExpenseFillData extends AppCompatActivity {
         //show current date
         showDate(new Date());
 
+        populateSpinner();
 
         EditText inputAmount = (EditText)findViewById(R.id.input_amount);
         inputAmount.addTextChangedListener(new MyTextWatcher(inputAmount));
@@ -65,12 +70,27 @@ public class ExpenseFillData extends AppCompatActivity {
         setupRecyclerView((RecyclerView) recyclerView);
     }
 
+    private void populateSpinner() {
+        // you need to have a list of data that you want the spinner to display
+        List<String> spinnerArray =  new ArrayList<String>();
+        spinnerArray.add("item1");
+        spinnerArray.add("item2");
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                this, android.R.layout.simple_spinner_item, spinnerArray);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        Spinner sItems = (Spinner) findViewById(R.id.paidBy_spinner);
+        sItems.setAdapter(adapter);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.confirm_expense) {
 
-            Intent intent = new Intent(this, GroupListActivity.class);
+            Intent intent = new Intent(this, ExpenseListActivity.class);
+
             //intent.putExtra(EXTRA_MESSAGE, userID);
 
             startActivity(intent);
@@ -140,7 +160,7 @@ public class ExpenseFillData extends AppCompatActivity {
     }
 
     private void showDate(Date data) {
-        EditText dateText = (EditText)findViewById(R.id.input_date);
+        TextView dateText = (TextView)findViewById(R.id.input_date);
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateText.setText(dateFormat.format(data)); //16/11/2016
     }
@@ -154,7 +174,7 @@ public class ExpenseFillData extends AppCompatActivity {
             };
 
     private void showDate(int year, int month, int day) {
-        EditText dateText = (EditText)findViewById(R.id.input_date);
+        TextView dateText = (TextView)findViewById(R.id.input_date);
         dateText.setText(new StringBuilder().append(day).append("/")
                 .append(month).append("/").append(year));
     }
