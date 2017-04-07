@@ -1,16 +1,10 @@
 package com.polito.madinblack.expandedmad;
 
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -29,15 +23,13 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.model.Expense;
+import com.polito.madinblack.expandedmad.model.Expense.Tag;
 import com.polito.madinblack.expandedmad.model.Group;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.User;
-import com.polito.madinblack.expandedmad.model.Expense.Tag;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -47,9 +39,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import static android.provider.AlarmClock.EXTRA_MESSAGE;
-
-public class ExpenseFillData extends AppCompatActivity {
+public class ExpenseFillData_2 extends AppCompatActivity {
 
     private int myinteger = 0;
     private int numMembers = 0;
@@ -83,14 +73,6 @@ public class ExpenseFillData extends AppCompatActivity {
 
         users = new ArrayList<>(groupSelected.getUsers());
         userCost = new HashMap<>();
-
-        //show current date
-        showDate(new Date());
-
-        populateSpinner();
-
-        EditText inputAmount = (EditText)findViewById(R.id.input_amount);
-        inputAmount.addTextChangedListener(new MyTextWatcher(inputAmount));
 
         //in questo punto il codice prende la lista principale e la mostra come recyclerview
         recyclerView = (RecyclerView) findViewById(R.id.users_list);
@@ -284,11 +266,11 @@ public class ExpenseFillData extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new ExpenseFillData.SimpleItemRecyclerViewAdapter(users));
+        recyclerView.setAdapter(new ExpenseFillData_2.SimpleItemRecyclerViewAdapter(users));
     }
 
     //questa classe la usa per fare il managing della lista che deve mostrare
-    public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseFillData.SimpleItemRecyclerViewAdapter.ViewHolder> {
+    public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseFillData_2.SimpleItemRecyclerViewAdapter.ViewHolder> {
 
 
         public SimpleItemRecyclerViewAdapter(List<User> userssGroup) {
@@ -297,9 +279,9 @@ public class ExpenseFillData extends AppCompatActivity {
         }
 
         @Override
-        public ExpenseFillData.SimpleItemRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public ExpenseFillData_2.SimpleItemRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_for_new_expense, parent, false);
-            return new ExpenseFillData.SimpleItemRecyclerViewAdapter.ViewHolder(view);
+            return new ExpenseFillData_2.SimpleItemRecyclerViewAdapter.ViewHolder(view);
         }
 
         @Override
