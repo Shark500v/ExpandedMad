@@ -139,14 +139,14 @@ public class ExpenseFillData extends AppCompatActivity {
             int year = Integer.parseInt(dayS[2]);
 
 
-            Iterator<Long> userId = userCost.keySet().iterator();
 
 
-            for(int i=0; i<userCost.size(); i++){
-                user
 
 
-            }
+
+
+
+
 
                 /*
             for(int i=0; i<....; i++){
@@ -161,7 +161,13 @@ public class ExpenseFillData extends AppCompatActivity {
 
 
             Expense newExpense = new Expense(title, tag, amount, descriptionS, Expense.Currency.EURO, groupSelected, userSelect, year, month, day);
+            Iterator<Long> userId = userCost.keySet().iterator();
+            while(userId.hasNext()){
+                Long idUser = userId.next();
+                newExpense.addPayment(groupSelected.getUser(idUser), 0f, userCost.get(userId));
 
+            }
+            groupSelected.addExpense(newExpense);
 
 
 
