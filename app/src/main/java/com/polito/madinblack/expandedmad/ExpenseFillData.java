@@ -54,12 +54,12 @@ public class ExpenseFillData extends AppCompatActivity {
     private int myinteger = 0;
     private int numMembers = 0;
     private int itemSelected;
-    private RecyclerView recyclerView;
     private String groupID = "index";
     private Group groupSelected;
     private MyApplication ma;
     private Map<Long, Float> userCost;
     private List<User> users;
+    public RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -218,11 +218,12 @@ public class ExpenseFillData extends AppCompatActivity {
         public void afterTextChanged(Editable editable) {
             switch (view.getId()) {
                 case R.id.input_amount:
-                    modifyProportion(editable.toString());
+                    //modifyProportion(editable.toString());
                     break;
             }
         }
     }
+
 
     private void modifyProportion(String value) {
         float amount = value.equals("")?0:Float.parseFloat(value);

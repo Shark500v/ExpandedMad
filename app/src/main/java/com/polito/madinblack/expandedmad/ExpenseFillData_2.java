@@ -54,7 +54,7 @@ public class ExpenseFillData_2 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.expense_fill);
+        setContentView(R.layout.expense_fill2);
         //toolbar settings
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -74,10 +74,15 @@ public class ExpenseFillData_2 extends AppCompatActivity {
         users = new ArrayList<>(groupSelected.getUsers());
         userCost = new HashMap<>();
 
-        //in questo punto il codice prende la lista principale e la mostra come recyclerview
-        recyclerView = (RecyclerView) findViewById(R.id.users_list);
-        assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
+        showDate(new Date());
+
+        populateSpinner();
+
+        EditText inputAmount = (EditText)findViewById(R.id.input_amount);
+        inputAmount.addTextChangedListener(new MyTextWatcher(inputAmount));
+
+
+
     }
 
     private void populateSpinner() {
@@ -125,32 +130,15 @@ public class ExpenseFillData_2 extends AppCompatActivity {
             int year = Integer.parseInt(dayS[2]);
 
 
-
-
-
-
-
-
-
-
-
-                /*
-            for(int i=0; i<....; i++){
-                TextView user = (TextView) findViewById(R.id.username);
-                TextView personal = (TextView) findViewById(R.id.personal_amount);
-
-            }
-            */
-
             TextView description = (TextView) findViewById(R.id.input_description);
             String descriptionS = description.getText().toString();
 
 
             Expense newExpense = new Expense(title, tag, amount, descriptionS, Expense.Currency.EURO, groupSelected, userSelect, year, month, day);
-            Iterator<Long> userId = userCost.keySet().iterator();
+            Iterator<User> userId = users.iterator();
             while(userId.hasNext()){
-                Long idUser = userId.next();
-                newExpense.addPayment(groupSelected.getUser(idUser), 0f, userCost.get(userId));
+                User userI = userId.next();
+                newExpense.addPayment(userI, 0f, amount/users.size());
 
             }
             groupSelected.addExpense(newExpense);
@@ -265,86 +253,8 @@ public class ExpenseFillData_2 extends AppCompatActivity {
         displayInteger.setText("" + number);
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new ExpenseFillData_2.SimpleItemRecyclerViewAdapter(users));
-    }
-
-    //questa classe la usa per fare il managing della lista che deve mostrare
-    public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<ExpenseFillData_2.SimpleItemRecyclerViewAdapter.ViewHolder> {
 
 
-        public SimpleItemRecyclerViewAdapter(List<User> userssGroup) {
 
-            users = userssGroup;
-        }
-
-        @Override
-        public ExpenseFillData_2.SimpleItemRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_for_new_expense, parent, false);
-            return new ExpenseFillData_2.SimpleItemRecyclerViewAdapter.ViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(final SimpleItemRecyclerViewAdapter.ViewHolder holder, final int position) {
-            holder.mItem = users.get(position);   //mValues.get(position) rappresenta un singolo elemento della nostra lista di gruppi
-            holder.mIdView.setText(holder.mItem.getName());
-            holder.partition.setText(userCost.get(holder.mItem.getId()).toString());
-            holder.minus.setOnClickListener(new View.OnClickListener() {
-
-                //Minus button
-                @Override
-                public void onClick(View v) {
-                    float part = Float.parseFloat(holder.mNumber.getText().toString());
-                    part--;
-                    holder.mNumber.setText(Float.toString(part));
-                    if(part == 1){
-                        holder.mNumber.setEnabled(false);
-                        userCost.remove(users.get(position).getId());
-                    }
-
-
-                    recyclerView.getAdapter().notifyItemChanged(position, users.get(position));
-                }
-            });
-            //holder.mContentView.setText(mValues.get(position).content);
-            //sopra vengono settati i tre campi che costituisco le informazioni di ogni singolo gruppo, tutti pronti per essere mostriti nella gui
-            /*holder.mView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    holder.mIdView.setText("5");
-                }
-            });*/
-        }
-
-        @Override
-        public int getItemCount() {
-            return userCost.size();
-        }   //ritorna il numero di elementi nella lista
-
-        //questa è una classe di supporto che viene usata per creare la vista a schermo, non ho ben capito come funziona
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            public final View mView;
-            public final TextView mIdView;
-            public final TextView mNumber;
-            public final TextView partition;
-            public User mItem;
-            public final Button minus;
-
-            public ViewHolder(View view) {
-                super(view);
-                mView = view;
-                mIdView = (TextView) view.findViewById(R.id.username);
-                mNumber = (TextView) view.findViewById(R.id.integer_number);
-                partition = (TextView) view.findViewById(R.id.personal_amount);
-                minus = (Button) view.findViewById(R.id.decrease);
-            }
-
-            @Override
-            public String toString() {
-                return super.toString() + " '"  + "'";
-            }
-        }
-    }
 
 }
