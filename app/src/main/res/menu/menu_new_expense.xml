@@ -5,7 +5,7 @@
     <!--detail button-->
     <item
         android:id="@+id/confirm_expense"
-        android:icon="@drawable/check"
+        android:icon="@drawable/check_icon"
         android:title="Settings"
         app:showAsAction="always"/>
 </menu>
