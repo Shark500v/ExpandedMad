@@ -154,6 +154,8 @@ public class Expense {
         return userCost.get(MyApplication.myself.getId()).getBalance();
     }
 
+
+
     public void addPayment(User user, Float paid, Float toPaid){
         Payment p = new Payment(user, this, paid, toPaid);
         userCost.put(user.getId(), p);
@@ -168,4 +170,12 @@ public class Expense {
     public User getPaying() {
         return paying;
     }
+
+    public String toString(){
+        return userCost.get(MyApplication.myself.getId()).toString();
+
+
+    }
+
+
 }
