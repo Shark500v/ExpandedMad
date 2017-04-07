@@ -55,7 +55,7 @@ public class ExpenseFillData extends AppCompatActivity {
     private int itemSelected;
     private RecyclerView recyclerView;
     private String groupID = "index";
-    private com.polito.madinblack.expandedmad.model.Group groupSelected;
+    private Group groupSelected;
     private MyApplication ma;
     private Map<Long, Float> userCost;
     private List<User> users;

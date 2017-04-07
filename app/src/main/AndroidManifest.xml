@@ -91,6 +91,16 @@
                 android:value="com.polito.madinblack.expandedmad.group_members.UserExpenses" />
         </activity>
 
+        <activity
+            android:name=".ExpenseFillData"
+            android:label="Add New Expense"
+            android:parentActivityName=".ExpenseListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.polito.madinblack.expandedmad.ExpenseListActivity" />
+        </activity>
+
     </application>
 
 </manifest>
