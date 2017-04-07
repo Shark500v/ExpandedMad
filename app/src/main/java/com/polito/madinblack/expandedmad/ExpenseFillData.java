@@ -89,7 +89,18 @@ public class ExpenseFillData extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.confirm_expense) {
 
+
+            EditText inputTitle = (EditText)findViewById(R.id.input_title);
+            EditText inputAmout = (EditText)findViewById(R.id.input_amount);
+            Spinner inputPaidBy = (Spinner) findViewById(R.id.paidBy_spinner);
+            Spinner tag_spinner = (Spinner) findViewById(R.id.tag_spinner);
+
+
+
+
+
             Intent intent = new Intent(this, ExpenseListActivity.class);
+
 
             //intent.putExtra(EXTRA_MESSAGE, userID);
 
