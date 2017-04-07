@@ -287,8 +287,8 @@ public class ExpenseFillData extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final SimpleItemRecyclerViewAdapter.ViewHolder holder, final int position) {
             holder.mItem = users.get(position);   //mValues.get(position) rappresenta un singolo elemento della nostra lista di gruppi
-            holder.mIdView.setText(userCost.values().get(position).id);
-            holder.partition.setText(mValues.get(position).details);
+            holder.mIdView.setText(holder.mItem.getName());
+            holder.partition.setText(userCost.get(holder.mItem.getId()).toString());
             holder.minus.setOnClickListener(new View.OnClickListener() {
 
                 //Minus button
