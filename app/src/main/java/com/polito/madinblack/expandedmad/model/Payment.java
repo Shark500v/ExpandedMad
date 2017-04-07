@@ -80,7 +80,7 @@ public class Payment {
     @Override
     public String toString() {
         if(paid > toPaid)
-            return "+"+paid.toString()+"/"+toPaid.toString();
+            return paid.toString()+"/"+toPaid.toString();
         else
             return paid.toString()+"/"+toPaid.toString();
     }
