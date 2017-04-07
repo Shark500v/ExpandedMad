@@ -77,7 +77,7 @@ public class ExpenseFillData extends AppCompatActivity {
         groupSelected = ma.getSingleGroup(Long.valueOf(beginner.getStringExtra("index"))); //recupero l'id del gruppo selezionato, e quindi il gruppo stesso
         groupID = beginner.getStringExtra("index");   //id del gruppo, che devo considerare
 
-        users = new ArrayList<>(groupSelected.getUsers());
+        users = groupSelected.getUsers();
         userCost = new HashMap<>();
 
         //show current date
@@ -139,15 +139,6 @@ public class ExpenseFillData extends AppCompatActivity {
             int year = Integer.parseInt(dayS[2]);
 
 
-            Iterator<Long> userId = userCost.keySet().iterator();
-
-
-            for(int i=0; i<userCost.size(); i++){
-                user
-
-
-            }
-
                 /*
             for(int i=0; i<....; i++){
                 TextView user = (TextView) findViewById(R.id.username);
@@ -162,6 +153,13 @@ public class ExpenseFillData extends AppCompatActivity {
 
             Expense newExpense = new Expense(title, tag, amount, descriptionS, Expense.Currency.EURO, groupSelected, userSelect, year, month, day);
 
+            Iterator<Long> userId = userCost.keySet().iterator();
+            while(userId.hasNext()){
+                Long idUser = userId.next();
+                newExpense.addPayment(groupSelected.getUser(idUser), 0f, userCost.get(userId));
+
+            }
+            groupSelected.addExpense(newExpense);
 
 
 
