@@ -34,6 +34,7 @@
         <item name="exclude">Exclude member</item>
         <item name="custom_policy">Custom</item>
     </string-array>
+
     <string name="who">Who pay?</string>
     <string name="how">How much?</string>
     <string name="partition">Partition</string>
