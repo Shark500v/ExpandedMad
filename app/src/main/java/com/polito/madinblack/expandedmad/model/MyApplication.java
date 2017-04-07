@@ -83,6 +83,18 @@ public class MyApplication {
         e3.addPayment(myself,    0f, 20f);
         e3.addPayment(u5,       50f, 20f);
         g2.addExpense(e3);
+
+        Expense e4 = new Expense("Pizza", Expense.Tag.FOOD, 50f, "Pizza saturday dinner", Expense.Currency.EURO, g3, u5, 2017, 3, 16);
+        e4.addPayment(myself,    0f, 16.67f);
+        e4.addPayment(u5,       50f, 16.67f);
+        e4.addPayment(u6,        0f, 16.67f);
+        g3.addExpense(e4);
+
+        Expense e5 = new Expense("Lunch", Expense.Tag.FOOD, 145f, "Lunch at Ciro's restaurant", Expense.Currency.EURO, g3, myself, 2017, 4, 4);
+        e5.addPayment(myself,  145f, 48.3f);
+        e5.addPayment(u5,        0f, 48.3f);
+        e5.addPayment(u6,        0f, 48.3f);
+        g3.addExpense(e5);
     }
 
 
