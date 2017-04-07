@@ -24,7 +24,8 @@
             android:id="@+id/decrease"
             android:layout_width="30dp"
             android:layout_height="35dp"
-            android:layout_margin = "10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
             android:onClick="decreaseInteger"
             android:text="-"
             android:textAlignment="textStart"/>
@@ -40,7 +41,8 @@
             android:id="@+id/increase"
             android:layout_width="30dp"
             android:layout_height="35dp"
-            android:layout_margin = "10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
             android:onClick="increaseInteger"
             android:text="+"
             android:textAlignment="textStart"/>
@@ -53,13 +55,14 @@
         android:layout_gravity="center_vertical"
         android:textAppearance="?attr/textAppearanceListItem"
         android:layout_marginLeft="7dp"
+        android:layout_marginRight="@dimen/text_margin"
         android:text="0.00"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_margin="@dimen/text_margin"
+        android:layout_marginRight="@dimen/text_margin"
         android:textAppearance="?attr/textAppearanceListItem"
         android:text="EUR"/>
 </LinearLayout>
