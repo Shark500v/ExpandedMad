@@ -137,7 +137,10 @@ public class ExpenseFillData_2 extends AppCompatActivity {
             Iterator<User> userId = users.iterator();
             while(userId.hasNext()){
                 User userI = userId.next();
-                newExpense.addPayment(userI, 0f, amount/users.size());
+                if(userI.getId()==userSelect.getId())
+                    newExpense.addPayment(userI, amount, amount/users.size());
+                else
+                    newExpense.addPayment(userI, 0f, amount/users.size());
 
             }
             groupSelected.addExpense(newExpense);
