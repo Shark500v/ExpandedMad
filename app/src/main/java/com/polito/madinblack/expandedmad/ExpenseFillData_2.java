@@ -105,12 +105,27 @@ public class ExpenseFillData_2 extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.confirm_expense) {
 
+            boolean isNull = false;
+            Intent intent;
 
             EditText inputTitle = (EditText)findViewById(R.id.input_title);
             String title = inputTitle.getText().toString();
+            if(title.isEmpty() || title==null) {
+                intent = new Intent(this, ExpenseFillData_2.class);
+                intent.putExtra("index", groupID);
+                startActivity(intent);
+                return true;
+
+            }
 
             EditText inputAmout = (EditText)findViewById(R.id.input_amount);
             String amountS = inputAmout.getText().toString();
+            if(amountS.isEmpty() || amountS==null) {
+                intent = new Intent(this, ExpenseFillData_2.class);
+                intent.putExtra("index", groupID);
+                startActivity(intent);
+                return true;
+            }
             Float amount = Float.valueOf(amountS);
 
             Spinner inputPaidBy = (Spinner) findViewById(R.id.paidBy_spinner);
@@ -123,6 +138,13 @@ public class ExpenseFillData_2 extends AppCompatActivity {
 
             TextView data = (TextView) findViewById(R.id.input_date);
             String dataS = data.getText().toString();
+            if(amountS.isEmpty() || amountS==null) {
+                intent = new Intent(this, ExpenseFillData_2.class);
+                intent.putExtra("index", groupID);
+                startActivity(intent);
+                return true;
+            }
+
             String [] dayS = dataS.split("/");
             int day = Integer.parseInt(dayS[0]);
             int month = Integer.parseInt(dayS[1]);
@@ -131,7 +153,10 @@ public class ExpenseFillData_2 extends AppCompatActivity {
 
             TextView description = (TextView) findViewById(R.id.input_description);
             String descriptionS = description.getText().toString();
+            if(descriptionS.isEmpty() || descriptionS==null) {
+                descriptionS = " ";
 
+            }
 
             Expense newExpense = new Expense(title, tag, amount, descriptionS, Expense.Currency.EURO, groupSelected, userSelect, year, month, day);
             Iterator<User> userId = users.iterator();
@@ -147,11 +172,9 @@ public class ExpenseFillData_2 extends AppCompatActivity {
 
 
 
-            Intent intent = new Intent(this, ExpenseListActivity.class);
 
-
+            intent = new Intent(this, ExpenseListActivity.class);
             intent.putExtra("index", groupID);
-
             startActivity(intent);
             return true;
         }else if(id == 16908332){
@@ -195,7 +218,7 @@ public class ExpenseFillData_2 extends AppCompatActivity {
             DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker arg0,int arg1, int arg2, int arg3) {
-                    showDate(arg1, arg2, arg3);
+                    showDate(arg1, arg2+1, arg3);
                 }
             };
 
