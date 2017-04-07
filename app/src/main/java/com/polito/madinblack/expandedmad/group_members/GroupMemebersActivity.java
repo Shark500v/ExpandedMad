@@ -22,23 +22,18 @@ import com.polito.madinblack.expandedmad.R;
 
 import java.util.List;
 
-import com.polito.madinblack.expandedmad.dummy.DummyContent;
-import com.polito.madinblack.expandedmad.dummy.Expense;
-import com.polito.madinblack.expandedmad.dummy.Group;
+import com.polito.madinblack.expandedmad.model.Group;
+import com.polito.madinblack.expandedmad.model.MyApplication;
+import com.polito.madinblack.expandedmad.model.User;
 
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
-/**
- * An activity representing a list of Items. This activity
- * has different presentations for handset and tablet-size devices. On
- * handsets, the activity presents a list of items, which when touched,
- * item details. On tablets, the activity presents the list of items and
- * item details side-by-side using two vertical panes.
- */
 public class GroupMemebersActivity extends AppCompatActivity {
 
     public String groupID = "init";
     private String name = "hello";
+    private MyApplication ma;
+    private Group groupSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +42,9 @@ public class GroupMemebersActivity extends AppCompatActivity {
 
         groupID = getIntent().getStringExtra("GROUP_ID");
         name = "Group " + groupID;
+
+        ma = MyApplication.getInstance();
+        groupSelected = ma.getSingleGroup(Long.valueOf(getIntent().getStringExtra("GROUP_ID")));
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(name);
@@ -77,14 +75,14 @@ public class GroupMemebersActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(DummyContent.ITEMS));
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(groupSelected.getUsers()));
     }
 
     public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<DummyContent.DummyItem> mValues;
+        private final List<User> mValues;
 
-        public SimpleItemRecyclerViewAdapter(List<DummyContent.DummyItem> items) {
+        public SimpleItemRecyclerViewAdapter(List<User> items) {
             mValues = items;
         }
 
@@ -97,20 +95,22 @@ public class GroupMemebersActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).id);
-            holder.mContentView.setText(mValues.get(position).content);
+            holder.mIdView.setText(mValues.get(position).getName() + " " + mValues.get(position).getSurname());
+            holder.mContentView.setText("");
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                        Context context = v.getContext();
-                        Intent intent = new Intent(context, UserExpenses.class);
-                        Bundle extras = new Bundle();
-                        extras.putString("GROUP_ID",groupID);
-                        extras.putString("USER_ID",holder.mItem.id);
-                        intent.putExtras(extras);
+                    /*
+                    Context context = v.getContext();
+                    Intent intent = new Intent(context, UserExpenses.class);
+                    Bundle extras = new Bundle();
+                    extras.putString("GROUP_ID",groupID);
+                    extras.putString("USER_ID",holder.mItem.id);
+                    intent.putExtras(extras);
 
-                        context.startActivity(intent);
+                    context.startActivity(intent);
+                    */
                 }
             });
         }
@@ -124,7 +124,7 @@ public class GroupMemebersActivity extends AppCompatActivity {
             public final View mView;
             public final TextView mIdView;
             public final TextView mContentView;
-            public DummyContent.DummyItem mItem;
+            public User mItem;
 
             public ViewHolder(View view) {
                 super(view);
