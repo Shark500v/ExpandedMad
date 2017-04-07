@@ -54,7 +54,7 @@ public class ExpenseFillData extends AppCompatActivity {
     private int numMembers = 0;
     private int itemSelected;
     private RecyclerView recyclerView;
-    private String groupID = "1";
+    private String groupID = "index";
     private com.polito.madinblack.expandedmad.model.Group groupSelected;
     private MyApplication ma;
     private Map<Long, Float> userCost;
@@ -73,13 +73,11 @@ public class ExpenseFillData extends AppCompatActivity {
 
 
 
-        /*Intent beginner = getIntent();
+        Intent beginner = getIntent();
         groupSelected = ma.getSingleGroup(Long.valueOf(beginner.getStringExtra("index"))); //recupero l'id del gruppo selezionato, e quindi il gruppo stesso
-        groupID = beginner.getStringExtra("index");   //id del gruppo, che devo considerare*/
+        groupID = beginner.getStringExtra("index");   //id del gruppo, che devo considerare
 
         users = new ArrayList<>(groupSelected.getUsers());
-    }
-    void cc(){
         userCost = new HashMap<>();
 
         //show current date
@@ -87,7 +85,7 @@ public class ExpenseFillData extends AppCompatActivity {
 
         populateSpinner();
 
-        EditText inputAmount = (EditText) findViewById(R.id.input_amount);
+        EditText inputAmount = (EditText)findViewById(R.id.input_amount);
         inputAmount.addTextChangedListener(new MyTextWatcher(inputAmount));
 
         //in questo punto il codice prende la lista principale e la mostra come recyclerview
@@ -141,6 +139,15 @@ public class ExpenseFillData extends AppCompatActivity {
             int year = Integer.parseInt(dayS[2]);
 
 
+            Iterator<Long> userId = userCost.keySet().iterator();
+
+
+            for(int i=0; i<userCost.size(); i++){
+                user
+
+
+            }
+
                 /*
             for(int i=0; i<....; i++){
                 TextView user = (TextView) findViewById(R.id.username);
@@ -155,13 +162,6 @@ public class ExpenseFillData extends AppCompatActivity {
 
             Expense newExpense = new Expense(title, tag, amount, descriptionS, Expense.Currency.EURO, groupSelected, userSelect, year, month, day);
 
-            Iterator<Long> userId = userCost.keySet().iterator();
-            while(userId.hasNext()){
-                Long idUser = userId.next();
-                newExpense.addPayment(groupSelected.getUser(idUser), 0f, userCost.get(userId));
-
-            }
-            groupSelected.addExpense(newExpense);
 
 
 
