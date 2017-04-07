@@ -54,7 +54,7 @@ public class ExpenseFillData extends AppCompatActivity {
     private int numMembers = 0;
     private int itemSelected;
     private RecyclerView recyclerView;
-    private String groupID = "index";
+    private String groupID = "1";
     private com.polito.madinblack.expandedmad.model.Group groupSelected;
     private MyApplication ma;
     private Map<Long, Float> userCost;
@@ -73,11 +73,13 @@ public class ExpenseFillData extends AppCompatActivity {
 
 
 
-        Intent beginner = getIntent();
+        /*Intent beginner = getIntent();
         groupSelected = ma.getSingleGroup(Long.valueOf(beginner.getStringExtra("index"))); //recupero l'id del gruppo selezionato, e quindi il gruppo stesso
-        groupID = beginner.getStringExtra("index");   //id del gruppo, che devo considerare
+        groupID = beginner.getStringExtra("index");   //id del gruppo, che devo considerare*/
 
-        users = groupSelected.getUsers();
+        users = new ArrayList<>(groupSelected.getUsers());
+    }
+    void cc(){
         userCost = new HashMap<>();
 
         //show current date
@@ -85,7 +87,7 @@ public class ExpenseFillData extends AppCompatActivity {
 
         populateSpinner();
 
-        EditText inputAmount = (EditText)findViewById(R.id.input_amount);
+        EditText inputAmount = (EditText) findViewById(R.id.input_amount);
         inputAmount.addTextChangedListener(new MyTextWatcher(inputAmount));
 
         //in questo punto il codice prende la lista principale e la mostra come recyclerview
