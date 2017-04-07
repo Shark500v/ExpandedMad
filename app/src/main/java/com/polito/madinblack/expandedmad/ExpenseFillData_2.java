@@ -120,7 +120,7 @@ public class ExpenseFillData_2 extends AppCompatActivity {
 
             EditText inputAmout = (EditText)findViewById(R.id.input_amount);
             String amountS = inputAmout.getText().toString();
-            if(amountS.isEmpty() || amountS==null) {
+            if(amountS.isEmpty() || amountS==null || !android.text.TextUtils.isDigitsOnly(amountS)) {
                 intent = new Intent(this, ExpenseFillData_2.class);
                 intent.putExtra("index", groupID);
                 startActivity(intent);
