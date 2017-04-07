@@ -183,7 +183,7 @@ public class ExpenseFillData extends AppCompatActivity {
 
             startActivity(intent);
             return true;
-        }else if(id == 16908332){
+        }else if(id == 16908332){   //questo è l'id del back button, non capisco perchè con R.id.home non ha lo stesso id
             Intent intent3 = new Intent(this, ExpenseListActivity.class);
             intent3.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
             navigateUpTo(intent3);

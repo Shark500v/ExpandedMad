@@ -72,7 +72,7 @@ public class ExpenseListActivity extends AppCompatActivity {
                 //questo stampa al fondo la scritta
                 //Snackbar.make(view, "New Expense added!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 Context c = view.getContext();
-                Intent intent = new Intent(c, ExpenseFillData.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
+                Intent intent = new Intent(c, ExpenseFillData_2.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
                 intent.putExtra("index", index);    //passo l'indice del gruppo
                 c.startActivity(intent);
             }
