@@ -30,6 +30,7 @@ import android.widget.TextView;
 import com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.dummy.Expense;
 import com.polito.madinblack.expandedmad.dummy.Group;
+import com.polito.madinblack.expandedmad.model.MyApplication;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -47,6 +48,9 @@ public class ExpenseFillData extends AppCompatActivity {
     private int itemSelected;
     private List<Group.GroupElements> mValues;
     private RecyclerView recyclerView;
+    private String groupID = "index";
+    private com.polito.madinblack.expandedmad.model.Group groupSelected;
+    private MyApplication ma;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +59,12 @@ public class ExpenseFillData extends AppCompatActivity {
         //toolbar settings
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        ma = MyApplication.getInstance();   //retrive del DB
+
+        Intent beginner = getIntent();
+        groupSelected = ma.getSingleGroup(Long.valueOf(beginner.getStringExtra("index"))); //recupero l'id del gruppo selezionato, e quindi il gruppo stesso
+        groupID = beginner.getStringExtra("index");   //id del gruppo, che devo considerare
 
         //show current date
         showDate(new Date());
@@ -76,8 +86,7 @@ public class ExpenseFillData extends AppCompatActivity {
         spinnerArray.add("item1");
         spinnerArray.add("item2");
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                this, android.R.layout.simple_spinner_item, spinnerArray);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerArray);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         Spinner sItems = (Spinner) findViewById(R.id.paidBy_spinner);
