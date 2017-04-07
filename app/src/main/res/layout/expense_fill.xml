@@ -160,8 +160,16 @@
                 android:layout_height="300dp"
                 android:inputType="textMultiLine"
                 android:gravity="top"
-                android:hint="@string/hint_description"/>
+                android:paddingTop="10dp"
+                android:paddingLeft="10dp"
+                android:hint="@string/hint_description"
+                android:background="@layout/rounded_border_edittext"/>
         </android.support.design.widget.TextInputLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            />
 
     </LinearLayout>
 

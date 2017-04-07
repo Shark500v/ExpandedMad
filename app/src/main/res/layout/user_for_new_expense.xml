@@ -56,7 +56,9 @@
         android:textAppearance="?attr/textAppearanceListItem"
         android:layout_marginLeft="7dp"
         android:layout_marginRight="@dimen/text_margin"
-        android:text="0.00"/>
+        android:text="0.00"
+        android:inputType="none"
+        />
 
     <TextView
         android:layout_width="wrap_content"
