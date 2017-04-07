@@ -168,6 +168,17 @@ public class Expense {
         }
     }
 
+    public void addPayment(Payment p){
+
+        userCost.put(p.getUser().getId(), p);
+
+        if(paying.getId()==MyApplication.myself.getId() && p.getUser().getId()!=MyApplication.myself.getId()){
+            group.uplMyCreditDebit(p.getUser(), (p.getToPaid()-p.getPaid()));
+        }else if(paying.getId()!=MyApplication.myself.getId() && p.getUser().getId()==MyApplication.myself.getId()){
+            group.uplMyCreditDebit(paying, (p.getPaid()-p.getToPaid()));
+        }
+    }
+
     public User getPaying() {
         return paying;
     }
