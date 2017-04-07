@@ -66,7 +66,7 @@
 
 
             <TextView
-                android:id="@+id/paidBy"
+                android:id="@+id/currency"
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
                 android:textAppearance="?attr/textAppearanceListItem"
@@ -89,19 +89,31 @@
                 android:hint="@string/hint_paidby" />
         </android.support.design.widget.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/input_layout_tag"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <Spinner
-                android:id="@+id/tag_spinner"
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="13dp"
-                android:layout_marginBottom="13dp"
-                android:entries="@array/tags" />
-        </android.support.design.widget.TextInputLayout>
+                android:text="@string/tag"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="6dp"
+                android:layout_gravity="center_vertical"/>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_tag"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Spinner
+                    android:id="@+id/tag_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="13dp"
+                    android:layout_marginBottom="13dp"
+                    android:entries="@array/tags" />
+            </android.support.design.widget.TextInputLayout>
+        </LinearLayout>
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/input_layout_date"
@@ -122,7 +134,6 @@
             android:name="com.polito.madinblack.expandedmad.ExpenseFillData"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/cost"
             app:layoutManager="LinearLayoutManager"
             tools:context="com.polito.madinblack.expandedmad.GroupManaging.ExpenseFillData"
             tools:listitem="@layout/user_for_new_expense" />

@@ -37,6 +37,6 @@
     <string name="partition">Partition</string>
     <string name="hint_title">Title</string>
     <string name="hint_amount">Amount</string>
-    <string name="hint_paidby">Payd By</string>
+    <string name="hint_paidby">Paid By</string>
     <string name="hint_description">Description</string>
 </resources>
