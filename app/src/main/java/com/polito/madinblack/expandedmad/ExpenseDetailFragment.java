@@ -59,19 +59,22 @@ public class ExpenseDetailFragment extends Fragment {
             ((TextView) rootView.findViewById(R.id.description_field)).setText(mItem.getDescription());
             ((TextView) rootView.findViewById(R.id.paid_container)).setText(mItem.toString());
             ((TextView) rootView.findViewById(R.id.tag_container)).setText(mItem.getTag().toString());
-            ((TextView) rootView.findViewById(R.id.cost_container)).setText(Float.toString(mItem.getCost()));
+            ((TextView) rootView.findViewById(R.id.cost_container)).setText(String.format("%.2f",(mItem.getCost())));
             ((TextView) rootView.findViewById(R.id.currency_container)).setText(mItem.getCurrency().toString());
-            ((TextView) rootView.findViewById(R.id.buyer_container)).setText(mItem.getPaying().getName()+" "+mItem.getPaying().getSurname());
+            if( mItem.getPaying().getId() == MyApplication.myself.getId() )
+                ((TextView) rootView.findViewById(R.id.buyer_container)).setText("You");
+            else
+                ((TextView) rootView.findViewById(R.id.buyer_container)).setText(mItem.getPaying().getName()+" "+mItem.getPaying().getSurname());
             ((TextView) rootView.findViewById(R.id.date_container)).setText(Integer.toString(mItem.getDay()) + "/" + Integer.toString(mItem.getMonth()) + "/" + Integer.toString(mItem.getYear()));
             if(mItem.getMyBalance() > 0){
-                ((TextView) rootView.findViewById(R.id.balance_container)).setText("+"+String.format("%.2f",(mItem.getMyBalance())));
+                ((TextView) rootView.findViewById(R.id.balance_container)).setText(String.format("+%.2f",(mItem.getMyBalance())));
                 ((TextView) rootView.findViewById(R.id.balance_container)).setTextColor(Color.parseColor("#00c200"));
             }else if(mItem.getMyBalance() < 0){
                 ((TextView) rootView.findViewById(R.id.balance_container)).setText(String.format("%.2f",(mItem.getMyBalance())));
                 ((TextView) rootView.findViewById(R.id.balance_container)).setTextColor(Color.parseColor("#ff0000"));
             }
             else{
-                ((TextView) rootView.findViewById(R.id.balance_container)).setText(Float.toString(mItem.getMyBalance()));
+                ((TextView) rootView.findViewById(R.id.balance_container)).setText(String.format("%.2f",(mItem.getMyBalance())));
             }
         }
 

@@ -163,18 +163,23 @@ public class ExpenseListActivity extends AppCompatActivity {
             holder.mItem = mValues.get(position);   //mValues.get(position) rappresenta un singolo elemento della nostra lista di spese
             holder.mIdView.setText(mValues.get(position).getName());
             if(mValues.get(position).getMyBalance()>0) {
-                holder.mContentView.setText("+"+String.format("%.2f",mValues.get(position).getMyBalance()) + " " + mValues.get(position).getCurrency());
+                holder.mContentView.setText(String.format("+%.2f",mValues.get(position).getMyBalance()) + " " + mValues.get(position).getCurrency());
                 holder.mContentView.setTextColor(Color.parseColor("#00c200"));
             }else if(mValues.get(position).getMyBalance()<0) {
                 holder.mContentView.setText(String.format("%.2f",mValues.get(position).getMyBalance()) + " " + mValues.get(position).getCurrency());
                 holder.mContentView.setTextColor(Color.parseColor("#ff0000"));
             }
             else{
-                holder.mContentView.setText(mValues.get(position).getMyBalance().toString());
+                holder.mContentView.setText(String.format("%.2f",mValues.get(position).getMyBalance()) + " " + mValues.get(position).getCurrency());
             }
 
+            if(mValues.get(position).getPaying().getId()==MyApplication.myself.getId())
+                holder.mPaydBy.setText("Paid by: You");
+            else
+                holder.mPaydBy.setText("Paid by: " + mValues.get(position).getPaying().getName());
 
-            holder.mPaydBy.setText("Paid by " + mValues.get(position).getPaying().getName());
+
+
 
             //sopra vengono settati i tre campi che costituisco le informazioni di ogni singolo gruppo, tutti pronti per essere mostriti nella gui
 

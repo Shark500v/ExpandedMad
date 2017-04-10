@@ -79,7 +79,8 @@ public class Payment {
 
     @Override
     public String toString() {
-        return paid.toString()+"/"+toPaid.toString();
+
+        return String.format("%.2f",(paid))+"/"+String.format("%.2f",(toPaid));
     }
 
 

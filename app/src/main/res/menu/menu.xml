@@ -19,7 +19,7 @@
 
     <item
         android:id="@+id/action_debts"
-        android:title="My debts"
+        android:title="My debts/credits"
         app:showAsAction="never"/>
 
     <!--info button-->

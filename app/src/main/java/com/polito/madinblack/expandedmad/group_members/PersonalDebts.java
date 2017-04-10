@@ -55,7 +55,7 @@ public class PersonalDebts extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.item_detail_container, fragment)
                     .commit();*/
-            actionBar.setTitle("Me vs " + groupSelected.getName());
+            actionBar.setTitle("You vs " + groupSelected.getName());
 
 
             View recyclerView = findViewById(R.id.item_list);
@@ -98,17 +98,23 @@ public class PersonalDebts extends AppCompatActivity {
             return new PersonalDebts.SimpleItemRecyclerViewAdapter.ViewHolder(view);
         }
 
+
+        //String.format("%.2f", groupSelected.getMyCreditsDebits().get(mValues.get(position).getId()))
+        //
+
         @Override
         public void onBindViewHolder(final PersonalDebts.SimpleItemRecyclerViewAdapter.ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);                           //singolo utente
             holder.mIdView.setText(mValues.get(position).getName() + " " +mValues.get(position).getSurname());               //qui visualizzo nome e cognome
             //qui invece quanto deve o meno
-            if (groupSelected.getMyCreditsDebits().get(mValues.get(position).getId())>=0){
-                holder.mContentView.setText("+" + Float.toString(groupSelected.getMyCreditsDebits().get(mValues.get(position).getId())));
+            if (groupSelected.getMyCreditsDebits().get(mValues.get(position).getId())>0){
+                holder.mContentView.setText(String.format("+%.2f", groupSelected.getMyCreditsDebits().get(mValues.get(position).getId())));
                 holder.mContentView.setTextColor(Color.parseColor("#00c200"));
-            }else{
-                holder.mContentView.setText(Float.toString(groupSelected.getMyCreditsDebits().get(mValues.get(position).getId())));
+            }else if(groupSelected.getMyCreditsDebits().get(mValues.get(position).getId())<0){
+                holder.mContentView.setText(String.format("%.2f", groupSelected.getMyCreditsDebits().get(mValues.get(position).getId())));
                 holder.mContentView.setTextColor(Color.parseColor("#ff0000"));
+            }else{
+                holder.mContentView.setText(String.format("%.2f", groupSelected.getMyCreditsDebits().get(mValues.get(position).getId())));
             }
 
             holder.mView.setOnClickListener(new View.OnClickListener() {

@@ -185,9 +185,6 @@ public class Expense {
 
     public String toString(){
         return userCost.get(MyApplication.myself.getId()).toString();
-
-
-
     }
 
 

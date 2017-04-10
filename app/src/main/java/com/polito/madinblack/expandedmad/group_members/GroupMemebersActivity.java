@@ -41,10 +41,12 @@ public class GroupMemebersActivity extends AppCompatActivity {
         setContentView(R.layout.users_of_group);
 
         groupID = getIntent().getStringExtra("GROUP_ID");
-        name = "Group " + groupID;
+
 
         ma = MyApplication.getInstance();
         groupSelected = ma.getSingleGroup(Long.valueOf(getIntent().getStringExtra("GROUP_ID")));
+        name = groupSelected.getName();
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(name);
@@ -95,7 +97,10 @@ public class GroupMemebersActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).getName() + " " + mValues.get(position).getSurname());
+            if(holder.mItem.getId()==MyApplication.myself.getId())
+                holder.mIdView.setText("You");
+            else
+                holder.mIdView.setText(mValues.get(position).getName() + " " + mValues.get(position).getSurname());
             holder.mContentView.setText("");
 
             holder.mView.setOnClickListener(new View.OnClickListener() {

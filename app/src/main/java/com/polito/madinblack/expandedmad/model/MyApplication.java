@@ -47,20 +47,23 @@ public class MyApplication {
         users.put(u5.getId(), u5);
         users.put(u6.getId(), u6);
 
-        g1.addUser(myself);
+
         g1.addUser(u1);
         g1.addUser(u2);
         g1.addUser(u3);
+        g1.addUser(myself);
 
-        g2.addUser(myself);
+
         g2.addUser(u1);
         g2.addUser(u2);
         g2.addUser(u3);
         g2.addUser(u5);
+        g2.addUser(myself);
 
-        g3.addUser(myself);
+
         g3.addUser(u5);
         g3.addUser(u6);
+        g3.addUser(myself);
 
         Expense e1 = new Expense("Flight", Expense.Tag.FLIGHT, 89.6f, "Fligth to New York!", Expense.Currency.EURO, g1, u1, 2017, 3, 16);
         e1.addPayment(u1,    89.6f, 22.4f);
