@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "840395540651",
+    "firebase_url": "https://madproject-7fb82.firebaseio.com",
+    "project_id": "madproject-7fb82",
+    "storage_bucket": "madproject-7fb82.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:840395540651:android:861cd9ba9061daeb",
+        "android_client_info": {
+          "package_name": "com.polito.madinblack.expandedmad"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "840395540651-hoikhja0m1qhjcjtua705u0ivqni8rdm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkmt0ObILaocjskVgDXwZLdT6gaJFTtYM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

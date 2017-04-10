@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimaryLight"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="@dimen/activity_horizontal_margin">
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="@dimen/logo_w_h"
+            android:layout_height="@dimen/logo_w_h"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/logo_w_h"
+            android:src="@mipmap/ic_wallet" />
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/phonenumber"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/registration_fields"
+                android:inputType="number"
+                android:hint="@string/hint_phonenumber"
+                android:maxLines="1"
+                android:textColor="@android:color/white"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/registration_fields"
+            android:inputType="textPassword"
+            android:hint="@string/hint_password"
+            android:maxLines="1"
+            android:textColor="@android:color/white"/>
+
+        <EditText
+            android:id="@+id/passwordConfirm"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/registration_fields"
+            android:inputType="textPassword"
+            android:hint="@string/hint_password_confirm"
+            android:maxLines="1"
+            android:textColor="@android:color/white"/>
+
+       <Button
+           android:id="@+id/signup_button"
+           style="?android:textAppearanceSmall"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="16dp"
+           android:background="@color/colorAccentLight"
+           android:text="@string/action_sign_in_short"
+           android:textColor="@color/primary_text"
+           android:textStyle="bold"/>
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center|bottom"
+        android:layout_marginBottom="20dp"
+        android:visibility="gone" />
+</android.support.design.widget.CoordinatorLayout>

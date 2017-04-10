@@ -42,4 +42,11 @@
     <string name="hint_amount">Amount *</string>
     <string name="hint_paidby">Paid By</string>
     <string name="hint_description">Description</string>
+    <string name="hint_phonenumber">Enter your phone number</string>
+    <string name="hint_password">Enter your password</string>
+    <string name="hint_password_confirm">Confirm your password</string>
+    <string name="action_sign_in_short">Register</string>
+    <string name="hint_confirmation_code">Enter the code that you have received</string>
+    <string name="confirm_code">Confirm code</string>
+    <string name="signup">Signup</string>
 </resources>
