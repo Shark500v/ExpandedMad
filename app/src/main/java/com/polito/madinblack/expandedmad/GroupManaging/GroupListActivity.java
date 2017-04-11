@@ -2,6 +2,7 @@ package com.polito.madinblack.expandedmad.GroupManaging;
 
 import android.content.Context;
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -16,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,6 +25,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.polito.madinblack.expandedmad.ExpenseListActivity;
 import com.polito.madinblack.expandedmad.MultipleBarGraph;
 import com.polito.madinblack.expandedmad.R;
@@ -35,6 +42,9 @@ import java.util.List;
 public class GroupListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     private MyApplication ma;
+    public String PHONE_ID; //numero di telefono passato dalla registrazione
+    private DatabaseReference mFirebaseDatabase;
+    private FirebaseDatabase mFirebaseInstance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,10 +81,27 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener((NavigationView.OnNavigationItemSelectedListener) this);
 
+        mFirebaseInstance = FirebaseDatabase.getInstance();
+        mFirebaseDatabase = mFirebaseInstance.getReference("Users");
+        mFirebaseInstance.getReference("AppName").setValue("MadExpense");
+
+        Bundle extras=getIntent().getExtras();
+        if(extras!=null) {
+            PHONE_ID = extras.getString("phoneN");
+            //bisogna aggiungere la verifica se l'utente esiste gia nel database
+            createUser();
+        }
+
         //in questo punto il codice prende la lista principale e la mostra come recyclerview
         View recyclerView = findViewById(R.id.group_list);
         assert recyclerView != null;
         setupRecyclerView((RecyclerView) recyclerView);
+    }
+
+    //aggiunge l'user al database
+    public void createUser(){
+        User user=new User("name","surname");//da cambiare (bisogna inserire i veri nome e cognome
+        mFirebaseDatabase.child(PHONE_ID).setValue(user);
     }
 
     //le due funzioni sottostanti servono al menù laterale che esce

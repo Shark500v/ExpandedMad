@@ -49,4 +49,6 @@
     <string name="hint_confirmation_code">Enter the code that you have received</string>
     <string name="confirm_code">Confirm code</string>
     <string name="signup">Signup</string>
+    <string name="name">Name</string>
+    <string name="surname">Surname</string>
 </resources>

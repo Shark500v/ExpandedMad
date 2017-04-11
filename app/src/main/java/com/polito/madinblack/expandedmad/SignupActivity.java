@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity;
 
 public class SignupActivity extends AppCompatActivity {
     private EditText inputPhoneNumber;
@@ -41,7 +42,7 @@ public class SignupActivity extends AppCompatActivity {
         buttonSignUp.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                String phoneNumber = inputPhoneNumber.getText().toString().trim();
+                final String phoneNumber = inputPhoneNumber.getText().toString().trim();
                 String password = inputPassword.getText().toString().trim();
                 String passwordConfirm= inputPasswordConfirm.getText().toString().trim();
                 //controllo di aver inserito qualcosa
@@ -85,7 +86,8 @@ public class SignupActivity extends AppCompatActivity {
                             Toast.makeText(SignupActivity.this, "Authentication failed." + task.getException(),
                                     Toast.LENGTH_SHORT).show();
                         } else {
-                            Intent intent=new Intent(SignupActivity.this, ConfirmRegistration.class);
+                            Intent intent=new Intent(SignupActivity.this, GroupListActivity.class);
+                            intent.putExtra("phoneN", phoneNumber);
                             startActivity(intent);
                             finish();
 

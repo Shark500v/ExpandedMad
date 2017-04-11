@@ -14,6 +14,11 @@ public class User {
     /*all groups for user*/
     private Map<Long, Group>groups = new HashMap<>();
 
+    public User()
+    {
+        this.id = counter++;
+        globalBalance = 0;
+    }
 
     public User(String name, String surname){
         this.name = name;
