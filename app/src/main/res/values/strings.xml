@@ -51,4 +51,6 @@
     <string name="signup">Signup</string>
     <string name="name">Name</string>
     <string name="surname">Surname</string>
+    <string name="group_name">Group name</string>
+    <string name="sign_in">Sign in</string>
 </resources>

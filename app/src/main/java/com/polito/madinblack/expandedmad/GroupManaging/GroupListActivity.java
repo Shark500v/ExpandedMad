@@ -32,6 +32,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.polito.madinblack.expandedmad.ExpenseListActivity;
 import com.polito.madinblack.expandedmad.MultipleBarGraph;
+import com.polito.madinblack.expandedmad.NewGroup;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.*;
@@ -41,8 +42,8 @@ import java.util.List;
 
 public class GroupListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
+    public String phoneId; //numero di telefono passato dalla registrazione
     private MyApplication ma;
-    public String PHONE_ID; //numero di telefono passato dalla registrazione
     private DatabaseReference mFirebaseDatabase;
     private FirebaseDatabase mFirebaseInstance;
 
@@ -87,7 +88,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
 
         Bundle extras=getIntent().getExtras();
         if(extras!=null) {
-            PHONE_ID = extras.getString("phoneN");
+            phoneId = extras.getString("phoneN");
             //bisogna aggiungere la verifica se l'utente esiste gia nel database
             createUser();
         }
@@ -101,7 +102,8 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
     //aggiunge l'user al database
     public void createUser(){
         User user=new User("name","surname");//da cambiare (bisogna inserire i veri nome e cognome
-        mFirebaseDatabase.child(PHONE_ID).setValue(user);
+        user.setPhoneNumber(phoneId);//aggiungo numero di telefono
+        mFirebaseDatabase.child(phoneId).setValue(user);
     }
 
     //le due funzioni sottostanti servono al menù laterale che esce
@@ -122,6 +124,9 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         int id = item.getItemId();
 
         if (id == R.id.nav_addgroup) {
+            Intent intent=new Intent(GroupListActivity.this, NewGroup.class);
+            intent.putExtra("phoneId",phoneId);
+            startActivity(intent);
             // Handle the camera action
         } else if (id == R.id.nav_expenses) {
 

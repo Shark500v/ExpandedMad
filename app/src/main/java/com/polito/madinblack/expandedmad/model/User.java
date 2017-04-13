@@ -7,6 +7,7 @@ public class User {
 
     private String name;
     private String surname;
+    private String phoneNumber;
     private float globalBalance;
     private static long counter = 1; /*counter to assign an id*/
     private final Long id;          //unique Id for each user
@@ -14,6 +15,7 @@ public class User {
     /*all groups for user*/
     private Map<Long, Group>groups = new HashMap<>();
 
+    //serve questo costruttore per il database (aggiunto anche setter e getter su phoneNumber)
     public User()
     {
         this.id = counter++;
@@ -59,5 +61,7 @@ public class User {
         return this.getName() + " " + this.getSurname();
     }
 
+    public String getPhoneNumber() { return phoneNumber; }
 
+    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
 }

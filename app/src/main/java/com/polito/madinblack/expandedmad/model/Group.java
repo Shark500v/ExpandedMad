@@ -28,6 +28,13 @@ public class Group {
     //map containing how money myself have to paid/received by users. + = received - = give 0 nothing
     private Map<Long, Float> myCreditsDebits = new HashMap<>();
 
+    //serve questo costruttore per il database (aggiunto anche il setter sul nome)
+    public Group(){
+        this.id = counter++;
+        totCredit = 0F;
+        totDebit = 0F;
+    }
+
     public Group(String name){
         this.name = name;
         this.id = counter++;
@@ -66,6 +73,7 @@ public class Group {
 
     public List<User> getUsers(){ return new ArrayList<>(users.values());}
 
+    public void setName(String name) { this.name = name; }
 
     public Long getId(){
         return id;
