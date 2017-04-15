@@ -14,6 +14,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -97,6 +98,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         View recyclerView = findViewById(R.id.group_list);
         assert recyclerView != null;
         setupRecyclerView((RecyclerView) recyclerView);
+
     }
 
     //aggiunge l'user al database
