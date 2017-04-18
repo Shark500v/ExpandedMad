@@ -83,11 +83,11 @@ public class NewGroup extends AppCompatActivity {
         //creo il gruppo sotto "Groups" e gli assegno una chiave univoca
         mGroupsDatabase=FirebaseDatabase.getInstance().getReference("Groups");
         String groupId =mGroupsDatabase.push().getKey();
+        mGroupsDatabase.child(groupId).child(phoneId);
         mGroupsDatabase.child(groupId).setValue(group);
 
         //creo il gruppo sotto l'utente che lo crea (bisognerà aggiungere il gruppo ad ogni utente che partecipa al gruppo)
         mUsersDatabase = FirebaseDatabase.getInstance().getReference("Users");
-        mUsersDatabase.child(phoneId).setValue(groupId);
         mUsersDatabase.child(phoneId).child(groupId).setValue(group);
 
         //da togliere penso
