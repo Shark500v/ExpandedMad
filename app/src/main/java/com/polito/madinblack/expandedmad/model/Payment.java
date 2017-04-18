@@ -11,6 +11,9 @@ public class Payment {
     private Float paid;
     private Float toPaid;
 
+    //costruttore per il database
+    public Payment(){}
+
     public Payment(User user, Expense expense, Float paid, Float toPaid){
         this.user    = user;
         this.expense = expense;

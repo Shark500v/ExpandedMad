@@ -45,8 +45,8 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
 
     public String phoneId; //numero di telefono passato dalla registrazione
     private MyApplication ma;
-    private DatabaseReference mFirebaseDatabase;
-    private FirebaseDatabase mFirebaseInstance;
+    private DatabaseReference mDatabaseReference;
+    private FirebaseDatabase mFirebaseDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,16 +83,19 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener((NavigationView.OnNavigationItemSelectedListener) this);
 
-        mFirebaseInstance = FirebaseDatabase.getInstance();
-        mFirebaseDatabase = mFirebaseInstance.getReference("Users");
-        mFirebaseInstance.getReference("AppName").setValue("MadExpense");
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mDatabaseReference = mFirebaseDatabase.getReference("Users");
+        mFirebaseDatabase.getReference("AppName").setValue("MadExpense");
 
+        //devo prendere il numero cellulare dell'utente (qua lo prendevo dalla registrazione ma e' da cambiare)
         Bundle extras=getIntent().getExtras();
         if(extras!=null) {
             phoneId = extras.getString("phoneN");
             //bisogna aggiungere la verifica se l'utente esiste gia nel database
-            createUser();
+            createUser(phoneId,"name","surname");//nome e cognome devo prenderli dalle info dell'utente
         }
+
+        phoneId="3657898765";//da togliere
 
         //in questo punto il codice prende la lista principale e la mostra come recyclerview
         View recyclerView = findViewById(R.id.group_list);
@@ -102,10 +105,11 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
     }
 
     //aggiunge l'user al database
-    public void createUser(){
-        User user=new User("name","surname");//da cambiare (bisogna inserire i veri nome e cognome
+    public void createUser(String phoneId, String name, String surname){
+        User user=new User(name,surname);//da cambiare (bisogna inserire i veri nome e cognome)
         user.setPhoneNumber(phoneId);//aggiungo numero di telefono
-        mFirebaseDatabase.child(phoneId).setValue(user);
+        String userKey = mDatabaseReference.push().getKey();
+        mDatabaseReference.child(phoneId).setValue(user);
     }
 
     //le due funzioni sottostanti servono al menù laterale che esce
@@ -175,7 +179,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         @Override
         public void onBindViewHolder(final SimpleItemRecyclerViewAdapter.ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);   //mValues.get(position) rappresenta un singolo elemento della nostra lista di gruppi
-            holder.mNumView.setText(Integer.toString(mValues.get(position).getUsers().size()) + " members");
+            holder.mNumView.setText(Integer.toString(mValues.get(position).getUsers().size()) + " " +getString(R.string.members));
             holder.mContentView.setText(mValues.get(position).getName());
             //sopra vengono settati i tre campi che costituisco le informazioni di ogni singolo gruppo, tutti pronti per essere mostriti nella gui
 

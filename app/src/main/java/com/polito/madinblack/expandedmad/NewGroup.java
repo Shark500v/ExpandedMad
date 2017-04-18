@@ -16,11 +16,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.model.Group;
+import com.polito.madinblack.expandedmad.model.MyApplication;
 
 public class NewGroup extends AppCompatActivity {
 
     private FirebaseDatabase mFirebaseInstance;
-    private DatabaseReference mFirebaseDatabase;
+    private DatabaseReference mGroupsDatabase;
+    private DatabaseReference mUsersDatabase;
+    private MyApplication ma;
     String phoneId;
 
     @Override
@@ -61,21 +64,35 @@ public class NewGroup extends AppCompatActivity {
                 return true;
             }
 
-            // creo il gruppo e setto il nome del gruppo ricevuto dalla EditText
-            Group group = new Group();
-            group.setName(groupName);
 
-            //queste 4 righe sono ancora da modificare, devono creare il gruppo sotto l'utente, e gli utenti all'interno del gruppo
-            mFirebaseInstance=FirebaseDatabase.getInstance();
-            mFirebaseDatabase = mFirebaseInstance.getReference("Groups");
-            mFirebaseDatabase.child(group.getId()+": "+groupName).child("Group").setValue(group);
-            mFirebaseDatabase.child(group.getId()+": "+groupName).child("Users").setValue(phoneId);
+
+            addGroup(groupName);
 
             Intent intent1=new Intent(NewGroup.this, GroupListActivity.class); //da cambiare (dovra' andare alla pagina del gruppo creato)
             startActivity(intent1);
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void addGroup(String groupName){
+        // creo il gruppo e setto il nome del gruppo ricevuto dalla EditText
+        Group group = new Group();
+        group.setName(groupName);
+
+        //creo il gruppo sotto "Groups" e gli assegno una chiave univoca
+        mGroupsDatabase=FirebaseDatabase.getInstance().getReference("Groups");
+        String groupId =mGroupsDatabase.push().getKey();
+        mGroupsDatabase.child(groupId).setValue(group);
+
+        //creo il gruppo sotto l'utente che lo crea (bisognerà aggiungere il gruppo ad ogni utente che partecipa al gruppo)
+        mUsersDatabase = FirebaseDatabase.getInstance().getReference("Users");
+        mUsersDatabase.child(phoneId).setValue(groupId);
+        mUsersDatabase.child(phoneId).child(groupId).setValue(group);
+
+        //da togliere penso
+        ma = MyApplication.getInstance();
+        ma.addGroup(group);
     }
 
     @Override

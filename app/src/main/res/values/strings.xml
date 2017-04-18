@@ -53,4 +53,8 @@
     <string name="surname">Surname</string>
     <string name="group_name">Group name</string>
     <string name="sign_in">Sign in</string>
+    <string name="members">members</string>
+    <string name="new_group">New group</string>
+    <string name="my_expenses">My expenses</string>
+    <string name="settings">Settings</string>
 </resources>

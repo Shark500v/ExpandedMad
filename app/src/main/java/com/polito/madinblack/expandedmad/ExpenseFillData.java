@@ -28,6 +28,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.model.Expense;
 import com.polito.madinblack.expandedmad.model.Group;
@@ -60,6 +62,7 @@ public class ExpenseFillData extends AppCompatActivity {
     private MyApplication ma;
     private List<User> users;
     private List<Payment> mValues;
+    DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,6 +170,8 @@ public class ExpenseFillData extends AppCompatActivity {
                 newExpense.addPayment(mValues.get(i));
             }
 
+            addExpense(newExpense);
+
             groupSelected.addExpense(newExpense);
 
 
@@ -179,6 +184,13 @@ public class ExpenseFillData extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    //aggiunge una spesa al gruppo nel database associandogli una chiave univoca
+    public void addExpense(Expense expense){
+        databaseReference = FirebaseDatabase.getInstance().getReference("Groups");
+        String expenseId = databaseReference.push().getKey();
+        databaseReference.child(groupID).child(expenseId).setValue(expense);
     }
 
     @Override
