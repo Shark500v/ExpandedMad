@@ -172,6 +172,7 @@ public class Expense {
 
     public void addPayment(User user, Float paid, Float toPaid){
         Payment p = new Payment(user, this, paid, toPaid);
+        p.setCost( this.cost);
         userCost.put(user.getId(), p);
 
         if(paying.getId()==MyApplication.myself.getId() && user.getId()!=MyApplication.myself.getId()){
@@ -182,6 +183,7 @@ public class Expense {
     }
 
     public void addPayment(Payment p){
+        this.cost = p.getCost();
 
         userCost.put(p.getUser().getId(), p);
 

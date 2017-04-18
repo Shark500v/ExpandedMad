@@ -1,15 +1,13 @@
 package com.polito.madinblack.expandedmad.model;
 
-/**
- * Created by Ale on 04/04/2017.
- */
-
 public class Payment {
 
     private User user;
     private Expense expense;
     private Float paid;
     private Float toPaid;
+    private int weight;
+    private float totalCost;
 
     //costruttore per il database
     public Payment(){}
@@ -18,8 +16,10 @@ public class Payment {
         this.user    = user;
         this.expense = expense;
         this.paid    = paid;
-        this.toPaid  = toPaid;
-
+        this.toPaid  = CostUtil.round(toPaid, 2);
+        this.weight  = 0;
+        if(this.expense != null)
+            totalCost = this.expense.getCost();
 
     }
 
@@ -42,6 +42,24 @@ public class Payment {
     }
 
 
+    public int getWeight() {
+        return weight;
+    }
+
+    public void setWeight(int weight) { this.weight = weight; }
+
+
+    public float getCost() {
+        return totalCost;
+    }
+
+    public void setCost(float cost){
+        if(expense != null)
+            expense.setCost(cost);
+        this.totalCost = cost;
+    }
+
+
     public Float getPaid() {
         return paid;
     }
@@ -55,7 +73,8 @@ public class Payment {
     }
 
     public void setToPaid(Float toPaid) {
-        this.toPaid = toPaid;
+
+        this.toPaid = CostUtil.round(toPaid, 2);
     }
 
     public Float getDebit(){
