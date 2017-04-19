@@ -1,7 +1,9 @@
 package com.polito.madinblack.expandedmad;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
@@ -48,6 +50,7 @@ import com.polito.madinblack.expandedmad.model.Expense.Tag;
 
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -67,7 +70,6 @@ public class ExpenseFillData extends AppCompatActivity {
     private Group groupSelected;
     private MyApplication ma;
     private List<User> users;
-    private List<Integer> mWeights;
     private List<Payment> mValues;
     DatabaseReference databaseReference;
     private EditText inputName, inputAmount;
@@ -201,11 +203,38 @@ public class ExpenseFillData extends AppCompatActivity {
     }
 
     public void uploadPhoto(View view){
+        final CharSequence[] items = { "Take Photo", "Choose from Gallery", "Cancel" };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(ExpenseFillData.this);
+        builder.setTitle("Add Expense Proof!");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                //boolean result=Utility.checkPermission(ExpenseFillData.this);
+
+                if (items[item].equals("Take Photo")) {
+                    //userChoosenTask ="Take Photo";
+                    //if(result)
+                        //cameraIntent();
+
+                } else if (items[item].equals("Choose from Gallery")) {
+                    //userChoosenTask ="Choose from Library";
+                    //if(result)
+                        photoFromGallery();
+
+                } else if (items[item].equals("Cancel")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+    }
+
+    public void photoFromGallery(){
         Intent i = new Intent(
                 Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
         startActivityForResult(i, RESULT_LOAD_IMAGE);
-
     }
 
     @Override
@@ -216,7 +245,7 @@ public class ExpenseFillData extends AppCompatActivity {
             Uri selectedImage = data.getData();
             String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
-            Cursor cursor = getContentResolver().query(selectedImage,
+            /*Cursor cursor = getContentResolver().query(selectedImage,
                     filePathColumn, null, null, null);
             cursor.moveToFirst();
 
@@ -226,7 +255,7 @@ public class ExpenseFillData extends AppCompatActivity {
 
             // String picturePath contains the path of selected Image
             //CircularImageView imageView = (CircularImageView) findViewById(R.id.expense_proof);
-            //imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+            //imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));*/
             CircularImageView imageView = (CircularImageView) findViewById(R.id.expense_proof);
             //imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
             try {
@@ -305,18 +334,35 @@ public class ExpenseFillData extends AppCompatActivity {
         }
     }
 
-    private void modifyProportion(String value) {
-        float amount = value.equals("")?0:Float.parseFloat(value);
-        float price = amount/mValues.size();
+    private void modifyPayment() {
+        int totalWeigth = 0;
+        float netAmount = amount;
+
+        for(Payment pay:mValues){
+            if(pay.isModified())
+                netAmount -= pay.getToPaid();
+            totalWeigth += pay.getWeight();
+        }
+
         for(int i=0;i<mValues.size();i++){
-            mValues.get(i).setToPaid(price);
+            mValues.get(i).setToPaid( (amount * mValues.get(i).getWeight())/totalWeigth);
             recyclerView.getAdapter().notifyItemChanged(i, mValues.get(i));
         }
+
     }
 
-    private void adjustPartition(){
+    private void modifyProportion(String value) {
+        amount = value.equals("")?0:Float.parseFloat(value);
+
+        int totalWeigth = 0;
+
+        for(Payment pay:mValues){
+            totalWeigth += pay.getWeight();
+        }
+
         for(int i=0;i<mValues.size();i++){
-            mValues.get(i).getToPaid();
+            mValues.get(i).setToPaid( (amount * mValues.get(i).getWeight())/totalWeigth);
+            mValues.get(i).setWeightEnabled(true);
             recyclerView.getAdapter().notifyItemChanged(i, mValues.get(i));
         }
     }
@@ -328,8 +374,9 @@ public class ExpenseFillData extends AppCompatActivity {
             totalWeigth += pay.getWeight();
         }
 
-        for(Payment pay:mValues){
-            pay.setToPaid( (amount * pay.getWeight())/totalWeigth);
+        for(int i=0;i<mValues.size();i++){
+            mValues.get(i).setToPaid( (amount * mValues.get(i).getWeight())/totalWeigth);
+            recyclerView.getAdapter().notifyItemChanged(i, mValues.get(i));
         }
 
     }
@@ -373,11 +420,6 @@ public class ExpenseFillData extends AppCompatActivity {
         for(int i=0;i<users.size();i++){
             payment.add(new Payment(users.get(i), null, (float)0.00, (float)0.00));
         }
-        //initialize list
-        List<Integer> weights = new ArrayList<>();
-        for(User u:users){
-            weights.add(2);
-        }
         recyclerView.setAdapter(new ExpenseFillData.SimpleItemRecyclerViewAdapter(payment));
     }
 
@@ -398,28 +440,53 @@ public class ExpenseFillData extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ExpenseFillData.SimpleItemRecyclerViewAdapter.ViewHolder holder, int position) {
-            holder.mItem = mValues.get(position);   //mValues.get(position) rappresenta un singolo elemento della nostra lista di gruppi
+            holder.mItem = mValues.get(position);
             holder.mIdView.setText( holder.mItem.getUser().getName());
-            holder.partition.setText( holder.mItem.getToPaid().toString());
-            //holder.mNumber.setText( mWeights.get(position));
-            //sopra vengono settati i tre campi che costituisco le informazioni di ogni singolo gruppo, tutti pronti per essere mostriti nella gui
+            holder.partition.setText( String.format("%.2f", holder.mItem.getToPaid()));
+            holder.mNumber.setText( String.valueOf(holder.mItem.getWeight()) );
+            holder.minus.setEnabled( holder.mItem.isWeightEnabled());
             holder.minus.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
                     if(Integer.parseInt(holder.mNumber.getText().toString()) > 1){
-                        holder.mNumber.setText("0");
+                        int currentWeight = Integer.parseInt(holder.mNumber.getText().toString());
+                        holder.mItem.setWeight(--currentWeight);
+                        holder.mNumber.setText( String.valueOf(holder.mItem.getWeight()) );
                         fixPayment();
                     }
                 }
             });
+            holder.plus.setEnabled( holder.mItem.isWeightEnabled());
             holder.plus.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    holder.mNumber.setText("5");
+                    int currentWeight = Integer.parseInt(holder.mNumber.getText().toString());
+                    holder.mItem.setWeight(++currentWeight);
+                    holder.mNumber.setText( String.valueOf(holder.mItem.getWeight()) );
                     fixPayment();
 
+                }
+            });
+            holder.partition.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    Float value = s.toString().equals("")?0:Float.parseFloat(s.toString());
+                    holder.mItem.setToPaid(value);
+                    holder.mItem.setModified(true);
+                    holder.mNumber.setText("-");
+                    holder.minus.setEnabled(false);
+                    holder.plus.setEnabled(false);
                 }
             });
             /*holder.mView.setOnClickListener(new View.OnClickListener() {
