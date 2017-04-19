@@ -92,7 +92,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         if(extras!=null) {
             phoneId = extras.getString("phoneN");
             //bisogna aggiungere la verifica se l'utente esiste gia nel database
-            createUser(phoneId,"name","surname");//nome e cognome devo prenderli dalle info dell'utente
+            writeNewUser(phoneId,"name","surname");//nome e cognome devo prenderli dalle info dell'utente
         }
 
         phoneId="3657898765";//da togliere
@@ -105,7 +105,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
     }
 
     //aggiunge l'user al database
-    public void createUser(String phoneId, String name, String surname){
+    public void writeNewUser(String phoneId, String name, String surname){
         User user=new User(name,surname);//da cambiare (bisogna inserire i veri nome e cognome)
         user.setPhoneNumber(phoneId);//aggiungo numero di telefono
         String userKey = mDatabaseReference.push().getKey();

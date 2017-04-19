@@ -187,7 +187,7 @@ public class ExpenseFillData_2 extends AppCompatActivity {
 
             }
 
-            addExpense(newExpense);
+            writeNewExpense(newExpense);
 
             groupSelected.addExpense(newExpense);
 
@@ -208,10 +208,13 @@ public class ExpenseFillData_2 extends AppCompatActivity {
     }
 
     //aggiunge una spesa al gruppo nel database associandogli una chiave univoca
-    public void addExpense(Expense expense){
+    public void writeNewExpense(Expense expense){
         databaseReference = FirebaseDatabase.getInstance().getReference("Groups");
         String expenseId = databaseReference.push().getKey();
         databaseReference.child(groupID).child(expenseId).setValue(expense);
+
+        //bisogna aggiungere la spesa anche sotto users
+
     }
 
     @Override

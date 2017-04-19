@@ -184,10 +184,13 @@ public class ExpenseFillData extends AppCompatActivity {
     }
 
     //aggiunge una spesa al gruppo nel database associandogli una chiave univoca
-    public void saveExpense(Expense expense){
+    public void writeNewExpense(Expense expense){
         databaseReference = FirebaseDatabase.getInstance().getReference("Groups");
         String expenseId = databaseReference.push().getKey();
         databaseReference.child(groupID).child(expenseId).setValue(expense);
+
+        //bisogna aggiungere la spesa anche sotto users
+
     }
 
     @Override

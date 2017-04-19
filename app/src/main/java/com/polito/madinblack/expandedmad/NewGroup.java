@@ -66,7 +66,7 @@ public class NewGroup extends AppCompatActivity {
 
 
 
-            addGroup(groupName);
+            writeNewGroup(groupName);
 
             Intent intent1=new Intent(NewGroup.this, GroupListActivity.class); //da cambiare (dovra' andare alla pagina del gruppo creato)
             startActivity(intent1);
@@ -75,7 +75,7 @@ public class NewGroup extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void addGroup(String groupName){
+    private void writeNewGroup(String groupName){
         // creo il gruppo e setto il nome del gruppo ricevuto dalla EditText
         Group group = new Group();
         group.setName(groupName);
