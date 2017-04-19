@@ -1,7 +1,5 @@
 package com.polito.madinblack.expandedmad.model;
 
-import com.polito.madinblack.expandedmad.R;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -35,7 +33,7 @@ public class Expense {
     //a map showing for each user the cost of the Payment
     private Map<Long, Payment> userCost = new HashMap<>();
 
-    public Expense(){}
+    private Map<Enum, Character> currencySymbol = new HashMap<>();
 
     public Expense(String name, Tag tag, float cost, String description, Currency currency, Group group, User paying, int year, int month, int day){
         this.name        = name;
@@ -137,16 +135,6 @@ public class Expense {
         return day;
     }
 
-    public void setYear(int year) { this.year = year; }
-
-    public void setMonth(int month) { this.month = month; }
-
-    public void setDay(int day) { this.day = day; }
-
-    public void setGroup(Group group) { this.group = group; }
-
-    public void setPaying(User user) {this.paying = user; }
-
 
     public static int dateCompare(Expense e1, Expense e2){
         /*if(e1.getYear()>e2.getYear())
@@ -172,6 +160,7 @@ public class Expense {
 
     public void addPayment(User user, Float paid, Float toPaid){
         Payment p = new Payment(user, this, paid, toPaid);
+        p.setCost(this.cost);
         userCost.put(user.getId(), p);
 
         if(paying.getId()==MyApplication.myself.getId() && user.getId()!=MyApplication.myself.getId()){
@@ -182,6 +171,7 @@ public class Expense {
     }
 
     public void addPayment(Payment p){
+        this.cost = p.getCost();
 
         userCost.put(p.getUser().getId(), p);
 

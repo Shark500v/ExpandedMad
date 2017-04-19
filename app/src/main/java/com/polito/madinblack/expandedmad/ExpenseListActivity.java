@@ -14,6 +14,8 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -72,12 +74,9 @@ public class ExpenseListActivity extends AppCompatActivity {
                 //questo stampa al fondo la scritta
                 //Snackbar.make(view, "New Expense added!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 Context c = view.getContext();
-                Intent intent = new Intent(c, ExpenseFillData.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
+                Intent intent = new Intent(c, ExpenseFillData_2.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
                 intent.putExtra("index", index);    //passo l'indice del gruppo
-                //startActivityForResult(intent, 1);
                 c.startActivity(intent);
-                //forse serve il finish alla fine
-                //finish();
             }
         });
 
@@ -176,10 +175,18 @@ public class ExpenseListActivity extends AppCompatActivity {
                 holder.mContentView.setText(String.format("%.2f",mValues.get(position).getMyBalance()) + " " + mValues.get(position).getCurrency());
             }
 
-            if(mValues.get(position).getPaying().getId()==MyApplication.myself.getId())
-                holder.mPaydBy.setText("Paid by: You");
-            else
-                holder.mPaydBy.setText("Paid by: " + mValues.get(position).getPaying().getName());
+            /*code useful to convert in bold only a piece of string*/
+            final SpannableStringBuilder str;
+
+            if(mValues.get(position).getPaying().getId()==MyApplication.myself.getId()) {
+                str = new SpannableStringBuilder("Paid by "+ "You");
+                str.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), "Paid by ".length(), ("Paid by ".length() + "You".length()), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }else {
+                str = new SpannableStringBuilder("Paid by "+ mValues.get(position).getPaying().getName());
+                str.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), "Paid by ".length(), ("Paid by ".length() + mValues.get(position).getPaying().getName().length()), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+            holder.mPaydBy.setText(str);
+
 
 
 

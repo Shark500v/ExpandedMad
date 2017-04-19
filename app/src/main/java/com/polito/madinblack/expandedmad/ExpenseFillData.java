@@ -1,20 +1,13 @@
 package com.polito.madinblack.expandedmad;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -28,18 +21,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.pkmmte.view.CircularImageView;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.model.Expense;
 import com.polito.madinblack.expandedmad.model.Group;
@@ -48,9 +36,7 @@ import com.polito.madinblack.expandedmad.model.Payment;
 import com.polito.madinblack.expandedmad.model.User;
 import com.polito.madinblack.expandedmad.model.Expense.Tag;
 
-import java.io.IOException;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -65,19 +51,15 @@ import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 public class ExpenseFillData extends AppCompatActivity {
 
+    private int myinteger = 0;
+    private int numMembers = 0;
+    private int itemSelected;
     private RecyclerView recyclerView;
     private String groupID = "index";
     private Group groupSelected;
     private MyApplication ma;
     private List<User> users;
     private List<Payment> mValues;
-    DatabaseReference databaseReference;
-    private EditText inputName, inputAmount;
-    private TextInputLayout inputLayoutName, inputLayoutAmount;
-    private Float amount;
-    private String expenseName;
-
-    private static int RESULT_LOAD_IMAGE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,12 +69,6 @@ public class ExpenseFillData extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //prepare instance variable
-        inputLayoutName = (TextInputLayout) findViewById(R.id.input_layout_title);
-        inputLayoutAmount = (TextInputLayout) findViewById(R.id.input_layout_amount);
-        inputName = (EditText) findViewById(R.id.input_title);
-        inputAmount = (EditText) findViewById(R.id.input_amount);
-
         ma = MyApplication.getInstance();   //retrive del DB
 
         Intent beginner = getIntent();
@@ -101,11 +77,10 @@ public class ExpenseFillData extends AppCompatActivity {
 
         users = new ArrayList<>(groupSelected.getUsers());
 
-        //this remove focus from edit text when activity starts
-        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
         //show current date
         showDate(new Date());
+
+        populateSpinner();
 
         EditText inputAmount = (EditText)findViewById(R.id.input_amount);
         inputAmount.addTextChangedListener(new MyTextWatcher(inputAmount));
@@ -116,49 +91,73 @@ public class ExpenseFillData extends AppCompatActivity {
         setupRecyclerView((RecyclerView) recyclerView);
     }
 
+    private void populateSpinner() {
+        // you need to have a list of data that you want the spinner to display
+        List<String> spinnerArray =  new ArrayList<String>();
+        Iterator<User> us = groupSelected.getUsers().iterator();
+        while(us.hasNext()) {
+            User u = us.next();
+            spinnerArray.add(u.getName());
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerArray);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        Spinner sItems = (Spinner) findViewById(R.id.paidBy_spinner);
+        sItems.setAdapter(adapter);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.confirm_expense) {
 
 
-            boolean isNull = false;
-            Intent intent;
+            EditText inputTitle = (EditText)findViewById(R.id.input_title);
+            String title = inputTitle.getText().toString();
 
-            if (!validateName()) {
-                return true;
-            }
-            if (!validateAmount()) {
-                return true;
-            }
+            EditText inputAmout = (EditText)findViewById(R.id.input_amount);
+            String amountS = inputAmout.getText().toString();
+            Float amount = Float.valueOf(amountS);
+
+            Spinner inputPaidBy = (Spinner) findViewById(R.id.paidBy_spinner);
+            int index = inputPaidBy.getSelectedItemPosition();
+            User userSelect = groupSelected.getUsers().get(index);
 
             Spinner tag_spinner = (Spinner) findViewById(R.id.tag_spinner);
             String tagS = tag_spinner.getSelectedItem().toString();
-            Tag tag = Tag.valueOf(tagS.toUpperCase());
+            Tag tag = Tag.valueOf(tagS);
 
-            EditText data = (EditText) findViewById(R.id.input_date);
+            TextView data = (TextView) findViewById(R.id.input_date);
             String dataS = data.getText().toString();
-            if(dataS.isEmpty() || dataS==null) {
-                intent = new Intent(this, ExpenseFillData.class);
-                intent.putExtra("index", groupID);
-                startActivity(intent);
-                return true;
-            }
-
             String [] dayS = dataS.split("/");
             int day = Integer.parseInt(dayS[0]);
             int month = Integer.parseInt(dayS[1]);
             int year = Integer.parseInt(dayS[2]);
 
 
-            TextView description = (TextView) findViewById(R.id.input_description);
-            String descriptionS = description.getText().toString();
-            if(descriptionS.isEmpty() || descriptionS==null) {
-                descriptionS = " ";
+
+
+
+
+
+
+
+
+
+                /*
+            for(int i=0; i<....; i++){
+                TextView user = (TextView) findViewById(R.id.username);
+                TextView personal = (TextView) findViewById(R.id.personal_amount);
 
             }
+            */
 
-            Expense newExpense = new Expense(expenseName, tag, amount, descriptionS, Expense.Currency.EURO, groupSelected, ma.myself, year, month, day);
+            TextView description = (TextView) findViewById(R.id.input_description);
+            String descriptionS = description.getText().toString();
+
+
+            Expense newExpense = new Expense(title, tag, amount, descriptionS, Expense.Currency.EURO, groupSelected, userSelect, year, month, day);
 
             for(int i=0;i<mValues.size();i++){
                 mValues.get(i).setExpense(newExpense);
@@ -168,31 +167,18 @@ public class ExpenseFillData extends AppCompatActivity {
                 newExpense.addPayment(mValues.get(i));
             }
 
-
             groupSelected.addExpense(newExpense);
 
-            intent = new Intent(this, ExpenseListActivity.class);
-            intent.putExtra("index", groupID);
+
+            Intent intent = new Intent(this, ExpenseListActivity.class);
+
+
+            //intent.putExtra(EXTRA_MESSAGE, userID);
+
             startActivity(intent);
-            finish();
-            return true;
-        }else if(id == 16908332){
-            Intent intent3 = new Intent(this, ExpenseListActivity.class);
-            intent3.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            navigateUpTo(intent3);
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    //aggiunge una spesa al gruppo nel database associandogli una chiave univoca
-    public void writeNewExpense(Expense expense){
-        databaseReference = FirebaseDatabase.getInstance().getReference("Groups");
-        String expenseId = databaseReference.push().getKey();
-        databaseReference.child(groupID).child(expenseId).setValue(expense);
-
-        //bisogna aggiungere la spesa anche sotto users
-
     }
 
     @Override
@@ -200,112 +186,6 @@ public class ExpenseFillData extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_new_expense, menu);
         return true;
-    }
-
-    public void uploadPhoto(View view){
-        final CharSequence[] items = { "Take Photo", "Choose from Gallery", "Cancel" };
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(ExpenseFillData.this);
-        builder.setTitle("Add Expense Proof!");
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-                //boolean result=Utility.checkPermission(ExpenseFillData.this);
-
-                if (items[item].equals("Take Photo")) {
-                    //userChoosenTask ="Take Photo";
-                    //if(result)
-                        //cameraIntent();
-
-                } else if (items[item].equals("Choose from Gallery")) {
-                    //userChoosenTask ="Choose from Library";
-                    //if(result)
-                        photoFromGallery();
-
-                } else if (items[item].equals("Cancel")) {
-                    dialog.dismiss();
-                }
-            }
-        });
-        builder.show();
-    }
-
-    public void photoFromGallery(){
-        Intent i = new Intent(
-                Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-        startActivityForResult(i, RESULT_LOAD_IMAGE);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
-            Uri selectedImage = data.getData();
-            String[] filePathColumn = {MediaStore.Images.Media.DATA};
-
-            /*Cursor cursor = getContentResolver().query(selectedImage,
-                    filePathColumn, null, null, null);
-            cursor.moveToFirst();
-
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String picturePath = cursor.getString(columnIndex);
-            cursor.close();
-
-            // String picturePath contains the path of selected Image
-            //CircularImageView imageView = (CircularImageView) findViewById(R.id.expense_proof);
-            //imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));*/
-            CircularImageView imageView = (CircularImageView) findViewById(R.id.expense_proof);
-            //imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-            try {
-                imageView.setImageBitmap(MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage));
-            } catch (IOException e) {
-
-                //cambio qui come gestire errore
-                e.printStackTrace();
-            }
-        }
-    }
-
-
-    private boolean validateName() {
-        expenseName = inputName.getText().toString().trim();
-        if (expenseName.isEmpty()) {
-            inputLayoutName.setError(getString(R.string.err_msg_title));
-            requestFocus(inputName);
-            return false;
-        } else {
-            inputLayoutName.setErrorEnabled(false);
-        }
-
-        return true;
-    }
-
-    private boolean validateAmount() {
-        String amountS = inputAmount.getText().toString().trim();
-        if (amountS.isEmpty()) {
-            inputLayoutAmount.setError(getString(R.string.err_msg_amount));
-            requestFocus(inputAmount);
-            return false;
-        } else {
-            try {
-                amount = Float.valueOf(amountS);
-            } catch (NumberFormatException ex) {
-                inputLayoutAmount.setError(getString(R.string.err_msg_amount));
-                requestFocus(inputAmount);
-                return false;
-            }
-            inputLayoutAmount.setErrorEnabled(false);
-        }
-
-        return true;
-    }
-
-    private void requestFocus(View view) {
-        if (view.requestFocus()) {
-            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-        }
     }
 
     private class MyTextWatcher implements TextWatcher {
@@ -334,51 +214,25 @@ public class ExpenseFillData extends AppCompatActivity {
         }
     }
 
-    private void modifyPayment() {
-        int totalWeigth = 0;
-        float netAmount = amount;
-
-        for(Payment pay:mValues){
-            if(pay.isModified())
-                netAmount -= pay.getToPaid();
-            totalWeigth += pay.getWeight();
-        }
-
-        for(int i=0;i<mValues.size();i++){
-            mValues.get(i).setToPaid( (amount * mValues.get(i).getWeight())/totalWeigth);
-            recyclerView.getAdapter().notifyItemChanged(i, mValues.get(i));
-        }
-
-    }
-
     private void modifyProportion(String value) {
-        amount = value.equals("")?0:Float.parseFloat(value);
-
-        int totalWeigth = 0;
-
-        for(Payment pay:mValues){
-            totalWeigth += pay.getWeight();
-        }
-
+        float amount = value.equals("")?0:Float.parseFloat(value);
+        float price = amount/mValues.size();
         for(int i=0;i<mValues.size();i++){
-            mValues.get(i).setToPaid( (amount * mValues.get(i).getWeight())/totalWeigth);
-            mValues.get(i).setWeightEnabled(true);
+            mValues.get(i).setToPaid(price);
             recyclerView.getAdapter().notifyItemChanged(i, mValues.get(i));
         }
     }
 
-    private void fixPayment(){
-        int totalWeigth = 0;
+    public void increaseInteger(View view) {
+        /*RecyclerView rv = (RecyclerView)view;
+        myinteger++;
+        display(myinteger);*/
 
-        for(Payment pay:mValues){
-            totalWeigth += pay.getWeight();
-        }
+    }
 
-        for(int i=0;i<mValues.size();i++){
-            mValues.get(i).setToPaid( (amount * mValues.get(i).getWeight())/totalWeigth);
-            recyclerView.getAdapter().notifyItemChanged(i, mValues.get(i));
-        }
-
+    public void decreaseInteger(View view) {
+        /*myinteger--;
+        display(myinteger);*/
     }
 
     public void showDataPicker(View view) {
@@ -390,7 +244,7 @@ public class ExpenseFillData extends AppCompatActivity {
     }
 
     private void showDate(Date data) {
-        EditText dateText = (EditText)findViewById(R.id.input_date);
+        TextView dateText = (TextView)findViewById(R.id.input_date);
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateText.setText(dateFormat.format(data)); //16/11/2016
     }
@@ -418,7 +272,7 @@ public class ExpenseFillData extends AppCompatActivity {
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         List<Payment> payment = new ArrayList<>();
         for(int i=0;i<users.size();i++){
-            payment.add(new Payment(users.get(i), null, (float)0.00, (float)0.00));
+            payment.add(new Payment(users.get(i),null, (float)0.00, (float)0.00));
         }
         recyclerView.setAdapter(new ExpenseFillData.SimpleItemRecyclerViewAdapter(payment));
     }
@@ -427,9 +281,9 @@ public class ExpenseFillData extends AppCompatActivity {
     public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
 
-        public SimpleItemRecyclerViewAdapter(List<Payment> payments) {
+        public SimpleItemRecyclerViewAdapter(List<Payment> groups) {
 
-            mValues = payments;
+            mValues = groups;
         }
 
         @Override
@@ -440,55 +294,10 @@ public class ExpenseFillData extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ExpenseFillData.SimpleItemRecyclerViewAdapter.ViewHolder holder, int position) {
-            holder.mItem = mValues.get(position);
+            holder.mItem = mValues.get(position);   //mValues.get(position) rappresenta un singolo elemento della nostra lista di gruppi
             holder.mIdView.setText( holder.mItem.getUser().getName());
-            holder.partition.setText( String.format("%.2f", holder.mItem.getToPaid()));
-            holder.mNumber.setText( String.valueOf(holder.mItem.getWeight()) );
-            holder.minus.setEnabled( holder.mItem.isWeightEnabled());
-            holder.minus.setOnClickListener( new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    if(Integer.parseInt(holder.mNumber.getText().toString()) > 1){
-                        int currentWeight = Integer.parseInt(holder.mNumber.getText().toString());
-                        holder.mItem.setWeight(--currentWeight);
-                        holder.mNumber.setText( String.valueOf(holder.mItem.getWeight()) );
-                        fixPayment();
-                    }
-                }
-            });
-            holder.plus.setEnabled( holder.mItem.isWeightEnabled());
-            holder.plus.setOnClickListener( new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int currentWeight = Integer.parseInt(holder.mNumber.getText().toString());
-                    holder.mItem.setWeight(++currentWeight);
-                    holder.mNumber.setText( String.valueOf(holder.mItem.getWeight()) );
-                    fixPayment();
-
-                }
-            });
-            holder.partition.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    Float value = s.toString().equals("")?0:Float.parseFloat(s.toString());
-                    holder.mItem.setToPaid(value);
-                    holder.mItem.setModified(true);
-                    holder.mNumber.setText("-");
-                    holder.minus.setEnabled(false);
-                    holder.plus.setEnabled(false);
-                }
-            });
+            holder.partition.setText( holder.mItem.getToPaid().toString());
+            //sopra vengono settati i tre campi che costituisco le informazioni di ogni singolo gruppo, tutti pronti per essere mostriti nella gui
             /*holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -509,8 +318,6 @@ public class ExpenseFillData extends AppCompatActivity {
             public final TextView mIdView;
             public final TextView mNumber;
             public final EditText partition;
-            public final Button plus;
-            public final Button minus;
             public Payment mItem;
 
             public ViewHolder(View view) {
@@ -519,8 +326,6 @@ public class ExpenseFillData extends AppCompatActivity {
                 mIdView = (TextView) view.findViewById(R.id.username);
                 mNumber = (TextView) view.findViewById(R.id.integer_number);
                 partition = (EditText) view.findViewById(R.id.personal_amount);
-                plus = (Button) view.findViewById(R.id.increase);
-                minus = (Button) view.findViewById(R.id.decrease);
             }
 
             @Override

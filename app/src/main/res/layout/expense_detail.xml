@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:padding="16dp"
     tools:context="com.polito.madinblack.expandedmad.ExpenseDetailFragment">
 
 
@@ -20,10 +21,10 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/paid"
         android:layout_toEndOf="@+id/paid"
-        android:layout_marginEnd="@dimen/text_margin"
         android:text="x/y"
         android:textSize="22dp"
-        android:gravity="end" />
+        android:gravity="end"
+        android:layout_marginEnd="16dp"/>
 
     <TextView
         android:id="@+id/balance"
@@ -40,7 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_toEndOf="@+id/balance"
         android:layout_alignBottom="@+id/balance"
-        android:layout_marginEnd="@dimen/text_margin"
+        android:layout_marginEnd="16dp"
         android:text="75"
         android:textAlignment="textEnd"
         android:textSize="22dp"/>
@@ -60,9 +61,9 @@
         android:layout_height="wrap_content"
         android:layout_toEndOf="@+id/tag"
         android:layout_alignBottom="@+id/tag"
+        android:layout_marginEnd="16dp"
         android:text="Type"
         android:textAlignment="textEnd"
-        android:layout_marginEnd="@dimen/text_margin"
         android:textSize="22dp"/>
 
     <TextView
@@ -80,8 +81,8 @@
         android:layout_height="wrap_content"
         android:layout_toEndOf="@+id/cost"
         android:layout_alignBottom="@+id/cost"
+        android:layout_marginEnd="16dp"
         android:text="Value"
-        android:layout_marginEnd="@dimen/text_margin"
         android:textAlignment="textEnd"
         android:textSize="22dp"/>
 
@@ -98,9 +99,9 @@
         android:id="@+id/buyer_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/text_margin"
         android:layout_toEndOf="@+id/buyer"
         android:layout_alignBottom="@+id/buyer"
+        android:layout_marginEnd="16dp"
         android:text="user"
         android:textAlignment="textEnd"
         android:textSize="22dp"/>
@@ -109,9 +110,9 @@
         android:id="@+id/currency_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/text_margin"
         android:layout_toEndOf="@+id/currency"
         android:layout_alignBottom="@+id/currency"
+        android:layout_marginEnd="16dp"
         android:text="Euro"
         android:textAlignment="textEnd"
         android:textSize="22dp"/>
@@ -131,7 +132,7 @@
         android:layout_height="wrap_content"
         android:layout_toEndOf="@+id/date"
         android:layout_alignBottom="@+id/date"
-        android:layout_marginEnd="@dimen/text_margin"
+        android:layout_marginEnd="16dp"
         android:text="dd/mm/yyyy"
         android:textAlignment="textEnd"
         android:textSize="22dp"/>
@@ -160,12 +161,12 @@
         android:layout_height="match_parent"
         android:layout_toEndOf="@id/description"
         android:layout_alignTop="@+id/description"
-        android:layout_marginEnd="@dimen/text_margin"
+        android:paddingRight="16dp"
         android:paddingLeft="16dp"
         android:textColorHint="@color/secondary_text"
+        android:layout_marginEnd="16dp"
         android:text="@string/type_description_here"
         android:textSize="20dp"
-        android:textAlignment="textEnd"
         android:layout_alignBaseline="@+id/description"/>
 
 </RelativeLayout>

@@ -5,15 +5,15 @@
         <item
             android:id="@+id/nav_addgroup"
             android:icon="@drawable/ic_add_circle"
-            android:title="@string/new_group" />
+            android:title="New group" />
         <item
             android:id="@+id/nav_expenses"
             android:icon="@drawable/ic_show_chart"
-            android:title="@string/my_expenses" />
+            android:title="My expenses" />
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/settings"
-            android:title="@string/settings" />
+            android:title="Settings" />
     </group>
 
     <item android:title="Communicate" android:visible="false">

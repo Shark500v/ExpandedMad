@@ -10,8 +10,10 @@
         android:layout_gravity="center_vertical"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:layout_margin="@dimen/text_margin"
         android:textAppearance="?attr/textAppearanceListItem"
-        android:gravity="center_vertical"/>
+        android:gravity="center_vertical"
+        android:text="User 1"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -52,10 +54,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:textAppearance="?attr/textAppearanceListItem"
-        android:inputType="numberDecimal"
         android:layout_marginLeft="7dp"
         android:layout_marginRight="@dimen/text_margin"
         android:text="0.00"
+        android:inputType="none"
         />
 
     <TextView

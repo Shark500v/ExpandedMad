@@ -16,7 +16,6 @@
             android:name=".GroupManaging.GroupListActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -115,20 +114,11 @@
                 android:value="com.polito.madinblack.expandedmad.ExpenseListActivity" />
         </activity>
 
-        <activity android:name=".SignupActivity"
+        <activity android:name=".GoogleSignInActivity2"
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
 
-        <activity
-            android:name=".NewGroup"
-            android:label="New Group"
-            android:parentActivityName=".GroupManaging.GroupListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity" />
-        </activity>
     </application>
 
 </manifest>
