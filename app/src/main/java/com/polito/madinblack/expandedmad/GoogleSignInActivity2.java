@@ -259,7 +259,8 @@ public class GoogleSignInActivity2 extends BaseActivity implements
         /*confirm number and add user detail*/
         phoneNumber = mTelephoneTextView.getText().toString();
         mDatabase.child("userId").child(userId).setValue(phoneNumber);
-        
+
+
 
         Intent intent = new Intent(GoogleSignInActivity2.this, GroupListActivity.class);
         startActivity(intent);
