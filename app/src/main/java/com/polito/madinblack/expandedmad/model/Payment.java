@@ -7,7 +7,6 @@ public class Payment {
     private Float paid;
     private Float toPaid;
     private int weight;
-    private float totalCost;
 
     //costruttore per il database
     public Payment(){}
@@ -18,9 +17,6 @@ public class Payment {
         this.paid    = paid;
         this.toPaid  = CostUtil.round(toPaid, 2);
         this.weight  = 0;
-        if(this.expense != null)
-            totalCost = this.expense.getCost();
-
     }
 
     public User getUser() {
@@ -42,22 +38,9 @@ public class Payment {
     }
 
 
-    public int getWeight() {
-        return weight;
-    }
+    public int getWeight() { return weight; }
 
     public void setWeight(int weight) { this.weight = weight; }
-
-
-    public float getCost() {
-        return totalCost;
-    }
-
-    public void setCost(float cost){
-        if(expense != null)
-            expense.setCost(cost);
-        this.totalCost = cost;
-    }
 
 
     public Float getPaid() {
