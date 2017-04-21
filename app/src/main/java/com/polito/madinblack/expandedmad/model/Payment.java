@@ -1,11 +1,5 @@
 package com.polito.madinblack.expandedmad.model;
 
-import android.graphics.drawable.PaintDrawable;
-
-/**
- * Created by Ale on 04/04/2017.
- */
-
 public class Payment {
 
     private User user;
@@ -13,20 +7,20 @@ public class Payment {
     private Float paid;
     private Float toPaid;
     private int weight;
-    private float cost;
+    private boolean isWeightEnabled;
+    private boolean isModified;
 
+    //costruttore per il database
+    public Payment(){}
 
     public Payment(User user, Expense expense, Float paid, Float toPaid){
-        this.user    = user;
-        this.expense = expense;
-        this.paid    = paid;
-        this.toPaid  = toPaid;
-        this.weight  = 0;
-        if(this.expense!=null)
-            cost=this.expense.getCost();
-
-
-
+        this.user               = user;
+        this.expense            = expense;
+        this.paid               = paid;
+        this.toPaid             = CostUtil.round(toPaid, 2);
+        this.weight             = 1;
+        this.isWeightEnabled    = false;
+        this.isModified         = false;
     }
 
     public User getUser() {
@@ -48,6 +42,34 @@ public class Payment {
     }
 
 
+
+    public int getWeight() { return weight; }
+
+    public void setWeight(int weight) { this.weight = weight; }
+
+
+
+    public boolean isWeightEnabled() {
+        return isWeightEnabled;
+    }
+
+    public void setWeightEnabled(boolean weightEnabled) {
+        isWeightEnabled = weightEnabled;
+    }
+
+
+
+    public boolean isModified() {
+        return isModified;
+    }
+
+    public void setModified(boolean modified) {
+        isModified = modified;
+    }
+
+
+
+
     public Float getPaid() {
         return paid;
     }
@@ -61,15 +83,8 @@ public class Payment {
     }
 
     public void setToPaid(Float toPaid) {
-        this.toPaid = toPaid;
-    }
 
-    public void setCost(float cost){
-        if(expense!=null) {
-            expense.setCost(cost);
-        }
-        this.cost = cost;
-
+        this.toPaid = CostUtil.round(toPaid, 2);
     }
 
     public Float getDebit(){
@@ -93,22 +108,13 @@ public class Payment {
         return (paid-toPaid);
     }
 
-    public void setWeight (int weight){
-
-        this.weight = weight;
-
-    }
-
-    public float getCost() {
-        return cost;
-    }
-
 
     @Override
     public String toString() {
 
         return String.format("%.2f",(paid))+"/"+String.format("%.2f",(toPaid));
     }
+
 
 
 

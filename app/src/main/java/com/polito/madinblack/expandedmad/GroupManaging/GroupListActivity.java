@@ -14,6 +14,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -25,16 +26,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.polito.madinblack.expandedmad.ExpenseListActivity;
-import com.polito.madinblack.expandedmad.GoogleSignInActivity2;
 import com.polito.madinblack.expandedmad.MultipleBarGraph;
+import com.polito.madinblack.expandedmad.NewGroup;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.*;
@@ -44,78 +43,17 @@ import java.util.List;
 
 public class GroupListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
+    public String phoneId; //numero di telefono passato dalla registrazione
     private MyApplication ma;
-    public String PHONE_ID; //numero di telefono passato dalla registrazione
-    private DatabaseReference mFirebaseDatabase;
-    private FirebaseDatabase mFirebaseInstance;
-
-
-    private FirebaseAuth mAuth;
-    private DatabaseReference mDatabase;
-    private FirebaseAuth.AuthStateListener mAuthListener;
-    private static final String TAG = "GoogleActivity";
-    private static final int RC_SIGN_IN = 9001;
-
-
+    private DatabaseReference mDatabaseReference;
+    private FirebaseDatabase mFirebaseDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        /*[START] first of all verify if the user is register and he/she inserted his/her telephone number*/
-        mAuth     = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference("userId");
-
-        mAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-
-                    mDatabase.child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            if (!dataSnapshot.exists()) {
-                                /*google login and number not yet inserted jump to group page*/
-                                Intent intent = new Intent(GroupListActivity.this, GoogleSignInActivity2.class);
-                                startActivity(intent);
-
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-
-
-                } else {
-                    // User is signed out
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
-                    /*google login and number not yet inserted jump to group page*/
-                    Intent intent = new Intent(GroupListActivity.this, GoogleSignInActivity2.class);
-                    startActivity(intent);
-                }
-            }
-        });
-        /*[END] first of all verify if the user is register and he/she inserted his/her telephone number*/
-
-
-
-
-
-
-
-
-
-
         setContentView(R.layout.starting_layoute);
 
         ma = MyApplication.getInstance();   //retrive del DB
-
 
         //toolbar settings
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -145,27 +83,33 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener((NavigationView.OnNavigationItemSelectedListener) this);
 
-        mFirebaseInstance = FirebaseDatabase.getInstance();
-        mFirebaseDatabase = mFirebaseInstance.getReference("Users");
-        mFirebaseInstance.getReference("AppName").setValue("MadExpense");
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mDatabaseReference = mFirebaseDatabase.getReference("Users");
+        mFirebaseDatabase.getReference("AppName").setValue("MadExpense");
 
+        //devo prendere il numero cellulare dell'utente (qua lo prendevo dalla registrazione ma e' da cambiare)
         Bundle extras=getIntent().getExtras();
         if(extras!=null) {
-            PHONE_ID = extras.getString("phoneN");
+            phoneId = extras.getString("phoneN");
             //bisogna aggiungere la verifica se l'utente esiste gia nel database
-            createUser();
+            writeNewUser(phoneId,"name","surname");//nome e cognome devo prenderli dalle info dell'utente
         }
+
+        phoneId="3657898765";//da togliere
 
         //in questo punto il codice prende la lista principale e la mostra come recyclerview
         View recyclerView = findViewById(R.id.group_list);
         assert recyclerView != null;
         setupRecyclerView((RecyclerView) recyclerView);
+
     }
 
     //aggiunge l'user al database
-    public void createUser(){
-        User user=new User("name","surname");//da cambiare (bisogna inserire i veri nome e cognome
-        mFirebaseDatabase.child(PHONE_ID).setValue(user);
+    public void writeNewUser(String phoneId, String name, String surname){
+        User user=new User(name,surname);//da cambiare (bisogna inserire i veri nome e cognome)
+        user.setPhoneNumber(phoneId);//aggiungo numero di telefono
+        String userKey = mDatabaseReference.push().getKey();
+        mDatabaseReference.child(phoneId).setValue(user);
     }
 
     //le due funzioni sottostanti servono al menù laterale che esce
@@ -186,6 +130,9 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         int id = item.getItemId();
 
         if (id == R.id.nav_addgroup) {
+            Intent intent=new Intent(GroupListActivity.this, NewGroup.class);
+            intent.putExtra("phoneId",phoneId);
+            startActivity(intent);
             // Handle the camera action
         } else if (id == R.id.nav_expenses) {
 
@@ -232,7 +179,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         @Override
         public void onBindViewHolder(final SimpleItemRecyclerViewAdapter.ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);   //mValues.get(position) rappresenta un singolo elemento della nostra lista di gruppi
-            holder.mNumView.setText(Integer.toString(mValues.get(position).getUsers().size()) + " members");
+            holder.mNumView.setText(Integer.toString(mValues.get(position).getUsers().size()) + " " +getString(R.string.members));
             holder.mContentView.setText(mValues.get(position).getName());
             //sopra vengono settati i tre campi che costituisco le informazioni di ogni singolo gruppo, tutti pronti per essere mostriti nella gui
 

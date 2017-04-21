@@ -4,6 +4,9 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <uses-feature android:name="android.hardware.camera" android:required="true" />
+
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_wallet"
@@ -21,7 +24,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
 
         <activity
@@ -114,11 +116,19 @@
                 android:value="com.polito.madinblack.expandedmad.ExpenseListActivity" />
         </activity>
 
-        <activity android:name=".GoogleSignInActivity2"
+        <activity android:name=".SignupActivity"
             android:theme="@style/AppTheme.NoActionBar">
-
         </activity>
 
+        <activity
+            android:name=".NewGroup"
+            android:label="New Group"
+            android:parentActivityName=".GroupManaging.GroupListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity" />
+        </activity>
     </application>
 
 </manifest>
