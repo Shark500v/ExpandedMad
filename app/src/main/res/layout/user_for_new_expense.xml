@@ -16,6 +16,8 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="right"
         android:orientation="horizontal">
 
         <Button
@@ -48,13 +50,14 @@
 
     <EditText
         android:id="@+id/personal_amount"
-        android:layout_width="wrap_content"
+        android:layout_width="60dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:textAppearance="?attr/textAppearanceListItem"
         android:inputType="numberDecimal"
+        android:gravity="right"
         android:layout_marginLeft="7dp"
-        android:layout_marginRight="@dimen/text_margin"
+        android:layout_marginRight="7dp"
         android:text="0.00"
         />
 
@@ -62,7 +65,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginRight="@dimen/text_margin"
         android:textAppearance="?attr/textAppearanceListItem"
         android:text="EUR"/>
 </LinearLayout>

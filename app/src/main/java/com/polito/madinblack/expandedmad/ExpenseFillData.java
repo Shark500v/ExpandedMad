@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -61,7 +62,7 @@ public class ExpenseFillData extends AppCompatActivity {
     private TextInputLayout inputLayoutName, inputLayoutAmount;
     private Float amount;
     private String expenseName;
-    private boolean userModifying;
+    private boolean onBind;
 
     private static int RESULT_LOAD_IMAGE = 1;
     private static int RESULT_REQUEST_CAMERA = 0;
@@ -73,6 +74,12 @@ public class ExpenseFillData extends AppCompatActivity {
         //toolbar settings
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        // Show the Up button
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         //prepare instance variable
         inputLayoutName = (TextInputLayout) findViewById(R.id.input_layout_title);
@@ -112,7 +119,7 @@ public class ExpenseFillData extends AppCompatActivity {
             }
         });
 
-        userModifying = false;
+        onBind = false;
 
         //in questo punto il codice prende la lista principale e la mostra come recyclerview
         recyclerView = (RecyclerView) findViewById(R.id.users_list);
@@ -167,6 +174,10 @@ public class ExpenseFillData extends AppCompatActivity {
             }
 
             for(int i=0;i<mValues.size();i++){
+                //set Total Expense to people who pay
+                if(mValues.get(i).getUser().getId() == ma.myself.getId()){
+                    mValues.get(i).setPaid(amount);
+                }
                 newExpense.addPayment(mValues.get(i));
             }
 
@@ -205,26 +216,27 @@ public class ExpenseFillData extends AppCompatActivity {
     }
 
     public void uploadPhoto(View view){
-        final CharSequence[] items = { "Take Photo", "Choose from Gallery", "Cancel" };
+        final CharSequence[] items = { getString(R.string.photo),
+                getString(R.string.gallery), getString(R.string.cancel) };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(ExpenseFillData.this);
-        builder.setTitle("Add Expense Proof!");
+        builder.setTitle(getString(R.string.add_proof));
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
                 //boolean result=Utility.checkPermission(ExpenseFillData.this);
 
-                if (items[item].equals("Take Photo")) {
+                if (items[item].equals(getString(R.string.photo))) {
                     //userChoosenTask ="Take Photo";
                     //if(result)
                         photoFromCamera();
 
-                } else if (items[item].equals("Choose from Gallery")) {
+                } else if (items[item].equals(getString(R.string.gallery))) {
                     //userChoosenTask ="Choose from Library";
                     //if(result)
                         photoFromGallery();
 
-                } else if (items[item].equals("Cancel")) {
+                } else if (items[item].equals(getString(R.string.cancel))) {
                     dialog.dismiss();
                 }
             }
@@ -345,6 +357,29 @@ public class ExpenseFillData extends AppCompatActivity {
         }
     }
 
+    public void resetPayment(View view) {
+        boolean enableWeight;
+
+        if(inputAmount.getText().toString().equals("")){
+            amount = 0f;
+            enableWeight = false;
+        }else{
+            amount = Float.parseFloat(inputAmount.getText().toString());
+            enableWeight = true;
+        }
+
+        for(int i=0;i<mValues.size();i++){
+            Payment currentPayment = mValues.get(i);
+            if(currentPayment.isModified())
+                currentPayment.setModified(false);
+            currentPayment.setWeight(1);
+            currentPayment.setToPaid(amount / users.size());
+            currentPayment.setWeightEnabled(enableWeight);
+            recyclerView.getAdapter().notifyItemChanged(i, currentPayment);
+        }
+
+    }
+
     private void modifyPayment() {
         int totalWeigth = 0;
         float netAmount = amount;
@@ -360,12 +395,12 @@ public class ExpenseFillData extends AppCompatActivity {
         for(int i=0;i<mValues.size();i++){
             Payment currentPayment = mValues.get(i);
             if(netAmount>0 && !currentPayment.isModified())
-                currentPayment.setToPaid( (amount * currentPayment.getWeight())/totalWeigth);
+                currentPayment.setToPaid( (netAmount * currentPayment.getWeight())/totalWeigth);
             else if(netAmount <=0 && !currentPayment.isModified())
                 currentPayment.setToPaid(0f);
             else //currentPayment.isModified()
                 continue;
-            recyclerView.getAdapter().notifyItemChanged(i, mValues.get(i));
+            recyclerView.getAdapter().notifyItemChanged(i, currentPayment);
         }
     }
 
@@ -380,28 +415,27 @@ public class ExpenseFillData extends AppCompatActivity {
             amount = Float.parseFloat(value);
             enableWeight = true;
         }
+
+        float netAmount = amount;
+
         for(Payment pay:mValues){
+            if(pay.isModified()){
+                netAmount -= pay.getToPaid();
+            }
+            else
             totalWeigth += pay.getWeight();
         }
 
         for(int i=0;i<mValues.size();i++){
-            mValues.get(i).setToPaid( (amount * mValues.get(i).getWeight())/totalWeigth);
-            mValues.get(i).setWeightEnabled(enableWeight);
-            recyclerView.getAdapter().notifyItemChanged(i, mValues.get(i));
-        }
-
-    }
-
-    private void fixPayment(){
-        int totalWeigth = 0;
-
-        for(Payment pay:mValues){
-            totalWeigth += pay.getWeight();
-        }
-
-        for(int i=0;i<mValues.size();i++){
-            mValues.get(i).setToPaid( (amount * mValues.get(i).getWeight())/totalWeigth);
-            recyclerView.getAdapter().notifyItemChanged(i, mValues.get(i));
+            Payment currentPayment = mValues.get(i);
+            if(netAmount>0 && !currentPayment.isModified())
+                currentPayment.setToPaid( (netAmount * currentPayment.getWeight())/totalWeigth);
+            else if(netAmount <=0 && !currentPayment.isModified())
+                currentPayment.setToPaid(0f);
+            else //currentPayment.isModified()
+                continue;
+            currentPayment.setWeightEnabled(enableWeight);
+            recyclerView.getAdapter().notifyItemChanged(i, currentPayment);
         }
 
     }
@@ -442,6 +476,8 @@ public class ExpenseFillData extends AppCompatActivity {
         recyclerView.setAdapter(new ExpenseFillData.SimpleItemRecyclerViewAdapter(payment));
     }
 
+
+
     //questa classe la usa per fare il managing della lista che deve mostrare
     public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
@@ -461,71 +497,15 @@ public class ExpenseFillData extends AppCompatActivity {
         public void onBindViewHolder(final ExpenseFillData.SimpleItemRecyclerViewAdapter.ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
             holder.mIdView.setText( holder.mItem.getUser().getName());
+            onBind = true;
             holder.partition.setText( String.format("%.2f", holder.mItem.getToPaid()));
+            onBind = false;
             holder.mNumber.setText( String.valueOf(holder.mItem.getWeight()) );
             holder.minus.setEnabled( holder.mItem.isWeightEnabled());
-            holder.minus.setOnClickListener( new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    if(Integer.parseInt(holder.mNumber.getText().toString()) > 0){
-                        int currentWeight = Integer.parseInt(holder.mNumber.getText().toString());
-                        holder.mItem.setWeight(--currentWeight);
-                        holder.mNumber.setText( String.valueOf(holder.mItem.getWeight()) );
-                        fixPayment();
-                    }
-                }
-            });
             holder.plus.setEnabled( holder.mItem.isWeightEnabled());
-            holder.plus.setOnClickListener( new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int currentWeight = Integer.parseInt(holder.mNumber.getText().toString());
-                    holder.mItem.setWeight(++currentWeight);
-                    holder.mNumber.setText( String.valueOf(holder.mItem.getWeight()) );
-                    fixPayment();
-
-                }
-            });
             holder.partition.setEnabled( holder.mItem.isWeightEnabled() );
-            holder.partition.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-                    if (!hasFocus) {
-                        // code to execute when EditText loses focus
-                        userModifying = false;
-                    }else{
-                        // code to execute when EditText acquires focus
-                        userModifying = true;
-                    }
-                }
-            });
 
-            holder.partition.addTextChangedListener( new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-
-                    if(userModifying){
-                        Float value = s.toString().equals("")?0:Float.parseFloat(s.toString());
-                        holder.mItem.setToPaid(value);
-                        holder.mItem.setModified(true);
-                        holder.mNumber.setText("-");
-                        holder.minus.setEnabled(false);
-                        holder.plus.setEnabled(false);
-                        modifyPayment();
-                    }
-                }
-            });
             /*holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -558,6 +538,54 @@ public class ExpenseFillData extends AppCompatActivity {
                 partition = (EditText) view.findViewById(R.id.personal_amount);
                 plus = (Button) view.findViewById(R.id.increase);
                 minus = (Button) view.findViewById(R.id.decrease);
+
+                partition.addTextChangedListener( new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                        if(!onBind){
+                            Float value = s.toString().equals("")?0:Float.parseFloat(s.toString());
+                            mItem.setToPaid(value);
+                            mItem.setModified(true);
+                            mNumber.setText("-");
+                            minus.setEnabled(false);
+                            plus.setEnabled(false);
+                            modifyPayment();
+                        }
+                    }
+                });
+                plus.setOnClickListener( new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int currentWeight = Integer.parseInt(mNumber.getText().toString());
+                        mItem.setWeight(++currentWeight);
+                        mNumber.setText( String.valueOf(mItem.getWeight()) );
+                        modifyPayment();
+
+                    }
+                });
+                minus.setOnClickListener( new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        if(Integer.parseInt(mNumber.getText().toString()) > 0){
+                            int currentWeight = Integer.parseInt(mNumber.getText().toString());
+                            mItem.setWeight(--currentWeight);
+                            mNumber.setText( String.valueOf(mItem.getWeight()) );
+                            modifyPayment();
+                        }
+                    }
+                });
             }
 
             @Override
