@@ -147,12 +147,6 @@ public class ExpenseFillData extends AppCompatActivity {
 
             EditText data = (EditText) findViewById(R.id.input_date);
             String dataS = data.getText().toString();
-            if(dataS.isEmpty() || dataS==null) {
-                intent = new Intent(this, ExpenseFillData.class);
-                intent.putExtra("index", groupID);
-                startActivity(intent);
-                return true;
-            }
 
             String [] dayS = dataS.split("/");
             int day = Integer.parseInt(dayS[0]);
@@ -162,10 +156,6 @@ public class ExpenseFillData extends AppCompatActivity {
 
             TextView description = (TextView) findViewById(R.id.input_description);
             String descriptionS = description.getText().toString();
-            if(descriptionS.isEmpty() || descriptionS==null) {
-                descriptionS = " ";
-
-            }
 
             Expense newExpense = new Expense(expenseName, tag, amount, descriptionS, Expense.Currency.EURO, groupSelected, ma.myself, year, month, day);
 
@@ -186,7 +176,8 @@ public class ExpenseFillData extends AppCompatActivity {
 
             intent = new Intent(this, ExpenseListActivity.class);
             intent.putExtra("index", groupID);
-            startActivity(intent);
+            //startActivity(intent);
+            setResult(RESULT_OK, intent);
             finish();
             return true;
         }else if(id == 16908332){
@@ -375,7 +366,7 @@ public class ExpenseFillData extends AppCompatActivity {
             currentPayment.setWeight(1);
             currentPayment.setToPaid(amount / users.size());
             currentPayment.setWeightEnabled(enableWeight);
-            recyclerView.getAdapter().notifyItemChanged(i, currentPayment);
+            recyclerView.getAdapter().notifyItemChanged(i);
         }
 
     }
@@ -400,7 +391,7 @@ public class ExpenseFillData extends AppCompatActivity {
                 currentPayment.setToPaid(0f);
             else //currentPayment.isModified()
                 continue;
-            recyclerView.getAdapter().notifyItemChanged(i, currentPayment);
+            recyclerView.getAdapter().notifyItemChanged(i);
         }
     }
 
@@ -435,7 +426,7 @@ public class ExpenseFillData extends AppCompatActivity {
             else //currentPayment.isModified()
                 continue;
             currentPayment.setWeightEnabled(enableWeight);
-            recyclerView.getAdapter().notifyItemChanged(i, currentPayment);
+            recyclerView.getAdapter().notifyItemChanged(i);
         }
 
     }
