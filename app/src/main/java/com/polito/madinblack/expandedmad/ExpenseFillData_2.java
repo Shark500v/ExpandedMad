@@ -23,8 +23,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.polito.madinblack.expandedmad.model.Expense;
 import com.polito.madinblack.expandedmad.model.Expense.Tag;
 import com.polito.madinblack.expandedmad.model.Group;
@@ -52,7 +50,6 @@ public class ExpenseFillData_2 extends AppCompatActivity {
     private MyApplication ma;
     private Map<Long, Float> userCost;
     private List<User> users;
-    DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,9 +183,6 @@ public class ExpenseFillData_2 extends AppCompatActivity {
                     newExpense.addPayment(userI, 0f, amount/users.size());
 
             }
-
-            writeNewExpense(newExpense);
-
             groupSelected.addExpense(newExpense);
 
 
@@ -205,16 +199,6 @@ public class ExpenseFillData_2 extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    //aggiunge una spesa al gruppo nel database associandogli una chiave univoca
-    public void writeNewExpense(Expense expense){
-        databaseReference = FirebaseDatabase.getInstance().getReference("Groups");
-        String expenseId = databaseReference.push().getKey();
-        databaseReference.child(groupID).child(expenseId).setValue(expense);
-
-        //bisogna aggiungere la spesa anche sotto users
-
     }
 
     @Override
