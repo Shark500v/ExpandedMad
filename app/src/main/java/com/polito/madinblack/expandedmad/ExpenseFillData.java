@@ -366,7 +366,7 @@ public class ExpenseFillData extends AppCompatActivity {
             currentPayment.setWeight(1);
             currentPayment.setToPaid(amount / users.size());
             currentPayment.setWeightEnabled(enableWeight);
-            recyclerView.getAdapter().notifyItemChanged(i);
+            recyclerView.getAdapter().notifyItemChanged(i, currentPayment);
         }
 
     }
@@ -391,7 +391,7 @@ public class ExpenseFillData extends AppCompatActivity {
                 currentPayment.setToPaid(0f);
             else //currentPayment.isModified()
                 continue;
-            recyclerView.getAdapter().notifyItemChanged(i);
+            recyclerView.getAdapter().notifyItemChanged(i, currentPayment);
         }
     }
 
@@ -426,7 +426,7 @@ public class ExpenseFillData extends AppCompatActivity {
             else //currentPayment.isModified()
                 continue;
             currentPayment.setWeightEnabled(enableWeight);
-            recyclerView.getAdapter().notifyItemChanged(i);
+            recyclerView.getAdapter().notifyItemChanged(i, currentPayment);
         }
 
     }
