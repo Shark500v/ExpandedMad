@@ -1,4 +1,4 @@
-package com.polito.madinblack.expandedmad;
+package com.polito.madinblack.expandedmad.new_group;
 
 import android.content.Context;
 import android.content.Intent;

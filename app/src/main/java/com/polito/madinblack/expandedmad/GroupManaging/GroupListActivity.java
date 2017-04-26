@@ -41,14 +41,12 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
 
     public String phoneId; //numero di telefono passato dalla registrazione
     private MyApplication ma;
-    private DatabaseReference mFirebaseDatabase;
-    private FirebaseDatabase mFirebaseInstance;
+    private DatabaseReference mDatabaseReference;
+    private FirebaseDatabase mFirebaseDatabase;
     private GoogleApiClient mGoogleApiClient;
 
     private static final int REQUEST_INVITE = 0;
     private static final String TAG = "GroupList";
-    private DatabaseReference mDatabaseReference;
-    private FirebaseDatabase mFirebaseDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
