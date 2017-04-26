@@ -1,7 +1,15 @@
 package com.polito.madinblack.expandedmad.model;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.polito.madinblack.expandedmad.GoogleSignInActivity;
+import com.polito.madinblack.expandedmad.GoogleSignInActivity2;
+
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +19,17 @@ public class MyApplication {
     public static MyApplication myApplication = null;
 
     public static User myself;
+    private static FirebaseUser firebaseUser;
+    private static String userPhoneNumber;
+    private static String firebaseId;
+    private static String userName;
+    private static String userSurname;
+    private static String userEmail;
+    private static Boolean logged;
+    private static Boolean isPhone;
+
+
+
 
     /*groupId --> group*/
     private Map<Long, Group> groups = new LinkedHashMap<>();
@@ -18,10 +37,26 @@ public class MyApplication {
     /*list of all users, can be seen as phonebook*/
     private Map<Long, User> users = new LinkedHashMap<>();
 
+    private DatabaseReference mDatabase;
+
+
+
+
 
 
     private MyApplication(){
+
+
+
+
+
+
+
+
+
+        /*
         myself = new User("Mario", "Rossi");
+        int i;
         
 
         Group g1 = new Group("Group1");
@@ -93,11 +128,20 @@ public class MyApplication {
         e4.addPayment(u6,        0f, 16.67f);
         g3.addExpense(e4);
 
+        for(i=0; i<15; i++){
+            e4 = new Expense("Pizza", Expense.Tag.FOOD, 50f, "Pizza saturday dinner", Expense.Currency.EURO, g3, u5, 2017, 3, 16);
+            e4.addPayment(myself,    0f, 16.67f);
+            e4.addPayment(u5,       50f, 16.67f);
+            e4.addPayment(u6,        0f, 16.67f);
+            g3.addExpense(e4);
+        }
+
         Expense e5 = new Expense("Lunch", Expense.Tag.FOOD, 145f, "Lunch at Ciro's restaurant", Expense.Currency.EURO, g3, myself, 2017, 4, 4);
         e5.addPayment(myself,  145f, 48.3f);
         e5.addPayment(u5,        0f, 48.3f);
         e5.addPayment(u6,        0f, 48.3f);
         g3.addExpense(e5);
+        */
     }
 
 
@@ -108,7 +152,8 @@ public class MyApplication {
     }
 
     public void addGroup(Group g){
-        groups.put(g.getId(), g);
+        /*groups.put(g.getId(), g);
+    */
     }
 
     public List<Group> getGroup(){ return new ArrayList<Group>(groups.values()); }
@@ -117,4 +162,75 @@ public class MyApplication {
         return groups.get(id);
     }
 
+    public static User getMyself() {
+        return myself;
+    }
+
+    public static void setMyself(User myself) {
+        MyApplication.myself = myself;
+    }
+
+    public static String getUserPhoneNumber() {
+        return userPhoneNumber;
+    }
+
+    public static void setUserPhoneNumber(String userPhoneNumber) {
+        MyApplication.userPhoneNumber = userPhoneNumber;
+    }
+
+    public static String getFirebaseId() {
+        return firebaseId;
+    }
+
+    public static void setFirebaseId(String firebaseId) {
+        MyApplication.firebaseId = firebaseId;
+    }
+
+    public static String getUserName() {
+        return userName;
+    }
+
+    public static void setUserName(String userName) {
+        MyApplication.userName = userName;
+    }
+
+    public static String getUserSurname() {
+        return userSurname;
+    }
+
+    public static void setUserSurname(String userSurname) {
+        MyApplication.userSurname = userSurname;
+    }
+
+    public static String getUserEmail() {
+        return userEmail;
+    }
+
+    public static void setUserEmail(String userEmail) {
+        MyApplication.userEmail = userEmail;
+    }
+
+    public static Boolean getLogged() {
+        return logged;
+    }
+
+    public static void setLogged(Boolean logged) {
+        MyApplication.logged = logged;
+    }
+
+    public static Boolean getIsPhone() {
+        return isPhone;
+    }
+
+    public static void setIsPhone(Boolean isPhone) {
+        MyApplication.isPhone = isPhone;
+    }
+
+    public static FirebaseUser getFirebaseUser() {
+        return firebaseUser;
+    }
+
+    public static void setFirebaseUser(FirebaseUser firebaseUser) {
+        MyApplication.firebaseUser = firebaseUser;
+    }
 }

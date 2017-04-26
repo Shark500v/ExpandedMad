@@ -23,8 +23,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.polito.madinblack.expandedmad.model.Expense;
 import com.polito.madinblack.expandedmad.model.Expense.Tag;
 import com.polito.madinblack.expandedmad.model.Group;
@@ -52,7 +50,6 @@ public class ExpenseFillData_2 extends AppCompatActivity {
     private MyApplication ma;
     private Map<Long, Float> userCost;
     private List<User> users;
-    DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +71,7 @@ public class ExpenseFillData_2 extends AppCompatActivity {
         groupSelected = ma.getSingleGroup(Long.valueOf(beginner.getStringExtra("index"))); //recupero l'id del gruppo selezionato, e quindi il gruppo stesso
         groupID = beginner.getStringExtra("index");   //id del gruppo, che devo considerare
 
-        users = new ArrayList<>(groupSelected.getUsers());
+        users = new ArrayList<>(groupSelected.getUsers2());
         userCost = new HashMap<>();
 
         showDate(new Date());
@@ -90,7 +87,7 @@ public class ExpenseFillData_2 extends AppCompatActivity {
     private void populateSpinner() {
         // you need to have a list of data that you want the spinner to display
         List<String> spinnerArray =  new ArrayList<String>();
-        Iterator<User> us = groupSelected.getUsers().iterator();
+        Iterator<User> us = groupSelected.getUsers2().iterator();
         while(us.hasNext()) {
             User u = us.next();
             spinnerArray.add(u.getName());
@@ -148,7 +145,7 @@ public class ExpenseFillData_2 extends AppCompatActivity {
 
             Spinner inputPaidBy = (Spinner) findViewById(R.id.paidBy_spinner);
             int index = inputPaidBy.getSelectedItemPosition();
-            User userSelect = groupSelected.getUsers().get(index);
+            User userSelect = groupSelected.getUsers2().get(index);
 
             Spinner tag_spinner = (Spinner) findViewById(R.id.tag_spinner);
             String tagS = tag_spinner.getSelectedItem().toString();
@@ -186,9 +183,6 @@ public class ExpenseFillData_2 extends AppCompatActivity {
                     newExpense.addPayment(userI, 0f, amount/users.size());
 
             }
-
-            writeNewExpense(newExpense);
-
             groupSelected.addExpense(newExpense);
 
 
@@ -205,16 +199,6 @@ public class ExpenseFillData_2 extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    //aggiunge una spesa al gruppo nel database associandogli una chiave univoca
-    public void writeNewExpense(Expense expense){
-        databaseReference = FirebaseDatabase.getInstance().getReference("Groups");
-        String expenseId = databaseReference.push().getKey();
-        databaseReference.child(groupID).child(expenseId).setValue(expense);
-
-        //bisogna aggiungere la spesa anche sotto users
-
     }
 
     @Override

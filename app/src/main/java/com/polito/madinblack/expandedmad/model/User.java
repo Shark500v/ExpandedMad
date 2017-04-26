@@ -1,7 +1,7 @@
 package com.polito.madinblack.expandedmad.model;
 
 import com.google.firebase.database.DatabaseReference;
-
+import android.graphics.Bitmap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,24 +9,34 @@ public class User {
 
     private String name;
     private String surname;
+    private String firebaseId;
     private String phoneNumber;
-    private float globalBalance;
-    private static long counter = 1; /*counter to assign an id*/
-    private final Long id;          //unique Id for each user
+    private String id;
+    private String email;
+    Bitmap thumb;
 
     /*all groups for user*/
-    private Map<Long, Group>groups = new HashMap<>();
+    private Map<String, Boolean> groups = new HashMap<>();
 
-    //serve questo costruttore per il database (aggiunto anche setter e getter su phoneNumber)
     public User(){
-        this.id = counter++;
+
     }
 
-    public User(String name, String surname){
-        this.name = name;
-        this.surname = surname;
-        this.id = counter++;
-        globalBalance = 0;
+    public User(String name, String surname, String phoneNumber, String email){
+        this.name        = name;
+        this.surname     = surname;
+        this.phoneNumber = phoneNumber;
+        this.email       = email;
+        this.id          = phoneNumber;
+
+
+    }
+
+    public static void writeNewUser(DatabaseReference mDatabase, String firebaseId, String name, String surname, String phoneNumber, String email) {
+        User user = new User(name, surname, phoneNumber, email);
+        user.setFirebaseId(firebaseId);
+
+        mDatabase.child("users").child(user.getId()).setValue(user);
     }
 
 
@@ -47,21 +57,27 @@ public class User {
         this.surname = surname;
     }
 
-    public float getGlobalBalance() {
-        return globalBalance;
-    }
+    public String getFirebaseId() { return firebaseId; }
 
-    public void setGlobalBalance(float globalBalance) {
-        this.globalBalance = globalBalance;
-    }
+    public void setFirebaseId(String firebaseId) { this.firebaseId = firebaseId; }
 
-    public Long getId(){ return id; }
+    public String getPhoneNumber() { return phoneNumber; }
+
+    public void setPhoneNumber(String telephone) { this.phoneNumber = phoneNumber; }
+
+    public String getId() { return id; }
 
     public String toString(){
         return this.getName() + " " + this.getSurname();
     }
 
-    public String getPhoneNumber() { return phoneNumber; }
+    /*
+    public Bitmap getThumb() {
+        return thumb;
+    }*/
 
-    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
+    public void setThumb(Bitmap thumb) {
+        this.thumb = thumb;
+    }
+
 }

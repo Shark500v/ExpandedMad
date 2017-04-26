@@ -49,7 +49,7 @@ public class GroupDetailFragment extends Fragment {
 
         // Show the dummy content as text in a TextView.
         if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.group_detail)).setText(mItem.getDetails());
+            ((TextView) rootView.findViewById(R.id.group_detail)).setText("Coap"/*mItem.getDetails()*/);
         }
 
         return rootView;

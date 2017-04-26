@@ -1,5 +1,11 @@
 package com.polito.madinblack.expandedmad.model;
 
+import android.graphics.drawable.PaintDrawable;
+
+/**
+ * Created by Ale on 04/04/2017.
+ */
+
 public class Payment {
 
     private User user;
@@ -11,7 +17,9 @@ public class Payment {
     private boolean isModified;
 
     //costruttore per il database
-    public Payment(){}
+    public Payment(){
+
+    }
 
     public Payment(User user, Expense expense, Float paid, Float toPaid){
         this.user               = user;

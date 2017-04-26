@@ -1,5 +1,9 @@
 package com.polito.madinblack.expandedmad.model;
 
+/**
+ * Created by Ale on 25/04/2017.
+ */
+
 public class CostUtil {
 
     public static float round(float number, int scale) {
@@ -9,6 +13,4 @@ public class CostUtil {
         float tmp = number * pow;
         return (float) (int) ((tmp - (int) tmp) >= 0.5f ? tmp + 1 : tmp) / pow;
     }
-
-
 }

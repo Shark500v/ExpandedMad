@@ -25,35 +25,53 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.polito.madinblack.expandedmad.ExpenseListActivity;
+import com.polito.madinblack.expandedmad.GoogleSignInActivity;
+import com.polito.madinblack.expandedmad.GoogleSignInActivity2;
 import com.polito.madinblack.expandedmad.MultipleBarGraph;
-import com.polito.madinblack.expandedmad.NewGroup;
+import com.polito.madinblack.expandedmad.Logout;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.*;
+import com.polito.madinblack.expandedmad.new_group.SelectContact;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 
 public class GroupListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
-    public String phoneId; //numero di telefono passato dalla registrazione
     private MyApplication ma;
-    private DatabaseReference mDatabaseReference;
-    private FirebaseDatabase mFirebaseDatabase;
+
+    private static final String TAG = "GoogleActivity";
+
+
+    private DatabaseReference mGroupsReference;
+    private DatabaseReference mUserGroupsReference;
+    private SimpleItemRecyclerViewAdapter mAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.starting_layoute);
-
         ma = MyApplication.getInstance();   //retrive del DB
+
+        mUserGroupsReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber()).child("groups");
+
 
         //toolbar settings
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -83,34 +101,47 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener((NavigationView.OnNavigationItemSelectedListener) this);
 
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mDatabaseReference = mFirebaseDatabase.getReference("Users");
-        mFirebaseDatabase.getReference("AppName").setValue("MadExpense");
 
-        //devo prendere il numero cellulare dell'utente (qua lo prendevo dalla registrazione ma e' da cambiare)
         Bundle extras=getIntent().getExtras();
         if(extras!=null) {
-            phoneId = extras.getString("phoneN");
-            //bisogna aggiungere la verifica se l'utente esiste gia nel database
-            writeNewUser(phoneId,"name","surname");//nome e cognome devo prenderli dalle info dell'utente
+            /*manage extra code inserted to a group*/
+            //PHONE_ID = extras.getString("");
+
         }
 
-        phoneId="3657898765";//da togliere
 
+
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
         //in questo punto il codice prende la lista principale e la mostra come recyclerview
         View recyclerView = findViewById(R.id.group_list);
         assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
+
+        if(mUserGroupsReference!=null) {
+            mAdapter = new SimpleItemRecyclerViewAdapter(this, mUserGroupsReference);
+            ((RecyclerView) recyclerView).setAdapter(mAdapter);
+        }
+
+
+
 
     }
 
-    //aggiunge l'user al database
-    public void writeNewUser(String phoneId, String name, String surname){
-        User user=new User(name,surname);//da cambiare (bisogna inserire i veri nome e cognome)
-        user.setPhoneNumber(phoneId);//aggiungo numero di telefono
-        String userKey = mDatabaseReference.push().getKey();
-        mDatabaseReference.child(phoneId).setValue(user);
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // Clean up comments listener
+        if(mAdapter!=null)
+            mAdapter.cleanupListener();
+
+
+
     }
+
 
     //le due funzioni sottostanti servono al menù laterale che esce
     @Override
@@ -130,14 +161,18 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         int id = item.getItemId();
 
         if (id == R.id.nav_addgroup) {
-            Intent intent=new Intent(GroupListActivity.this, NewGroup.class);
-            intent.putExtra("phoneId",phoneId);
+            //handle add group activity
+            Intent intent=new Intent(GroupListActivity.this, SelectContact.class);
+            //intent.putExtra("phoneId",phoneId);
             startActivity(intent);
             // Handle the camera action
         } else if (id == R.id.nav_expenses) {
 
         } else if (id == R.id.nav_settings){
 
+        } else if (id == R.id.nav_logout) {
+            Logout fragment = new Logout();
+            fragment.show(getSupportFragmentManager(), "LogoutFragment");
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -157,17 +192,117 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         return super.onCreateOptionsMenu(menu);
     }
 
+
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(ma.getGroup()));
+
     }
+
 
     //questa classe la usa per fare il managing della lista che deve mostrare
     public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<Group> mValues;
+        private Context mContext;
+        private DatabaseReference mDatabaseReference;
+        private ChildEventListener mChildEventListener;
 
-        public SimpleItemRecyclerViewAdapter(List<Group> groups) {
-            mValues = groups;
+        private List<String> mValuesIds = new ArrayList<>();
+        private List<GroupForUser> mValues = new ArrayList<>();
+
+
+        public SimpleItemRecyclerViewAdapter(final Context context, DatabaseReference ref) {
+            mContext = context;
+            mDatabaseReference = ref;
+
+            // Create child event listener
+            // [START child_event_listener_recycler]
+            ChildEventListener childEventListener = new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
+                    Log.d(TAG, "onChildAdded:" + dataSnapshot.getKey());
+
+                    // A new comment has been added, add it to the displayed list
+                    GroupForUser groupForUser = dataSnapshot.getValue(GroupForUser.class);
+
+                    // [START_EXCLUDE]
+                    // Update RecyclerView
+                    mValuesIds.add(dataSnapshot.getKey());
+                    mValues.add(groupForUser);
+                    notifyItemInserted(mValues.size() - 1);
+                    // [END_EXCLUDE]
+                }
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
+                    Log.d(TAG, "onChildChanged:" + dataSnapshot.getKey());
+
+                    // A comment has changed, use the key to determine if we are displaying this
+                    // comment and if so displayed the changed comment.
+                    GroupForUser newGroupForUser = dataSnapshot.getValue(GroupForUser.class);
+                    String groupKey = dataSnapshot.getKey();
+
+                    // [START_EXCLUDE]
+                    int groupIndex = mValuesIds.indexOf(groupKey);
+                    if (groupIndex > -1) {
+                        // Replace with the new data
+                        mValues.set(groupIndex, newGroupForUser);
+
+                        // Update the RecyclerView
+                        notifyItemChanged(groupIndex);
+                    } else {
+                        Log.w(TAG, "onChildChanged:unknown_child:" + groupKey);
+                    }
+                    // [END_EXCLUDE]
+                }
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+                    Log.d(TAG, "onChildRemoved:" + dataSnapshot.getKey());
+
+                    // A comment has changed, use the key to determine if we are displaying this
+                    // comment and if so remove it.
+                    String groupKey = dataSnapshot.getKey();
+
+                    // [START_EXCLUDE]
+                    int groupIndex = mValuesIds.indexOf(groupKey);
+                    if (groupIndex > -1) {
+                        // Remove data from the list
+                        mValuesIds.remove(groupIndex);
+                        mValues.remove(groupIndex);
+
+                        // Update the RecyclerView
+                        notifyItemRemoved(groupIndex);
+                    } else {
+                        Log.w(TAG, "onChildRemoved:unknown_child:" + groupKey);
+                    }
+                    // [END_EXCLUDE]
+                }
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
+                    Log.d(TAG, "onChildMoved:" + dataSnapshot.getKey());
+
+                    // A comment has changed position, use the key to determine if we are
+                    // displaying this comment and if so move it.
+                    //Group movedGroup = dataSnapshot.getValue(Group.class);
+                    //String groupKey = dataSnapshot.getKey();
+
+                    // ...
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.w(TAG, "Groups:onCancelled", databaseError.toException());
+                    Toast.makeText(mContext, "Failed to load groups.",
+                            Toast.LENGTH_SHORT).show();
+                }
+            };
+            ref.addChildEventListener(childEventListener);
+            // [END child_event_listener_recycler]
+
+            // Store reference to listener so it can be removed on app stop
+            mChildEventListener = childEventListener;
+
+
         }
 
         @Override
@@ -179,7 +314,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         @Override
         public void onBindViewHolder(final SimpleItemRecyclerViewAdapter.ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);   //mValues.get(position) rappresenta un singolo elemento della nostra lista di gruppi
-            holder.mNumView.setText(Integer.toString(mValues.get(position).getUsers().size()) + " " +getString(R.string.members));
+            holder.mNumView.setText(Long.toString(mValues.get(position).getSize()) + " members");
             holder.mContentView.setText(mValues.get(position).getName());
             //sopra vengono settati i tre campi che costituisco le informazioni di ogni singolo gruppo, tutti pronti per essere mostriti nella gui
 
@@ -188,7 +323,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                 public void onClick(View v) {
                     Context context = v.getContext();
                     Intent intent = new Intent(context, ExpenseListActivity.class); //qui setto la nuova attività da mostrare a schermo dopo che clicco
-                    intent.putExtra("index", holder.mItem.getId().toString());    //passo alla nuova activity l'ide del gruppo chè l'utente ha selezionto
+                    intent.putExtra("index", holder.mItem.getId());    //passo alla nuova activity l'ide del gruppo chè l'utente ha selezionto
 
                     context.startActivity(intent);
                 }
@@ -200,12 +335,21 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             return mValues.size();
         }   //ritorna il numero di elementi nella lista
 
+
+        public void cleanupListener() {
+            if (mChildEventListener != null) {
+                mDatabaseReference.removeEventListener(mChildEventListener);
+            }
+        }
+
+
+
         //questa è una classe di supporto che viene usata per creare la vista a schermo, non ho ben capito come funziona
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
             public final TextView mNumView;
             public final TextView mContentView;
-            public Group mItem;
+            public GroupForUser mItem;
 
             public ViewHolder(View view) {
                 super(view);
