@@ -107,7 +107,7 @@ public class GoogleSignInActivity2 extends BaseActivity implements
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
-        // [START initialize_auth]
+
         //
         // [END initialize_auth]
 
