@@ -71,7 +71,7 @@ public class ExpenseFillData_2 extends AppCompatActivity {
         groupSelected = ma.getSingleGroup(Long.valueOf(beginner.getStringExtra("index"))); //recupero l'id del gruppo selezionato, e quindi il gruppo stesso
         groupID = beginner.getStringExtra("index");   //id del gruppo, che devo considerare
 
-        users = new ArrayList<>(groupSelected.getUsers());
+        users = new ArrayList<>(groupSelected.getUsers2());
         userCost = new HashMap<>();
 
         showDate(new Date());
@@ -87,7 +87,7 @@ public class ExpenseFillData_2 extends AppCompatActivity {
     private void populateSpinner() {
         // you need to have a list of data that you want the spinner to display
         List<String> spinnerArray =  new ArrayList<String>();
-        Iterator<User> us = groupSelected.getUsers().iterator();
+        Iterator<User> us = groupSelected.getUsers2().iterator();
         while(us.hasNext()) {
             User u = us.next();
             spinnerArray.add(u.getName());
@@ -145,7 +145,7 @@ public class ExpenseFillData_2 extends AppCompatActivity {
 
             Spinner inputPaidBy = (Spinner) findViewById(R.id.paidBy_spinner);
             int index = inputPaidBy.getSelectedItemPosition();
-            User userSelect = groupSelected.getUsers().get(index);
+            User userSelect = groupSelected.getUsers2().get(index);
 
             Spinner tag_spinner = (Spinner) findViewById(R.id.tag_spinner);
             String tagS = tag_spinner.getSelectedItem().toString();

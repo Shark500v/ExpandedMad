@@ -14,6 +14,8 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,7 +41,7 @@ public class ExpenseListActivity extends AppCompatActivity {
     private MyApplication ma;
 
     private String index = "index";
-    private RecyclerView recyclerView;
+
     private List<Expense> eItem;          //quello che vado a mostrare in questa activity è una lista di spese
     private Group groupSelected;
 
@@ -52,7 +54,7 @@ public class ExpenseListActivity extends AppCompatActivity {
 
         Intent beginner = getIntent();
         groupSelected = ma.getSingleGroup(Long.valueOf(beginner.getStringExtra("index"))); //recupero l'id del gruppo selezionato, e quindi il gruppo stesso
-        eItem = groupSelected.getExpenses();
+        //eItem = groupSelected.getExpenses();
         index = beginner.getStringExtra("index");   //id del gruppo, che devo considerare
 
         //toolbar settings
@@ -72,12 +74,9 @@ public class ExpenseListActivity extends AppCompatActivity {
                 //questo stampa al fondo la scritta
                 //Snackbar.make(view, "New Expense added!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 Context c = view.getContext();
-                Intent intent = new Intent(c, ExpenseFillData.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
+                Intent intent = new Intent(c, ExpenseFillData_2.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
                 intent.putExtra("index", index);    //passo l'indice del gruppo
-                startActivityForResult(intent, 1);
-                //c.startActivity(intent);
-                //forse serve il finish alla fine
-                //finish();
+                c.startActivity(intent);
             }
         });
 
@@ -88,22 +87,10 @@ public class ExpenseListActivity extends AppCompatActivity {
         }
 
         //in questo punto il codice prende la lista principale e la mostra come recyclerview
-        recyclerView = (RecyclerView)findViewById(R.id.expense_list);
+        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.expense_list);
         assert recyclerView != null;
         setupRecyclerView(recyclerView);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == RESULT_OK) {
-            eItem = groupSelected.getExpenses();
-            setupRecyclerView(recyclerView);
-            recyclerView.setItemAnimator(new DefaultItemAnimator());
-        }
-
     }
 
     @Override   //lo uso per le icone in alto a destra che posso selezionare

@@ -77,7 +77,7 @@ public class GroupMemebersActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(groupSelected.getUsers()));
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(groupSelected.getUsers2()));
     }
 
     public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {

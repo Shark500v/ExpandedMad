@@ -40,7 +40,7 @@ public class ExpenseDetailFragment extends Fragment {
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
             group = ma.getSingleGroup(Long.valueOf(getArguments().getString(ARG_GROUP_ID))); //I select the group that I need
-            mItem = group.getSingleExpense(Long.valueOf(getArguments().getString(ARG_ITEM_ID)));
+            //mItem = group.getSingleExpense(Long.valueOf(getArguments().getString(ARG_ITEM_ID)));
 
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);

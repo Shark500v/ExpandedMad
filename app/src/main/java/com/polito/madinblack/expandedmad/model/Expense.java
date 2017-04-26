@@ -8,6 +8,7 @@ import java.util.Map;
 
 public class Expense {
 
+
     public enum State{CONTEST, ACCEPTED}
     public enum Tag{FOOD, WATER_BILL, GAS_BILL, LIGHT_BILL, FLIGHT, HOTEL, FUEL, DRINK, OTHER}
     public enum Currency{YEN, EURO, DOLLAR, GBP}
@@ -31,9 +32,11 @@ public class Expense {
     private static long counter = 1;
 
     //a map showing for each user the cost of the Payment
-    private Map<Long, Payment> userCost = new HashMap<>();
+    private Map<String, Payment> userCost = new HashMap<>();
 
-    private Map<Enum, Character> currencySymbol = new HashMap<>();
+    public Expense(){
+
+    }
 
     public Expense(String name, Tag tag, float cost, String description, Currency currency, Group group, User paying, int year, int month, int day){
         this.name        = name;
@@ -48,18 +51,6 @@ public class Expense {
         this.day         = day;
         this.id          = counter++;
         this.state       = State.ACCEPTED;
-
-        /*first implementation: divide equally the cost and everybody in the group will pay
-        Float toPaid = cost / group.getUsers().size();
-        Iterator<User> us = group.getUsers().iterator();
-        while(us.hasNext()) {
-            User u = us.next();
-            if(u.getId()!=paying.getId())
-                userCost.put(u.getId(), new Payment(u, this, 0F, toPaid));
-            else
-                userCost.put(u.getId(), new Payment(u, this, cost, toPaid));
-        }
-        */
 
     }
 
@@ -135,6 +126,16 @@ public class Expense {
         return day;
     }
 
+    public void setYear(int year) { this.year = year; }
+
+    public void setMonth(int month) { this.month = month; }
+
+    public void setDay(int day) { this.day = day; }
+
+    public void setGroup(Group group) { this.group = group; }
+
+    public void setPaying(User user) {this.paying = user; }
+
 
     public static int dateCompare(Expense e1, Expense e2){
         /*if(e1.getYear()>e2.getYear())
@@ -160,7 +161,6 @@ public class Expense {
 
     public void addPayment(User user, Float paid, Float toPaid){
         Payment p = new Payment(user, this, paid, toPaid);
-        p.setCost(this.cost);
         userCost.put(user.getId(), p);
 
         if(paying.getId()==MyApplication.myself.getId() && user.getId()!=MyApplication.myself.getId()){
@@ -171,7 +171,6 @@ public class Expense {
     }
 
     public void addPayment(Payment p){
-        this.cost = p.getCost();
 
         userCost.put(p.getUser().getId(), p);
 
@@ -189,6 +188,5 @@ public class Expense {
     public String toString(){
         return userCost.get(MyApplication.myself.getId()).toString();
     }
-
 
 }

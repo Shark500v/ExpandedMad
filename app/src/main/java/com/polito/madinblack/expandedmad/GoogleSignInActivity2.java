@@ -32,6 +32,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity;
+import com.polito.madinblack.expandedmad.model.MyApplication;
+import com.polito.madinblack.expandedmad.model.User;
 
 
 /**
@@ -61,13 +63,19 @@ public class GoogleSignInActivity2 extends BaseActivity implements
 
     /*added by Ale*/
     private DatabaseReference mDatabase;
-    public String phoneNumber;
-    private String userId;
+
+    private String phoneNumber;
+
+    private MyApplication ma;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.google_registration2);
+
+        ma = MyApplication.getInstance();
 
         // Views
         mStatusTextView = (TextView) findViewById(R.id.status);
@@ -75,6 +83,8 @@ public class GoogleSignInActivity2 extends BaseActivity implements
         /*added by Ale to insert telephone*/
         mTelephoneTextView = (EditText) findViewById(R.id.telephone);
 
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mAuth = FirebaseAuth.getInstance();
 
         // Button listeners: to change and load only sign in of google and confirm
         findViewById(R.id.sign_in_button).setOnClickListener(this);
@@ -97,52 +107,63 @@ public class GoogleSignInActivity2 extends BaseActivity implements
                 .build();
 
         // [START initialize_auth]
-        mAuth = FirebaseAuth.getInstance();
+        //
         // [END initialize_auth]
 
         /*added by Ale to set index*/
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        //mDatabase = FirebaseDatabase.getInstance().getReference();
 
 
         // [START auth_state_listener]
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
+        //mAuthListener = new FirebaseAuth.AuthStateListener() {
+           // @Override
+         //   public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+          //      FirebaseUser user = firebaseAuth.getCurrentUser();
+            //    if (user != null) {
                     // User is signed in
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+              //      Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                //    firebaseId      = user.getUid();
+                  //  userEmail       = user.getEmail();
+                 //   String[] items  = user.getDisplayName().split(" ");
+                   // userName        = items[0];
+                    //userSurname     = items[1];
 
-                    mDatabase.child("userID").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.exists()) {
+               //     mDatabase.child("userId").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                 //       @Override
+                   //     public void onDataChange(DataSnapshot dataSnapshot) {
+                     //       if (dataSnapshot.exists()) {
+
+                       //         /*to memorize phone number of logged user*/
+                         //       userPhoneNumber = dataSnapshot.getValue(String.class);
+                           //     GroupListActivity.logged = true;
                                 /*google login and number yet inserted jump to group page*/
-                                Intent intent = new Intent(GoogleSignInActivity2.this, GroupListActivity.class);
-                                startActivity(intent);
+                             //   Intent intent = new Intent(GoogleSignInActivity2.this, GroupListActivity.class);
+                               // startActivity(intent);
+                                //finish();
 
-                            }
-                        }
+//                            }
+  //                      }
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
+    //                    @Override
+      //                  public void onCancelled(DatabaseError databaseError) {
 
-                        }
-                    });
-                    userId = user.getUid();
+        //                }
+          //          });
 
-                } else {
+
+
+         //       } else {
                     // User is signed out
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
+           //         Log.d(TAG, "onAuthStateChanged:signed_out");
 
-                }
-                // [START_EXCLUDE]
-                updateUI(user);
-                // [END_EXCLUDE]
-            }
-        };
+             //   }
+
+        //    }
+      //  };
         // [END auth_state_listener]
 
+
+        updateUI(ma.getFirebaseUser());
 
 
 
@@ -153,7 +174,8 @@ public class GoogleSignInActivity2 extends BaseActivity implements
     public void onStart() {
         super.onStart();
         //Adds a listener that will be called when the connection becomes authenticated or unauthenticated.
-        mAuth.addAuthStateListener(mAuthListener);
+       // mAuth.addAuthStateListener(mAuthListener);
+
     }
     // [END on_start_add_listener]
 
@@ -161,9 +183,9 @@ public class GoogleSignInActivity2 extends BaseActivity implements
     @Override
     public void onStop() {
         super.onStop();
-        if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
-        }
+       // if (mAuthListener != null) {
+         //   mAuth.removeAuthStateListener(mAuthListener);
+        //}
     }
     // [END on_stop_remove_listener]
 
@@ -258,13 +280,13 @@ public class GoogleSignInActivity2 extends BaseActivity implements
     private void confirmNumber() {
         /*confirm number and add user detail*/
         phoneNumber = mTelephoneTextView.getText().toString();
-        mDatabase.child("userId").child(userId).setValue(phoneNumber);
-        /*ADD HERE NEW OBJECT OF CURRENT USER*/
-
-
+        User.writeNewUser(mDatabase, ma.getFirebaseId(), ma.getUserName(),  ma.getUserSurname(), phoneNumber, ma.getUserEmail());
+        mDatabase.child("userId").child(ma.getFirebaseId()).setValue(phoneNumber);
+        finish();
+        /*
         Intent intent = new Intent(GoogleSignInActivity2.this, GroupListActivity.class);
         startActivity(intent);
-
+        */
     }
 
 

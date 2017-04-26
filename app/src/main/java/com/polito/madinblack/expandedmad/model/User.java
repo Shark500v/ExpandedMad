@@ -1,5 +1,7 @@
 package com.polito.madinblack.expandedmad.model;
 
+import com.google.firebase.database.DatabaseReference;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,24 +9,33 @@ public class User {
 
     private String name;
     private String surname;
-    private float globalBalance;
-    private static long counter = 1; /*counter to assign an id*/
-    private final Long id;          //unique Id for each user
+    private String firebaseId;
+    private String phoneNumber;
+    private String id;
+    private String email;
 
     /*all groups for user*/
-    private Map<Long, Group>groups = new HashMap<>();
+    private Map<String, Boolean> groups = new HashMap<>();
 
-    public User()
-    {
-        this.id = counter++;
-        globalBalance = 0;
+    public User(){
+
     }
 
-    public User(String name, String surname){
-        this.name = name;
-        this.surname = surname;
-        this.id = counter++;
-        globalBalance = 0;
+    public User(String name, String surname, String phoneNumber, String email){
+        this.name        = name;
+        this.surname     = surname;
+        this.phoneNumber = phoneNumber;
+        this.email       = email;
+        this.id          = phoneNumber;
+
+
+    }
+
+    public static void writeNewUser(DatabaseReference mDatabase, String firebaseId, String name, String surname, String phoneNumber, String email) {
+        User user = new User(name, surname, phoneNumber, email);
+        user.setFirebaseId(firebaseId);
+
+        mDatabase.child("users").child(user.getId()).setValue(user);
     }
 
 
@@ -45,15 +56,15 @@ public class User {
         this.surname = surname;
     }
 
-    public float getGlobalBalance() {
-        return globalBalance;
-    }
+    public String getFirebaseId() { return firebaseId; }
 
-    public void setGlobalBalance(float globalBalance) {
-        this.globalBalance = globalBalance;
-    }
+    public void setFirebaseId(String firebaseId) { this.firebaseId = firebaseId; }
 
-    public Long getId() { return id; }
+    public String getPhoneNumber() { return phoneNumber; }
+
+    public void setPhoneNumber(String telephone) { this.phoneNumber = phoneNumber; }
+
+    public String getId() { return id; }
 
     public String toString(){
         return this.getName() + " " + this.getSurname();
