@@ -58,8 +58,9 @@
     <string name="disconnect">Disconnect</string>
     <string name="sign_out">Sign out</string>
     <string name="mad_title_text">Mad Expense Sign In</string>
+    <string name="signed_out">Signed Out</string>
+    <string name="desc_firebase_lockup">App logo and name</string>
     <string name="login">Login with Google</string>
-    <string name="desc_firebase_lockup">Firebase logo and name</string>
     <string name="confirm">Confirm</string>
     <string name="group_name">Group name</string>
     <string name="sign_in">Sign in</string>

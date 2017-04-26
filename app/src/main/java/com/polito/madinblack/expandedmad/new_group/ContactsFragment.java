@@ -36,7 +36,7 @@ public class ContactsFragment extends Fragment {
     ContentResolver resolver;
 
     // ArrayList
-    ArrayList<SelectUser> selectUsers;
+    ArrayList<SelectUser> selectUsers = new ArrayList<SelectUser>();;
     List<SelectUser> groupMembers;
     // Contact List
     ListView listView;
@@ -57,12 +57,14 @@ public class ContactsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        resolver = getContext().getContentResolver();
-        RequestPerm();                                      //I need to ask for permission in order to access the contact list stored in the device
-
-        selectUsers = new ArrayList<SelectUser>();
-        //qui l'app si bugga
         groupMembers = (List<SelectUser>) getArguments().getSerializable("LIST");       //lista che ricevo dall'activity
+
+        RequestPerm();  //I need to ask for permission in order to access the contact list stored in the device
+    }
+
+    private void executeRetrive(){
+        resolver = getContext().getContentResolver();
+        phones = resolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
         //dopo aver fatto il retrieve dei contatti posso procedere
         LoadContact loadContact = new LoadContact();
         loadContact.execute();
@@ -77,7 +79,7 @@ public class ContactsFragment extends Fragment {
             //non basta inserire dentro il manifest file il permission per leggere i contatti, ma devo anche chiedere all'utente
         }else {
             //se ho tutti i permessi posso fare subito il retrieve dei contatti
-            phones = resolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
+            executeRetrive();
         }
     }
 
@@ -91,8 +93,7 @@ public class ContactsFragment extends Fragment {
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
                     //se l'utente mi dà i permessi allora accedo ai contatti facendo il retrieve
-                    phones = resolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
-
+                    executeRetrive();
                 } else {
 
                     // permission denied, boo! Disable the
