@@ -15,6 +15,38 @@
       },
       "oauth_client": [
         {
+          "client_id": "840395540651-jskposfdue8tm8le9ln45u4ka0sikv2v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.polito.madinblack.expandedmad",
+            "certificate_hash": "fd725f476699f058cae5318c0b0ac7aa0db1b5a9"
+          }
+        },
+        {
+          "client_id": "840395540651-lc9h1cj9brpolv22c3obep573018974p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.polito.madinblack.expandedmad",
+            "certificate_hash": "955df5bcbbca4807c7ca36264311741bb50a1465"
+          }
+        },
+        {
+          "client_id": "840395540651-rbj97589fctcuej9ovfcfti1e6oo21eo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.polito.madinblack.expandedmad",
+            "certificate_hash": "36e8d59f529eca63b4bc2be9ba403c38198e1048"
+          }
+        },
+        {
+          "client_id": "840395540651-09m6da7bt1l2rffaun8901cm560625aj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.polito.madinblack.expandedmad",
+            "certificate_hash": "7b52da34cc42499abe70e757cc93fc6186d45bfe"
+          }
+        },
+        {
           "client_id": "840395540651-hoikhja0m1qhjcjtua705u0ivqni8rdm.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +61,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "840395540651-hoikhja0m1qhjcjtua705u0ivqni8rdm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2
