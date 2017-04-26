@@ -1,20 +1,30 @@
 package com.polito.madinblack.expandedmad.GroupManaging;
 
+import android.content.Context;
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -37,6 +47,8 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
 
     private static final int REQUEST_INVITE = 0;
     private static final String TAG = "GroupList";
+    private DatabaseReference mDatabaseReference;
+    private FirebaseDatabase mFirebaseDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +61,21 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        /*
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //qui bisogna aggiungere un nuovo gruppo, in questo momento lo faccio nel modo semplice
+                //devo notificare la vista che qualcosa è cambiato
+                RecyclerView recyclerView = (RecyclerView)findViewById(R.id.group_list);
+                recyclerView.getAdapter().notifyDataSetChanged();   //rendo visibili le modifiche apportate
+                //questo stampa al fondo la scritta
+                Snackbar.make(view, "New Group added!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            }
+        });
+        */
+
         //le righe di codice di sotto servono al drower laterale che compare
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -58,17 +85,19 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener((NavigationView.OnNavigationItemSelectedListener) this);
 
-        //Firebase integration
-        mFirebaseInstance = FirebaseDatabase.getInstance();
-        mFirebaseDatabase = mFirebaseInstance.getReference("Users");
-        mFirebaseInstance.getReference("AppName").setValue("MadExpense");
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mDatabaseReference = mFirebaseDatabase.getReference("Users");
+        mFirebaseDatabase.getReference("AppName").setValue("MadExpense");
 
+        //devo prendere il numero cellulare dell'utente (qua lo prendevo dalla registrazione ma e' da cambiare)
         Bundle extras=getIntent().getExtras();
         if(extras!=null) {
             phoneId = extras.getString("phoneN");
             //bisogna aggiungere la verifica se l'utente esiste gia nel database
-            createUser();
+            writeNewUser(phoneId,"name","surname");//nome e cognome devo prenderli dalle info dell'utente
         }
+
+        phoneId="3657898765";//da togliere
 
         //GoogleInvitationManaging();
 
@@ -80,10 +109,11 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
     }
 
     //aggiunge l'user al database
-    public void createUser(){
-        User user=new User("name","surname");//da cambiare (bisogna inserire i veri nome e cognome
+    public void writeNewUser(String phoneId, String name, String surname){
+        User user=new User(name,surname);//da cambiare (bisogna inserire i veri nome e cognome)
         user.setPhoneNumber(phoneId);//aggiungo numero di telefono
-        mFirebaseDatabase.child(phoneId).setValue(user);
+        String userKey = mDatabaseReference.push().getKey();
+        mDatabaseReference.child(phoneId).setValue(user);
     }
 
     //le due funzioni sottostanti servono al menù laterale che si mostra a schermo
@@ -108,6 +138,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             Intent intent=new Intent(GroupListActivity.this, SelectContact.class);
             intent.putExtra("phoneId",phoneId);
             startActivity(intent);
+            // Handle the camera action
         } else if (id == R.id.nav_expenses) {
 
         } else if (id == R.id.nav_settings){

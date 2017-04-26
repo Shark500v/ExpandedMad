@@ -1,7 +1,7 @@
 package com.polito.madinblack.expandedmad.model;
 
+import com.google.firebase.database.DatabaseReference;
 import android.graphics.Bitmap;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,7 +58,7 @@ public class User {
         this.globalBalance = globalBalance;
     }
 
-    public Long getId() { return id; }
+    public Long getId(){ return id; }
 
     public String toString(){
         return this.getName() + " " + this.getSurname();

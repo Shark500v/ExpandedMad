@@ -10,22 +10,22 @@
         android:layout_gravity="center_vertical"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:layout_margin="@dimen/text_margin"
         android:textAppearance="?attr/textAppearanceListItem"
-        android:gravity="center_vertical"
-        android:text="User 1"/>
+        android:gravity="center_vertical"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="right"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/decrease"
-            android:layout_width="30dp"
-            android:layout_height="35dp"
+            android:layout_width="35dp"
+            android:layout_height="40dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="3dp"
             android:onClick="decreaseInteger"
             android:text="-"
             android:textAlignment="textStart"/>
@@ -34,15 +34,15 @@
             android:id="@+id/integer_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_gravity="center_vertical"
             android:text="1"/>
 
         <Button
             android:id="@+id/increase"
-            android:layout_width="30dp"
-            android:layout_height="35dp"
+            android:layout_width="35dp"
+            android:layout_height="40dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="3dp"
             android:onClick="increaseInteger"
             android:text="+"
             android:textAlignment="textStart"/>
@@ -50,21 +50,21 @@
 
     <EditText
         android:id="@+id/personal_amount"
-        android:layout_width="wrap_content"
+        android:layout_width="60dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:textAppearance="?attr/textAppearanceListItem"
+        android:inputType="numberDecimal"
+        android:gravity="right"
         android:layout_marginLeft="7dp"
-        android:layout_marginRight="@dimen/text_margin"
+        android:layout_marginRight="7dp"
         android:text="0.00"
-        android:inputType="none"
         />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginRight="@dimen/text_margin"
         android:textAppearance="?attr/textAppearanceListItem"
         android:text="EUR"/>
 </LinearLayout>

@@ -39,7 +39,7 @@ public class ExpenseListActivity extends AppCompatActivity {
     private MyApplication ma;
 
     private String index = "index";
-
+    private RecyclerView recyclerView;
     private List<Expense> eItem;          //quello che vado a mostrare in questa activity è una lista di spese
     private Group groupSelected;
 
@@ -72,9 +72,12 @@ public class ExpenseListActivity extends AppCompatActivity {
                 //questo stampa al fondo la scritta
                 //Snackbar.make(view, "New Expense added!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 Context c = view.getContext();
-                Intent intent = new Intent(c, ExpenseFillData_2.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
+                Intent intent = new Intent(c, ExpenseFillData.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
                 intent.putExtra("index", index);    //passo l'indice del gruppo
-                c.startActivity(intent);
+                startActivityForResult(intent, 1);
+                //c.startActivity(intent);
+                //forse serve il finish alla fine
+                //finish();
             }
         });
 
@@ -85,10 +88,22 @@ public class ExpenseListActivity extends AppCompatActivity {
         }
 
         //in questo punto il codice prende la lista principale e la mostra come recyclerview
-        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.expense_list);
+        recyclerView = (RecyclerView)findViewById(R.id.expense_list);
         assert recyclerView != null;
         setupRecyclerView(recyclerView);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            eItem = groupSelected.getExpenses();
+            setupRecyclerView(recyclerView);
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+        }
+
     }
 
     @Override   //lo uso per le icone in alto a destra che posso selezionare

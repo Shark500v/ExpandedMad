@@ -33,6 +33,7 @@ public class Expense {
     //a map showing for each user the cost of the Payment
     private Map<Long, Payment> userCost = new HashMap<>();
 
+    public Expense(){}
 
     public Expense(String name, Tag tag, float cost, String description, Currency currency, Group group, User paying, int year, int month, int day){
         this.name        = name;
@@ -133,6 +134,16 @@ public class Expense {
     public int getDay() {
         return day;
     }
+
+    public void setYear(int year) { this.year = year; }
+
+    public void setMonth(int month) { this.month = month; }
+
+    public void setDay(int day) { this.day = day; }
+
+    public void setGroup(Group group) { this.group = group; }
+
+    public void setPaying(User user) {this.paying = user; }
 
 
     public static int dateCompare(Expense e1, Expense e2){
