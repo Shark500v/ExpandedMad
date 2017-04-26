@@ -1,17 +1,28 @@
 package com.polito.madinblack.expandedmad.new_group;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.os.Vibrator;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.polito.madinblack.expandedmad.ExpenseListActivity;
 import com.polito.madinblack.expandedmad.R;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 public class SelectContact extends AppCompatActivity {
+
+    List<SelectUser> groupM = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +48,12 @@ public class SelectContact extends AppCompatActivity {
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction().add(R.id.group_detail_container, fragment).commit();
             */
+            Bundle arguments = new Bundle();
+            arguments.putSerializable("LIST", (Serializable) groupM);
+            ContactsFragment fragment = new ContactsFragment();
+            fragment.setArguments(arguments);
+            getSupportFragmentManager().beginTransaction().add(R.id.frameLayout, fragment).commit();
+
         }
     }
 
@@ -48,8 +65,19 @@ public class SelectContact extends AppCompatActivity {
             navigateUpTo(intent);
             return true;
         }else if(id == R.id.confirm_group){
-            Intent intent1=new Intent(SelectContact.this, NewGroup.class);
-            startActivity(intent1);
+            if (groupM.isEmpty()) {
+
+                View mv = findViewById(R.id.frameLayout);
+                Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                // Vibrate for 250 milliseconds
+                v.vibrate(250);
+                Snackbar.make(mv, "Please, select at least one member!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                return true;
+            }else{
+                Intent intent1=new Intent(SelectContact.this, NewGroup.class);
+                intent1.putExtra("Group Members", (Serializable) groupM);
+                startActivity(intent1);
+            }
         }
         return super.onOptionsItemSelected(item);
     }

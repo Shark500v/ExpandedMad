@@ -14,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
@@ -22,11 +23,16 @@ import com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.Group;
 
+import java.util.List;
+
 public class NewGroup extends AppCompatActivity {
 
     private FirebaseDatabase mFirebaseInstance;
     private DatabaseReference mFirebaseDatabase;
     String phoneId;
+    List<SelectUser> groupM;
+    ListView lv;
+    GroupMembersAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,12 +42,17 @@ public class NewGroup extends AppCompatActivity {
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        groupM = (List<SelectUser>) getIntent().getSerializableExtra("Group Members");
+        lv = (ListView) findViewById(R.id.list1);
+        adapter = new GroupMembersAdapter(groupM, this);
+
         // Show the Up button in the action bar
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        lv.setAdapter(adapter);
     }
 
 
@@ -50,7 +61,6 @@ public class NewGroup extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.confirm_group) {
 
-            boolean isNull = false;
             Intent intent;
 
             EditText inputGroupName = (EditText) findViewById(R.id.group_name);

@@ -1,6 +1,5 @@
 package com.polito.madinblack.expandedmad.GroupManaging;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,30 +12,31 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.polito.madinblack.expandedmad.Logout;
 import com.polito.madinblack.expandedmad.R;
-import com.polito.madinblack.expandedmad.Utility.TabView;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.*;
 import com.polito.madinblack.expandedmad.new_group.SelectContact;
 
-import java.util.List;
 
-
-public class GroupListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class GroupListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.OnConnectionFailedListener{
 
     public String phoneId; //numero di telefono passato dalla registrazione
     private MyApplication ma;
     private DatabaseReference mFirebaseDatabase;
     private FirebaseDatabase mFirebaseInstance;
+    private GoogleApiClient mGoogleApiClient;
+
+    private static final int REQUEST_INVITE = 0;
+    private static final String TAG = "GroupList";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,21 +49,6 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        /*
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //qui bisogna aggiungere un nuovo gruppo, in questo momento lo faccio nel modo semplice
-                //devo notificare la vista che qualcosa è cambiato
-                RecyclerView recyclerView = (RecyclerView)findViewById(R.id.group_list);
-                recyclerView.getAdapter().notifyDataSetChanged();   //rendo visibili le modifiche apportate
-                //questo stampa al fondo la scritta
-                Snackbar.make(view, "New Group added!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-            }
-        });
-        */
-
         //le righe di codice di sotto servono al drower laterale che compare
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -73,6 +58,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener((NavigationView.OnNavigationItemSelectedListener) this);
 
+        //Firebase integration
         mFirebaseInstance = FirebaseDatabase.getInstance();
         mFirebaseDatabase = mFirebaseInstance.getReference("Users");
         mFirebaseInstance.getReference("AppName").setValue("MadExpense");
@@ -83,6 +69,8 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             //bisogna aggiungere la verifica se l'utente esiste gia nel database
             createUser();
         }
+
+        //GoogleInvitationManaging();
 
         //in questo punto il codice prende la lista principale e la mostra come recyclerview
         View recyclerView = findViewById(R.id.group_list);
@@ -98,7 +86,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         mFirebaseDatabase.child(phoneId).setValue(user);
     }
 
-    //le due funzioni sottostanti servono al menù laterale che esce
+    //le due funzioni sottostanti servono al menù laterale che si mostra a schermo
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -124,6 +112,9 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
 
         } else if (id == R.id.nav_settings){
 
+        } else if (id == R.id.nav_logout) {
+            Logout fragment = new Logout();
+            fragment.show(getSupportFragmentManager(), "LogoutFragment");
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -142,69 +133,95 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
 
         return super.onCreateOptionsMenu(menu);
     }
+    /*
+    private void GoogleInvitationManaging (){
+        // Create an auto-managed GoogleApiClient with access to App Invites.
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(AppInvite.API)
+                .enableAutoManage(this, this)
+                .build();
+
+        // Check for App Invite invitations and launch deep-link activity if possible.
+        // Requires that an Activity is registered in AndroidManifest.xml to handle
+        // deep-link URLs.
+        boolean autoLaunchDeepLink = true;
+        AppInvite.AppInviteApi.getInvitation(mGoogleApiClient, this, autoLaunchDeepLink)
+                .setResultCallback(new ResultCallback<AppInviteInvitationResult>() {
+                    @Override
+                    public void onResult(AppInviteInvitationResult result) {
+                        Log.d(TAG, "getInvitation:onResult:" + result.getStatus());
+                        if (result.getStatus().isSuccess()) {
+                            // Extract information from the intent
+                            Intent intent = result.getInvitationIntent();
+                            String deepLink = AppInviteReferral.getDeepLink(intent);
+                            String invitationId = AppInviteReferral.getInvitationId(intent);
+
+                            // Because autoLaunchDeepLink = true we don't have to do anything
+                            // here, but we could set that to false and manually choose
+                            // an Activity to launch to handle the deep link here.
+                            // ...
+                        }
+                    }
+                });
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.d(TAG, "onConnectionFailed:" + connectionResult);
+        showMessage(getString(R.string.google_play_services_error));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG, "onActivityResult: requestCode=" + requestCode + ", resultCode=" + resultCode);
+
+        if (requestCode == REQUEST_INVITE) {
+            if (resultCode == RESULT_OK) {
+                // Get the invitation IDs of all sent messages
+                String[] ids = AppInviteInvitation.getInvitationIds(resultCode, data);
+                for (String id : ids) {
+                    Log.d(TAG, "onActivityResult: sent invitation " + id);
+                }
+            } else {
+                // Sending failed or it was canceled, show failure message to the user
+                showMessage(getString(R.string.send_failed));
+            }
+        }
+    }
+
+    private void onInviteClicked() {
+        Intent intent = new AppInviteInvitation.IntentBuilder(getString(R.string.invitation_title))
+                .setMessage(getString(R.string.invitation_message))
+                .setDeepLink(Uri.parse(getString(R.string.invitation_deep_link)))
+                //.setCustomImage(Uri.parse(getString(R.string.invitation_custom_image)))
+                //.setCallToActionText(getString(R.string.invitation_cta))
+                .setEmailHtmlContent("<html><body>" +
+                        "<h1>" + phoneId + " has invited you on MadExpenses!<br></h1>" + //bisogna mettere il nome dell'utente loggato al posto di phoneId
+                        "Hi,<br><br>" +
+                        phoneId + " would like to add you in his/her group.<br><br>" +
+                        "To join your friend " +
+                        "<a href=\"%%APPINVITE_LINK_PLACEHOLDER%%\">install</a>" +
+                        " our app now.<br><br>" +
+                        "We are waiting for you on MadExpenses,<br><br>" +
+                        "Your MadExpenses Team" +
+                        "<body></html>")
+                .setEmailSubject("[MadExpenses] " + phoneId + " has sent you an invite")//bisogna mettere il nome dell'utente loggato al posto di phoneId
+                .build();
+        startActivityForResult(intent, REQUEST_INVITE);
+    }
+
+    private void showMessage(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+    */
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(ma.getGroup()));
+        recyclerView.setAdapter(new RecyclerViewAdapter(ma.getGroup()));
     }
 
-    //questa classe la usa per fare il managing della lista che deve mostrare
-    public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
-        private final List<Group> mValues;
-
-        public SimpleItemRecyclerViewAdapter(List<Group> groups) {
-            mValues = groups;
-        }
-
-        @Override
-        public GroupListActivity.SimpleItemRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.group_list_content, parent, false);
-            return new ViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(final SimpleItemRecyclerViewAdapter.ViewHolder holder, int position) {
-            holder.mItem = mValues.get(position);   //mValues.get(position) rappresenta un singolo elemento della nostra lista di gruppi
-            holder.mNumView.setText(Integer.toString(mValues.get(position).getUsers().size()) + " members");
-            holder.mContentView.setText(mValues.get(position).getName());
-            //sopra vengono settati i tre campi che costituisco le informazioni di ogni singolo gruppo, tutti pronti per essere mostriti nella gui
-
-            holder.mView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Context context = v.getContext();
-                    Intent intent = new Intent(context, TabView.class); //qui setto la nuova attività da mostrare a schermo dopo che clicco
-                    intent.putExtra("index", holder.mItem.getId().toString());    //passo alla nuova activity l'ide del gruppo chè l'utente ha selezionto
-
-                    context.startActivity(intent);
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return mValues.size();
-        }   //ritorna il numero di elementi nella lista
-
-        //questa è una classe di supporto che viene usata per creare la vista a schermo, non ho ben capito come funziona
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            public final View mView;
-            public final TextView mNumView;
-            public final TextView mContentView;
-            public Group mItem;
-
-            public ViewHolder(View view) {
-                super(view);
-                mView = view;
-                mNumView = (TextView) view.findViewById(R.id.num_members);
-                mContentView = (TextView) view.findViewById(R.id.content);
-            }
-
-            @Override
-            public String toString() {
-                return super.toString() + " '" + mContentView.getText() + "'";
-            }
-        }
     }
-
 }

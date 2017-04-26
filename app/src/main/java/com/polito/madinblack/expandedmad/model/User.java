@@ -1,5 +1,7 @@
 package com.polito.madinblack.expandedmad.model;
 
+import android.graphics.Bitmap;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,8 +11,9 @@ public class User {
     private String surname;
     private String phoneNumber;
     private float globalBalance;
-    private static long counter = 1; /*counter to assign an id*/
-    private final Long id;          //unique Id for each user
+    private static long counter = 1;    /*counter to assign an id*/
+    private final Long id;              //unique Id for each user
+    Bitmap thumb;                       //used for the icon account
 
     /*all groups for user*/
     private Map<Long, Group>groups = new HashMap<>();
@@ -64,4 +67,12 @@ public class User {
     public String getPhoneNumber() { return phoneNumber; }
 
     public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
+
+    public Bitmap getThumb() {
+        return thumb;
+    }
+
+    public void setThumb(Bitmap thumb) {
+        this.thumb = thumb;
+    }
 }
