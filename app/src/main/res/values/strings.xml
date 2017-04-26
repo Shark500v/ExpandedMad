@@ -38,10 +38,13 @@
     <string name="who">Who pay?</string>
     <string name="how">How much?</string>
     <string name="partition">Partition</string>
-    <string name="hint_title">Title *</string>
+    <string name="hint_title">Expense Name *</string>
     <string name="hint_amount">Amount *</string>
-    <string name="hint_paidby">Paid By</string>
+    <string name="hint_paidBy">Paid By</string>
+    <string name="hint_date">Date</string>
     <string name="hint_description">Description</string>
+    <string name="err_msg_title">Enter the expense name</string>
+    <string name="err_msg_amount">Enter the amount</string>
     <string name="hint_phonenumber">Enter your phone number</string>
     <string name="hint_password">Enter your password</string>
     <string name="hint_password_confirm">Confirm your password</string>
@@ -58,4 +61,18 @@
     <string name="signed_out">Signed Out</string>
     <string name="desc_firebase_lockup">Firebase logo and name</string>
     <string name="confirm">Confirm</string>
+    <string name="group_name">Group name</string>
+    <string name="sign_in">Sign in</string>
+    <string name="members">members</string>
+    <string name="new_group">New group</string>
+    <string name="my_expenses">My expenses</string>
+    <string name="settings">Settings</string>
+    <string name="photo">Take Photo</string>
+    <string name="gallery">Choose from Gallery</string>
+    <string name="cancel">Cancel</string>
+    <string name="add_proof">Add Expense Proof</string>
+    <string name="me">Me</string>
+    <string name="you">You</string>
+    <string name="reset">Reset</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>

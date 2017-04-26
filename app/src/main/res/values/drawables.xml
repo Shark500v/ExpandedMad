@@ -6,4 +6,5 @@
     <item name="ic_menu_manage" type="drawable">@drawable/ic_manage</item>
     <item name="ic_menu_share" type="drawable">@drawable/ic_share</item>
     <item name="ic_menu_send" type="drawable">@drawable/ic_send</item>
+    <item name="ic_menu_logout" type="drawable">@drawable/ic_power_settings_new_black_24px</item>
 </resources>

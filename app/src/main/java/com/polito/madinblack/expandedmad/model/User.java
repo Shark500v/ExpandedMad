@@ -1,7 +1,7 @@
 package com.polito.madinblack.expandedmad.model;
 
 import com.google.firebase.database.DatabaseReference;
-
+import android.graphics.Bitmap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,6 +13,7 @@ public class User {
     private String phoneNumber;
     private String id;
     private String email;
+    Bitmap thumb;
 
     /*all groups for user*/
     private Map<String, Boolean> groups = new HashMap<>();
@@ -70,5 +71,13 @@ public class User {
         return this.getName() + " " + this.getSurname();
     }
 
+    /*
+    public Bitmap getThumb() {
+        return thumb;
+    }*/
+
+    public void setThumb(Bitmap thumb) {
+        this.thumb = thumb;
+    }
 
 }

@@ -140,9 +140,8 @@ public class ExpenseListActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    //tecnicamente si poteva anche gestire sopra questa funzione, direttamente nel main
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(eItem)); //secondo me crasha qui
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(eItem));
     }
 
     //questa classe la usa per fare il managing della lista che deve mostrare
@@ -186,9 +185,6 @@ public class ExpenseListActivity extends AppCompatActivity {
                 str.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), "Paid by ".length(), ("Paid by ".length() + mValues.get(position).getPaying().getName().length()), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
             holder.mPaydBy.setText(str);
-
-
-
 
 
             //sopra vengono settati i tre campi che costituisco le informazioni di ogni singolo gruppo, tutti pronti per essere mostriti nella gui

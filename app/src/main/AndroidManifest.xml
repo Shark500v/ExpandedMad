@@ -3,6 +3,11 @@
     package="com.polito.madinblack.expandedmad">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
+
+    <uses-feature android:name="android.hardware.camera" android:required="true" />
+
 
     <application
         android:allowBackup="true"
@@ -23,6 +28,16 @@
         <activity
             android:name=".ExpenseListActivity"
             android:label="@string/title_expense_list"
+            android:parentActivityName=".GroupManaging.GroupListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity" />
+        </activity>
+
+        <activity
+            android:name=".Utility.TabView"
+            android:label="Tab View"
             android:parentActivityName=".GroupManaging.GroupListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -122,6 +137,26 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".new_group.NewGroup"
+            android:label="New Group"
+            android:parentActivityName=".new_group.SelectContact"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.polito.madinblack.expandedmad.new_group.SelectContact" />
+        </activity>
+
+        <activity
+            android:name=".new_group.SelectContact"
+            android:label="Select Contact"
+            android:parentActivityName=".GroupManaging.GroupListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity" />
         </activity>
 
     </application>
