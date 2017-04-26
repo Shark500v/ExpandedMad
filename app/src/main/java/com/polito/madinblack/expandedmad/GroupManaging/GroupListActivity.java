@@ -59,21 +59,6 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        /*
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //qui bisogna aggiungere un nuovo gruppo, in questo momento lo faccio nel modo semplice
-                //devo notificare la vista che qualcosa è cambiato
-                RecyclerView recyclerView = (RecyclerView)findViewById(R.id.group_list);
-                recyclerView.getAdapter().notifyDataSetChanged();   //rendo visibili le modifiche apportate
-                //questo stampa al fondo la scritta
-                Snackbar.make(view, "New Group added!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-            }
-        });
-        */
-
         //le righe di codice di sotto servono al drower laterale che compare
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -83,6 +68,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener((NavigationView.OnNavigationItemSelectedListener) this);
 
+        //Firebase integration
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference("Users");
         mFirebaseDatabase.getReference("AppName").setValue("MadExpense");

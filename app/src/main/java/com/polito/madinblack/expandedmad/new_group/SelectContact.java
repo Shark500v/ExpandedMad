@@ -23,6 +23,7 @@ import java.util.List;
 public class SelectContact extends AppCompatActivity {
 
     List<SelectUser> groupM = new ArrayList<>();
+    List<SelectUser> invite = new ArrayList<>();    //used to invite new membres to join the app
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,9 +75,31 @@ public class SelectContact extends AppCompatActivity {
                 Snackbar.make(mv, "Please, select at least one member!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 return true;
             }else{
-                Intent intent1=new Intent(SelectContact.this, NewGroup.class);
-                intent1.putExtra("Group Members", (Serializable) groupM);
-                startActivity(intent1);
+                //prima di lanciare la nuova activity devo verificare che tutti i contatti selezionati facciano parte dell'applicazione
+
+                /*
+                *   verifica contatti e riempo la lista degli invite!
+                * */
+
+                //se acuni contatti non sono presenti dentro il DB allora li devo invitare
+
+                invite.addAll(groupM);  //funzione di prova
+
+                if(invite.isEmpty()){
+                    //se la lista è vuota non ci sono inviti da fare e posso andare oltre, altrimenti devo procedere ad invitare le persone mancanti prima di creare il gruppo
+                    Intent intent1=new Intent(SelectContact.this, NewGroup.class);
+                    intent1.putExtra("Group Members", (Serializable) groupM);
+                    startActivity(intent1);
+                }else{
+                    //invito le persone che non sono ancora nel DB
+                    Bundle arguments = new Bundle();
+                    arguments.putSerializable("invite", (Serializable) invite);
+                    InviteContact fragment = new InviteContact();
+                    fragment.setArguments(arguments);
+                    fragment.show(getSupportFragmentManager(), "InviteContacts");
+                }
+
+
             }
         }
         return super.onOptionsItemSelected(item);
