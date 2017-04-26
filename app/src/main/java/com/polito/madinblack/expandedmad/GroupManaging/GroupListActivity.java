@@ -124,10 +124,6 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             mAdapter = new SimpleItemRecyclerViewAdapter(this, mUserGroupsReference);
             ((RecyclerView) recyclerView).setAdapter(mAdapter);
         }
-
-
-
-
     }
 
     @Override
@@ -137,9 +133,6 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         // Clean up comments listener
         if(mAdapter!=null)
             mAdapter.cleanupListener();
-
-
-
     }
 
 

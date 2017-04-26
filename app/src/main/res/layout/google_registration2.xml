@@ -3,7 +3,6 @@
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorAccentLight6"
     android:orientation="vertical"
     android:weightSum="4">
 
@@ -28,9 +27,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:textSize="20sp"
-            android:text="@string/mad_title_text"
-             />
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="20dp"
+            android:text="@string/mad_title_text" />
 
         <TextView
             android:id="@+id/status"
@@ -41,9 +40,8 @@
             android:maxLines="5"
             android:padding="4dp"
             android:scrollbars="vertical"
-            android:textSize="14sp"
-            android:text="@string/signed_out"
-           />
+            android:textSize="14dp"
+            android:text="@string/signed_out" />
 
         <TextView
             android:id="@+id/detail"
@@ -73,9 +71,7 @@
             android:inputType="phone"
             android:visibility="gone"
             tools:visibility="visible"
-            tools:text="+39 333 22 88 521"
-
-            />
+            tools:text="+39 333 22 88 521" />
 
 
     </LinearLayout>
@@ -101,9 +97,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:visibility="gone"
-            android:text="@string/confirm"
-
-            />
+            android:text="@string/confirm" />
 
 
         <LinearLayout
