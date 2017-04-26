@@ -60,7 +60,7 @@ public class TabView extends AppCompatActivity {
 
         Intent beginner = getIntent();
         groupSelected = ma.getSingleGroup(Long.valueOf(beginner.getStringExtra("index"))); //recupero l'id del gruppo selezionato, e quindi il gruppo stesso
-        eItem = groupSelected.getExpenses();
+        //eItem = groupSelected.getExpenses();
         index = beginner.getStringExtra("index");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
