@@ -37,8 +37,7 @@
                 android:layout_marginBottom="16dp"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:text="@string/mad_title_text"
-                 />
+                android:text="@string/mad_title_text" />
 
             <TextView
                 android:id="@+id/status"
