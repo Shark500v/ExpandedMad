@@ -151,35 +151,13 @@ public class Expense {
 
     public Payment getPayment(Long id){ return userCost.get(id); }
 
-    public Float getMyBalance(){
+    public Double getMyBalance(){
         if(!userCost.containsKey(MyApplication.myself.getId()))
-            return -777f;
+            return -777d;
         return userCost.get(MyApplication.myself.getId()).getBalance();
     }
 
 
-
-    public void addPayment(User user, Float paid, Float toPaid){
-        Payment p = new Payment(user, this, paid, toPaid);
-        userCost.put(user.getId(), p);
-
-        if(paying.getId()==MyApplication.myself.getId() && user.getId()!=MyApplication.myself.getId()){
-            group.uplMyCreditDebit(user, (toPaid-paid));
-        }else if(paying.getId()!=MyApplication.myself.getId() && user.getId()==MyApplication.myself.getId()){
-            group.uplMyCreditDebit(paying, (paid-toPaid));
-        }
-    }
-
-    public void addPayment(Payment p){
-
-        userCost.put(p.getUser().getId(), p);
-
-        if(paying.getId()==MyApplication.myself.getId() && p.getUser().getId()!=MyApplication.myself.getId()){
-            group.uplMyCreditDebit(p.getUser(), (p.getToPaid()-p.getPaid()));
-        }else if(paying.getId()!=MyApplication.myself.getId() && p.getUser().getId()==MyApplication.myself.getId()){
-            group.uplMyCreditDebit(paying, (p.getPaid()-p.getToPaid()));
-        }
-    }
 
     public User getPaying() {
         return paying;
