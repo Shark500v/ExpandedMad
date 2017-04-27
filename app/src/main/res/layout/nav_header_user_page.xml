@@ -29,7 +29,7 @@
         android:layout_below="@id/imageView" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="+39 3891158946"

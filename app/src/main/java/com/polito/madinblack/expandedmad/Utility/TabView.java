@@ -45,13 +45,18 @@ public class TabView extends AppCompatActivity {
 
     private ViewPager mViewPager;
 
-    private static MyApplication ma;
+    private MyApplication ma;
 
     private static String index = "index";
 
     private static Group groupSelected;
 
     private static List<Expense> eItem;    //usato per la lista di spese da mostrare in una delle tre schede a schermo
+
+    private MyBalanceFragment balanceFrag = MyBalanceFragment.newInstance();
+
+    private ExpensesListFragment listFrag = ExpensesListFragment.newInstance();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,16 +122,8 @@ public class TabView extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == RESULT_OK) {
-            /*
-            aggiornare adapter dei frgments
-
-            eItem = groupSelected.getExpenses();
-            setupRecyclerView(recyclerView);
-            recyclerView.setItemAnimator(new DefaultItemAnimator());*/
-        }
-
+        balanceFrag.UpdateAdapter();
+        listFrag.UpdateAdapter();
     }
 
     @Override
@@ -194,6 +191,7 @@ public class TabView extends AppCompatActivity {
     public static class ExpensesListFragment extends Fragment {
 
         RecyclerViewAdapter adapter;
+        RecyclerView recyclerView;
 
         public ExpensesListFragment() {
             // Required empty public constructor
@@ -218,17 +216,17 @@ public class TabView extends AppCompatActivity {
 
             View rootView = inflater.inflate(R.layout.expense_list_fragment, container, false);
 
-            adapter = new RecyclerViewAdapter(getContext(),
-                    FirebaseDatabase.getInstance().getReference().child("users")
-                    .child(ma.myself.getId()).child("groups").child(groupSelected.getId())
-                    .child("expenses")
-                    , index);    //come argomento devo passare la lista di elementi che voglio mostrare a schermo
+            RecyclerViewAdapter adapter = new RecyclerViewAdapter(eItem, index);    //come argomento devo passare la lista di elementi che voglio mostrare a schermo
 
-            RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.expense_list2);
+            recyclerView = (RecyclerView) rootView.findViewById(R.id.expense_list2);
             recyclerView.setAdapter(adapter);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
 
             return rootView;
+        }
+
+        public void UpdateAdapter(){
+            recyclerView.setAdapter(adapter);
         }
 
         @Override
@@ -245,6 +243,7 @@ public class TabView extends AppCompatActivity {
     public static class MyBalanceFragment extends Fragment {
 
         RecyclerViewAdapterUsers adapter;
+        RecyclerView recyclerView;
 
         public MyBalanceFragment() {
             // Required empty public constructor
@@ -274,11 +273,15 @@ public class TabView extends AppCompatActivity {
                             .child(groupSelected.getId()).child("users").
                             child("balance"), groupSelected);
 
-            RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.item_list);
+            recyclerView = (RecyclerView) rootView.findViewById(R.id.item_list);
             recyclerView.setAdapter(adapter);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
 
             return rootView;
+        }
+
+        public void UpdateAdapter(){
+            recyclerView.setAdapter(adapter);
         }
 
         @Override
@@ -308,10 +311,10 @@ public class TabView extends AppCompatActivity {
             //used to instantiate one different fragment for each tabs
             switch (position) {
                 case 0:
-                    return MyBalanceFragment.newInstance();
+                    return balanceFrag;
                 case 1:
                     //return new BlankFragment();
-                    return ExpensesListFragment.newInstance();
+                    return listFrag;
                 case 2:
                     //return new BlankFragment();
                     return PlaceholderFragment.newInstance(position + 1);
