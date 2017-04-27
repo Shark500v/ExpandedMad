@@ -2,6 +2,8 @@ package com.polito.madinblack.expandedmad.new_group;
 
 
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,10 +29,28 @@ public class InviteRecyclerViewAdapter extends RecyclerView.Adapter<InviteRecycl
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.mItem = mValues.get(position);
         holder.mNameView.setText(holder.mItem.getName());
+        mValues.get(position).setEmail("");       //prima di tutto setto le email a null, in modo da poter fare un check dopo
 
+        holder.mContentView.addTextChangedListener( new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String email = s.toString();
+                mValues.get(position).setEmail(email);
+            }
+        });
     }
 
     @Override
@@ -50,7 +70,6 @@ public class InviteRecyclerViewAdapter extends RecyclerView.Adapter<InviteRecycl
             mView = view;
             mNameView = (TextView) view.findViewById(R.id.name_surname);
             mContentView = (EditText) view.findViewById(R.id.input_email);
-
         }
     }
 }
