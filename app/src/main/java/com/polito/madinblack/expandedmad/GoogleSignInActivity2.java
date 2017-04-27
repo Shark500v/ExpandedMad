@@ -71,6 +71,7 @@ public class GoogleSignInActivity2 extends BaseActivity implements
     private EditText mInputInvitationTextView;
 
     private TextInputLayout phoneLayout;
+    private TextInputLayout invitationLayout;
     /*added by Ale*/
     private DatabaseReference mDatabase;
 
@@ -96,6 +97,7 @@ public class GoogleSignInActivity2 extends BaseActivity implements
         mInputInvitationTextView = (EditText)findViewById(R.id.input_invitation);
 
         phoneLayout = (TextInputLayout)findViewById(R.id.telephone_layout);
+        invitationLayout = (TextInputLayout)findViewById(R.id.invitation_layout);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
@@ -326,6 +328,8 @@ public class GoogleSignInActivity2 extends BaseActivity implements
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if(dataSnapshot.exists()){
                         Group.writeUserToGroup(mDatabase, invitationCode, ma.getUserPhoneNumber(), ma.getUserName(), ma.getUserName());
+                        Intent intent = new Intent(GoogleSignInActivity2.this, GroupListActivity.class);
+                        startActivity(intent);
                         finish();
                     }
                     else{
@@ -352,7 +356,10 @@ public class GoogleSignInActivity2 extends BaseActivity implements
 
 
         }else{
+            Intent intent = new Intent(GoogleSignInActivity2.this, GroupListActivity.class);
+            startActivity(intent);
             finish();
+
 
         }
 

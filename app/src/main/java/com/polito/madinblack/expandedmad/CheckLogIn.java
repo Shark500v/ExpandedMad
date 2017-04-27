@@ -88,6 +88,7 @@ public class CheckLogIn extends AppCompatActivity {
                                 ma.setIsPhone(false);
                                 Intent intent = new Intent(CheckLogIn.this, GoogleSignInActivity2.class);
                                 startActivity(intent);
+                                finish();
 
                             }
                         }
@@ -99,7 +100,7 @@ public class CheckLogIn extends AppCompatActivity {
                     };
 
 
-                    mDatabase.child("userId").child(user.getUid()).addValueEventListener(mValueListener);
+                    mDatabase.child("userId").child(user.getUid()).addListenerForSingleValueEvent(mValueListener);
 
 
 
