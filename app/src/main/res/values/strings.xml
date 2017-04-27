@@ -61,6 +61,7 @@
     <string name="mad_title_text">Mad Expense Sign In</string>
     <string name="signed_out">Signed Out</string>
     <string name="desc_firebase_lockup">App logo and name</string>
+    <string name="login">Login with Google</string>
     <string name="confirm">Confirm</string>
     <string name="group_name">Group name</string>
     <string name="sign_in">Sign in</string>
@@ -77,4 +78,5 @@
     <string name="reset">Reset</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="hint_paidby">Paid By</string>
+    <string name="hint_invitation">Invitation code (optional)</string>
 </resources>

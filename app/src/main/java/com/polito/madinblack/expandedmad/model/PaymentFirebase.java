@@ -1,36 +1,30 @@
 package com.polito.madinblack.expandedmad.model;
 
-import android.graphics.drawable.PaintDrawable;
-
-public class Payment {
-
-    private User user;
+public class PaymentFirebase {
+    private String userId;
     private Expense expense;
     private Double paid;
-    private double toPaid;
-    private int weight;
-    private boolean isWeightEnabled;
-    private boolean isModified;
+    private Double toPaid;
 
-    public Payment(User user, Expense expense, Double paid, Double toPaid){
-        this.user               = user;
+    //costruttore per il database
+    public PaymentFirebase(){
+
+    }
+
+    public PaymentFirebase(String userId, Expense expense, Double paid, Double toPaid){
+        this.userId               = userId;
         this.expense            = expense;
         this.paid               = paid;
         this.toPaid             = CostUtil.round(toPaid, 2);
-        this.weight             = 1;
-        this.isWeightEnabled    = false;
-        this.isModified         = false;
     }
 
-    public User getUser() {
-        return user;
+    public String getUser() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(String userId) {
+        this.userId = userId;
     }
-
-
 
     public Expense getExpense() {
         return expense;
@@ -39,34 +33,6 @@ public class Payment {
     public void setExpense(Expense expense) {
         this.expense = expense;
     }
-
-
-
-    public int getWeight() { return weight; }
-
-    public void setWeight(int weight) { this.weight = weight; }
-
-
-
-    public boolean isWeightEnabled() {
-        return isWeightEnabled;
-    }
-
-    public void setWeightEnabled(boolean weightEnabled) {
-        isWeightEnabled = weightEnabled;
-    }
-
-
-
-    public boolean isModified() {
-        return isModified;
-    }
-
-    public void setModified(boolean modified) {
-        isModified = modified;
-    }
-
-
 
 
 
@@ -114,8 +80,4 @@ public class Payment {
 
         return String.format("%.2f",(paid))+"/"+String.format("%.2f",(toPaid));
     }
-
-
-
-
 }
