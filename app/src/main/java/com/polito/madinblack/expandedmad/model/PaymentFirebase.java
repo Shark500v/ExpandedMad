@@ -26,8 +26,6 @@ public class PaymentFirebase {
         this.userId = userId;
     }
 
-
-
     public Expense getExpense() {
         return expense;
     }
