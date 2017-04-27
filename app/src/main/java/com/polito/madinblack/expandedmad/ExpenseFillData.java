@@ -141,6 +141,7 @@ public class ExpenseFillData extends AppCompatActivity {
                 return true;
             }
 
+
             Spinner tag_spinner = (Spinner) findViewById(R.id.tag_spinner);
             String tagS = tag_spinner.getSelectedItem().toString();
             Tag tag = Tag.valueOf(tagS.toUpperCase());
