@@ -68,6 +68,11 @@ public class Group {
 
     public static void writeNewGroup(DatabaseReference mDatabase, String name, List<UserForGroup> usersForGroup) {
 
+        for(UserForGroup userForGroup : usersForGroup) {
+            userForGroup.initializeBalance(usersForGroup);
+        }
+
+
         Group group = new Group(name, usersForGroup);
 
 

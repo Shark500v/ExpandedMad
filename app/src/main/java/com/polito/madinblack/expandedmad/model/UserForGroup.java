@@ -10,7 +10,7 @@ public class UserForGroup {
     private String name;
     private String surname;
     private String id;
-    private List<Balance> balances = new ArrayList<>();
+    private Map<String, Balance> balances = new HashMap<>();
 
     public UserForGroup(){
 
@@ -54,12 +54,25 @@ public class UserForGroup {
         this.id = id;
     }
 
-    public List<Balance> getBalances() {
+    public Map<String, Balance> getBalances() {
         return balances;
     }
 
-    public void setBalances(List<Balance> balances) {
+    public void setBalances(Map<String, Balance> balances) {
         this.balances = balances;
+    }
+
+    public void initializeBalance(List<UserForGroup> usersForGroup){
+
+        for(UserForGroup userForGroup : usersForGroup){
+            if(userForGroup.getId()!=this.getId()){
+                Balance balance = new Balance(userForGroup.getId(), userForGroup.getName(), userForGroup.getSurname(), 0D);
+                balances.put(userForGroup.getId(), balance);
+
+            }
+
+        }
+
     }
 
 }
