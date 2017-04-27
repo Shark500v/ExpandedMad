@@ -107,7 +107,6 @@ public class ExpenseListActivity extends AppCompatActivity {
 
             case R.id.action_debts:
                 //insert here the connection
-
                 return true;
 
             default:
