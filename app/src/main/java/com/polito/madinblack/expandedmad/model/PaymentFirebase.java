@@ -1,8 +1,9 @@
 package com.polito.madinblack.expandedmad.model;
 
 public class PaymentFirebase {
+    private String id;
     private String userId;
-    private Expense expense;
+    private String expenseId;
     private Double paid;
     private Double toPaid;
 
@@ -11,9 +12,9 @@ public class PaymentFirebase {
 
     }
 
-    public PaymentFirebase(String userId, Expense expense, Double paid, Double toPaid){
-        this.userId     = userId;
-        this.expense    = expense;
+    public PaymentFirebase(Payment payment){
+        this.userId     = payment.getUser().getId();
+        this.expense    = payment.getExpenseId();
         this.paid       = paid;
         this.toPaid     = CostUtil.round(toPaid, 2);
     }
@@ -26,15 +27,21 @@ public class PaymentFirebase {
         this.userId = userId;
     }
 
-    public Expense getExpense() {
-        return expense;
+    public String getExpenseId() {
+        return expenseId;
     }
 
-    public void setExpense(Expense expense) {
-        this.expense = expense;
+    public void setExpense(String expenseId) {
+        this.expenseId = expenseId;
     }
 
+    public String getId() {
+        return id;
+    }
 
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public Double getPaid() {
         return paid;

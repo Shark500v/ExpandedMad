@@ -67,18 +67,19 @@ public class Group {
         Group group = new Group(name, users);
 
 
-        DatabaseReference myPostRef = mDatabase.child("groups").push();
-        String groupKey = myPostRef.getKey();
+        DatabaseReference myGroupRef = mDatabase.child("groups").push();
+        String groupKey = myGroupRef.getKey();
 
         group.setId(groupKey);
 
         GroupForUser groupForUser = new GroupForUser(group);
 
-        myPostRef.setValue(group);
+        myGroupRef.setValue(group);
 
         for(String s : users.keySet()) {
             mDatabase.child("users").child(s).child("groups").child(groupKey).setValue(groupForUser);
         }
+
 
 
 

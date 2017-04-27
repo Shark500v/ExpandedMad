@@ -1,8 +1,11 @@
 package com.polito.madinblack.expandedmad.model;
 
+import com.google.firebase.database.DatabaseReference;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 
@@ -17,7 +20,8 @@ public class Expense {
     private String  id;
     private String  name;
     private String  tag;
-    private String  paidBy;
+    private String  paidById;
+    private String  paidByName;
     private Double  cost;
     private String  currencyName;
     private String  currencySymbol;
@@ -29,7 +33,7 @@ public class Expense {
     private String  description;
 
 
-    private Map<String, PaymentFirebase>payments;
+    private Map<String, PaymentFirebase>payments = new HashMap<>();
 
     //a map showing for each user the cost of the Payment
     //private Map<String, Payment> userCost = new HashMap<>();
@@ -38,11 +42,11 @@ public class Expense {
 
     }
 
-    public Expense(String id, String name, String tag, String paidBy, Double cost, String currencyName, String currencySymbol, Long year, Long month, Long day, String description) {
-        this.id = id;
+    public Expense(String name, String tag, String paidById, String paidByName, Double cost, String currencyName, String currencySymbol, String groupId, Long year, Long month, Long day, String description) {
         this.name = name;
         this.tag = tag;
-        this.paidBy = paidBy;
+        this.paidById = paidById;
+        this.paidByName = paidByName;
         this.cost = cost;
         this.currencyName = currencyName;
         this.currencySymbol = currencySymbol;
@@ -52,11 +56,12 @@ public class Expense {
         this.description = description;
     }
 
-    public Expense(String id, String name, String tag, String paidBy, Double cost, String currencyName, String currencySymbol, Long year, Long month, Long day, String description, Map<String, PaymentFirebase> payments) {
-        this.id = id;
+    public Expense(String name, String tag, String paidById, String paidByName, Double cost, String currencyName, String currencySymbol, String groupId, Long year, Long month, Long day, String description, Map<String, PaymentFirebase> payments) {
+
         this.name = name;
         this.tag = tag;
-        this.paidBy = paidBy;
+        this.paidById = paidById;
+        this.paidByName = paidByName;
         this.cost = cost;
         this.currencyName = currencyName;
         this.currencySymbol = currencySymbol;
@@ -91,12 +96,20 @@ public class Expense {
         this.tag = tag;
     }
 
-    public String getPaidBy() {
-        return paidBy;
+    public String getPaidById() {
+        return paidById;
     }
 
-    public void setPaidBy(String paidBy) {
-        this.paidBy = paidBy;
+    public void setPaidById(String paidById) {
+        this.paidById = paidById;
+    }
+
+    public String getPaidByName() {
+        return paidByName;
+    }
+
+    public void setPaidByName(String paidByName) {
+        this.paidByName = paidByName;
     }
 
     public Double getCost() {
@@ -163,12 +176,53 @@ public class Expense {
         this.description = description;
     }
 
-    public Map<String, PaymentFirebase> getPayments() {
-        return payments;
-    }
 
     public void setPayments(Map<String, PaymentFirebase> payments) {
         this.payments = payments;
+    }
+
+
+    public static void writeNewExpense(DatabaseReference mDatabase, String name, String tag, String paidById, String paidByName, Double cost, String currencyName, String currencySymbol, String groupId, Long year, Long month, Long day, String description, List<Payment> paymentList){
+
+        DatabaseReference myExpenseRef = mDatabase.child("expenses").push();
+        String expenseKey = myExpenseRef.getKey();
+
+        Expense expense = new Expense(name, tag, paidById, paidByName, cost, currencyName, currencySymbol, groupId, year, month, day, description);
+        expense.setId(expenseKey);
+        myExpenseRef.setValue(expense);
+
+
+        Map<String, PaymentFirebase> payments = new HashMap<>();
+        DatabaseReference myPaymentRef;
+        String paymentKey;
+
+        for(Payment payment : paymentList){
+
+            myPaymentRef = myExpenseRef.child("payments").push();
+            paymentKey = myPaymentRef.getKey();
+
+            PaymentFirebase paymentFirebase = new PaymentFirebase(payment);
+            paymentFirebase.setId(paymentKey);
+
+            myPaymentRef.setValue(payment);
+
+            ExpenseForUser expenseForUser = new ExpenseForUser(expense, payment.getBalance());
+            mDatabase.child("users").child(payment.getUser().getId()).child("groups").child(groupId).child("expenses").child(expenseKey).setValue(expenseForUser);
+
+
+
+        }
+
+
+
+        mDatabase.child("groups").child(groupId).child("expenses").child(expenseKey).setValue(true);
+
+
+
+
+
+
+
     }
 
 
