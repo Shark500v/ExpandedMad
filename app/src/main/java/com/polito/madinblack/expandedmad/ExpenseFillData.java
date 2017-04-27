@@ -479,7 +479,7 @@ public class ExpenseFillData extends AppCompatActivity {
 
                         List<Payment> payment = new ArrayList<>();
                         for(int i=0;i<users.size();i++){
-                            payment.add(new Payment(users.get(i).getId(),users.get(i).getName(), null, 0.00d, 0.00d));
+                            payment.add(new Payment(users.get(i).getId(), users.get(i).getName(), null, 0D, 0D));
                         }
                         recyclerView.setAdapter(new ExpenseFillData.SimpleItemRecyclerViewAdapter(payment));
                     }
