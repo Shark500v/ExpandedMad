@@ -1,29 +1,29 @@
 package com.polito.madinblack.expandedmad.model;
 
 public class PaymentFirebase {
-    private User user;
+    private String userId;
     private Expense expense;
-    private Float paid;
-    private Float toPaid;
+    private Double paid;
+    private Double toPaid;
 
     //costruttore per il database
     public PaymentFirebase(){
 
     }
 
-    public PaymentFirebase(User user, Expense expense, Float paid, Float toPaid){
-        this.user               = user;
+    public PaymentFirebase(String userId, Expense expense, Double paid, Double toPaid){
+        this.userId               = userId;
         this.expense            = expense;
         this.paid               = paid;
         this.toPaid             = CostUtil.round(toPaid, 2);
     }
 
-    public User getUser() {
-        return user;
+    public String getUser() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(String userId) {
+        this.userId = userId;
     }
 
 
@@ -38,41 +38,41 @@ public class PaymentFirebase {
 
 
 
-    public Float getPaid() {
+    public Double getPaid() {
         return paid;
     }
 
-    public void setPaid(Float paid) {
+    public void setPaid(Double paid) {
         this.paid = paid;
     }
 
-    public Float getToPaid() {
+    public double getToPaid() {
         return toPaid;
     }
 
-    public void setToPaid(Float toPaid) {
+    public void setToPaid(double toPaid) {
 
         this.toPaid = CostUtil.round(toPaid, 2);
     }
 
-    public Float getDebit(){
+    public Double getDebit(){
 
 
         if(paid < toPaid)
             return (toPaid-paid);
         else
-            return 0f;
+            return 0d;
     }
 
-    public Float getCredit(){
+    public Double getCredit(){
         if(paid > toPaid)
             return (paid-toPaid);
         else
-            return 0f;
+            return 0d;
 
     }
 
-    public Float getBalance(){
+    public Double getBalance(){
         return (paid-toPaid);
     }
 

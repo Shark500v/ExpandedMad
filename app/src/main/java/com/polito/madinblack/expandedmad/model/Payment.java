@@ -10,13 +10,13 @@ public class Payment {
 
     private User user;
     private Expense expense;
-    private Float paid;
-    private Float toPaid;
+    private Double paid;
+    private double toPaid;
     private int weight;
     private boolean isWeightEnabled;
     private boolean isModified;
 
-    public Payment(User user, Expense expense, Float paid, Float toPaid){
+    public Payment(User user, Expense expense, Double paid, Double toPaid){
         this.user               = user;
         this.expense            = expense;
         this.paid               = paid;
@@ -73,41 +73,42 @@ public class Payment {
 
 
 
-    public Float getPaid() {
+
+    public Double getPaid() {
         return paid;
     }
 
-    public void setPaid(Float paid) {
+    public void setPaid(Double paid) {
         this.paid = paid;
     }
 
-    public Float getToPaid() {
+    public double getToPaid() {
         return toPaid;
     }
 
-    public void setToPaid(Float toPaid) {
+    public void setToPaid(double toPaid) {
 
         this.toPaid = CostUtil.round(toPaid, 2);
     }
 
-    public Float getDebit(){
+    public Double getDebit(){
 
 
         if(paid < toPaid)
             return (toPaid-paid);
         else
-            return 0f;
+            return 0d;
     }
 
-    public Float getCredit(){
+    public Double getCredit(){
         if(paid > toPaid)
             return (paid-toPaid);
         else
-            return 0f;
+            return 0d;
 
     }
 
-    public Float getBalance(){
+    public Double getBalance(){
         return (paid-toPaid);
     }
 
