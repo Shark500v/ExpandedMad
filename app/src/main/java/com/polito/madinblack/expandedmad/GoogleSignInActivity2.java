@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -58,10 +57,10 @@ public class GoogleSignInActivity2 extends BaseActivity implements
 
     private GoogleApiClient mGoogleApiClient;
     private TextView mStatusTextView;
-
+    private TextView mDetailTextView;
     /*added by Ale*/
     private EditText mTelephoneTextView;
-    private EditText mInputInvitationTextView;
+
     /*added by Ale*/
     private DatabaseReference mDatabase;
 
@@ -82,15 +81,12 @@ public class GoogleSignInActivity2 extends BaseActivity implements
         mStatusTextView = (TextView) findViewById(R.id.status);
         /*added by Ale to insert telephone*/
         mTelephoneTextView = (EditText) findViewById(R.id.telephone);
-        mInputInvitationTextView = (EditText)findViewById(R.id.input_invitation);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
 
         // Button listeners: to change and load only sign in of google and confirm
         findViewById(R.id.sign_in_button).setOnClickListener(this);
-        //findViewById(R.id.sign_out_button).setOnClickListener(this);
-        //findViewById(R.id.disconnect_button).setOnClickListener(this);
         /*added by Ale to confirm telephone number*/
         findViewById(R.id.confirm_number_button).setOnClickListener(this);
 
@@ -107,7 +103,7 @@ public class GoogleSignInActivity2 extends BaseActivity implements
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
-
+        // [START initialize_auth]
         //
         // [END initialize_auth]
 
@@ -307,7 +303,6 @@ public class GoogleSignInActivity2 extends BaseActivity implements
             findViewById(R.id.sign_in_button).setVisibility(View.GONE);
             findViewById(R.id.confirm_number_button).setVisibility(View.VISIBLE);
             findViewById(R.id.telephone).setVisibility(View.VISIBLE);
-            findViewById(R.id.input_invitation).setVisibility(View.VISIBLE);
 
 
         } else {
@@ -320,7 +315,6 @@ public class GoogleSignInActivity2 extends BaseActivity implements
             //findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
             findViewById(R.id.confirm_number_button).setVisibility(View.GONE);
             findViewById(R.id.telephone).setVisibility(View.GONE);
-            findViewById(R.id.input_invitation).setVisibility(View.GONE);
 
 
         }
@@ -339,10 +333,6 @@ public class GoogleSignInActivity2 extends BaseActivity implements
         int i = v.getId();
         if (i == R.id.sign_in_button) {
             signIn();
-        } else if (i == R.id.sign_out_button) {
-            signOut();
-        } else if (i == R.id.disconnect_button) {
-            revokeAccess();
         }
         else if (i == R.id.confirm_number_button) {
             confirmNumber();
