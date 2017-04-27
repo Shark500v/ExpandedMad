@@ -152,9 +152,9 @@ public class ExpenseFillData extends AppCompatActivity {
             String dataS = data.getText().toString();
 
             String [] dayS = dataS.split("/");
-            int day = Integer.parseInt(dayS[0]);
-            int month = Integer.parseInt(dayS[1]);
-            int year = Integer.parseInt(dayS[2]);
+            Long day = Long.parseLong(dayS[0]);
+            Long month = Long.parseLong(dayS[1]);
+            Long year = Long.parseLong(dayS[2]);
 
 
             TextView description = (TextView) findViewById(R.id.input_description);
@@ -175,6 +175,7 @@ public class ExpenseFillData extends AppCompatActivity {
                     year,
                     month,
                     day,
+                    descriptionS,
                     mValues
                     );
             /*
