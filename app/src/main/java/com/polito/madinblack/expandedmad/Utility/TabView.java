@@ -239,8 +239,9 @@ public class TabView extends AppCompatActivity {
             View rootView = inflater.inflate(R.layout.user_list_fragment, container, false);
 
             adapter = new RecyclerViewAdapterUsers(getContext(),
-                    FirebaseDatabase.getInstance().getReference().child("groups").child(groupSelected.getId()).child("members").
-                            child("balance"), groupSelected);    //come argomento devo passare la lista di elementi che voglio mostrare a schermo
+                    FirebaseDatabase.getInstance().getReference().child("groups")
+                            .child(groupSelected.getId()).child("users").
+                            child("balance"), groupSelected);
 
             RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.item_list);
             recyclerView.setAdapter(adapter);
