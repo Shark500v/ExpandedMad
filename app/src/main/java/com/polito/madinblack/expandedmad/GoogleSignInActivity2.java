@@ -33,6 +33,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity;
+import com.polito.madinblack.expandedmad.model.Group;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.User;
 
@@ -66,6 +67,7 @@ public class GoogleSignInActivity2 extends BaseActivity implements
     private DatabaseReference mDatabase;
 
     private String phoneNumber;
+    private String invitationCode;
 
     private MyApplication ma;
 
@@ -282,8 +284,15 @@ public class GoogleSignInActivity2 extends BaseActivity implements
     private void confirmNumber() {
         /*confirm number and add user detail*/
         phoneNumber = mTelephoneTextView.getText().toString();
+        invitationCode = mInputInvitationTextView.getText().toString();
+
         User.writeNewUser(mDatabase, ma.getFirebaseId(), ma.getUserName(),  ma.getUserSurname(), phoneNumber, ma.getUserEmail());
         mDatabase.child("userId").child(ma.getFirebaseId()).setValue(phoneNumber);
+
+        if(invitationCode!=null && invitationCode!=""){
+            Group.writeUserToGroup(mDatabase, invitationCode, ma.getUserPhoneNumber(), ma.getUserName(), ma.getUserName());
+        }
+
         finish();
         /*
         Intent intent = new Intent(GoogleSignInActivity2.this, GroupListActivity.class);
