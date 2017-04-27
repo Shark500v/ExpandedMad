@@ -45,7 +45,7 @@ public class TabView extends AppCompatActivity {
 
     private ViewPager mViewPager;
 
-    private MyApplication ma;
+    private static MyApplication ma;
 
     private static String index = "index";
 
@@ -193,6 +193,8 @@ public class TabView extends AppCompatActivity {
     //gestisco la lista delle spese nella tab di mezzo
     public static class ExpensesListFragment extends Fragment {
 
+        RecyclerViewAdapter adapter;
+
         public ExpensesListFragment() {
             // Required empty public constructor
         }
@@ -216,13 +218,26 @@ public class TabView extends AppCompatActivity {
 
             View rootView = inflater.inflate(R.layout.expense_list_fragment, container, false);
 
-            RecyclerViewAdapter adapter = new RecyclerViewAdapter(eItem, index);    //come argomento devo passare la lista di elementi che voglio mostrare a schermo
+            adapter = new RecyclerViewAdapter(getContext(),
+                    FirebaseDatabase.getInstance().getReference().child("users")
+                    .child(ma.myself.getId()).child("groups").child(groupSelected.getId())
+                    .child("expenses")
+                    , index);    //come argomento devo passare la lista di elementi che voglio mostrare a schermo
 
             RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.expense_list2);
             recyclerView.setAdapter(adapter);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
 
             return rootView;
+        }
+
+        @Override
+        public void onStop() {
+            super.onStop();
+
+            // Clean up comments listener
+            if(adapter!=null)
+                adapter.cleanupListener();
         }
     }
 
