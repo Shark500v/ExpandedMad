@@ -66,13 +66,6 @@ public class ExpenseListActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //eItem.AddNewExpense();
-                //devo notificare la vista che qualcosa è cambiato
-                //accedo prima alla Recycler View e poi all'Adapter per notificare l'aggiunta
-                //RecyclerView recyclerView = (RecyclerView)findViewById(R.id.expense_list);
-                //recyclerView.getAdapter().notifyItemInserted(recyclerView.getAdapter().getItemCount());
-                //questo stampa al fondo la scritta
-                //Snackbar.make(view, "New Expense added!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 Context c = view.getContext();
                 Intent intent = new Intent(c, ExpenseFillData_2.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
                 intent.putExtra("index", index);    //passo l'indice del gruppo

@@ -82,7 +82,7 @@ public class SelectContact extends AppCompatActivity {
                 * */
 
                 //se acuni contatti non sono presenti dentro il DB allora li devo invitare
-
+                invite.clear();
                 invite.addAll(groupM);  //funzione di prova
 
                 if(invite.isEmpty()){
@@ -94,6 +94,7 @@ public class SelectContact extends AppCompatActivity {
                     //invito le persone che non sono ancora nel DB
                     Bundle arguments = new Bundle();
                     arguments.putSerializable("invite", (Serializable) invite);
+                    arguments.putSerializable("Group Members", (Serializable) groupM);  //lista di utenti già inscritti
                     InviteContact fragment = new InviteContact();
                     fragment.setArguments(arguments);
                     fragment.show(getSupportFragmentManager(), "InviteContacts");

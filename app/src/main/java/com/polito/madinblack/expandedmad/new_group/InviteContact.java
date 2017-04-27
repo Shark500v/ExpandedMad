@@ -2,10 +2,12 @@ package com.polito.madinblack.expandedmad.new_group;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class InviteContact extends DialogFragment {
@@ -38,7 +40,10 @@ public class InviteContact extends DialogFragment {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked OK button
                 //manage here the invitation activity
-
+                Intent intent = new Intent(getContext(), InviteActivity.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
+                intent.putExtra("InviteList", (Serializable) invite);
+                intent.putExtra("Group Members", getArguments().getSerializable("Group Members"));
+                startActivity(intent);
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

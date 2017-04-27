@@ -106,16 +106,6 @@
         </activity>
 
         <activity
-            android:name=".ExpenseFillData"
-            android:label="Add New Expense"
-            android:parentActivityName=".ExpenseListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.polito.madinblack.expandedmad.ExpenseListActivity" />
-        </activity>
-
-        <activity
             android:name=".ExpenseFillData_2"
             android:label="Add New Expense"
             android:parentActivityName=".ExpenseListActivity"
@@ -157,6 +147,16 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity" />
+        </activity>
+
+        <activity
+            android:name=".new_group.InviteActivity"
+            android:label="Invite New Contacts"
+            android:parentActivityName=".new_group.SelectContact"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.polito.madinblack.expandedmad.new_group.SelectContact" />
         </activity>
 
     </application>

@@ -39,6 +39,7 @@
     <string name="how">How much?</string>
     <string name="partition">Partition</string>
     <string name="hint_title">Expense Name *</string>
+    <string name="hint_email">name.surname@gmail.com</string>
     <string name="hint_amount">Amount *</string>
     <string name="hint_paidBy">Paid By</string>
     <string name="hint_date">Date</string>
