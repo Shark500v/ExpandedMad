@@ -12,10 +12,10 @@ public class PaymentFirebase {
     }
 
     public PaymentFirebase(String userId, Expense expense, Double paid, Double toPaid){
-        this.userId               = userId;
-        this.expense            = expense;
-        this.paid               = paid;
-        this.toPaid             = CostUtil.round(toPaid, 2);
+        this.userId     = userId;
+        this.expense    = expense;
+        this.paid       = paid;
+        this.toPaid     = CostUtil.round(toPaid, 2);
     }
 
     public String getUser() {
