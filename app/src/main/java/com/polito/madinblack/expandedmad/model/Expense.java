@@ -14,19 +14,19 @@ public class Expense {
     public enum Currency{YEN, EURO, DOLLAR, GBP}
     */
 
-    private String id;
-    private String name;
-    private String tag;
-    private String paidBy;
-    private Double cost;
-    private String currencyName;
-    private String currencySymbol;
+    private String  id;
+    private String  name;
+    private String  tag;
+    private String  paidBy;
+    private Double  cost;
+    private String  currencyName;
+    private String  currencySymbol;
     //private String state
-    private String groupId;
-    private Long year;
-    private Long month;
-    private Long day;
-    private String description;
+    private String  groupId;
+    private Long    year;
+    private Long    month;
+    private Long    day;
+    private String  description;
 
 
 
