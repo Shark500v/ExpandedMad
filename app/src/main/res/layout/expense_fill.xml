@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
@@ -24,154 +25,227 @@
         android:layout_height="match_parent"
         android:fillViewport="true">
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
-        android:orientation="vertical"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp">
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/input_layout_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/input_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:hint="@string/hint_title" />
-        </android.support.design.widget.TextInputLayout>
-
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/input_layout_amount"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="?attr/actionBarSize"
+            android:orientation="vertical"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp">
+
+            <FrameLayout
                 android:layout_width="wrap_content"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/expense_proof"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:src="@drawable/scontrino"
+                    android:scaleType="centerCrop"
+                    app:civ_border_width="2dp"
+                    app:civ_border_color="#EEEEEE"/>
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="bottom|end"
+                    android:background="@drawable/color"
+                    android:onClick="uploadPhoto"/>
+            </FrameLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_title"
+                android:paddingTop="10dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:id="@+id/input_amount"
+                    android:id="@+id/input_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:hint="@string/hint_amount" />
+                    android:maxLines="1"
+                    android:hint="@string/hint_title" />
             </android.support.design.widget.TextInputLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/currency"
-                android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:textAppearance="?attr/textAppearanceListItem"
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="5dp"
-                android:text="EUR"/>
-
-        </LinearLayout>
+                    <EditText
+                        android:id="@+id/input_amount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:hint="@string/hint_amount" />
+                </android.support.design.widget.TextInputLayout>
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/currency"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="5dp"
+                    android:text="EUR"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/hint_paidby"
-                android:layout_marginRight="5dp"
-                android:layout_marginLeft="6dp"
-                android:layout_gravity="center_vertical"/>
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/input_layout_paidBy"
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <Spinner
-                    android:id="@+id/paidBy_spinner"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="13dp"
-                    android:layout_marginBottom="13dp" />
-            </android.support.design.widget.TextInputLayout>
-        </LinearLayout>
+                    android:text="@string/hint_paidBy"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginLeft="6dp"
+                    android:layout_gravity="center_vertical"/>
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_paidBy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/paidBy"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:enabled="false"
+                        android:inputType="none"
+                        android:gravity="center_horizontal"
+                        android:text="@string/me"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+                    <!--<Spinner
+                        android:id="@+id/paidBy_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="13dp"
+                        android:layout_marginBottom="13dp" />-->
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/tag"
-                android:layout_marginRight="26dp"
-                android:layout_marginLeft="6dp"
-                android:layout_gravity="center_vertical"/>
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/input_layout_tag"
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <Spinner
-                    android:id="@+id/tag_spinner"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="13dp"
-                    android:layout_marginBottom="13dp"
-                    android:entries="@array/tags" />
-            </android.support.design.widget.TextInputLayout>
-        </LinearLayout>
+                    android:text="@string/hint_date"
+                    android:layout_marginRight="21dp"
+                    android:layout_marginLeft="6dp"
+                    android:layout_gravity="center_vertical"/>
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/input_layout_date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+                    <!-- da cambiare -->
+                    <EditText
+                        android:id="@+id/input_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:gravity="center_horizontal"
+                        android:onClick="showDataPicker"/>
+                    <!--<TextView
+                        android:id="@+id/input_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:onClick="showDataPicker"/>-->
+                </android.support.design.widget.TextInputLayout>
 
-            <TextView
-                android:id="@+id/input_date"
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tag"
+                    android:layout_marginRight="26dp"
+                    android:layout_marginLeft="6dp"
+                    android:layout_gravity="center_vertical"/>
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_tag"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <Spinner
+                        android:id="@+id/tag_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="13dp"
+                        android:layout_marginBottom="13dp"
+                        android:entries="@array/tags" />
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_reset"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:text="@string/reset"
+                android:background="@android:color/transparent"
+                android:layout_gravity="end"
+                android:textColor="@color/colorPrimary"
+                android:onClick="resetPayment"/>
+
+            <android.support.v4.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:onClick="showDataPicker"/>
-        </android.support.design.widget.TextInputLayout>
+                android:scrollbars="none">
 
-        <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/users_list"
-            android:name="com.polito.madinblack.expandedmad.ExpenseFillData"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layoutManager="LinearLayoutManager"
-            tools:context="com.polito.madinblack.expandedmad.GroupManaging.ExpenseFillData"
-            tools:listitem="@layout/user_for_new_expense" />
+                <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    xmlns:tools="http://schemas.android.com/tools"
+                    android:id="@+id/users_list"
+                    android:name="com.polito.madinblack.expandedmad.ExpenseFillData"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layoutManager="LinearLayoutManager"
+                    tools:context="com.polito.madinblack.expandedmad.GroupManaging.ExpenseFillData"
+                    tools:listitem="@layout/user_for_new_expense" />
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/input_layout_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/input_description"
+            </android.support.v4.widget.NestedScrollView>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/input_layout_description"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:inputType="textMultiLine"
-                android:gravity="top"
-                android:paddingTop="10dp"
-                android:paddingLeft="10dp"
-                android:hint="@string/hint_description"
-                android:background="@layout/rounded_border_edittext"/>
-        </android.support.design.widget.TextInputLayout>
+                android:layout_height="wrap_content">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            />
+                <EditText
+                    android:id="@+id/input_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:inputType="textMultiLine"
+                    android:gravity="top"
+                    android:paddingTop="10dp"
+                    android:paddingLeft="10dp"
+                    android:hint="@string/hint_description"
+                    android:background="@layout/rounded_border_edittext"/>
+            </android.support.design.widget.TextInputLayout>
 
-    </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                />
+
+        </LinearLayout>
 
     </ScrollView>
 </RelativeLayout>
