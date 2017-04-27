@@ -4,17 +4,17 @@ import android.graphics.drawable.PaintDrawable;
 
 public class Payment {
 
-    private User user;
-    private Expense expense;
+    private String userName;
+    private String expenseId;
     private Double paid;
     private double toPaid;
     private int weight;
     private boolean isWeightEnabled;
     private boolean isModified;
 
-    public Payment(User user, Expense expense, Double paid, Double toPaid){
-        this.user               = user;
-        this.expense            = expense;
+    public Payment(String userName, String expenseId, Double paid, Double toPaid){
+        this.userName           = userName;
+        this.expenseId          = expenseId;
         this.paid               = paid;
         this.toPaid             = CostUtil.round(toPaid, 2);
         this.weight             = 1;
@@ -22,22 +22,22 @@ public class Payment {
         this.isModified         = false;
     }
 
-    public User getUser() {
-        return user;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
 
 
-    public Expense getExpense() {
-        return expense;
+    public String getExpenseId() {
+        return expenseId;
     }
 
-    public void setExpense(Expense expense) {
-        this.expense = expense;
+    public void setExpenseId(String expenseId) {
+        this.expenseId = expenseId;
     }
 
 

@@ -17,7 +17,9 @@ public class Expense {
     private String  id;
     private String  name;
     private String  tag;
-    private String  paidBy;
+    private String  paidByName;
+    private String  paidBySurname;
+    private String  paidById;
     private Double  cost;
     private String  currencyName;
     private String  currencySymbol;
@@ -38,11 +40,12 @@ public class Expense {
 
     }
 
-    public Expense(String id, String name, String tag, String paidBy, Double cost, String currencyName, String currencySymbol, Long year, Long month, Long day, String description) {
-        this.id = id;
+    public Expense(String name, String tag, String paidByName, String paidBySurname, String paidById, Double cost, String currencyName, String currencySymbol, Long year, Long month, Long day, String description) {
         this.name = name;
         this.tag = tag;
-        this.paidBy = paidBy;
+        this.paidByName = paidByName;
+        this.paidBySurname = paidBySurname;
+        this.paidById = paidById;
         this.cost = cost;
         this.currencyName = currencyName;
         this.currencySymbol = currencySymbol;
@@ -52,11 +55,13 @@ public class Expense {
         this.description = description;
     }
 
-    public Expense(String id, String name, String tag, String paidBy, Double cost, String currencyName, String currencySymbol, Long year, Long month, Long day, String description, Map<String, PaymentFirebase> payments) {
+    public Expense(String id, String name, String tag, String paidByName, String paidBySurname, String paidById, Double cost, String currencyName, String currencySymbol, Long year, Long month, Long day, String description, Map<String, PaymentFirebase> payments) {
         this.id = id;
         this.name = name;
         this.tag = tag;
-        this.paidBy = paidBy;
+        this.paidByName = paidByName;
+        this.paidBySurname = paidBySurname;
+        this.paidById = paidById;
         this.cost = cost;
         this.currencyName = currencyName;
         this.currencySymbol = currencySymbol;
@@ -91,12 +96,28 @@ public class Expense {
         this.tag = tag;
     }
 
-    public String getPaidBy() {
-        return paidBy;
+    public String getPaidByName() {
+        return paidByName;
     }
 
-    public void setPaidBy(String paidBy) {
-        this.paidBy = paidBy;
+    public void setPaidByName(String paidByName) {
+        this.paidByName = paidByName;
+    }
+
+    public String getPaidBySurname() {
+        return paidBySurname;
+    }
+
+    public void setPaidBySurname(String paidBySurname) {
+        this.paidBySurname = paidBySurname;
+    }
+
+    public String getPaidById() {
+        return paidById;
+    }
+
+    public void setPaidById(String paidById) {
+        this.paidById = paidById;
     }
 
     public Double getCost() {

@@ -24,7 +24,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.polito.madinblack.expandedmad.model.Expense;
-import com.polito.madinblack.expandedmad.model.Expense.Tag;
 import com.polito.madinblack.expandedmad.model.Group;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.User;
@@ -71,7 +70,7 @@ public class ExpenseFillData_2 extends AppCompatActivity {
         groupSelected = ma.getSingleGroup(Long.valueOf(beginner.getStringExtra("index"))); //recupero l'id del gruppo selezionato, e quindi il gruppo stesso
         groupID = beginner.getStringExtra("index");   //id del gruppo, che devo considerare
 
-        users = new ArrayList<>(groupSelected.getUsers2());
+        //users = new ArrayList<>(groupSelected.getUsers2());
         userCost = new HashMap<>();
 
         showDate(new Date());
@@ -86,7 +85,7 @@ public class ExpenseFillData_2 extends AppCompatActivity {
 
     private void populateSpinner() {
         // you need to have a list of data that you want the spinner to display
-        List<String> spinnerArray =  new ArrayList<String>();
+        /*List<String> spinnerArray =  new ArrayList<String>();
         Iterator<User> us = groupSelected.getUsers2().iterator();
         while(us.hasNext()) {
             User u = us.next();
@@ -97,7 +96,7 @@ public class ExpenseFillData_2 extends AppCompatActivity {
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         Spinner sItems = (Spinner) findViewById(R.id.paidBy_spinner);
-        sItems.setAdapter(adapter);
+        sItems.setAdapter(adapter);*/
     }
 
     @Override
@@ -145,11 +144,9 @@ public class ExpenseFillData_2 extends AppCompatActivity {
 
             Spinner inputPaidBy = (Spinner) findViewById(R.id.paidBy_spinner);
             int index = inputPaidBy.getSelectedItemPosition();
-            User userSelect = groupSelected.getUsers2().get(index);
 
             Spinner tag_spinner = (Spinner) findViewById(R.id.tag_spinner);
             String tagS = tag_spinner.getSelectedItem().toString();
-            Tag tag = Tag.valueOf(tagS.toUpperCase());
 
             TextView data = (TextView) findViewById(R.id.input_date);
             String dataS = data.getText().toString();
@@ -173,7 +170,7 @@ public class ExpenseFillData_2 extends AppCompatActivity {
 
             }
 
-            Expense newExpense = new Expense(title, tag, amount, descriptionS, Expense.Currency.EURO, groupSelected, userSelect, year, month, day);
+            /*Expense newExpense = new Expense(title, tagS, amount, descriptionS, Expense.Currency.EURO, groupSelected, userSelect, year, month, day);
             Iterator<User> userId = users.iterator();
             while(userId.hasNext()){
                 User userI = userId.next();
@@ -183,7 +180,7 @@ public class ExpenseFillData_2 extends AppCompatActivity {
                     newExpense.addPayment(userI, 0f, amount/users.size());
 
             }
-            groupSelected.addExpense(newExpense);
+            groupSelected.addExpense(newExpense);*/
 
 
 

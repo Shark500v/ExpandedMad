@@ -3,9 +3,13 @@ package com.polito.madinblack.expandedmad.model;
 
 public class ExpenseForUser {
     private String name;
-    private String paidBy;
+    private String paidByName;
+    private String paidBySurname;
+    private String paidById;
     private String id;
     private Double myBalance;
+    private String  currencyName;
+    private String  currencySymbol;
 
 
     public ExpenseForUser(){
@@ -13,9 +17,13 @@ public class ExpenseForUser {
     }
 
     public ExpenseForUser(Expense expense, Double myBalance){
-        this.name       = expense.getName();
-        this.myBalance  = myBalance;
-        this.paidBy     = expense.getPaidBy();
+        this.name           = expense.getName();
+        this.myBalance      = myBalance;
+        this.paidByName     = expense.getPaidByName();
+        this.paidBySurname  = expense.getPaidBySurname();
+        this.paidById       = expense.getPaidById();
+        this.currencyName   = expense.getCurrencyName();
+        this.currencySymbol = expense.getCurrencySymbol();
     }
 
 
@@ -40,13 +48,34 @@ public class ExpenseForUser {
 
 
 
-    public String getPaidBy() {
-        return paidBy;
+    public String getPaidByName() {
+        return paidByName;
     }
 
-    public void setPaidBy(String paidBy) {
-        this.paidBy = paidBy;
+    public void setPaidByName(String paidByName) {
+        this.paidByName = paidByName;
     }
+
+
+
+    public String getPaidBySurname() {
+        return paidBySurname;
+    }
+
+    public void setPaidBySurname(String paidBySurname) {
+        this.paidBySurname = paidBySurname;
+    }
+
+
+
+    public String getPaidById() {
+        return paidById;
+    }
+
+    public void setPaidById(String paidById) {
+        this.paidById = paidById;
+    }
+
 
 
 
@@ -59,6 +88,27 @@ public class ExpenseForUser {
         this.myBalance = myBalance;
     }
 
+
+
+
+    public String getCurrencyName() {
+        return currencyName;
+    }
+
+    public void setCurrencyName(String currencyName) {
+        this.currencyName = currencyName;
+    }
+
+
+
+
+    public String getCurrencySymbol() {
+        return currencySymbol;
+    }
+
+    public void setCurrencySymbol(String currencySymbol) {
+        this.currencySymbol = currencySymbol;
+    }
 
 
 }

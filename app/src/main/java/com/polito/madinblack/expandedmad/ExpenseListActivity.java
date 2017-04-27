@@ -42,7 +42,7 @@ public class ExpenseListActivity extends AppCompatActivity {
 
     private String index = "index";
 
-    private List<Expense> eItem;          //quello che vado a mostrare in questa activity è una lista di spese
+    private List<ExpenseForUser> eItem;          //quello che vado a mostrare in questa activity è una lista di spese
     private Group groupSelected;
 
     @Override
@@ -140,9 +140,9 @@ public class ExpenseListActivity extends AppCompatActivity {
     //questa classe la usa per fare il managing della lista che deve mostrare
     public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<Expense> mValues;
+        private final List<ExpenseForUser> mValues;
 
-        public SimpleItemRecyclerViewAdapter(List<Expense> expenses) {
+        public SimpleItemRecyclerViewAdapter(List<ExpenseForUser> expenses) {
             mValues = expenses;
         }
 
@@ -157,25 +157,25 @@ public class ExpenseListActivity extends AppCompatActivity {
             holder.mItem = mValues.get(position);   //mValues.get(position) rappresenta un singolo elemento della nostra lista di spese
             holder.mIdView.setText(mValues.get(position).getName());
             if(mValues.get(position).getMyBalance()>0) {
-                holder.mContentView.setText(String.format("+%.2f",mValues.get(position).getMyBalance()) + " " + mValues.get(position).getCurrency());
+                holder.mContentView.setText(String.format("+%.2f",mValues.get(position).getMyBalance()) + " " + mValues.get(position).getCurrencySymbol());
                 holder.mContentView.setTextColor(Color.parseColor("#00c200"));
             }else if(mValues.get(position).getMyBalance()<0) {
-                holder.mContentView.setText(String.format("%.2f",mValues.get(position).getMyBalance()) + " " + mValues.get(position).getCurrency());
+                holder.mContentView.setText(String.format("%.2f",mValues.get(position).getMyBalance()) + " " + mValues.get(position).getCurrencySymbol());
                 holder.mContentView.setTextColor(Color.parseColor("#ff0000"));
             }
             else{
-                holder.mContentView.setText(String.format("%.2f",mValues.get(position).getMyBalance()) + " " + mValues.get(position).getCurrency());
+                holder.mContentView.setText(String.format("%.2f",mValues.get(position).getMyBalance()) + " " + mValues.get(position).getCurrencySymbol());
             }
 
             /*code useful to convert in bold only a piece of string*/
             final SpannableStringBuilder str;
 
-            if(mValues.get(position).getPaying().getId()==MyApplication.myself.getId()) {
+            if(mValues.get(position).getPaidById() == MyApplication.myself.getId()) {
                 str = new SpannableStringBuilder("Paid by "+ "You");
                 str.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), "Paid by ".length(), ("Paid by ".length() + "You".length()), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }else {
-                str = new SpannableStringBuilder("Paid by "+ mValues.get(position).getPaying().getName());
-                str.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), "Paid by ".length(), ("Paid by ".length() + mValues.get(position).getPaying().getName().length()), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                str = new SpannableStringBuilder("Paid by "+ mValues.get(position).getPaidByName());
+                str.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), "Paid by ".length(), ("Paid by ".length() + mValues.get(position).getPaidByName().length()), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
             holder.mPaydBy.setText(str);
 
@@ -207,7 +207,7 @@ public class ExpenseListActivity extends AppCompatActivity {
             public final TextView mIdView;
             public final TextView mPaydBy;
             public final TextView mContentView;
-            public Expense mItem;
+            public ExpenseForUser mItem;
 
             public ViewHolder(View view) {
                 super(view);
