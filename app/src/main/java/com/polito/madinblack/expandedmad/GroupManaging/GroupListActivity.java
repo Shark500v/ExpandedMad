@@ -15,6 +15,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -24,6 +25,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +53,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.Inflater;
 
 public class GroupListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -58,6 +61,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
 
     private static final String TAG = "GoogleActivity";
 
+    private TextView tv1, tv2;
 
     private DatabaseReference mGroupsReference;
     private DatabaseReference mUserGroupsReference;
@@ -68,6 +72,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.starting_layoute);
+
         ma = MyApplication.getInstance();   //retrive del DB
 
         mUserGroupsReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber()).child("groups");
@@ -76,21 +81,6 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         //toolbar settings
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        /*
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //qui bisogna aggiungere un nuovo gruppo, in questo momento lo faccio nel modo semplice
-                //devo notificare la vista che qualcosa è cambiato
-                RecyclerView recyclerView = (RecyclerView)findViewById(R.id.group_list);
-                recyclerView.getAdapter().notifyDataSetChanged();   //rendo visibili le modifiche apportate
-                //questo stampa al fondo la scritta
-                Snackbar.make(view, "New Group added!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-            }
-        });
-        */
 
         //le righe di codice di sotto servono al drower laterale che compare
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -109,8 +99,12 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
 
         }
 
-
-
+        //setto nome e cognome nella nav bar
+        View header = navigationView.getHeaderView(0);
+        tv1 = (TextView) header.findViewById(R.id.textView2);
+        tv2 = (TextView) header.findViewById(R.id.textView3);
+        tv1.setText(ma.getUserName() + " " + ma.getUserSurname());
+        tv2.setText(ma.getUserPhoneNumber());
     }
 
     @Override
