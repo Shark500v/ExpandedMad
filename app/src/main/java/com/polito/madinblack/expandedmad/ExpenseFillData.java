@@ -467,7 +467,7 @@ public class ExpenseFillData extends AppCompatActivity {
     private void setupRecyclerView(@NonNull final RecyclerView recyclerView) {
 
         FirebaseDatabase.getInstance().getReference().child("groups").child(groupID)
-                .child("members").addListenerForSingleValueEvent(new ValueEventListener() {
+                .child("users").addListenerForSingleValueEvent(new ValueEventListener() {
 
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
@@ -479,7 +479,7 @@ public class ExpenseFillData extends AppCompatActivity {
 
                         List<Payment> payment = new ArrayList<>();
                         for(int i=0;i<users.size();i++){
-                            payment.add(new Payment(users.get(i).getName(), null, (Double) 0.00, (Double) 0.00));
+                            payment.add(new Payment(users.get(i).getId(), users.get(i).getName(), null, 0D, 0D));
                         }
                         recyclerView.setAdapter(new ExpenseFillData.SimpleItemRecyclerViewAdapter(payment));
                     }

@@ -211,7 +211,7 @@ public class Expense {
         DatabaseReference myPaymentRef;
         String paymentKey;
 
-        for(final Payment payment : paymentList){
+        for(Payment payment : paymentList){
 
             myPaymentRef = myExpenseRef.child("payments").push();
             paymentKey = myPaymentRef.getKey();
