@@ -20,8 +20,9 @@ public class Expense {
     private String  id;
     private String  name;
     private String  tag;
-    private String  paidById;
     private String  paidByName;
+    private String  paidBySurname;
+    private String  paidById;
     private Double  cost;
     private String  currencyName;
     private String  currencySymbol;
@@ -45,8 +46,9 @@ public class Expense {
     public Expense(String name, String tag, String paidById, String paidByName, Double cost, String currencyName, String currencySymbol, String groupId, Long year, Long month, Long day, String description) {
         this.name = name;
         this.tag = tag;
-        this.paidById = paidById;
         this.paidByName = paidByName;
+        this.paidBySurname = paidBySurname;
+        this.paidById = paidById;
         this.cost = cost;
         this.currencyName = currencyName;
         this.currencySymbol = currencySymbol;
@@ -60,8 +62,9 @@ public class Expense {
 
         this.name = name;
         this.tag = tag;
-        this.paidById = paidById;
         this.paidByName = paidByName;
+        this.paidBySurname = paidBySurname;
+        this.paidById = paidById;
         this.cost = cost;
         this.currencyName = currencyName;
         this.currencySymbol = currencySymbol;

@@ -29,14 +29,18 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.polito.madinblack.expandedmad.model.Expense;
 import com.polito.madinblack.expandedmad.model.Group;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.Payment;
 import com.polito.madinblack.expandedmad.model.User;
-import com.polito.madinblack.expandedmad.model.Expense.Tag;
+import com.polito.madinblack.expandedmad.model.UserForGroup;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -55,7 +59,7 @@ public class ExpenseFillData extends AppCompatActivity {
     private String groupID = "index";
     private Group groupSelected;
     private MyApplication ma;
-    private List<User> users;
+    private List<UserForGroup> users;
     private List<Payment> mValues;
     private DatabaseReference databaseReference;
     private EditText inputName, inputAmount;
@@ -93,7 +97,6 @@ public class ExpenseFillData extends AppCompatActivity {
         groupSelected = ma.getSingleGroup(Long.valueOf(beginner.getStringExtra("index"))); //recupero l'id del gruppo selezionato, e quindi il gruppo stesso
         groupID = beginner.getStringExtra("index");   //id del gruppo, che devo considerare
 
-        users = new ArrayList<>(groupSelected.getUsers2());
 
         //this remove focus from edit text when activity starts
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -143,8 +146,7 @@ public class ExpenseFillData extends AppCompatActivity {
 
 
             Spinner tag_spinner = (Spinner) findViewById(R.id.tag_spinner);
-            String tagS = tag_spinner.getSelectedItem().toString();
-            Tag tag = Tag.valueOf(tagS.toUpperCase());
+            String tag = tag_spinner.getSelectedItem().toString();
 
             EditText data = (EditText) findViewById(R.id.input_date);
             String dataS = data.getText().toString();
@@ -158,6 +160,8 @@ public class ExpenseFillData extends AppCompatActivity {
             TextView description = (TextView) findViewById(R.id.input_description);
             String descriptionS = description.getText().toString();
 
+            /*
+            Sarà da chiamare write new payment
             Expense newExpense = new Expense(expenseName, tag, amount, descriptionS, Expense.Currency.EURO, groupSelected, ma.myself, year, month, day);
 
             for(int i=0;i<mValues.size();i++){
@@ -173,7 +177,7 @@ public class ExpenseFillData extends AppCompatActivity {
             }
 
 
-            groupSelected.addExpense(newExpense);
+            groupSelected.addExpense(newExpense);*/
 
             intent = new Intent(this, ExpenseListActivity.class);
             intent.putExtra("index", groupID);
@@ -460,12 +464,31 @@ public class ExpenseFillData extends AppCompatActivity {
                 .append(month).append("/").append(year));
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        List<Payment> payment = new ArrayList<>();
-        for(int i=0;i<users.size();i++){
-            payment.add(new Payment(users.get(i), null, (Double) 0.00, (Double) 0.00));
-        }
-        recyclerView.setAdapter(new ExpenseFillData.SimpleItemRecyclerViewAdapter(payment));
+    private void setupRecyclerView(@NonNull final RecyclerView recyclerView) {
+
+        FirebaseDatabase.getInstance().getReference().child("groups").child(groupID)
+                .child("members").addListenerForSingleValueEvent(new ValueEventListener() {
+
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+                        users.clear();
+                        for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                            UserForGroup user = postSnapshot.getValue(UserForGroup.class);
+                            users.add(user);
+                        }
+
+                        List<Payment> payment = new ArrayList<>();
+                        for(int i=0;i<users.size();i++){
+                            payment.add(new Payment(users.get(i).getName(), null, (Double) 0.00, (Double) 0.00));
+                        }
+                        recyclerView.setAdapter(new ExpenseFillData.SimpleItemRecyclerViewAdapter(payment));
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError firebaseError) {
+                        System.out.println("The read failed: " + firebaseError.getMessage());
+                    }
+                });
     }
 
 
@@ -477,6 +500,7 @@ public class ExpenseFillData extends AppCompatActivity {
         public SimpleItemRecyclerViewAdapter(List<Payment> payments) {
 
             mValues = payments;
+
         }
 
         @Override
@@ -488,7 +512,7 @@ public class ExpenseFillData extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final ExpenseFillData.SimpleItemRecyclerViewAdapter.ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
-            holder.mIdView.setText( holder.mItem.getUser().getName());
+            holder.mIdView.setText( holder.mItem.getUserName());
             onBind = true;
             holder.partition.setText( String.format("%.2f", holder.mItem.getToPaid()));
             onBind = false;

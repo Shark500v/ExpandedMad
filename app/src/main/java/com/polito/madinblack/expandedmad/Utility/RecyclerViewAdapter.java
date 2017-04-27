@@ -40,7 +40,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(final RecyclerViewAdapter.ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);   //mValues.get(position) rappresenta un singolo elemento della nostra lista di spese
         holder.mIdView.setText(mValues.get(position).getName());
-        if(mValues.get(position).getMyBalance()>0) {
+        /*if(mValues.get(position).getMyBalance()>0) {
             holder.mContentView.setText(String.format("+%.2f",mValues.get(position).getMyBalance()) + " " + mValues.get(position).getCurrency());
             holder.mContentView.setTextColor(Color.parseColor("#00c200"));
         }else if(mValues.get(position).getMyBalance()<0) {
@@ -50,11 +50,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         else{
             holder.mContentView.setText(String.format("%.2f",mValues.get(position).getMyBalance()) + " " + mValues.get(position).getCurrency());
         }
-
-        if(mValues.get(position).getPaying().getId()== MyApplication.myself.getId())
+        */
+        if(mValues.get(position).getPaidById()== MyApplication.myself.getId())
             holder.mPaydBy.setText("Paid by: You");
         else
-            holder.mPaydBy.setText("Paid by: " + mValues.get(position).getPaying().getName());
+            holder.mPaydBy.setText("Paid by: " + mValues.get(position).getPaidByName());
 
         //sopra vengono settati i tre campi che costituisco le informazioni di ogni singolo gruppo, tutti pronti per essere mostriti nella gui
 

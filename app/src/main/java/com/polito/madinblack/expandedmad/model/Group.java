@@ -36,7 +36,6 @@ public class Group {
 
 
     private Map<String, Boolean> users = new LinkedHashMap<>();
-    private Map<String, User> users2 = new LinkedHashMap<>();
 
     private Map<String, Boolean> expenses = new LinkedHashMap<>();
 
@@ -166,10 +165,6 @@ public class Group {
     public Map<String, Float> getMyCreditsDebits() {
         return myCreditsDebits;
     }
-
-    public List<User> getUsers2(){ return new ArrayList<>(users2.values());}
-
-
 
 
     /*
