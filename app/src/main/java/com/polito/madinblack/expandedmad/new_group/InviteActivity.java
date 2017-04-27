@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -19,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.polito.madinblack.expandedmad.R;
+import com.polito.madinblack.expandedmad.model.MyApplication;
 
 import java.io.Serializable;
 import java.util.List;
@@ -27,6 +29,9 @@ public class InviteActivity extends AppCompatActivity {
 
     List<SelectUser> invite;
     List<SelectUser> groupM;
+    private MyApplication ma;
+    TaskStackBuilder ts = TaskStackBuilder.create(this);
+    Intent intent1;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +47,7 @@ public class InviteActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        ma = MyApplication.getInstance();
         invite = (List<SelectUser>) getIntent().getSerializableExtra("InviteList");
         groupM = (List<SelectUser>) getIntent().getSerializableExtra("Group Members");
 
@@ -69,11 +75,13 @@ public class InviteActivity extends AppCompatActivity {
                 if(flag){
                     //posso procedere con l'activity successiva, ma prima devo inviare le email
 
+                    intent1 = new Intent(InviteActivity.this, NewGroup.class);
+                    intent1.putExtra("Group Members", (Serializable) groupM);
+
                     sendEmail();
 
-                    Intent intent1=new Intent(InviteActivity.this, NewGroup.class);
-                    intent1.putExtra("Group Members", (Serializable) groupM);
                     startActivity(intent1);
+
                     return true;
                 }else{
                     //devo prima settare tutte le email
@@ -81,7 +89,7 @@ public class InviteActivity extends AppCompatActivity {
                     Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                     // Vibrate for 250 milliseconds
                     v.vibrate(250);
-                    Snackbar.make(mv, "Please, compile all field", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                    Snackbar.make(mv, "Please, compile all fields", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                     return true;
                 }
 
@@ -98,8 +106,8 @@ public class InviteActivity extends AppCompatActivity {
 
     private void sendEmail(){
 
-        String userName = "Alessandro"; //devo passargli il nome dell'utente loggato
-        String code = "8321469"; //devo passargli il codice da inviare nella mail
+        String userName = ma.getUserName() + " " + ma.getUserSurname();         //devo passargli il nome dell'utente loggato
+        String code = "8321469";                //devo passargli il codice da inviare nella mail
         String[] to = new String[invite.size()];//prendo la mail del/dei destinatari
         for(int i=0; i<invite.size();i++) {
             to[i] = invite.get(i).getEmail();
@@ -120,6 +128,7 @@ public class InviteActivity extends AppCompatActivity {
         emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
         emailIntent.putExtra(Intent.EXTRA_TEXT, fromHtml(body));
+
         try {
             startActivity(Intent.createChooser(emailIntent, "Choose an Email client:"));
         }catch (ActivityNotFoundException e){

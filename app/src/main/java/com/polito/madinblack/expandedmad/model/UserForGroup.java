@@ -1,6 +1,8 @@
 package com.polito.madinblack.expandedmad.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class UserForGroup {
@@ -8,8 +10,7 @@ public class UserForGroup {
     private String name;
     private String surname;
     private String id;
-    private Map<String, Double> balance = new HashMap<String, Double>();
-
+    private List<Balance> balances = new ArrayList<>();
 
     public UserForGroup(){
 
@@ -53,12 +54,12 @@ public class UserForGroup {
         this.id = id;
     }
 
-    public Map<String, Double> getBalance() {
-        return balance;
+    public List<Balance> getBalances() {
+        return balances;
     }
 
-    public void setDebts(Map<String, Double> balance) {
-        this.balance = balance;
+    public void setBalances(List<Balance> balances) {
+        this.balances = balances;
     }
 
 }

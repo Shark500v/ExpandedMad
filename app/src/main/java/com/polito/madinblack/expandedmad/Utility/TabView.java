@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
+import com.google.firebase.database.FirebaseDatabase;
 import com.polito.madinblack.expandedmad.ExpenseFillData_2;
 import com.polito.madinblack.expandedmad.GroupManaging.GroupDetailActivity;
 import com.polito.madinblack.expandedmad.GroupManaging.GroupDetailFragment;
@@ -211,6 +212,8 @@ public class TabView extends AppCompatActivity {
     //gestisco la lista delle spese nella tab di mezzo (My Balance)
     public static class MyBalanceFragment extends Fragment {
 
+        RecyclerViewAdapterUsers adapter;
+
         public MyBalanceFragment() {
             // Required empty public constructor
         }
@@ -234,13 +237,24 @@ public class TabView extends AppCompatActivity {
 
             View rootView = inflater.inflate(R.layout.user_list_fragment, container, false);
 
-            RecyclerViewAdapterUsers adapter = new RecyclerViewAdapterUsers(groupSelected.getUsersCreditsDebits(), groupSelected);    //come argomento devo passare la lista di elementi che voglio mostrare a schermo
+            adapter = new RecyclerViewAdapterUsers(getContext(),
+                    FirebaseDatabase.getInstance().getReference().child("groups").child(groupSelected.getId()).child("members").
+                            child("balance"), groupSelected);    //come argomento devo passare la lista di elementi che voglio mostrare a schermo
 
             RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.item_list);
             recyclerView.setAdapter(adapter);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
 
             return rootView;
+        }
+
+        @Override
+        public void onStop() {
+            super.onStop();
+
+            // Clean up comments listener
+            if(adapter!=null)
+                adapter.cleanupListener();
         }
     }
 
