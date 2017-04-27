@@ -1,9 +1,12 @@
 package com.polito.madinblack.expandedmad;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.util.Log;
@@ -33,6 +36,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity;
+import com.polito.madinblack.expandedmad.model.CostUtil;
 import com.polito.madinblack.expandedmad.model.Group;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.User;
@@ -286,10 +290,29 @@ public class GoogleSignInActivity2 extends BaseActivity implements
         phoneNumber = mTelephoneTextView.getText().toString();
         invitationCode = mInputInvitationTextView.getText().toString();
 
+        if(!CostUtil.validateTelFaxNumber(phoneNumber)) {
+            if (expenseName.isEmpty()) {
+                inputLayoutName.setError(getString(R.string.err_msg_title));
+                requestFocus(inputName);
+                return false;
+            } else {
+                inputLayoutName.setErrorEnabled(false);
+            }
+
+
+
+            View mv = findViewById(R.id.title_text);
+            Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            // Vibrate for 250 milliseconds
+            v.vibrate(250);
+            Snackbar.make(mv, "Please, select a valid number!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+        }
+
         User.writeNewUser(mDatabase, ma.getFirebaseId(), ma.getUserName(),  ma.getUserSurname(), phoneNumber, ma.getUserEmail());
         mDatabase.child("userId").child(ma.getFirebaseId()).setValue(phoneNumber);
 
-        if(invitationCode!=null && invitationCode!=""){
+
+        if(invitationCode!=null && invitationCode.isEmpty()){
             Group.writeUserToGroup(mDatabase, invitationCode, ma.getUserPhoneNumber(), ma.getUserName(), ma.getUserName());
         }
 
