@@ -26,7 +26,8 @@ public class Group {
     private String  name;
     private String  id;
     private Long    size;
-    private Long    newExpenses;
+
+
 
     /*
     private Double totPersonalCredit;
@@ -49,14 +50,14 @@ public class Group {
     public Group(String name){
         this.name        = name;
         this.size        = 0L;
-        this.newExpenses = 0L;
+
 
     }
 
     public Group(String name, List<UserForGroup> usersForGroup){
         this.name        = name;
         this.size        = Long.valueOf(usersForGroup.size());
-        this.newExpenses = 0L;
+
 
         for(UserForGroup userForGroup : usersForGroup){
             this.users.put(userForGroup.getId(), userForGroup);
@@ -96,16 +97,38 @@ public class Group {
     }
 
     /*to add single member to a group created yet*/
-    public static void writeUserToGroup(final DatabaseReference mDatabase, final String groupId, final String userId){
+    public static void writeUserToGroup(final DatabaseReference mDatabase, final String groupId, final String userId, final String userName, final String userSurname){
 
-        mDatabase.child("groups").child(groupId).child("users").child(userId).setValue(true);
+
+        mDatabase.child("groups").child(groupId).child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<UserForGroup> userForGroupList = new ArrayList<UserForGroup>();
+                for(DataSnapshot userSnapshot : dataSnapshot.getChildren()){
+                    userForGroupList.add(userSnapshot.getValue(UserForGroup.class));
+                }
+                UserForGroup userForGroup = new UserForGroup(userId, userName, userSurname);
+                userForGroup.initializeBalance(userForGroupList);
+                mDatabase.child("groups").child(groupId).child("users").child(userId).setValue(userForGroup);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
 
         mDatabase.child("groups").child(groupId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    Group group = dataSnapshot.getValue(Group.class);
-                    mDatabase.child("users").child(userId).child("groups").child(groupId).setValue(group);
+                    GroupForUser groupForUser = new GroupForUser(dataSnapshot.getValue(Group.class));
+                    mDatabase.child("users").child(userId).child("groups").child(groupId).setValue(groupForUser);
                 }
 
             }
@@ -119,7 +142,7 @@ public class Group {
 
 
 
-        mDatabase.child("groups/size").runTransaction( new Transaction.Handler(){
+        mDatabase.child("groups").child(groupId).child("size").runTransaction( new Transaction.Handler(){
 
             @Override
             public Transaction.Result doTransaction(MutableData currentData){
@@ -196,7 +219,7 @@ public class Group {
 
     public Long   getSize(){ return size; }
 
-    public Long getNewExpenses() { return newExpenses; }
+
 
     public Map<String, UserForGroup> getUsers() { return users; }
 
@@ -206,7 +229,7 @@ public class Group {
 
     public void   setSize(Long size) { this.size = size; }
 
-    public void   setNewExpenses(Long newExpenses) { this.newExpenses = newExpenses; }
+
 
 
 

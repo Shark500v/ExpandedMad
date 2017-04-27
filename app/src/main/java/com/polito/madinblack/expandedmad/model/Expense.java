@@ -1,6 +1,10 @@
 package com.polito.madinblack.expandedmad.model;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -193,7 +197,7 @@ public class Expense {
     }
 
 
-    public static void writeNewExpense(DatabaseReference mDatabase, String name, String tag, String paidById, String paidByName, String paidBySurname, Double cost, String currencyName, String currencySymbol, String groupId, Long year, Long month, Long day, String description, List<Payment> paymentList){
+    public static void writeNewExpense(DatabaseReference mDatabase, String name, String tag, String paidById, String paidByName, String paidBySurname, Double cost, String currencyName, String currencySymbol, final String groupId, Long year, Long month, Long day, String description, List<Payment> paymentList){
 
         DatabaseReference myExpenseRef = mDatabase.child("expenses").push();
         String expenseKey = myExpenseRef.getKey();
@@ -207,7 +211,7 @@ public class Expense {
         DatabaseReference myPaymentRef;
         String paymentKey;
 
-        for(Payment payment : paymentList){
+        for(final Payment payment : paymentList){
 
             myPaymentRef = myExpenseRef.child("payments").push();
             paymentKey = myPaymentRef.getKey();
@@ -220,19 +224,35 @@ public class Expense {
             ExpenseForUser expenseForUser = new ExpenseForUser(expense, payment.getBalance());
             mDatabase.child("users").child(payment.getUserId()).child("groups").child(groupId).child("expenses").child(expenseKey).setValue(expenseForUser);
 
+            if(payment.getUserId()!=paidById) {
 
+                mDatabase.child("users").child(payment.getUserId()).child("groups").child(groupId).child("newExpenses").runTransaction(new Transaction.Handler() {
+
+                    @Override
+                    public Transaction.Result doTransaction(MutableData currentData) {
+                        if (currentData.getValue() == null) {
+                            //no default value for data, set one
+                            currentData.setValue(1);
+                        } else {
+                            // perform the update operations on data
+                            currentData.setValue((Long) currentData.getValue() + 1);
+                        }
+                        return Transaction.success(currentData);
+                    }
+
+                    @Override
+                    public void onComplete(DatabaseError databaseError,
+                                           boolean committed, DataSnapshot currentData) {
+                        //This method will be called once with the results of the transaction.
+                        //Update remove the user from the group
+                    }
+                });
+
+            }
 
         }
 
-
-
         mDatabase.child("groups").child(groupId).child("expenses").child(expenseKey).setValue(true);
-
-
-
-
-
-
 
     }
 

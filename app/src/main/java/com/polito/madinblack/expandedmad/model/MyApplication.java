@@ -25,8 +25,9 @@ public class MyApplication {
     private static String userName;
     private static String userSurname;
     private static String userEmail;
-    private static Boolean logged;
-    private static Boolean isPhone;
+    private static Boolean logged = false;
+    private static Boolean isPhone = false;
+
 
 
 
@@ -233,4 +234,6 @@ public class MyApplication {
     public static void setFirebaseUser(FirebaseUser firebaseUser) {
         MyApplication.firebaseUser = firebaseUser;
     }
+
+
 }
