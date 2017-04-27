@@ -2,10 +2,6 @@ package com.polito.madinblack.expandedmad.model;
 
 import android.graphics.drawable.PaintDrawable;
 
-/**
- * Created by Ale on 04/04/2017.
- */
-
 public class Payment {
 
     private User user;
