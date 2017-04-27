@@ -64,7 +64,7 @@ public class ExpenseFillData extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private EditText inputName, inputAmount;
     private TextInputLayout inputLayoutName, inputLayoutAmount;
-    private Float amount;
+    private Double amount;
     private String expenseName;
     private boolean onBind;
 
@@ -160,6 +160,23 @@ public class ExpenseFillData extends AppCompatActivity {
             TextView description = (TextView) findViewById(R.id.input_description);
             String descriptionS = description.getText().toString();
 
+            User myself = ma.myself;
+
+            Expense.writeNewExpense(FirebaseDatabase.getInstance().getReference(),
+                    expenseName,
+                    tag,
+                    myself.getId(),
+                    myself.getName(),
+                    myself.getSurname(),
+                    amount,
+                    "Euro",
+                    "€",
+                    groupID,
+                    year,
+                    month,
+                    day,
+                    mValues
+                    );
             /*
             Sarà da chiamare write new payment
             Expense newExpense = new Expense(expenseName, tag, amount, descriptionS, Expense.Currency.EURO, groupSelected, ma.myself, year, month, day);
@@ -335,7 +352,7 @@ public class ExpenseFillData extends AppCompatActivity {
             return false;
         } else {
             try {
-                amount = Float.valueOf(amountS);
+                amount = Double.valueOf(amountS);
             } catch (NumberFormatException ex) {
                 inputLayoutAmount.setError(getString(R.string.err_msg_amount));
                 requestFocus(inputAmount);
@@ -357,10 +374,10 @@ public class ExpenseFillData extends AppCompatActivity {
         boolean enableWeight;
 
         if(inputAmount.getText().toString().equals("")){
-            amount = 0f;
+            amount = 0d;
             enableWeight = false;
         }else{
-            amount = Float.parseFloat(inputAmount.getText().toString());
+            amount = Double.parseDouble(inputAmount.getText().toString());
             enableWeight = true;
         }
 
@@ -378,7 +395,7 @@ public class ExpenseFillData extends AppCompatActivity {
 
     private void modifyPayment() {
         int totalWeigth = 0;
-        float netAmount = amount;
+        double netAmount = amount;
 
         for(Payment pay:mValues){
             if(pay.isModified()){
@@ -405,14 +422,14 @@ public class ExpenseFillData extends AppCompatActivity {
         int totalWeigth = 0;
 
         if(value.equals("")){
-            amount = 0f;
+            amount = 0d;
             enableWeight = false;
         }else{
-            amount = Float.parseFloat(value);
+            amount = Double.parseDouble(value);
             enableWeight = true;
         }
 
-        float netAmount = amount;
+        double netAmount = amount;
 
         for(Payment pay:mValues){
             if(pay.isModified()){
