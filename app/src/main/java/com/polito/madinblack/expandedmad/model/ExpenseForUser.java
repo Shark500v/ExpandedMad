@@ -4,7 +4,7 @@ package com.polito.madinblack.expandedmad.model;
 public class ExpenseForUser {
     private String name;
     private String paidBy;
-    private Long id;
+    private String id;
     private Double myBalance;
 
 
@@ -12,10 +12,10 @@ public class ExpenseForUser {
 
     }
 
-    public ExpenseForUser(Expense expense){
+    public ExpenseForUser(Expense expense, Double myBalance){
         this.name       = expense.getName();
-        this.myBalance  = expense.getMyBalance();
-        this.paidBy     = expense.getPaying().getName();
+        this.myBalance  = myBalance;
+        this.paidBy     = expense.getPaidBy();
     }
 
 
@@ -29,11 +29,11 @@ public class ExpenseForUser {
 
 
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
