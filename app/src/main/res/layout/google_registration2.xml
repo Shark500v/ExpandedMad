@@ -63,6 +63,7 @@
                     android:maxLines="1"
                     android:gravity="center"
                     android:visibility="gone"
+                    android:inputType="phone"
                     tools:visibility="visible"
                     android:hint="@string/hint_phonenumber" />
             </android.support.design.widget.TextInputLayout>
