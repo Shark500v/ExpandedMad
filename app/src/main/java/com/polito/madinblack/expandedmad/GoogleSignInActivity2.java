@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -290,38 +291,72 @@ public class GoogleSignInActivity2 extends BaseActivity implements
                 });
     }
 
+    private void requestFocus(View view) {
+        if (view.requestFocus()) {
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }
+    }
+
     private void confirmNumber() {
         /*confirm number and add user detail*/
         phoneNumber = mTelephoneTextView.getText().toString();
         invitationCode = mInputInvitationTextView.getText().toString();
 
         if(!CostUtil.validateTelFaxNumber(phoneNumber)) {
-            if (expenseName.isEmpty()) {
-                inputLayoutName.setError(getString(R.string.err_msg_title));
-                requestFocus(inputName);
-                return false;
-            } else {
-                inputLayoutName.setErrorEnabled(false);
-            }
-
-
-
-            View mv = findViewById(R.id.title_text);
+            phoneLayout.setError(getString(R.string.err_msg_telephone));
+            requestFocus(mTelephoneTextView);
             Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
             // Vibrate for 250 milliseconds
             v.vibrate(250);
-            Snackbar.make(mv, "Please, select a valid number!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            return;
+        }else {
+            phoneLayout.setErrorEnabled(false);
         }
+
+        ma.setUserPhoneNumber(phoneNumber);
 
         User.writeNewUser(mDatabase, ma.getFirebaseId(), ma.getUserName(),  ma.getUserSurname(), phoneNumber, ma.getUserEmail());
         mDatabase.child("userId").child(ma.getFirebaseId()).setValue(phoneNumber);
 
 
-        if(invitationCode!=null && invitationCode.isEmpty()){
-            Group.writeUserToGroup(mDatabase, invitationCode, ma.getUserPhoneNumber(), ma.getUserName(), ma.getUserName());
+        if(invitationCode!=null && !invitationCode.isEmpty()){
+
+            mDatabase.child("groups").child(invitationCode).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.exists()){
+                        Group.writeUserToGroup(mDatabase, invitationCode, ma.getUserPhoneNumber(), ma.getUserName(), ma.getUserName());
+                        finish();
+                    }
+                    else{
+                        invitationLayout.setError(getString(R.string.err_msg_invitation));
+                        requestFocus(mInputInvitationTextView);
+                        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                        // Vibrate for 250 milliseconds
+                        v.vibrate(250);
+                        return;
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
+
+
+
+
+
+        }else{
+            finish();
+
         }
 
-        finish();
+
         /*
         Intent intent = new Intent(GoogleSignInActivity2.this, GroupListActivity.class);
         startActivity(intent);

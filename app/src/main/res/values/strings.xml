@@ -79,4 +79,6 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="hint_paidby">Paid By</string>
     <string name="hint_invitation">Invitation code (optional)</string>
+    <string name="err_msg_telephone">Invalid telephone number</string>
+    <string name="err_msg_invitation">Invalid invitation code</string>
 </resources>
