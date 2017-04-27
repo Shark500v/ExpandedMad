@@ -140,16 +140,16 @@ public class RecyclerViewAdapterUsers extends RecyclerView.Adapter<RecyclerViewA
     @Override
     public void onBindViewHolder(final RecyclerViewAdapterUsers.ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);                           //singolo utente
-        holder.mIdView.setText(mValues.get(position).getUsaername() + " " +mValues.get(position).getSurname());               //qui visualizzo nome e cognome
+        holder.mIdView.setText(mValues.get(position).getUserName() + " " +mValues.get(position).getUserSurname());               //qui visualizzo nome e cognome
         //qui invece quanto deve o meno
-        if (groupSelected.getMyCreditsDebits().get(mValues.get(position).getUserId())>0){
-            holder.mContentView.setText(String.format("+%.2f", groupSelected.getMyCreditsDebits().get(mValues.get(position).getUserId())));
+        if (mValues.get(position).getBalance()>0){
+            holder.mContentView.setText(String.format("+%.2f", mValues.get(position).getUserId()));
             holder.mContentView.setTextColor(Color.parseColor("#00c200"));
-        }else if(groupSelected.getMyCreditsDebits().get(mValues.get(position).getUserId())<0){
-            holder.mContentView.setText(String.format("%.2f", groupSelected.getMyCreditsDebits().get(mValues.get(position).getUserId())));
+        }else if(mValues.get(position).getBalance()<0){
+            holder.mContentView.setText(String.format("%.2f", mValues.get(position).getUserId()));
             holder.mContentView.setTextColor(Color.parseColor("#ff0000"));
         }else{
-            holder.mContentView.setText(String.format("%.2f", groupSelected.getMyCreditsDebits().get(mValues.get(position).getUserId())));
+            holder.mContentView.setText(String.format("%.2f", mValues.get(position).getUserId()));
         }
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
