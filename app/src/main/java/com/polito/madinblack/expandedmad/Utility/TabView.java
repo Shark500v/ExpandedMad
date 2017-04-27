@@ -113,6 +113,22 @@ public class TabView extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            /*
+            aggiornare adapter dei frgments
+
+            eItem = groupSelected.getExpenses();
+            setupRecyclerView(recyclerView);
+            recyclerView.setItemAnimator(new DefaultItemAnimator());*/
+        }
+
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
