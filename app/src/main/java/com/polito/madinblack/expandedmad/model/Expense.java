@@ -8,57 +8,72 @@ import java.util.Map;
 
 public class Expense {
 
-
+    /*
     public enum State{CONTEST, ACCEPTED}
     public enum Tag{FOOD, WATER_BILL, GAS_BILL, LIGHT_BILL, FLIGHT, HOTEL, FUEL, DRINK, OTHER}
     public enum Currency{YEN, EURO, DOLLAR, GBP}
+    */
 
-    private String name;
-    private Tag tag;
-    private float cost;
-    private String description;
-    private Currency currency;
-    private State state;
-    private Group group;
-    private User paying;
-    private Long id;
+    private String  id;
+    private String  name;
+    private String  tag;
+    private String  paidBy;
+    private Double  cost;
+    private String  currencyName;
+    private String  currencySymbol;
+    //private String state
+    private String  groupId;
+    private Long    year;
+    private Long    month;
+    private Long    day;
+    private String  description;
 
 
-    private int year;
-    private int month;
-    private int day;
 
-
-    private static long counter = 1;
+    private Map<String, PaymentFirebase>payments;
 
     //a map showing for each user the cost of the Payment
-    private Map<String, Payment> userCost = new HashMap<>();
+    //private Map<String, Payment> userCost = new HashMap<>();
 
     public Expense(){
 
     }
 
-    public Expense(String name, Tag tag, float cost, String description, Currency currency, Group group, User paying, int year, int month, int day){
-        this.name        = name;
-        this.tag         = tag;
-        this.cost        = cost;
+    public Expense(String id, String name, String tag, String paidBy, Double cost, String currencyName, String currencySymbol, Long year, Long month, Long day, String description) {
+        this.id = id;
+        this.name = name;
+        this.tag = tag;
+        this.paidBy = paidBy;
+        this.cost = cost;
+        this.currencyName = currencyName;
+        this.currencySymbol = currencySymbol;
+        this.year = year;
+        this.month = month;
+        this.day = day;
         this.description = description;
-        this.currency    = currency;
-        this.group       = group;
-        this.paying      = paying;
-        this.year        = year;
-        this.month       = month;
-        this.day         = day;
-        this.id          = counter++;
-        this.state       = State.ACCEPTED;
-
     }
 
+    public Expense(String id, String name, String tag, String paidBy, Double cost, String currencyName, String currencySymbol, Long year, Long month, Long day, String description, Map<String, PaymentFirebase> payments) {
+        this.id = id;
+        this.name = name;
+        this.tag = tag;
+        this.paidBy = paidBy;
+        this.cost = cost;
+        this.currencyName = currencyName;
+        this.currencySymbol = currencySymbol;
+        this.year = year;
+        this.month = month;
+        this.day = day;
+        this.description = description;
+        this.payments = payments;
+    }
 
+    public String getId() {
+        return id;
+    }
 
-    public void addUserCost(User u, Payment payment){
-        userCost.put(u.getId(), payment);
-
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -69,20 +84,76 @@ public class Expense {
         this.name = name;
     }
 
-    public Tag getTag() {
+    public String getTag() {
         return tag;
     }
 
-    public void setTag(Tag tag) {
+    public void setTag(String tag) {
         this.tag = tag;
     }
 
-    public float getCost() {
+    public String getPaidBy() {
+        return paidBy;
+    }
+
+    public void setPaidBy(String paidBy) {
+        this.paidBy = paidBy;
+    }
+
+    public Double getCost() {
         return cost;
     }
 
-    public void setCost(float cost) {
+    public void setCost(Double cost) {
         this.cost = cost;
+    }
+
+    public String getCurrencyName() {
+        return currencyName;
+    }
+
+    public void setCurrencyName(String currencyName) {
+        this.currencyName = currencyName;
+    }
+
+    public String getCurrencySymbol() {
+        return currencySymbol;
+    }
+
+    public void setCurrencySymbol(String currencySymbol) {
+        this.currencySymbol = currencySymbol;
+    }
+
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
+    public Long getYear() {
+        return year;
+    }
+
+    public void setYear(Long year) {
+        this.year = year;
+    }
+
+    public Long getMonth() {
+        return month;
+    }
+
+    public void setMonth(Long month) {
+        this.month = month;
+    }
+
+    public Long getDay() {
+        return day;
+    }
+
+    public void setDay(Long day) {
+        this.day = day;
     }
 
     public String getDescription() {
@@ -93,48 +164,21 @@ public class Expense {
         this.description = description;
     }
 
-    public Currency getCurrency() {
-        return currency;
+    public Map<String, PaymentFirebase> getPayments() {
+        return payments;
     }
 
-    /*to modify in order to change cost accordly to new currency*/
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
+    public void setPayments(Map<String, PaymentFirebase> payments) {
+        this.payments = payments;
     }
 
-    public State getState() {
-        return state;
+
+    public void addUserCost(User u, Payment payment){
+    //    userCost.put(u.getId(), payment);
+
     }
 
-    public void setState(State state) {
-        this.state = state;
-    }
 
-    public String dateToString(){
-        return day+"/"+month+"/"+year;
-    }
-
-    public int getYear() {
-        return year;
-    }
-
-    public int getMonth() {
-        return month;
-    }
-
-    public int getDay() {
-        return day;
-    }
-
-    public void setYear(int year) { this.year = year; }
-
-    public void setMonth(int month) { this.month = month; }
-
-    public void setDay(int day) { this.day = day; }
-
-    public void setGroup(Group group) { this.group = group; }
-
-    public void setPaying(User user) {this.paying = user; }
 
 
     public static int dateCompare(Expense e1, Expense e2){
@@ -145,26 +189,47 @@ public class Expense {
         return 1;
     }
 
-    public Long getId() {
-        return id;
-    }
 
+
+    /*
     public Payment getPayment(Long id){ return userCost.get(id); }
 
-    public Double getMyBalance(){
+    public Float getMyBalance(){
         if(!userCost.containsKey(MyApplication.myself.getId()))
-            return -777d;
+            return -777f;
         return userCost.get(MyApplication.myself.getId()).getBalance();
     }
 
 
 
-    public User getPaying() {
-        return paying;
+    public void addPayment(User user, Float paid, Float toPaid){
+        Payment p = new Payment(user, this, paid, toPaid);
+        userCost.put(user.getId(), p);
+
+        if(paying.getId()==MyApplication.myself.getId() && user.getId()!=MyApplication.myself.getId()){
+            group.uplMyCreditDebit(user, (toPaid-paid));
+        }else if(paying.getId()!=MyApplication.myself.getId() && user.getId()==MyApplication.myself.getId()){
+            group.uplMyCreditDebit(paying, (paid-toPaid));
+        }
     }
+
+    public void addPayment(Payment p){
+
+        userCost.put(p.getUser().getId(), p);
+
+        if(paying.getId()==MyApplication.myself.getId() && p.getUser().getId()!=MyApplication.myself.getId()){
+            group.uplMyCreditDebit(p.getUser(), (p.getToPaid()-p.getPaid()));
+        }else if(paying.getId()!=MyApplication.myself.getId() && p.getUser().getId()==MyApplication.myself.getId()){
+            group.uplMyCreditDebit(paying, (p.getPaid()-p.getToPaid()));
+        }
+    }
+
+
+
 
     public String toString(){
         return userCost.get(MyApplication.myself.getId()).toString();
     }
+    */
 
 }
