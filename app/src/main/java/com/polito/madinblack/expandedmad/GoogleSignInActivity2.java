@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -67,6 +68,8 @@ public class GoogleSignInActivity2 extends BaseActivity implements
     /*added by Ale*/
     private EditText mTelephoneTextView;
     private EditText mInputInvitationTextView;
+
+    private TextInputLayout phoneLayout;
     /*added by Ale*/
     private DatabaseReference mDatabase;
 
@@ -90,6 +93,8 @@ public class GoogleSignInActivity2 extends BaseActivity implements
         /*added by Ale to insert telephone*/
         mTelephoneTextView = (EditText) findViewById(R.id.telephone);
         mInputInvitationTextView = (EditText)findViewById(R.id.input_invitation);
+
+        phoneLayout = (TextInputLayout)findViewById(R.id.telephone_layout);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
