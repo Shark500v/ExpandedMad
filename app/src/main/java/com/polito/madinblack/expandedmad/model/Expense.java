@@ -43,7 +43,7 @@ public class Expense {
 
     }
 
-    public Expense(String name, String tag, String paidById, String paidByName, Double cost, String currencyName, String currencySymbol, String groupId, Long year, Long month, Long day, String description) {
+    public Expense(String name, String tag, String paidById, String paidByName, String paidBySurname, Double cost, String currencyName, String currencySymbol, String groupId, Long year, Long month, Long day, String description) {
         this.name = name;
         this.tag = tag;
         this.paidByName = paidByName;
@@ -58,7 +58,7 @@ public class Expense {
         this.description = description;
     }
 
-    public Expense(String name, String tag, String paidById, String paidByName, Double cost, String currencyName, String currencySymbol, String groupId, Long year, Long month, Long day, String description, Map<String, PaymentFirebase> payments) {
+    public Expense(String name, String tag, String paidById, String paidByName, String paidBySurname, Double cost, String currencyName, String currencySymbol, String groupId, Long year, Long month, Long day, String description, Map<String, PaymentFirebase> payments) {
 
         this.name = name;
         this.tag = tag;
@@ -113,6 +113,14 @@ public class Expense {
 
     public void setPaidByName(String paidByName) {
         this.paidByName = paidByName;
+    }
+
+    public String getPaidBySurname() {
+        return paidBySurname;
+    }
+
+    public void setPaidBySurname(String paidBySurname) {
+        this.paidBySurname = paidBySurname;
     }
 
     public Double getCost() {
@@ -185,12 +193,12 @@ public class Expense {
     }
 
 
-    public static void writeNewExpense(DatabaseReference mDatabase, String name, String tag, String paidById, String paidByName, Double cost, String currencyName, String currencySymbol, String groupId, Long year, Long month, Long day, String description, List<Payment> paymentList){
+    public static void writeNewExpense(DatabaseReference mDatabase, String name, String tag, String paidById, String paidByName, String paidBySurname, Double cost, String currencyName, String currencySymbol, String groupId, Long year, Long month, Long day, String description, List<Payment> paymentList){
 
         DatabaseReference myExpenseRef = mDatabase.child("expenses").push();
         String expenseKey = myExpenseRef.getKey();
 
-        Expense expense = new Expense(name, tag, paidById, paidByName, cost, currencyName, currencySymbol, groupId, year, month, day, description);
+        Expense expense = new Expense(name, tag, paidById, paidByName, paidBySurname, cost, currencyName, currencySymbol, groupId, year, month, day, description);
         expense.setId(expenseKey);
         myExpenseRef.setValue(expense);
 
@@ -210,7 +218,7 @@ public class Expense {
             myPaymentRef.setValue(payment);
 
             ExpenseForUser expenseForUser = new ExpenseForUser(expense, payment.getBalance());
-            mDatabase.child("users").child(payment.getUser().getId()).child("groups").child(groupId).child("expenses").child(expenseKey).setValue(expenseForUser);
+            mDatabase.child("users").child(payment.getUserId()).child("groups").child(groupId).child("expenses").child(expenseKey).setValue(expenseForUser);
 
 
 

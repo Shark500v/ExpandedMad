@@ -13,10 +13,10 @@ public class PaymentFirebase {
     }
 
     public PaymentFirebase(Payment payment){
-        this.userId     = payment.getUser().getId();
-        this.expense    = payment.getExpenseId();
-        this.paid       = paid;
-        this.toPaid     = CostUtil.round(toPaid, 2);
+        this.userId     = payment.getUserId();
+        this.expenseId  = payment.getExpenseId();
+        this.paid       = CostUtil.round(payment.getPaid(), 2);
+        this.toPaid     = CostUtil.round(payment.getToPaid(), 2);
     }
 
     public String getUser() {

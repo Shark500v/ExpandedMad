@@ -35,12 +35,12 @@ public class Group {
     //image attribute will be combination of url and group id
 
 
-    private Map<String, Boolean> users = new LinkedHashMap<>();
+    private Map<String, UserForGroup> users = new LinkedHashMap<>();
 
     private Map<String, Boolean> expenses = new LinkedHashMap<>();
 
     //map containing how money myself have to paid/received by users. + = received - = give 0 nothing
-    private Map<String, Float> myCreditsDebits = new HashMap<>();
+    //private Map<String, Float> myCreditsDebits = new HashMap<>();
 
     public Group(){
 
@@ -53,17 +53,22 @@ public class Group {
 
     }
 
-    public Group(String name, Map<String, Boolean> users){
+    public Group(String name, List<UserForGroup> usersForGroup){
         this.name        = name;
-        this.size        = Long.valueOf(users.size());
+        this.size        = Long.valueOf(usersForGroup.size());
         this.newExpenses = 0L;
-        this.users       = users;
+
+        for(UserForGroup userForGroup : usersForGroup){
+            this.users.put(userForGroup.getId(), userForGroup);
+        }
+
 
     }
 
-    public static void writeNewGroup(DatabaseReference mDatabase, String name, Map<String, Boolean> users) {
 
-        Group group = new Group(name, users);
+    public static void writeNewGroup(DatabaseReference mDatabase, String name, List<UserForGroup> usersForGroup) {
+
+        Group group = new Group(name, usersForGroup);
 
 
         DatabaseReference myGroupRef = mDatabase.child("groups").push();
@@ -71,12 +76,13 @@ public class Group {
 
         group.setId(groupKey);
 
-        GroupForUser groupForUser = new GroupForUser(group);
-
         myGroupRef.setValue(group);
 
-        for(String s : users.keySet()) {
-            mDatabase.child("users").child(s).child("groups").child(groupKey).setValue(groupForUser);
+
+        GroupForUser groupForUser = new GroupForUser(group);
+
+        for(UserForGroup userForGroup : usersForGroup) {
+            mDatabase.child("users").child(userForGroup.getId()).child("groups").child(groupKey).setValue(groupForUser);
         }
 
 
@@ -139,15 +145,13 @@ public class Group {
 
 
     /*be carrefour: for now do this operation only after add all initial expenses*/
-    public void addExpense(Expense e){
+   // public void addExpense(Expense e){
         //expenses.put(e.getId(), e);
 
-    }
+    //}
 
-    public void addUser(String userId){
-        users.put(userId, true);
-    }
 
+/*
     public List<User> getUsersCreditsDebits (){
 
         List<User> usersCD = new ArrayList<User>();
@@ -165,7 +169,7 @@ public class Group {
     public Map<String, Float> getMyCreditsDebits() {
         return myCreditsDebits;
     }
-
+*/
 
     /*
     public Double getTotCredit() {
@@ -187,9 +191,9 @@ public class Group {
 
     public Long   getSize(){ return size; }
 
-    public Long   getNewExpenses() { return newExpenses; }
+    public Long getNewExpenses() { return newExpenses; }
 
-    public Map<String, Boolean> getUsers(){ return users; }
+    public Map<String, UserForGroup> getUsers() { return users; }
 
     public void   setName(String name) { this.name = name; }
 
@@ -199,7 +203,7 @@ public class Group {
 
     public void   setNewExpenses(Long newExpenses) { this.newExpenses = newExpenses; }
 
-    public void setUsers(Map<String, Boolean> users) { this.users = users; }
+
 
 /*
     public List<Expense> getExpenses() {
@@ -216,6 +220,7 @@ public class Group {
         return expenses.get(id);
     }
     */
+    /*
     public void uplMyCreditDebit(User user, Float debitCredit){
         if(!(myCreditsDebits.containsKey(user.getId()))){
             myCreditsDebits.put(user.getId(), debitCredit);
@@ -225,6 +230,6 @@ public class Group {
         }
 
     }
-
+*/
 
 }

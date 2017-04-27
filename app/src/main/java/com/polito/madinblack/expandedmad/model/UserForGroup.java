@@ -8,7 +8,7 @@ public class UserForGroup {
     private String name;
     private String surname;
     private String id;
-    private Map<String, Double> debts = new HashMap<String, Double>();
+    private Map<String, Double> balance = new HashMap<String, Double>();
 
 
     public UserForGroup(){
@@ -20,6 +20,13 @@ public class UserForGroup {
         this.surname     = user.getSurname();
         this.id          = user.getId();
     }
+
+    public UserForGroup(String id, String name, String surname){
+        this.name        = name;
+        this.surname     = surname;
+        this.id          = id;
+    }
+
 
 
     public String getName() {
@@ -46,12 +53,12 @@ public class UserForGroup {
         this.id = id;
     }
 
-    public Map<String, Double> getDebts() {
-        return debts;
+    public Map<String, Double> getBalance() {
+        return balance;
     }
 
-    public void setDebts(Map<String, Double> debts) {
-        this.debts = debts;
+    public void setDebts(Map<String, Double> balance) {
+        this.balance = balance;
     }
 
 }
