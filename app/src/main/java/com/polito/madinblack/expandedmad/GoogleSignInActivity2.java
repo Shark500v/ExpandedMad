@@ -339,11 +339,11 @@ public class GoogleSignInActivity2 extends BaseActivity implements
         int i = v.getId();
         if (i == R.id.sign_in_button) {
             signIn();
-        } else if (i == R.id.sign_out_button) {
-            signOut();
-        } else if (i == R.id.disconnect_button) {
-            revokeAccess();
-        }
+        }// else if (i == R.id.sign_out_button) {
+        //    signOut();
+        //} else if (i == R.id.disconnect_button) {
+       //     revokeAccess();
+       // }
         else if (i == R.id.confirm_number_button) {
             confirmNumber();
         }
