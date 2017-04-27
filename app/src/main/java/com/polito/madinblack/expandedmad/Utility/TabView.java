@@ -26,6 +26,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.google.firebase.database.FirebaseDatabase;
+import com.polito.madinblack.expandedmad.ExpenseFillData;
 import com.polito.madinblack.expandedmad.ExpenseFillData_2;
 import com.polito.madinblack.expandedmad.GroupManaging.GroupDetailActivity;
 import com.polito.madinblack.expandedmad.GroupManaging.GroupDetailFragment;
@@ -85,9 +86,9 @@ public class TabView extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Context c = view.getContext();
-                Intent intent = new Intent(c, ExpenseFillData_2.class);     //qui setto la nuova attività da mostrare a schermo dopo che clicco
+                Intent intent = new Intent(c, ExpenseFillData.class);     //qui setto la nuova attività da mostrare a schermo dopo che clicco
                 intent.putExtra("index", index);                            //passo l'indice del gruppo
-                c.startActivity(intent);
+                startActivityForResult(intent,1);
             }
         });
 

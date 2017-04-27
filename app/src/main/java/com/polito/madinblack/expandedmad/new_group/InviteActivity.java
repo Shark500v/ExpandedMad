@@ -80,8 +80,6 @@ public class InviteActivity extends AppCompatActivity {
 
                     sendEmail();
 
-                    startActivity(intent1);
-
                     return true;
                 }else{
                     //devo prima settare tutte le email
@@ -130,10 +128,17 @@ public class InviteActivity extends AppCompatActivity {
         emailIntent.putExtra(Intent.EXTRA_TEXT, fromHtml(body));
 
         try {
-            startActivity(Intent.createChooser(emailIntent, "Choose an Email client:"));
+            //startActivity(Intent.createChooser(emailIntent, "Choose an Email client:"));
+            startActivityForResult(Intent.createChooser(emailIntent, "Choose an Email client:"), 1);
         }catch (ActivityNotFoundException e){
             //non ci sono email clients sul telefono
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //lanciata quando l'activity precedente ritorna
+        startActivity(intent1);
     }
 
     @SuppressWarnings("deprecation")
