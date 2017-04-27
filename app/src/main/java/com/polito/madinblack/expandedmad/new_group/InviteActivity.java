@@ -1,8 +1,11 @@
 package com.polito.madinblack.expandedmad.new_group;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -10,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.polito.madinblack.expandedmad.R;
 
@@ -50,10 +54,29 @@ public class InviteActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.confirm_group:
                 //manage here the invitation email, after some checks
-                Intent intent1=new Intent(InviteActivity.this, NewGroup.class);
-                intent1.putExtra("Group Members", (Serializable) groupM);
-                startActivity(intent1);
-                return true;
+                //prima di poter procedere devo verificare che tutte le email siano state inserite
+                boolean flag = true;
+
+                for(int i=0; i<invite.size(); i++){
+                    if(invite.get(i).getEmail().compareTo("") == 0){
+                        flag=false;         //viene settato a false se almeno una email non viene inserita
+                    }
+                }
+
+                if(flag){
+                    //posso andare avanti
+                    Intent intent1=new Intent(InviteActivity.this, NewGroup.class);
+                    intent1.putExtra("Group Members", (Serializable) groupM);
+                    startActivity(intent1);
+                    return true;
+                }else{
+                    View mv = findViewById(R.id.frameLayout);
+                    Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                    // Vibrate for 250 milliseconds
+                    v.vibrate(250);
+                    Snackbar.make(mv, "Please, compile all field", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                    return true;
+                }
 
             case R.id.home:
                 navigateUpTo(new Intent(this, SelectContact.class));    //definisco il parente verso cui devo tornare indietro
