@@ -29,7 +29,6 @@ public class Expense {
     private String  description;
 
 
-
     private Map<String, PaymentFirebase>payments;
 
     //a map showing for each user the cost of the Payment
