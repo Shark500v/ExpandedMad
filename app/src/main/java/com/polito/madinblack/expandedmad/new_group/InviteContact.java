@@ -13,6 +13,7 @@ import java.util.List;
 public class InviteContact extends DialogFragment {
 
     List<SelectUser> invite;
+    List<SelectUser> groupM;
     String phrase = "Do you want to invite new members ?";
     String list = "";
 
@@ -24,6 +25,7 @@ public class InviteContact extends DialogFragment {
 
         //retriving the list of contacts I need to invite
         invite = (List<SelectUser>) getArguments().getSerializable("invite");
+        groupM = (List<SelectUser>) getArguments().getSerializable("Group Members");
 
         for(int i=0; i<invite.size(); i++){
             SelectUser contact= invite.get(i);
@@ -40,10 +42,16 @@ public class InviteContact extends DialogFragment {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked OK button
                 //manage here the invitation activity
+                /*
                 Intent intent = new Intent(getContext(), InviteActivity.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
                 intent.putExtra("InviteList", (Serializable) invite);
                 intent.putExtra("Group Members", getArguments().getSerializable("Group Members"));
                 startActivity(intent);
+                */
+                Intent intent1=new Intent(getContext(), NewGroup.class);
+                intent1.putExtra("Group Members", (Serializable) groupM);
+                intent1.putExtra("invite", (Serializable) invite);
+                startActivity(intent1);
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
