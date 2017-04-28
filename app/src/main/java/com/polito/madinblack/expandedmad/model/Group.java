@@ -158,6 +158,7 @@ public class Group {
                 }else{
                     // perform the update operations on data
                     currentData.setValue((Long) currentData.getValue() + 1);
+
                     mDatabase.child("users").child(userId).child("groups").child(groupId).child("size").setValue(currentData.getValue());
                 }
                 return Transaction.success(currentData);
