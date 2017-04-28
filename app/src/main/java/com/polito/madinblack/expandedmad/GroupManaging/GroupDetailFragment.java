@@ -16,7 +16,7 @@ public class GroupDetailFragment extends Fragment {
 
     public static final String ARG_G_ID = "item_id";
 
-    private Group mItem;
+    private GroupForUser mItem;
 
     private MyApplication ma;
 
@@ -33,7 +33,7 @@ public class GroupDetailFragment extends Fragment {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            mItem = ma.getSingleGroup(Long.valueOf(getArguments().getString(ARG_G_ID)));    //I retrive the group of my interest
+            mItem = ma.getGroupForUser();
 
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
