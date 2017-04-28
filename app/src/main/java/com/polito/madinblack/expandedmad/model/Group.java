@@ -106,11 +106,7 @@ public class Group {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<UserForGroup> userForGroupList = new ArrayList<UserForGroup>();
-
                 for(DataSnapshot userSnapshot : dataSnapshot.getChildren()){
-                    userSnapshot.getRef().child("balance").updateChildren(userId)
-
-
                     userForGroupList.add(userSnapshot.getValue(UserForGroup.class));
                 }
                 UserForGroup userForGroup = new UserForGroup(userId, userName, userSurname);
@@ -178,8 +174,8 @@ public class Group {
 
 
     /*be carrefour: for now do this operation only after add all initial expenses*/
-   // public void addExpense(Expense e){
-        //expenses.put(e.getId(), e);
+    // public void addExpense(Expense e){
+    //expenses.put(e.getId(), e);
 
     //}
 
@@ -214,7 +210,7 @@ public class Group {
     }
 */
 
-   // public User getUser(String id) { return users.get(id);}
+    // public User getUser(String id) { return users.get(id);}
 
     public String getName(){ return name; }
 

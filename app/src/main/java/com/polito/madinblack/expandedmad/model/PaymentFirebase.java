@@ -19,11 +19,11 @@ public class PaymentFirebase {
         this.toPaid     = CostUtil.round(payment.getToPaid(), 2);
     }
 
-    public String getUser() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUser(String userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
