@@ -22,22 +22,23 @@ import com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.Group;
 import com.polito.madinblack.expandedmad.model.MyApplication;
+import com.polito.madinblack.expandedmad.model.UserForGroup;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class NewGroup extends AppCompatActivity {
 
-    private FirebaseDatabase mFirebaseInstance;
-    private DatabaseReference mGroupsDatabase;
-    private DatabaseReference mUsersDatabase;
+
+    private DatabaseReference mDatabaseReference;
     private MyApplication ma;
     String phoneId;
     List<SelectUser> groupM;
     List<SelectUser> invite;
     ListView lv;
     GroupMembersAdapter adapter;
-    String GroupCode = "hello";
+    String groupCode = "hello";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,6 +50,7 @@ public class NewGroup extends AppCompatActivity {
 
         groupM = (List<SelectUser>) getIntent().getSerializableExtra("Group Members");
         invite = (List<SelectUser>) getIntent().getSerializableExtra("invite");
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         lv = (ListView) findViewById(R.id.list1);
         adapter = new GroupMembersAdapter(groupM, this);
@@ -94,7 +96,24 @@ public class NewGroup extends AppCompatActivity {
             mFirebaseDatabase.child(group.getId()+": "+groupName).child("Users").setValue(phoneId);
             */
 
-            writeNewGroup(groupName);
+
+            List<UserForGroup> userForGroupList = new ArrayList<>();
+            for(SelectUser selectUser : groupM){
+                String[] items = selectUser.getName().split(" ");
+                if(items[0]==null)
+                    items[0] = "";
+                if(items[1]==null)
+                    items[1] = "";
+
+                UserForGroup userForGroup = new UserForGroup(selectUser.getPhone(), items[0], items[1]);
+                userForGroupList.add(userForGroup);
+
+            }
+            UserForGroup userForGroup = new UserForGroup(ma.getUserPhoneNumber(), ma.getUserName(), ma.getUserName());
+            userForGroupList.add(userForGroup);
+
+
+            groupCode = Group.writeNewGroup(mDatabaseReference, groupName, userForGroupList);
 
             if(invite.isEmpty()){
                 Intent intent1=new Intent(NewGroup.this, GroupListActivity.class); //da cambiare (dovra' andare alla pagina del gruppo creato)
@@ -103,7 +122,7 @@ public class NewGroup extends AppCompatActivity {
                 //devo invitare i nuovi membri del gruppo
                 Intent intent2 = new Intent(NewGroup.this, InviteActivity.class);
                 intent2.putExtra("InviteList", (Serializable) invite);
-                intent2.putExtra("Code", GroupCode);
+                intent2.putExtra("Code", groupCode);
                 startActivity(intent2);
             }
 
@@ -118,25 +137,7 @@ public class NewGroup extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void writeNewGroup(String groupName){
-        // creo il gruppo e setto il nome del gruppo ricevuto dalla EditText
-        Group group = new Group();
-        group.setName(groupName);
 
-        //creo il gruppo sotto "Groups" e gli assegno una chiave univoca
-        mGroupsDatabase=FirebaseDatabase.getInstance().getReference("Groups");
-        String groupId =mGroupsDatabase.push().getKey();
-        mGroupsDatabase.child(groupId).child(phoneId);
-        mGroupsDatabase.child(groupId).setValue(group);
-
-        //creo il gruppo sotto l'utente che lo crea (bisognerà aggiungere il gruppo ad ogni utente che partecipa al gruppo)
-        mUsersDatabase = FirebaseDatabase.getInstance().getReference("Users");
-        mUsersDatabase.child(phoneId).child(groupId).setValue(group);
-
-        //da togliere penso
-        ma = MyApplication.getInstance();
-        ma.addGroup(group);
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
