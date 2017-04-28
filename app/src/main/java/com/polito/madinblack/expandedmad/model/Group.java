@@ -108,9 +108,7 @@ public class Group {
                 List<UserForGroup> userForGroupList = new ArrayList<UserForGroup>();
 
                 for(DataSnapshot userSnapshot : dataSnapshot.getChildren()){
-                    userSnapshot.getRef().child("balance").updateChildren(userId)
-
-
+                    userSnapshot.getRef().child("balance").child(userId).setValue(0D);
                     userForGroupList.add(userSnapshot.getValue(UserForGroup.class));
                 }
                 UserForGroup userForGroup = new UserForGroup(userId, userName, userSurname);
