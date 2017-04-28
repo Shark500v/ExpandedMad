@@ -25,20 +25,15 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.polito.madinblack.expandedmad.ExpenseFillData;
-import com.polito.madinblack.expandedmad.ExpenseFillData_2;
-import com.polito.madinblack.expandedmad.GroupManaging.GroupDetailActivity;
-import com.polito.madinblack.expandedmad.GroupManaging.GroupDetailFragment;
-import com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity;
+import com.polito.madinblack.expandedmad.groupManaging.GroupDetailActivity;
+import com.polito.madinblack.expandedmad.groupManaging.GroupDetailFragment;
+import com.polito.madinblack.expandedmad.groupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.R;
-import com.polito.madinblack.expandedmad.group_members.GroupMemebersActivity;
+import com.polito.madinblack.expandedmad.groupMembers.GroupMemebersActivity;
 import com.polito.madinblack.expandedmad.model.Expense;
-import com.polito.madinblack.expandedmad.model.Group;
 import com.polito.madinblack.expandedmad.model.GroupForUser;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 

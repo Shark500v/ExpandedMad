@@ -5,7 +5,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.polito.madinblack.expandedmad.GoogleSignInActivity;
-import com.polito.madinblack.expandedmad.GoogleSignInActivity2;
 
 import java.util.ArrayList;
 import java.util.Calendar;

@@ -1,4 +1,4 @@
-package com.polito.madinblack.expandedmad.new_group;
+package com.polito.madinblack.expandedmad.newGroup;
 
 import android.Manifest;
 import android.content.ContentResolver;
@@ -6,11 +6,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.SearchView;
@@ -22,10 +20,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity;
+import com.polito.madinblack.expandedmad.groupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.R;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 

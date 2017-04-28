@@ -1,9 +1,8 @@
-package com.polito.madinblack.expandedmad.new_group;
+package com.polito.madinblack.expandedmad.newGroup;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.os.Vibrator;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
@@ -18,15 +17,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.polito.madinblack.expandedmad.ExpenseListActivity;
-import com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity;
+import com.polito.madinblack.expandedmad.groupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.R;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class SelectContact extends AppCompatActivity {

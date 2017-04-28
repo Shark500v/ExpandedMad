@@ -5,10 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.EditText;
-import android.widget.TextView;
 
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -16,9 +13,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity;
+import com.polito.madinblack.expandedmad.groupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.model.MyApplication;
-import com.polito.madinblack.expandedmad.model.User;
 
 /**
  * Created by Ale on 26/04/2017.
@@ -88,7 +84,7 @@ public class CheckLogIn extends AppCompatActivity {
                             }else{
 
                                 ma.setIsPhone(false);
-                                Intent intent = new Intent(CheckLogIn.this, GoogleSignInActivity2.class);
+                                Intent intent = new Intent(CheckLogIn.this, GoogleSignInActivity.class);
                                 startActivity(intent);
                                 finish();
 
@@ -111,7 +107,7 @@ public class CheckLogIn extends AppCompatActivity {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                     ma.setLogged(false);
-                    Intent intent = new Intent(CheckLogIn.this, GoogleSignInActivity2.class);
+                    Intent intent = new Intent(CheckLogIn.this, GoogleSignInActivity.class);
                     startActivity(intent);
 
                 }

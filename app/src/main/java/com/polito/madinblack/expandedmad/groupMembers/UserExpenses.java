@@ -1,4 +1,4 @@
-package com.polito.madinblack.expandedmad.group_members;
+package com.polito.madinblack.expandedmad.groupMembers;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,15 +18,10 @@ import android.widget.TextView;
 
 import com.polito.madinblack.expandedmad.ExpenseDetailActivity;
 import com.polito.madinblack.expandedmad.ExpenseDetailFragment;
-import com.polito.madinblack.expandedmad.ExpenseListActivity;
-import com.polito.madinblack.expandedmad.GroupManaging.GroupDetailActivity;
-import com.polito.madinblack.expandedmad.GroupManaging.GroupDetailFragment;
-import com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.R;
 
 import java.util.List;
 
-import com.polito.madinblack.expandedmad.dummy.DummyContent;
 import com.polito.madinblack.expandedmad.dummy.Expense;
 import com.polito.madinblack.expandedmad.dummy.Group;
 
@@ -34,8 +29,8 @@ import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 public class UserExpenses extends AppCompatActivity {
 
-    private String groupID = "init";
-    private String userID = "init";
+    private String groupID = "";
+    private String userID = "";
     private Expense eItem;  //quello che vado a mostrare in questa activity è una lista di spese
     private Group.GroupElements groupSelected;
 
@@ -94,8 +89,7 @@ public class UserExpenses extends AppCompatActivity {
 
             case R.id.home:
                 //navigateUpTo(new Intent(this, GroupMemebersActivity.class));    //definisco il parente verso cui devo tornare indietro
-                //Intent intent2 = new Intent(this, GroupMemebersActivity.class);
-                Intent intent2 = getParentActivityIntent();
+                Intent intent2 = new Intent(this, GroupMemebersActivity.class);
                 intent2.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 navigateUpTo(intent2);
                 return true;
@@ -149,6 +143,11 @@ public class UserExpenses extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
 
+                        Context context = v.getContext();
+                        Intent intent = new Intent(context, ExpenseDetailActivity.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
+                        intent.putExtra(ExpenseDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+
+                        context.startActivity(intent);
                     }
                 });
             }

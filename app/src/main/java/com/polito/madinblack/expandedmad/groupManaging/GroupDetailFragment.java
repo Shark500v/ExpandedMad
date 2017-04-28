@@ -1,4 +1,4 @@
-package com.polito.madinblack.expandedmad.GroupManaging;
+package com.polito.madinblack.expandedmad.groupManaging;
 
 import android.app.Activity;
 import android.os.Bundle;

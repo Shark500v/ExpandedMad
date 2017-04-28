@@ -1,4 +1,4 @@
-package com.polito.madinblack.expandedmad.GroupManaging;
+package com.polito.madinblack.expandedmad.groupManaging;
 
 import android.content.Context;
 import android.content.Intent;

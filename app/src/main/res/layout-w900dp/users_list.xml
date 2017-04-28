@@ -9,7 +9,7 @@
     android:divider="?android:attr/dividerHorizontal"
     android:orientation="horizontal"
     android:showDividers="middle"
-    tools:context=".group_members.GroupMemebersActivity">
+    tools:context=".groupMembers.GroupMemebersActivity">
 
     <!--
     This layout is a two-pane layout for the Items

@@ -1,4 +1,4 @@
-package com.polito.madinblack.expandedmad.new_group;
+package com.polito.madinblack.expandedmad.newGroup;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -19,7 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity;
+import com.polito.madinblack.expandedmad.groupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 

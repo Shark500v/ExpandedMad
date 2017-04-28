@@ -13,7 +13,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
@@ -23,17 +22,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.polito.madinblack.expandedmad.GroupManaging.GroupDetailActivity;
-import com.polito.madinblack.expandedmad.GroupManaging.GroupDetailFragment;
-import com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity;
-import com.polito.madinblack.expandedmad.group_members.GroupMemebersActivity;
+import com.polito.madinblack.expandedmad.groupManaging.GroupDetailActivity;
+import com.polito.madinblack.expandedmad.groupManaging.GroupDetailFragment;
+import com.polito.madinblack.expandedmad.groupManaging.GroupListActivity;
+import com.polito.madinblack.expandedmad.groupMembers.GroupMemebersActivity;
 import com.polito.madinblack.expandedmad.model.*;
-import com.polito.madinblack.expandedmad.model.Expense;
 import com.polito.madinblack.expandedmad.model.Group;
 
 import java.util.List;
-
-import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 public class ExpenseListActivity extends AppCompatActivity {
 

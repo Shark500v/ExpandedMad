@@ -1,10 +1,8 @@
-package com.polito.madinblack.expandedmad.group_members;
+package com.polito.madinblack.expandedmad.groupMembers;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -22,22 +20,15 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.polito.madinblack.expandedmad.ExpenseDetailActivity;
-import com.polito.madinblack.expandedmad.ExpenseDetailFragment;
 import com.polito.madinblack.expandedmad.ExpenseListActivity;
-import com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.polito.madinblack.expandedmad.model.Group;
 import com.polito.madinblack.expandedmad.model.GroupForUser;
 import com.polito.madinblack.expandedmad.model.MyApplication;
-import com.polito.madinblack.expandedmad.model.User;
 import com.polito.madinblack.expandedmad.model.UserForGroup;
-
-import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 public class GroupMemebersActivity extends AppCompatActivity {
 

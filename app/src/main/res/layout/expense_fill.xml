@@ -219,7 +219,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layoutManager="LinearLayoutManager"
-                    tools:context="com.polito.madinblack.expandedmad.GroupManaging.ExpenseFillData"
+                    tools:context="com.polito.madinblack.expandedmad.groupManaging.ExpenseFillData"
                     tools:listitem="@layout/user_for_new_expense" />
 
             </android.support.v4.widget.NestedScrollView>

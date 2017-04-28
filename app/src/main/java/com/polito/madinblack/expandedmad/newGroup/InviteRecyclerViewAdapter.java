@@ -1,4 +1,4 @@
-package com.polito.madinblack.expandedmad.new_group;
+package com.polito.madinblack.expandedmad.newGroup;
 
 
 import android.support.v7.widget.RecyclerView;

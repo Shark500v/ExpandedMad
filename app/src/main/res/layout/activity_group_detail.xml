@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity"
+    tools:context="com.polito.madinblack.expandedmad.groupManaging.GroupListActivity"
     tools:ignore="MergeRootFrame">
 
     <android.support.design.widget.AppBarLayout

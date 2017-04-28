@@ -1,11 +1,16 @@
 package com.polito.madinblack.expandedmad;
 
+
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import android.support.design.widget.TextInputLayout;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +29,16 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.polito.madinblack.expandedmad.groupManaging.GroupListActivity;
+import com.polito.madinblack.expandedmad.model.CostUtil;
+import com.polito.madinblack.expandedmad.model.Group;
+import com.polito.madinblack.expandedmad.model.MyApplication;
+import com.polito.madinblack.expandedmad.model.User;
 
 
 /**
@@ -47,21 +62,49 @@ public class GoogleSignInActivity extends BaseActivity implements
 
     private GoogleApiClient mGoogleApiClient;
     private TextView mStatusTextView;
-    private TextView mDetailTextView;
+
+    /*added by Ale*/
+    private EditText mTelephoneTextView;
+    private EditText mInputInvitationTextView;
+
+    private TextInputLayout phoneLayout;
+    private TextInputLayout invitationLayout;
+    /*added by Ale*/
+    private DatabaseReference mDatabase;
+
+    private String phoneNumber;
+    private String invitationCode;
+
+    private MyApplication ma;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.google_registration2);
 
+        ma = MyApplication.getInstance();
+
         // Views
         mStatusTextView = (TextView) findViewById(R.id.status);
-       // mDetailTextView = (TextView) findViewById(R.id.detail);
+        /*added by Ale to insert telephone*/
+        mTelephoneTextView = (EditText) findViewById(R.id.telephone);
+        mInputInvitationTextView = (EditText)findViewById(R.id.input_invitation);
 
-        // Button listeners
+        phoneLayout = (TextInputLayout)findViewById(R.id.telephone_layout);
+        invitationLayout = (TextInputLayout)findViewById(R.id.invitation_layout);
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mAuth = FirebaseAuth.getInstance();
+
+        // Button listeners: to change and load only sign in of google and confirm
         findViewById(R.id.sign_in_button).setOnClickListener(this);
         //findViewById(R.id.sign_out_button).setOnClickListener(this);
         //findViewById(R.id.disconnect_button).setOnClickListener(this);
+        /*added by Ale to confirm telephone number*/
+        findViewById(R.id.confirm_number_button).setOnClickListener(this);
 
         // [START config_signin]
         // Configure Google Sign In
@@ -76,28 +119,67 @@ public class GoogleSignInActivity extends BaseActivity implements
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
-        // [START initialize_auth]
-        mAuth = FirebaseAuth.getInstance();
+
+        //
         // [END initialize_auth]
 
+        /*added by Ale to set index*/
+        //mDatabase = FirebaseDatabase.getInstance().getReference();
+
+
         // [START auth_state_listener]
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
+        //mAuthListener = new FirebaseAuth.AuthStateListener() {
+           // @Override
+         //   public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+          //      FirebaseUser user = firebaseAuth.getCurrentUser();
+            //    if (user != null) {
                     // User is signed in
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                } else {
+              //      Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                //    firebaseId      = user.getUid();
+                  //  userEmail       = user.getEmail();
+                 //   String[] items  = user.getDisplayName().split(" ");
+                   // userName        = items[0];
+                    //userSurname     = items[1];
+
+               //     mDatabase.child("userId").child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                 //       @Override
+                   //     public void onDataChange(DataSnapshot dataSnapshot) {
+                     //       if (dataSnapshot.exists()) {
+
+                       //         /*to memorize phone number of logged user*/
+                         //       userPhoneNumber = dataSnapshot.getValue(String.class);
+                           //     GroupListActivity.logged = true;
+                                /*google login and number yet inserted jump to group page*/
+                             //   Intent intent = new Intent(GoogleSignInActivity.this, GroupListActivity.class);
+                               // startActivity(intent);
+                                //finish();
+
+//                            }
+  //                      }
+
+    //                    @Override
+      //                  public void onCancelled(DatabaseError databaseError) {
+
+        //                }
+          //          });
+
+
+
+         //       } else {
                     // User is signed out
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
-                }
-                // [START_EXCLUDE]
-                updateUI(user);
-                // [END_EXCLUDE]
-            }
-        };
+           //         Log.d(TAG, "onAuthStateChanged:signed_out");
+
+             //   }
+
+        //    }
+      //  };
         // [END auth_state_listener]
+
+
+        updateUI(ma.getFirebaseUser());
+
+
+
     }
 
     // [START on_start_add_listener]
@@ -105,7 +187,8 @@ public class GoogleSignInActivity extends BaseActivity implements
     public void onStart() {
         super.onStart();
         //Adds a listener that will be called when the connection becomes authenticated or unauthenticated.
-        mAuth.addAuthStateListener(mAuthListener);
+       // mAuth.addAuthStateListener(mAuthListener);
+
     }
     // [END on_start_add_listener]
 
@@ -113,9 +196,10 @@ public class GoogleSignInActivity extends BaseActivity implements
     @Override
     public void onStop() {
         super.onStop();
-        if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
-        }
+        finish();
+       // if (mAuthListener != null) {
+         //   mAuth.removeAuthStateListener(mAuthListener);
+        //}
     }
     // [END on_stop_remove_listener]
 
@@ -131,6 +215,7 @@ public class GoogleSignInActivity extends BaseActivity implements
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
+
             } else {
                 // Google Sign In failed, update UI appropriately
                 // [START_EXCLUDE]
@@ -166,8 +251,10 @@ public class GoogleSignInActivity extends BaseActivity implements
                         // [START_EXCLUDE]
                         hideProgressDialog();
                         // [END_EXCLUDE]
+
                     }
                 });
+
     }
     // [END auth_with_google]
 
@@ -206,20 +293,117 @@ public class GoogleSignInActivity extends BaseActivity implements
                 });
     }
 
+    private void requestFocus(View view) {
+        if (view.requestFocus()) {
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }
+    }
+
+    private void confirmNumber() {
+        /*confirm number and add user detail*/
+        phoneNumber = mTelephoneTextView.getText().toString();
+        invitationCode = mInputInvitationTextView.getText().toString();
+
+        if(!CostUtil.validateTelFaxNumber(phoneNumber)) {
+            phoneLayout.setError(getString(R.string.err_msg_telephone));
+            requestFocus(mTelephoneTextView);
+            Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            // Vibrate for 250 milliseconds
+            v.vibrate(250);
+            return;
+        }else {
+            phoneLayout.setErrorEnabled(false);
+        }
+
+        ma.setUserPhoneNumber(phoneNumber);
+
+        User.writeNewUser(mDatabase, ma.getFirebaseId(), ma.getUserName(),  ma.getUserSurname(), phoneNumber, ma.getUserEmail());
+        ma.setIsPhone(true);
+        mDatabase.child("userId").child(ma.getFirebaseId()).setValue(phoneNumber);
+
+
+        if(invitationCode!=null && !invitationCode.isEmpty()){
+
+            mDatabase.child("groups").child(invitationCode).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.exists()){
+                        Group.writeUserToGroup(mDatabase, invitationCode, ma.getUserPhoneNumber(), ma.getUserName(), ma.getUserSurname());
+                        Intent intent = new Intent(GoogleSignInActivity.this, GroupListActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                    else{
+                        invitationLayout.setError(getString(R.string.err_msg_invitation));
+                        requestFocus(mInputInvitationTextView);
+                        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                        // Vibrate for 250 milliseconds
+                        v.vibrate(250);
+                        return;
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
+
+
+
+
+
+        }else{
+            Intent intent = new Intent(GoogleSignInActivity.this, GroupListActivity.class);
+            startActivity(intent);
+            finish();
+
+
+        }
+
+        finish();
+        /*
+        Intent intent = new Intent(GoogleSignInActivity.this, GroupListActivity.class);
+        startActivity(intent);
+        */
+    }
+
+
+
+
     private void updateUI(FirebaseUser user) {
         hideProgressDialog();
         if (user != null) {
+            /*
             mStatusTextView.setText("Google User: " + user.getEmail() + user.getDisplayName());
             mDetailTextView.setText("Firebase User: " + user.getUid());
 
+
+            findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
+        */
+            mStatusTextView.setText("Sign in as: " + user.getDisplayName());
             findViewById(R.id.sign_in_button).setVisibility(View.GONE);
-           // findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
+            findViewById(R.id.confirm_number_button).setVisibility(View.VISIBLE);
+            findViewById(R.id.telephone).setVisibility(View.VISIBLE);
+            findViewById(R.id.input_invitation).setVisibility(View.VISIBLE);
+
+
         } else {
+
             mStatusTextView.setText(R.string.signed_out);
-            mDetailTextView.setText(null);
+            //mDetailTextView.setText(null);
 
             findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
-            //(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
+
+            //findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
+            findViewById(R.id.confirm_number_button).setVisibility(View.GONE);
+            findViewById(R.id.telephone).setVisibility(View.GONE);
+            findViewById(R.id.input_invitation).setVisibility(View.GONE);
+
+
         }
     }
 
@@ -236,10 +420,15 @@ public class GoogleSignInActivity extends BaseActivity implements
         int i = v.getId();
         if (i == R.id.sign_in_button) {
             signIn();
-       // } else if (i == R.id.sign_out_button) {
-            signOut();
+        }// else if (i == R.id.sign_out_button) {
+        //    signOut();
         //} else if (i == R.id.disconnect_button) {
-           revokeAccess();
+       //     revokeAccess();
+       // }
+        else if (i == R.id.confirm_number_button) {
+            confirmNumber();
         }
     }
+
+
 }

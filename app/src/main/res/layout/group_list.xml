@@ -9,5 +9,5 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context="com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity"
+    tools:context="com.polito.madinblack.expandedmad.groupManaging.GroupListActivity"
     tools:listitem="@layout/group_list_content" />
