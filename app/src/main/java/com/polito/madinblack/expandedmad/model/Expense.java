@@ -38,7 +38,7 @@ public class Expense {
     private String  description;
 
 
-    private Map<String, PaymentFirebase>payments = new HashMap<>();
+    private Map<String, PaymentFirebase> payments = new HashMap<>();
 
     //a map showing for each user the cost of the Payment
     //private Map<String, Payment> userCost = new HashMap<>();
@@ -196,7 +196,7 @@ public class Expense {
         this.payments = payments;
     }
 
-    public PaymentFirebase getPaymentForUser(String userId){
+    public PaymentFirebase givePaymentForUser(String userId){
         return payments.get(userId);
     }
 
