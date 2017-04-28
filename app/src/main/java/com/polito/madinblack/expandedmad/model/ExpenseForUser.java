@@ -24,6 +24,7 @@ public class ExpenseForUser {
         this.paidById       = expense.getPaidById();
         this.currencyName   = expense.getCurrencyName();
         this.currencySymbol = expense.getCurrencySymbol();
+        this.id             = expense.getId();
     }
 
 
