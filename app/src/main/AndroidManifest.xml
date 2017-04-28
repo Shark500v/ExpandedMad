@@ -36,7 +36,7 @@
         </activity>
 
         <activity
-            android:name=".Utility.TabView"
+            android:name=".utility.TabView"
             android:label="Tab View"
             android:parentActivityName=".groupManaging.GroupListActivity"
             android:theme="@style/AppTheme.NoActionBar">

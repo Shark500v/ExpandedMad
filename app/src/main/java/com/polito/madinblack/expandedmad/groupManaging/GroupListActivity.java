@@ -30,7 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.polito.madinblack.expandedmad.Logout;
 import com.polito.madinblack.expandedmad.R;
-import com.polito.madinblack.expandedmad.Utility.TabView;
+import com.polito.madinblack.expandedmad.utility.TabView;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.*;
 import com.polito.madinblack.expandedmad.newGroup.SelectContact;

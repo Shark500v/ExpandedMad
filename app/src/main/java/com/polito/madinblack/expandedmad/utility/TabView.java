@@ -1,4 +1,4 @@
-package com.polito.madinblack.expandedmad.Utility;
+package com.polito.madinblack.expandedmad.utility;
 
 import android.content.Context;
 import android.content.Intent;

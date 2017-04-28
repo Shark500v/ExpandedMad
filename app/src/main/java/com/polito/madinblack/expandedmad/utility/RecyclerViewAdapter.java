@@ -1,7 +1,6 @@
-package com.polito.madinblack.expandedmad.Utility;
+package com.polito.madinblack.expandedmad.utility;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
@@ -17,13 +16,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.polito.madinblack.expandedmad.ExpenseDetailActivity;
-import com.polito.madinblack.expandedmad.ExpenseDetailFragment;
 import com.polito.madinblack.expandedmad.R;
-import com.polito.madinblack.expandedmad.model.Balance;
-import com.polito.madinblack.expandedmad.model.Expense;
 import com.polito.madinblack.expandedmad.model.ExpenseForUser;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 

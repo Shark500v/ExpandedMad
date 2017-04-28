@@ -1,4 +1,4 @@
-package com.polito.madinblack.expandedmad.Utility;
+package com.polito.madinblack.expandedmad.utility;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -16,9 +16,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.Balance;
-import com.polito.madinblack.expandedmad.model.Group;
 import com.polito.madinblack.expandedmad.model.GroupForUser;
-import com.polito.madinblack.expandedmad.model.User;
 
 import java.util.ArrayList;
 import java.util.List;

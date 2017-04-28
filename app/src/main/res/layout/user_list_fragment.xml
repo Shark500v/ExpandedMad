@@ -13,7 +13,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         app:layoutManager="LinearLayoutManager"
-        tools:context=".Utility.TabView"
+        tools:context=".utility.TabView"
         tools:listitem="@layout/users_list_content" />
 
 </RelativeLayout>

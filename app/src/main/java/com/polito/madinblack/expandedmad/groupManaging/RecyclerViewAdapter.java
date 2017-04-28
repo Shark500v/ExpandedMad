@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.polito.madinblack.expandedmad.R;
-import com.polito.madinblack.expandedmad.Utility.TabView;
+import com.polito.madinblack.expandedmad.utility.TabView;
 import com.polito.madinblack.expandedmad.model.Group;
 
 import java.util.List;
