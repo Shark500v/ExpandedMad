@@ -38,7 +38,7 @@ public class NewGroup extends AppCompatActivity {
     List<SelectUser> invite;
     ListView lv;
     GroupMembersAdapter adapter;
-    String groupCode = "hello";
+    String groupCode;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
