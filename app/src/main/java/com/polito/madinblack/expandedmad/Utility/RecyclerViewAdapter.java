@@ -145,17 +145,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(final RecyclerViewAdapter.ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);   //mValues.get(position) rappresenta un singolo elemento della nostra lista di spese
         holder.mIdView.setText(mValues.get(position).getName());
-        /*if(mValues.get(position).getMyBalance()>0) {
-            holder.mContentView.setText(String.format("+%.2f",mValues.get(position).getMyBalance()) + " " + mValues.get(position).getCurrency());
+        if(mValues.get(position).getMyBalance()>0) {
+            holder.mContentView.setText(String.format("+%.2f",mValues.get(position).getMyBalance()) + " " + mValues.get(position).getCurrencySymbol());
             holder.mContentView.setTextColor(Color.parseColor("#00c200"));
         }else if(mValues.get(position).getMyBalance()<0) {
-            holder.mContentView.setText(String.format("%.2f",mValues.get(position).getMyBalance()) + " " + mValues.get(position).getCurrency());
+            holder.mContentView.setText(String.format("%.2f",mValues.get(position).getMyBalance()) + " " + mValues.get(position).getCurrencySymbol());
             holder.mContentView.setTextColor(Color.parseColor("#ff0000"));
         }
         else{
-            holder.mContentView.setText(String.format("%.2f",mValues.get(position).getMyBalance()) + " " + mValues.get(position).getCurrency());
+            holder.mContentView.setText(String.format("%.2f",mValues.get(position).getMyBalance()) + " " + mValues.get(position).getCurrencySymbol());
         }
-        */
         if(mValues.get(position).getPaidById()== MyApplication.myself.getId())
             holder.mPaydBy.setText("Paid by: You");
         else
