@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -157,11 +159,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         else{
             holder.mContentView.setText(String.format("%.2f",mValues.get(position).getMyBalance()) + " " + mValues.get(position).getCurrencySymbol());
         }
-        if(mValues.get(position).getPaidById().equals(ma.getUserPhoneNumber()))
-            holder.mPaydBy.setText("Paid by: You");
-        else
-            holder.mPaydBy.setText("Paid by: " + mValues.get(position).getPaidByName());
 
+        final SpannableStringBuilder str;
+        if(mValues.get(position).getPaidById().equals(ma.getUserPhoneNumber())) {
+            str = new SpannableStringBuilder("Paid by "+ "You");
+            str.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), "Paid by ".length(), ("Paid by ".length() + "You".length()), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        else {
+            str = new SpannableStringBuilder("Paid by "+ mValues.get(position).getPaidByName());
+            str.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), "Paid by ".length(), ("Paid by ".length() + mValues.get(position).getPaidByName().length()), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        }
+        holder.mPaydBy.setText(str);
         //sopra vengono settati i tre campi che costituisco le informazioni di ogni singolo gruppo, tutti pronti per essere mostriti nella gui
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
