@@ -367,7 +367,7 @@ public class GoogleSignInActivity2 extends BaseActivity implements
 
         }
 
-
+        finish();
         /*
         Intent intent = new Intent(GoogleSignInActivity2.this, GroupListActivity.class);
         startActivity(intent);

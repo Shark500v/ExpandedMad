@@ -184,6 +184,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 FirebaseDatabase.getInstance().getReference().child("expenses").child(holder.mItem.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+
+
+
                         Context context = v.getContext();
                         Intent intent = new Intent(context, ExpenseDetailActivity.class);
                         intent.putExtra(ExpenseDetailFragment.ARG_ITEM_ID, holder.mItem.getId());
