@@ -137,14 +137,6 @@ public class TabView extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        balanceFrag.UpdateAdapter();
-        listFrag.UpdateAdapter();
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -211,6 +203,7 @@ public class TabView extends AppCompatActivity {
 
         RecyclerViewAdapter adapter;
         RecyclerView recyclerView;
+        View rootView;
 
         public ExpensesListFragment() {
             // Required empty public constructor
@@ -233,7 +226,14 @@ public class TabView extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-            View rootView = inflater.inflate(R.layout.expense_list_fragment, container, false);
+            rootView = inflater.inflate(R.layout.expense_list_fragment, container, false);
+
+            return rootView;
+        }
+
+        @Override
+        public void onStart(){
+            super.onStart();
 
             adapter = new RecyclerViewAdapter(getContext(),
                     FirebaseDatabase.getInstance().getReference().child("users")
@@ -243,12 +243,6 @@ public class TabView extends AppCompatActivity {
             recyclerView = (RecyclerView) rootView.findViewById(R.id.expense_list2);
             recyclerView.setAdapter(adapter);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
-
-            return rootView;
-        }
-
-        public void UpdateAdapter(){
-            recyclerView.setAdapter(adapter);
         }
 
         @Override
@@ -266,6 +260,7 @@ public class TabView extends AppCompatActivity {
 
         RecyclerViewAdapterUsers adapter;
         RecyclerView recyclerView;
+        View rootView;
 
         public MyBalanceFragment() {
             // Required empty public constructor
@@ -288,7 +283,14 @@ public class TabView extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-            View rootView = inflater.inflate(R.layout.user_list_fragment, container, false);
+            rootView = inflater.inflate(R.layout.user_list_fragment, container, false);
+
+            return rootView;
+        }
+
+        @Override
+        public void onStart(){
+            super.onStart();
 
             adapter = new RecyclerViewAdapterUsers(getContext(),
                     FirebaseDatabase.getInstance().getReference().child("groups")
@@ -298,12 +300,6 @@ public class TabView extends AppCompatActivity {
             recyclerView = (RecyclerView) rootView.findViewById(R.id.item_list);
             recyclerView.setAdapter(adapter);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
-
-            return rootView;
-        }
-
-        public void UpdateAdapter(){
-            recyclerView.setAdapter(adapter);
         }
 
         @Override
