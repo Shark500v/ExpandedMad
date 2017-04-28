@@ -23,7 +23,7 @@ public class ExpenseDetailFragment extends Fragment {
 
     private MyApplication ma;
 
-    private Group group;
+
     private Expense mItem;
 
     public ExpenseDetailFragment() {
@@ -39,7 +39,7 @@ public class ExpenseDetailFragment extends Fragment {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            group = ma.getSingleGroup(Long.valueOf(getArguments().getString(ARG_GROUP_ID))); //I select the group that I need
+            mItem = ma.getSelectedExpense(); //I select the group that I need
             //mItem = group.getSingleExpense(Long.valueOf(getArguments().getString(ARG_ITEM_ID)));
 
             Activity activity = this.getActivity();

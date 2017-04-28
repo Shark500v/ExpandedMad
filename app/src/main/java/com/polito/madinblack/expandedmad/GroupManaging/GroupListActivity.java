@@ -45,6 +45,7 @@ import com.polito.madinblack.expandedmad.GoogleSignInActivity2;
 import com.polito.madinblack.expandedmad.MultipleBarGraph;
 import com.polito.madinblack.expandedmad.Logout;
 import com.polito.madinblack.expandedmad.R;
+import com.polito.madinblack.expandedmad.Utility.TabView;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.*;
 import com.polito.madinblack.expandedmad.new_group.SelectContact;
@@ -65,6 +66,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
 
     private DatabaseReference mGroupsReference;
     private DatabaseReference mUserGroupsReference;
+    private DatabaseReference mDatabase;
     private SimpleItemRecyclerViewAdapter mAdapter;
 
 
@@ -76,7 +78,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         ma = MyApplication.getInstance();   //retrive del DB
 
         mUserGroupsReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber()).child("groups");
-
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         //toolbar settings
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -308,11 +310,30 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Context context = v.getContext();
-                    Intent intent = new Intent(context, ExpenseListActivity.class); //qui setto la nuova attività da mostrare a schermo dopo che clicco
+                    final Context context = v.getContext();
+                    final Intent intent = new Intent(context, TabView.class); //qui setto la nuova attività da mostrare a schermo dopo che clicco
                     intent.putExtra("index", holder.mItem.getId());    //passo alla nuova activity l'ide del gruppo chè l'utente ha selezionto
 
-                    context.startActivity(intent);
+                    mDatabase = FirebaseDatabase.getInstance().getReference().child("groups").child(holder.mItem.getId());
+
+                    mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            ma.setGroupForUser(dataSnapshot.getValue(GroupForUser.class));
+                            context.startActivity(intent);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+
+
+
+
+
                 }
             });
         }

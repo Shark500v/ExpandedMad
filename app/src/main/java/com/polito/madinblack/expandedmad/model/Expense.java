@@ -215,7 +215,7 @@ public class Expense {
         DatabaseReference myPaymentRef;
         String paymentKey;
 
-        for(Payment payment : paymentList){
+        for(final Payment payment : paymentList){
 
             myPaymentRef = myExpenseRef.child("payments").push();
             paymentKey = myPaymentRef.getKey();
@@ -228,7 +228,7 @@ public class Expense {
             ExpenseForUser expenseForUser = new ExpenseForUser(expense, payment.getBalance());
             mDatabase.child("users").child(payment.getUserId()).child("groups").child(groupId).child("expenses").child(expenseKey).setValue(expenseForUser);
 
-            if(payment.getUserId().equals(paidById)) {
+            if(!(payment.getUserId().equals(paidById))) {
 
                 mDatabase.child("users").child(payment.getUserId()).child("groups").child(groupId).child("newExpenses").runTransaction(new Transaction.Handler() {
 
@@ -252,7 +252,67 @@ public class Expense {
                     }
                 });
 
+                /*update users balances*/
+                mDatabase.child("groups").child(groupId).child("users").child(payment.getUserId()).child("balances").child(paidById).child("balance").runTransaction(new Transaction.Handler() {
+
+                    @Override
+                    public Transaction.Result doTransaction(MutableData currentData) {
+                        if (currentData.getValue() == null) {
+                            //no default value for data, set one
+                            currentData.setValue(payment.getBalance());
+                        } else {
+                            // perform the update operations on data
+                            currentData.setValue((Long) currentData.getValue() + payment.getBalance());
+                        }
+                        return Transaction.success(currentData);
+                    }
+
+                    @Override
+                    public void onComplete(DatabaseError databaseError,
+                                           boolean committed, DataSnapshot currentData) {
+                        //This method will be called once with the results of the transaction.
+                        //Update remove the user from the group
+                    }
+                });
+
+                mDatabase.child("groups").child(groupId).child("users").child(paidById).child("balances").child(payment.getUserId()).child("balance").runTransaction(new Transaction.Handler() {
+
+                    @Override
+                    public Transaction.Result doTransaction(MutableData currentData) {
+                        if (currentData.getValue() == null) {
+                            //no default value for data, set one
+                            currentData.setValue(payment.getToPaid());
+                        } else {
+                            // perform the update operations on data
+                            currentData.setValue((Long) currentData.getValue() + payment.getToPaid());
+                        }
+                        return Transaction.success(currentData);
+                    }
+
+                    @Override
+                    public void onComplete(DatabaseError databaseError,
+                                           boolean committed, DataSnapshot currentData) {
+                        //This method will be called once with the results of the transaction.
+                        //Update remove the user from the group
+                    }
+                });
+
+
+
             }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         }
 

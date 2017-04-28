@@ -28,14 +28,14 @@ public class RecyclerViewAdapterUsers extends RecyclerView.Adapter<RecyclerViewA
 
     private List<Balance> mValues = new ArrayList<>();
     private DatabaseReference dataref;
-    private Group groupSelected;
+    private GroupForUser groupSelected;
     private List<String> mValuesIds = new ArrayList<>();
     private Context mContext;
     private ChildEventListener mChildEventListener;
 
     private static final String TAG = "MyBalanceActivity";
 
-    public RecyclerViewAdapterUsers(Context ct, DatabaseReference dr, Group g) {
+    public RecyclerViewAdapterUsers(Context ct, DatabaseReference dr, GroupForUser g) {
 
         dataref = dr;
         groupSelected = g;
@@ -143,13 +143,13 @@ public class RecyclerViewAdapterUsers extends RecyclerView.Adapter<RecyclerViewA
         holder.mIdView.setText(mValues.get(position).getUserName() + " " +mValues.get(position).getUserSurname());               //qui visualizzo nome e cognome
         //qui invece quanto deve o meno
         if (mValues.get(position).getBalance()>0){
-            holder.mContentView.setText(String.format("+%.2f", mValues.get(position).getUserId()));
+            holder.mContentView.setText(String.format("+%.2f", mValues.get(position).getBalance()));
             holder.mContentView.setTextColor(Color.parseColor("#00c200"));
         }else if(mValues.get(position).getBalance()<0){
-            holder.mContentView.setText(String.format("%.2f", mValues.get(position).getUserId()));
+            holder.mContentView.setText(String.format("%.2f", mValues.get(position).getBalance()));
             holder.mContentView.setTextColor(Color.parseColor("#ff0000"));
         }else{
-            holder.mContentView.setText(String.format("%.2f", mValues.get(position).getUserId()));
+            holder.mContentView.setText(String.format("%.2f", mValues.get(position).getBalance()));
         }
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -193,5 +193,6 @@ public class RecyclerViewAdapterUsers extends RecyclerView.Adapter<RecyclerViewA
             return super.toString() + " '" + mContentView.getText() + "'";
         }
     }
+
 
 }
