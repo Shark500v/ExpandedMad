@@ -66,16 +66,18 @@ public class ExpenseDetailFragment extends Fragment {
             else
                 ((TextView) rootView.findViewById(R.id.buyer_container)).setText(mItem.getPaidByName()+" "+mItem.getPaidBySurname());
             ((TextView) rootView.findViewById(R.id.date_container)).setText(Long.toString(mItem.getDay()) + "/" + Long.toString(mItem.getMonth()) + "/" + Long.toString(mItem.getYear()));
-            /*if(mItem.getMyBalance() > 0){
-                ((TextView) rootView.findViewById(R.id.balance_container)).setText(String.format("+%.2f",(mItem.getMyBalance())));
+
+            Double balance = mItem.getPaymentForUser(ma.getUserPhoneNumber()).getBalance();
+            if(balance > 0){
+                ((TextView) rootView.findViewById(R.id.balance_container)).setText(String.format("+%.2f",(balance)));
                 ((TextView) rootView.findViewById(R.id.balance_container)).setTextColor(Color.parseColor("#00c200"));
-            }else if(mItem.getMyBalance() < 0){
-                ((TextView) rootView.findViewById(R.id.balance_container)).setText(String.format("%.2f",(mItem.getMyBalance())));
+            }else if(balance < 0){
+                ((TextView) rootView.findViewById(R.id.balance_container)).setText(String.format("%.2f",(balance)));
                 ((TextView) rootView.findViewById(R.id.balance_container)).setTextColor(Color.parseColor("#ff0000"));
             }
             else{
-                ((TextView) rootView.findViewById(R.id.balance_container)).setText(String.format("%.2f",(mItem.getMyBalance())));
-            }*/
+                ((TextView) rootView.findViewById(R.id.balance_container)).setText(String.format("%.2f",(balance)));
+            }
         }
 
         return rootView;

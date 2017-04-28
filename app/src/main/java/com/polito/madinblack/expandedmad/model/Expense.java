@@ -196,6 +196,10 @@ public class Expense {
         this.payments = payments;
     }
 
+    public PaymentFirebase getPaymentForUser(String userId){
+        return payments.get(userId);
+    }
+
 
     public static void writeNewExpense(DatabaseReference mDatabase, String name, String tag, String paidById, String paidByName, String paidBySurname, Double cost, String currencyName, String currencySymbol, final String groupId, Long year, Long month, Long day, String description, List<Payment> paymentList){
 
