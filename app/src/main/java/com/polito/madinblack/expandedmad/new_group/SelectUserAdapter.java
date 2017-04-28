@@ -76,7 +76,7 @@ public class SelectUserAdapter extends BaseAdapter {
         v.title.setText(data.getName());
         v.check.setChecked(data.getCheckedBox());
         v.phone.setText(data.getPhone());
-        v.email.setText(data.getEmail());
+        //v.email.setText(data.getEmail());
 
         /*
         // Set image if exists
