@@ -109,21 +109,27 @@ public class NewGroup extends AppCompatActivity {
                 userForGroupList.add(userForGroup);
 
             }
-            UserForGroup userForGroup = new UserForGroup(ma.getUserPhoneNumber(), ma.getUserName(), ma.getUserName());
+            UserForGroup userForGroup = new UserForGroup(ma.getUserPhoneNumber(), ma.getUserName(), ma.getUserSurname());
             userForGroupList.add(userForGroup);
 
 
             groupCode = Group.writeNewGroup(mDatabaseReference, groupName, userForGroupList);
 
-            if(invite.isEmpty()){
+
+            if(invite==null || invite.isEmpty()){
                 Intent intent1=new Intent(NewGroup.this, GroupListActivity.class); //da cambiare (dovra' andare alla pagina del gruppo creato)
                 startActivity(intent1);
             }else{
-                //devo invitare i nuovi membri del gruppo
-                Intent intent2 = new Intent(NewGroup.this, InviteActivity.class);
-                intent2.putExtra("InviteList", (Serializable) invite);
-                intent2.putExtra("Code", groupCode);
-                startActivity(intent2);
+                if(invite.isEmpty()){
+                    Intent intent1=new Intent(NewGroup.this, GroupListActivity.class); //da cambiare (dovra' andare alla pagina del gruppo creato)
+                    startActivity(intent1);
+                }else {
+                    //devo invitare i nuovi membri del gruppo
+                    Intent intent2 = new Intent(NewGroup.this, InviteActivity.class);
+                    intent2.putExtra("InviteList", (Serializable) invite);
+                    intent2.putExtra("Code", groupCode);
+                    startActivity(intent2);
+                }
             }
 
             return true;

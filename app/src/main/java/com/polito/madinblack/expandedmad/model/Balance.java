@@ -9,6 +9,11 @@ public class Balance {
     private String userSurname;
     private Double balance;
 
+    public Balance(){
+
+
+    }
+
     public Balance(String userId, String userName, String userSurname, Double balance) {
         this.userName = userName;
         this.userId = userId;
@@ -16,9 +21,7 @@ public class Balance {
         this.balance = balance;
     }
 
-    public String getUserId() {
-        return userId;
-    }
+    public String getUserId() {return userId;}
 
     public void setUserId(String userId) {
         this.userId = userId;

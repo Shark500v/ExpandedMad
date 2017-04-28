@@ -27,6 +27,8 @@ public class MyApplication {
     private static String userEmail;
     private static Boolean logged = false;
     private static Boolean isPhone = false;
+    private static GroupForUser groupForUser;
+    private static Expense selectedExpense;
 
 
 
@@ -39,6 +41,8 @@ public class MyApplication {
     private Map<Long, User> users = new LinkedHashMap<>();
 
     private DatabaseReference mDatabase;
+
+
 
 
 
@@ -235,5 +239,19 @@ public class MyApplication {
         MyApplication.firebaseUser = firebaseUser;
     }
 
+    public static GroupForUser getGroupForUser() {
+        return groupForUser;
+    }
 
+    public static void setGroupForUser(GroupForUser groupForUser) {
+        MyApplication.groupForUser = groupForUser;
+    }
+
+    public static Expense getSelectedExpense() {
+        return selectedExpense;
+    }
+
+    public static void setSelectedExpense(Expense selectedExpense) {
+        MyApplication.selectedExpense = selectedExpense;
+    }
 }

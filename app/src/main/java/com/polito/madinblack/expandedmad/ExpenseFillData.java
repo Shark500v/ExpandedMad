@@ -37,6 +37,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.polito.madinblack.expandedmad.model.Expense;
 import com.polito.madinblack.expandedmad.model.Group;
+import com.polito.madinblack.expandedmad.model.GroupForUser;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.Payment;
 import com.polito.madinblack.expandedmad.model.User;
@@ -57,7 +58,7 @@ public class ExpenseFillData extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private String groupID = "index";
-    private Group groupSelected;
+    private GroupForUser groupSelected;
     private MyApplication ma;
     private List<UserForGroup> users;
     private List<Payment> mValues;
@@ -93,8 +94,10 @@ public class ExpenseFillData extends AppCompatActivity {
 
         ma = MyApplication.getInstance();   //retrive del DB
 
+        users = new ArrayList<>();
+
         Intent beginner = getIntent();
-        groupSelected = ma.getSingleGroup(Long.valueOf(beginner.getStringExtra("index"))); //recupero l'id del gruppo selezionato, e quindi il gruppo stesso
+        groupSelected = ma.getGroupForUser(); //recupero l'id del gruppo selezionato, e quindi il gruppo stesso
         groupID = beginner.getStringExtra("index");   //id del gruppo, che devo considerare
 
 
@@ -160,6 +163,14 @@ public class ExpenseFillData extends AppCompatActivity {
             TextView description = (TextView) findViewById(R.id.input_description);
             String descriptionS = description.getText().toString();
 
+            /*added to set Paid value*/
+            for(Payment payment : mValues){
+                if(payment.getUserId().equals(ma.getUserPhoneNumber())){
+                    payment.setPaid(amount);
+
+                }
+
+            }
 
 
             Expense.writeNewExpense(FirebaseDatabase.getInstance().getReference(),
@@ -530,7 +541,10 @@ public class ExpenseFillData extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final ExpenseFillData.SimpleItemRecyclerViewAdapter.ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
-            holder.mIdView.setText( holder.mItem.getUserName());
+            if(holder.mItem.getUserId().equals(ma.getUserPhoneNumber()))
+                holder.mIdView.setText(getString(R.string.you));
+            else
+                holder.mIdView.setText( holder.mItem.getUserName());
             onBind = true;
             holder.partition.setText( String.format("%.2f", holder.mItem.getToPaid()));
             onBind = false;

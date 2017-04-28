@@ -33,6 +33,7 @@ public class GroupForUser {
     public GroupForUser(Group group){
         this.name        = group.getName();
         this.size        = group.getSize();
+        this.id          = group.getId();
         this.newExpenses = 0L;
 
     }

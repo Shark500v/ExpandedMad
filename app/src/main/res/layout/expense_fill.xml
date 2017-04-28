@@ -124,7 +124,7 @@
                         android:enabled="false"
                         android:inputType="none"
                         android:gravity="center_horizontal"
-                        android:text="@string/me"/>
+                        android:text="@string/you"/>
 
                     <!--<Spinner
                         android:id="@+id/paidBy_spinner"

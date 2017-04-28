@@ -96,7 +96,7 @@
         </activity>
 
         <activity
-            android:name=".ExpenseFillData_2"
+            android:name=".ExpenseFillData"
             android:label="Add New Expense"
             android:parentActivityName=".ExpenseListActivity"
             android:theme="@style/AppTheme.NoActionBar">

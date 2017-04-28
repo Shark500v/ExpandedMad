@@ -65,7 +65,7 @@ public class UserForGroup {
     public void initializeBalance(List<UserForGroup> usersForGroup){
 
         for(UserForGroup userForGroup : usersForGroup){
-            if(userForGroup.getId()!=this.getId()){
+            if(!userForGroup.getId().equals(this.getId())){
                 Balance balance = new Balance(userForGroup.getId(), userForGroup.getName(), userForGroup.getSurname(), 0D);
                 balances.put(userForGroup.getId(), balance);
 
