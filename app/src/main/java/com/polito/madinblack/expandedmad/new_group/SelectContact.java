@@ -13,17 +13,28 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.polito.madinblack.expandedmad.ExpenseListActivity;
+import com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.R;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class SelectContact extends AppCompatActivity {
 
-    List<SelectUser> groupM = new ArrayList<>();
-    List<SelectUser> invite = new ArrayList<>();    //used to invite new membres to join the app
+    private List<SelectUser> groupM = new ArrayList<>();
+    private List<SelectUser> invite = new ArrayList<>();    //used to invite new membres to join the app
+    private DatabaseReference mDatabaseReference;
+    private AtomicInteger counter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +43,8 @@ public class SelectContact extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
@@ -61,11 +74,12 @@ public class SelectContact extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            Intent intent = new Intent(this, ExpenseListActivity.class);
+            Intent intent = new Intent(this, GroupListActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
             navigateUpTo(intent);
             return true;
         }else if(id == R.id.confirm_group){
+
             if (groupM.isEmpty()) {
 
                 View mv = findViewById(R.id.frameLayout);
@@ -80,11 +94,53 @@ public class SelectContact extends AppCompatActivity {
                 /*
                 *   verifica contatti e riempo la lista degli invite!
                 * */
-
                 //se acuni contatti non sono presenti dentro il DB allora li devo invitare
                 invite.clear();
-                invite.addAll(groupM);  //funzione di prova
 
+                counter = new AtomicInteger(groupM.size());
+
+                for(final SelectUser selectUser : groupM){
+
+                    mDatabaseReference.child("users").child(selectUser.getPhone()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if(!dataSnapshot.exists()){
+                                groupM.remove(selectUser);
+                                invite.add(selectUser);
+                            }
+
+
+                            if(counter.decrementAndGet()==0){
+                                if(invite.isEmpty()){
+                                    //se la lista è vuota non ci sono inviti da fare e posso andare oltre, altrimenti devo procedere ad invitare le persone mancanti prima di creare il gruppo
+                                    Intent intent1=new Intent(SelectContact.this, NewGroup.class);
+                                    intent1.putExtra("Group Members", (Serializable) groupM);
+                                    startActivity(intent1);
+                                }else{
+                                    //invito le persone che non sono ancora nel DB
+                                    Bundle arguments = new Bundle();
+                                    arguments.putSerializable("invite", (Serializable) invite);
+                                    arguments.putSerializable("Group Members", (Serializable) groupM);  //lista di utenti già inscritti
+                                    InviteContact fragment = new InviteContact();
+                                    fragment.setArguments(arguments);
+                                    fragment.show(getSupportFragmentManager(), "InviteContacts");
+                                }
+
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+
+                }
+
+                //invite.addAll(groupM);  //funzione di prova
+
+                /*
                 if(invite.isEmpty()){
                     //se la lista è vuota non ci sono inviti da fare e posso andare oltre, altrimenti devo procedere ad invitare le persone mancanti prima di creare il gruppo
                     Intent intent1=new Intent(SelectContact.this, NewGroup.class);
@@ -99,7 +155,7 @@ public class SelectContact extends AppCompatActivity {
                     fragment.setArguments(arguments);
                     fragment.show(getSupportFragmentManager(), "InviteContacts");
                 }
-
+                */
 
             }
         }

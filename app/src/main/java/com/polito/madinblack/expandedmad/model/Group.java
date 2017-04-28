@@ -67,7 +67,8 @@ public class Group {
     }
 
 
-    public static void writeNewGroup(DatabaseReference mDatabase, String name, List<UserForGroup> usersForGroup) {
+    /*return of group id*/
+    public static String writeNewGroup(DatabaseReference mDatabase, String name, List<UserForGroup> usersForGroup) {
 
         for(UserForGroup userForGroup : usersForGroup) {
             userForGroup.initializeBalance(usersForGroup);
@@ -92,7 +93,7 @@ public class Group {
         }
 
 
-
+        return groupKey;
 
     }
 

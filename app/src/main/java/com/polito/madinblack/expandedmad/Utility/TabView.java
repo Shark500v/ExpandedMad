@@ -218,7 +218,7 @@ public class TabView extends AppCompatActivity {
 
             adapter = new RecyclerViewAdapter(getContext(),
                     FirebaseDatabase.getInstance().getReference().child("users")
-                            .child(ma.myself.getId()).child("groups").child(groupSelected.getId())
+                            .child(ma.getUserPhoneNumber()).child("groups").child(groupSelected.getId())
                             .child("expenses")
                     , index);
             recyclerView = (RecyclerView) rootView.findViewById(R.id.expense_list2);

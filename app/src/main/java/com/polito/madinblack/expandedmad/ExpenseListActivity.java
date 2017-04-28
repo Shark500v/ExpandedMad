@@ -166,7 +166,7 @@ public class ExpenseListActivity extends AppCompatActivity {
             /*code useful to convert in bold only a piece of string*/
             final SpannableStringBuilder str;
 
-            if(mValues.get(position).getPaidById() == MyApplication.myself.getId()) {
+            if(mValues.get(position).getPaidById().equals(ma.getUserPhoneNumber())) {
                 str = new SpannableStringBuilder("Paid by "+ "You");
                 str.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), "Paid by ".length(), ("Paid by ".length() + "You".length()), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }else {
