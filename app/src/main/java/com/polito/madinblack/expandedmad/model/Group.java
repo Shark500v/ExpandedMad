@@ -106,7 +106,11 @@ public class Group {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<UserForGroup> userForGroupList = new ArrayList<UserForGroup>();
+
                 for(DataSnapshot userSnapshot : dataSnapshot.getChildren()){
+                    userSnapshot.getRef().child("balance").updateChildren(userId)
+
+
                     userForGroupList.add(userSnapshot.getValue(UserForGroup.class));
                 }
                 UserForGroup userForGroup = new UserForGroup(userId, userName, userSurname);

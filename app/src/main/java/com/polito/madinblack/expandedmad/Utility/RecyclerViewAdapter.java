@@ -177,16 +177,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
 
-                final Context context = v.getContext();
-                final Intent intent = new Intent(context, ExpenseDetailActivity.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
-                intent.putExtra(ExpenseDetailFragment.ARG_ITEM_ID, holder.mItem.getId());
-                intent.putExtra(ExpenseDetailFragment.ARG_GROUP_ID, index);         //così gli passo l'indice del gruppo di interesse
+
 
                 FirebaseDatabase.getInstance().getReference().child("expenses").child(holder.mItem.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+                        Context context = v.getContext();
+                        Intent intent = new Intent(context, ExpenseDetailActivity.class);
+                        intent.putExtra(ExpenseDetailFragment.ARG_ITEM_ID, holder.mItem.getId());
+                        intent.putExtra(ExpenseDetailFragment.ARG_GROUP_ID, index);
                         ma.setSelectedExpense(dataSnapshot.getValue(Expense.class));
                         context.startActivity(intent);
 
