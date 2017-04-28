@@ -199,6 +199,7 @@ public class GoogleSignInActivity2 extends BaseActivity implements
     @Override
     public void onStop() {
         super.onStop();
+        finish();
        // if (mAuthListener != null) {
          //   mAuth.removeAuthStateListener(mAuthListener);
         //}
@@ -253,8 +254,10 @@ public class GoogleSignInActivity2 extends BaseActivity implements
                         // [START_EXCLUDE]
                         hideProgressDialog();
                         // [END_EXCLUDE]
+
                     }
                 });
+
     }
     // [END auth_with_google]
 
@@ -318,6 +321,7 @@ public class GoogleSignInActivity2 extends BaseActivity implements
         ma.setUserPhoneNumber(phoneNumber);
 
         User.writeNewUser(mDatabase, ma.getFirebaseId(), ma.getUserName(),  ma.getUserSurname(), phoneNumber, ma.getUserEmail());
+        ma.setIsPhone(true);
         mDatabase.child("userId").child(ma.getFirebaseId()).setValue(phoneNumber);
 
 

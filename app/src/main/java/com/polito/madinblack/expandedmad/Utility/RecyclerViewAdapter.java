@@ -17,6 +17,8 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.polito.madinblack.expandedmad.ExpenseDetailActivity;
 import com.polito.madinblack.expandedmad.ExpenseDetailFragment;
 import com.polito.madinblack.expandedmad.R;
@@ -177,12 +179,27 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             @Override
             public void onClick(View v) {
 
-                Context context = v.getContext();
-                Intent intent = new Intent(context, ExpenseDetailActivity.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
-                intent.putExtra(ExpenseDetailFragment.ARG_ITEM_ID, holder.mItem.getId().toString());
+                final Context context = v.getContext();
+                final Intent intent = new Intent(context, ExpenseDetailActivity.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
+                intent.putExtra(ExpenseDetailFragment.ARG_ITEM_ID, holder.mItem.getId());
                 intent.putExtra(ExpenseDetailFragment.ARG_GROUP_ID, index);         //così gli passo l'indice del gruppo di interesse
 
-                context.startActivity(intent);
+                FirebaseDatabase.getInstance().getReference().child("expenses").child(holder.mItem.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        ma.setSelectedExpense(dataSnapshot.getValue(Expense.class));
+                        context.startActivity(intent);
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
+
             }
         });
     }

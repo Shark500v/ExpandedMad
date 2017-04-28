@@ -75,12 +75,14 @@ public class CheckLogIn extends AppCompatActivity {
                             if (dataSnapshot.exists()) {
 
                                 ma.setUserPhoneNumber(dataSnapshot.getValue(String.class));
-                                ma.setIsPhone(true);
 
 
+                                if(ma.getIsPhone()==false) {
                                 /*google login and number yet inserted jump to group page*/
-                                Intent intent = new Intent(CheckLogIn.this, GroupListActivity.class);
-                                startActivity(intent);
+                                    Intent intent = new Intent(CheckLogIn.this, GroupListActivity.class);
+                                    startActivity(intent);
+                                }
+
                                 finish();
 
                             }else{
