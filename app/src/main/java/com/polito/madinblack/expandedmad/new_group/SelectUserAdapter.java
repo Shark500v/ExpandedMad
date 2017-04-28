@@ -119,7 +119,7 @@ public class SelectUserAdapter extends BaseAdapter {
                 }
             }
         });
-
+        /*
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -133,10 +133,9 @@ public class SelectUserAdapter extends BaseAdapter {
                     //elimino l'utente precedentemente aggiunto nel caso l'user cambiasse idea
                     groupMem.remove(data);
                 }
-
             }
         });
-
+        */
         view.setTag(data);
         return view;
     }
