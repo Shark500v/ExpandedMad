@@ -197,7 +197,11 @@ public class Expense {
     }
 
     public PaymentFirebase givePaymentForUser(String userId){
-        return payments.get(userId);
+        for(PaymentFirebase pay:payments.values()){
+            if(pay.getUserId().equals(userId))
+                return pay;
+        }
+        return null;
     }
 
 
