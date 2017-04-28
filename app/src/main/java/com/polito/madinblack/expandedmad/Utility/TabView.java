@@ -66,7 +66,6 @@ public class TabView extends AppCompatActivity {
 
     private static final int CONTACT_REQUEST = 1;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
