@@ -25,7 +25,11 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.polito.madinblack.expandedmad.ExpenseFillData;
 import com.polito.madinblack.expandedmad.ExpenseFillData_2;
 import com.polito.madinblack.expandedmad.GroupManaging.GroupDetailActivity;
@@ -48,9 +52,11 @@ public class TabView extends AppCompatActivity {
 
     private static MyApplication ma;
 
-    private static String index = "index";
+    private static String index;
 
     private static GroupForUser groupSelected;
+
+    private DatabaseReference mDatabase;
 
     private static List<Expense> eItem;    //usato per la lista di spese da mostrare in una delle tre schede a schermo
 
@@ -58,6 +64,7 @@ public class TabView extends AppCompatActivity {
 
     private ExpensesListFragment listFrag = ExpensesListFragment.newInstance();
 
+    private static final int CONTACT_REQUEST = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,9 +74,16 @@ public class TabView extends AppCompatActivity {
         ma = MyApplication.getInstance();   //retrive del DB
 
         Intent beginner = getIntent();
-        groupSelected = ma.getSingleGroup(Long.valueOf(beginner.getStringExtra("index"))); //recupero l'id del gruppo selezionato, e quindi il gruppo stesso
-        //eItem = groupSelected.getExpenses();
+
         index = beginner.getStringExtra("index");
+
+        groupSelected = ma.getGroupForUser();
+
+        /*BUG
+        groupSelected = ma.getSingleGroup(Long.valueOf(beginner.getStringExtra("index"))); //recupero l'id del gruppo selezionato, e quindi il gruppo stesso
+        */
+        //eItem = groupSelected.getExpenses();
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(groupSelected.getName());
@@ -88,15 +102,19 @@ public class TabView extends AppCompatActivity {
         tabLayout.setupWithViewPager(mViewPager);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Context c = view.getContext();
                 Intent intent = new Intent(c, ExpenseFillData.class);     //qui setto la nuova attività da mostrare a schermo dopo che clicco
                 intent.putExtra("index", index);                            //passo l'indice del gruppo
-                startActivityForResult(intent,1);
+                startActivityForResult(intent,CONTACT_REQUEST);
+
             }
         });
+
 
         // Show the Up button in the action bar. (bottone indietro nella pagina 2)
         ActionBar actionBar = getSupportActionBar();
@@ -219,7 +237,7 @@ public class TabView extends AppCompatActivity {
 
             adapter = new RecyclerViewAdapter(getContext(),
                     FirebaseDatabase.getInstance().getReference().child("users")
-                            .child(ma.getUserPhoneNumber()).child("groups").child(groupSelected.getId())
+                            .child(ma.getUserPhoneNumber()).child("groups").child(index)
                             .child("expenses")
                     , index);
             recyclerView = (RecyclerView) rootView.findViewById(R.id.expense_list2);
@@ -229,7 +247,7 @@ public class TabView extends AppCompatActivity {
             return rootView;
         }
 
-        public void UpdateAdapter() {
+        public void UpdateAdapter(){
             recyclerView.setAdapter(adapter);
         }
 
@@ -275,7 +293,7 @@ public class TabView extends AppCompatActivity {
             adapter = new RecyclerViewAdapterUsers(getContext(),
                     FirebaseDatabase.getInstance().getReference().child("groups")
                             .child(groupSelected.getId()).child("users").
-                            child("balance"), groupSelected);
+                            child(ma.getUserPhoneNumber()).child("balances"), groupSelected);
 
             recyclerView = (RecyclerView) rootView.findViewById(R.id.item_list);
             recyclerView.setAdapter(adapter);
