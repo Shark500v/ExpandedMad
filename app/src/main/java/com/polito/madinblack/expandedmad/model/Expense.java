@@ -228,7 +228,7 @@ public class Expense {
             ExpenseForUser expenseForUser = new ExpenseForUser(expense, payment.getBalance());
             mDatabase.child("users").child(payment.getUserId()).child("groups").child(groupId).child("expenses").child(expenseKey).setValue(expenseForUser);
 
-            if(payment.getUserId()!=paidById) {
+            if(payment.getUserId().equals(paidById)) {
 
                 mDatabase.child("users").child(payment.getUserId()).child("groups").child(groupId).child("newExpenses").runTransaction(new Transaction.Handler() {
 
