@@ -25,11 +25,7 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.polito.madinblack.expandedmad.ExpenseFillData;
 import com.polito.madinblack.expandedmad.ExpenseFillData_2;
 import com.polito.madinblack.expandedmad.GroupManaging.GroupDetailActivity;
@@ -52,19 +48,15 @@ public class TabView extends AppCompatActivity {
 
     private static MyApplication ma;
 
-    private static String index;
+    private static String index = "index";
 
     private static GroupForUser groupSelected;
-
-    private DatabaseReference mDatabase;
 
     private static List<Expense> eItem;    //usato per la lista di spese da mostrare in una delle tre schede a schermo
 
     private MyBalanceFragment balanceFrag = MyBalanceFragment.newInstance();
 
     private ExpensesListFragment listFrag = ExpensesListFragment.newInstance();
-
-    private static final int CONTACT_REQUEST = 1;
 
 
     @Override
@@ -75,16 +67,9 @@ public class TabView extends AppCompatActivity {
         ma = MyApplication.getInstance();   //retrive del DB
 
         Intent beginner = getIntent();
-
-        index = beginner.getStringExtra("index");
-
-        groupSelected = ma.getGroupForUser();
-
-        /*BUG
         groupSelected = ma.getSingleGroup(Long.valueOf(beginner.getStringExtra("index"))); //recupero l'id del gruppo selezionato, e quindi il gruppo stesso
-        */
         //eItem = groupSelected.getExpenses();
-
+        index = beginner.getStringExtra("index");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(groupSelected.getName());
@@ -103,19 +88,15 @@ public class TabView extends AppCompatActivity {
         tabLayout.setupWithViewPager(mViewPager);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-
-
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Context c = view.getContext();
                 Intent intent = new Intent(c, ExpenseFillData.class);     //qui setto la nuova attività da mostrare a schermo dopo che clicco
                 intent.putExtra("index", index);                            //passo l'indice del gruppo
-                startActivityForResult(intent,CONTACT_REQUEST);
-
+                startActivityForResult(intent,1);
             }
         });
-
 
         // Show the Up button in the action bar. (bottone indietro nella pagina 2)
         ActionBar actionBar = getSupportActionBar();
@@ -238,7 +219,7 @@ public class TabView extends AppCompatActivity {
 
             adapter = new RecyclerViewAdapter(getContext(),
                     FirebaseDatabase.getInstance().getReference().child("users")
-                            .child(ma.getUserPhoneNumber()).child("groups").child(index)
+                            .child(ma.getUserPhoneNumber()).child("groups").child(groupSelected.getId())
                             .child("expenses")
                     , index);
             recyclerView = (RecyclerView) rootView.findViewById(R.id.expense_list2);
@@ -248,7 +229,7 @@ public class TabView extends AppCompatActivity {
             return rootView;
         }
 
-        public void UpdateAdapter(){
+        public void UpdateAdapter() {
             recyclerView.setAdapter(adapter);
         }
 
@@ -294,7 +275,7 @@ public class TabView extends AppCompatActivity {
             adapter = new RecyclerViewAdapterUsers(getContext(),
                     FirebaseDatabase.getInstance().getReference().child("groups")
                             .child(groupSelected.getId()).child("users").
-                            child(ma.getUserPhoneNumber()).child("balances"), groupSelected);
+                            child("balance"), groupSelected);
 
             recyclerView = (RecyclerView) rootView.findViewById(R.id.item_list);
             recyclerView.setAdapter(adapter);

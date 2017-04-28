@@ -9,22 +9,33 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.polito.madinblack.expandedmad.ExpenseDetailActivity;
 import com.polito.madinblack.expandedmad.ExpenseDetailFragment;
 import com.polito.madinblack.expandedmad.ExpenseListActivity;
+import com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.polito.madinblack.expandedmad.model.Group;
+import com.polito.madinblack.expandedmad.model.GroupForUser;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.User;
+import com.polito.madinblack.expandedmad.model.UserForGroup;
 
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
@@ -33,7 +44,13 @@ public class GroupMemebersActivity extends AppCompatActivity {
     public String groupID = "init";
     private String name = "hello";
     private MyApplication ma;
-    private Group groupSelected;
+    private GroupForUser groupSelected;
+
+    private static final String TAG = "GroupMemebersActivity";
+
+    private DatabaseReference mUserGroupsReference;
+    private DatabaseReference mDatabase;
+    private SimpleItemRecyclerViewAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +61,12 @@ public class GroupMemebersActivity extends AppCompatActivity {
 
 
         ma = MyApplication.getInstance();
-        groupSelected = ma.getSingleGroup(Long.valueOf(getIntent().getStringExtra("GROUP_ID")));
+        groupSelected = ma.getGroupForUser();
         name = groupSelected.getName();
+
+        mUserGroupsReference = FirebaseDatabase.getInstance().getReference()
+                .child("groups").child(groupID).child("users");
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -58,10 +79,28 @@ public class GroupMemebersActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        //in questo punto il codice prende la lista principale e la mostra come recyclerview
         View recyclerView = findViewById(R.id.item_list);
         assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
 
+        if(mUserGroupsReference!=null) {
+            mAdapter = new SimpleItemRecyclerViewAdapter(this, mUserGroupsReference);
+            ((RecyclerView) recyclerView).setAdapter(mAdapter);
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // Clean up comments listener
+        if(mAdapter!=null)
+            mAdapter.cleanupListener();
     }
 
     @Override
@@ -76,16 +115,110 @@ public class GroupMemebersActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        //recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(groupSelected.getUsers2()));
-    }
 
     public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<User> mValues;
+        private Context mContext;
+        private DatabaseReference mDatabaseReference;
+        private ChildEventListener mChildEventListener;
 
-        public SimpleItemRecyclerViewAdapter(List<User> items) {
-            mValues = items;
+        private final List<UserForGroup> mValues = new ArrayList<>();
+        private List<String> mValuesIds = new ArrayList<>();
+
+        public SimpleItemRecyclerViewAdapter(final Context context, DatabaseReference ref) {
+            mContext = context;
+            mDatabaseReference = ref;
+
+            // Create child event listener
+            // [START child_event_listener_recycler]
+            ChildEventListener childEventListener = new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
+                    Log.d(TAG, "onChildAdded:" + dataSnapshot.getKey());
+
+                    // A new user has been added, add it to the displayed list
+                    UserForGroup userForGroup = dataSnapshot.getValue(UserForGroup.class);
+
+                    // [START_EXCLUDE]
+                    // Update RecyclerView
+                    mValuesIds.add(dataSnapshot.getKey());
+                    mValues.add(userForGroup);
+                    notifyItemInserted(mValues.size() - 1);
+                    // [END_EXCLUDE]
+                }
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
+                    Log.d(TAG, "onChildChanged:" + dataSnapshot.getKey());
+
+                    // A comment has changed, use the key to determine if we are displaying this
+                    // comment and if so displayed the changed comment.
+                    UserForGroup userForGroup = dataSnapshot.getValue(UserForGroup.class);
+                    String userKey = dataSnapshot.getKey();
+
+                    // [START_EXCLUDE]
+                    int userIndex = mValuesIds.indexOf(userKey);
+                    if (userIndex > -1) {
+                        // Replace with the new data
+                        mValues.set(userIndex, userForGroup);
+
+                        // Update the RecyclerView
+                        notifyItemChanged(userIndex);
+                    } else {
+                        Log.w(TAG, "onChildChanged:unknown_child:" + userKey);
+                    }
+                    // [END_EXCLUDE]
+                }
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+                    Log.d(TAG, "onChildRemoved:" + dataSnapshot.getKey());
+
+                    // A comment has changed, use the key to determine if we are displaying this
+                    // comment and if so remove it.
+                    String userKey = dataSnapshot.getKey();
+
+                    // [START_EXCLUDE]
+                    int userIndex = mValuesIds.indexOf(userKey);
+                    if (userIndex > -1) {
+                        // Remove data from the list
+                        mValuesIds.remove(userIndex);
+                        mValues.remove(userIndex);
+
+                        // Update the RecyclerView
+                        notifyItemRemoved(userIndex);
+                    } else {
+                        Log.w(TAG, "onChildRemoved:unknown_child:" + userKey);
+                    }
+                    // [END_EXCLUDE]
+                }
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
+                    Log.d(TAG, "onChildMoved:" + dataSnapshot.getKey());
+
+                    // A comment has changed position, use the key to determine if we are
+                    // displaying this comment and if so move it.
+                    //Group movedGroup = dataSnapshot.getValue(Group.class);
+                    //String groupKey = dataSnapshot.getKey();
+
+                    // ...
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.w(TAG, "Groups:onCancelled", databaseError.toException());
+                    Toast.makeText(mContext, "Failed to load groups.",
+                            Toast.LENGTH_SHORT).show();
+                }
+            };
+            ref.addChildEventListener(childEventListener);
+            // [END child_event_listener_recycler]
+
+            // Store reference to listener so it can be removed on app stop
+            mChildEventListener = childEventListener;
+
+
         }
 
         @Override
@@ -120,6 +253,13 @@ public class GroupMemebersActivity extends AppCompatActivity {
             });
         }
 
+        public void cleanupListener() {
+            if (mChildEventListener != null) {
+                mDatabaseReference.removeEventListener(mChildEventListener);
+            }
+        }
+
+
         @Override
         public int getItemCount() {
             return mValues.size();
@@ -129,7 +269,7 @@ public class GroupMemebersActivity extends AppCompatActivity {
             public final View mView;
             public final TextView mIdView;
             public final TextView mContentView;
-            public User mItem;
+            public UserForGroup mItem;
 
             public ViewHolder(View view) {
                 super(view);

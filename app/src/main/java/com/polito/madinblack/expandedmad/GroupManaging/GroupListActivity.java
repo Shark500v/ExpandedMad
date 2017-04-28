@@ -60,11 +60,10 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
 
     private MyApplication ma;
 
-    private static final String TAG = "GoogleActivity";
+    private static final String TAG = "GroupListActivity";
 
     private TextView tv1, tv2;
 
-    private DatabaseReference mGroupsReference;
     private DatabaseReference mUserGroupsReference;
     private DatabaseReference mDatabase;
     private SimpleItemRecyclerViewAdapter mAdapter;
