@@ -331,7 +331,7 @@ public class GoogleSignInActivity2 extends BaseActivity implements
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if(dataSnapshot.exists()){
-                        Group.writeUserToGroup(mDatabase, invitationCode, ma.getUserPhoneNumber(), ma.getUserName(), ma.getUserName());
+                        Group.writeUserToGroup(mDatabase, invitationCode, ma.getUserPhoneNumber(), ma.getUserName(), ma.getUserSurname());
                         Intent intent = new Intent(GoogleSignInActivity2.this, GroupListActivity.class);
                         startActivity(intent);
                         finish();
