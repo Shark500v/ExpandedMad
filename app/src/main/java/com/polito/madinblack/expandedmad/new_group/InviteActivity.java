@@ -23,14 +23,12 @@ import com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 
-import java.io.Serializable;
 import java.util.List;
 
 public class InviteActivity extends AppCompatActivity {
 
     List<SelectUser> invite;
     private MyApplication ma;
-    TaskStackBuilder ts = TaskStackBuilder.create(this);
     Intent intent1;
     String groupCode;
 
@@ -93,7 +91,7 @@ public class InviteActivity extends AppCompatActivity {
                 }
 
             case R.id.home:
-                navigateUpTo(new Intent(this, SelectContact.class));    //definisco il parente verso cui devo tornare indietro
+                navigateUpTo(new Intent(this, NewGroup.class));    //definisco il parente verso cui devo tornare indietro
                 return true;
 
             default:
