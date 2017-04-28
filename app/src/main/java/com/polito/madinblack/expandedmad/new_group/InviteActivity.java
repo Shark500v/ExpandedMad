@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.polito.madinblack.expandedmad.GroupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 
@@ -28,10 +29,10 @@ import java.util.List;
 public class InviteActivity extends AppCompatActivity {
 
     List<SelectUser> invite;
-    List<SelectUser> groupM;
     private MyApplication ma;
     TaskStackBuilder ts = TaskStackBuilder.create(this);
     Intent intent1;
+    String groupCode;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +50,7 @@ public class InviteActivity extends AppCompatActivity {
 
         ma = MyApplication.getInstance();
         invite = (List<SelectUser>) getIntent().getSerializableExtra("InviteList");
-        groupM = (List<SelectUser>) getIntent().getSerializableExtra("Group Members");
+        groupCode = getIntent().getStringExtra("Code");
 
         //in questo punto il codice prende la lista principale e la mostra come recyclerview
         RecyclerView recyclerView = (RecyclerView)findViewById(R.id.invite_list);
@@ -75,8 +76,8 @@ public class InviteActivity extends AppCompatActivity {
                 if(flag){
                     //posso procedere con l'activity successiva, ma prima devo inviare le email
 
-                    intent1 = new Intent(InviteActivity.this, NewGroup.class);
-                    intent1.putExtra("Group Members", (Serializable) groupM);
+                    //dovrei andare alla pagina del gruppo
+                    intent1 = new Intent(InviteActivity.this, GroupListActivity.class);
 
                     sendEmail();
 
@@ -105,7 +106,7 @@ public class InviteActivity extends AppCompatActivity {
     private void sendEmail(){
 
         String userName = ma.getUserName() + " " + ma.getUserSurname();         //devo passargli il nome dell'utente loggato
-        String code = "8321469";                //devo passargli il codice da inviare nella mail
+        String code = groupCode;                //devo passargli il codice da inviare nella mail
         String[] to = new String[invite.size()];//prendo la mail del/dei destinatari
         for(int i=0; i<invite.size();i++) {
             to[i] = invite.get(i).getEmail();

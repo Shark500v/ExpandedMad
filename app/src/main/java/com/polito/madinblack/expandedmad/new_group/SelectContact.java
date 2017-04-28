@@ -78,6 +78,7 @@ public class SelectContact extends AppCompatActivity {
             navigateUpTo(intent);
             return true;
         }else if(id == R.id.confirm_group){
+
             if (groupM.isEmpty()) {
 
                 View mv = findViewById(R.id.frameLayout);

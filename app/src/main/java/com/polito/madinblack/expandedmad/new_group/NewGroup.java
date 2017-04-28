@@ -23,6 +23,7 @@ import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.Group;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class NewGroup extends AppCompatActivity {
@@ -33,8 +34,10 @@ public class NewGroup extends AppCompatActivity {
     private MyApplication ma;
     String phoneId;
     List<SelectUser> groupM;
+    List<SelectUser> invite;
     ListView lv;
     GroupMembersAdapter adapter;
+    String GroupCode = "hello";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,6 +48,8 @@ public class NewGroup extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         groupM = (List<SelectUser>) getIntent().getSerializableExtra("Group Members");
+        invite = (List<SelectUser>) getIntent().getSerializableExtra("invite");
+
         lv = (ListView) findViewById(R.id.list1);
         adapter = new GroupMembersAdapter(groupM, this);
 
@@ -91,8 +96,17 @@ public class NewGroup extends AppCompatActivity {
 
             writeNewGroup(groupName);
 
-            Intent intent1=new Intent(NewGroup.this, GroupListActivity.class); //da cambiare (dovra' andare alla pagina del gruppo creato)
-            startActivity(intent1);
+            if(invite.isEmpty()){
+                Intent intent1=new Intent(NewGroup.this, GroupListActivity.class); //da cambiare (dovra' andare alla pagina del gruppo creato)
+                startActivity(intent1);
+            }else{
+                //devo invitare i nuovi membri del gruppo
+                Intent intent2 = new Intent(NewGroup.this, InviteActivity.class);
+                intent2.putExtra("InviteList", (Serializable) invite);
+                intent2.putExtra("Code", GroupCode);
+                startActivity(intent2);
+            }
+
             return true;
 
         }else if (id == android.R.id.home){
