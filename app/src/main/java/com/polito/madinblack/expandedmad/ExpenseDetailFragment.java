@@ -61,11 +61,13 @@ public class ExpenseDetailFragment extends Fragment {
             ((TextView) rootView.findViewById(R.id.tag_container)).setText(mItem.getTag().toString());
             ((TextView) rootView.findViewById(R.id.cost_container)).setText(String.format("%.2f",(mItem.getCost())));
             ((TextView) rootView.findViewById(R.id.currency_container)).setText(mItem.getCurrencySymbol());
-            if( mItem.getPaidById() == MyApplication.myself.getId() )
+            if( mItem.getPaidById().equals(ma.getUserPhoneNumber()) )
                 ((TextView) rootView.findViewById(R.id.buyer_container)).setText("You");
             else
                 ((TextView) rootView.findViewById(R.id.buyer_container)).setText(mItem.getPaidByName()+" "+mItem.getPaidBySurname());
             ((TextView) rootView.findViewById(R.id.date_container)).setText(Long.toString(mItem.getDay()) + "/" + Long.toString(mItem.getMonth()) + "/" + Long.toString(mItem.getYear()));
+
+
             /*if(mItem.getMyBalance() > 0){
                 ((TextView) rootView.findViewById(R.id.balance_container)).setText(String.format("+%.2f",(mItem.getMyBalance())));
                 ((TextView) rootView.findViewById(R.id.balance_container)).setTextColor(Color.parseColor("#00c200"));

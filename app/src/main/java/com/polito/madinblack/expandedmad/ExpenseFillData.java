@@ -160,14 +160,14 @@ public class ExpenseFillData extends AppCompatActivity {
             TextView description = (TextView) findViewById(R.id.input_description);
             String descriptionS = description.getText().toString();
 
-            User myself = ma.myself;
+
 
             Expense.writeNewExpense(FirebaseDatabase.getInstance().getReference(),
                     expenseName,
                     tag,
-                    myself.getId(),
-                    myself.getName(),
-                    myself.getSurname(),
+                    ma.getUserPhoneNumber(),
+                    ma.getUserName(),
+                    ma.getUserSurname(),
                     amount,
                     "Euro",
                     "€",

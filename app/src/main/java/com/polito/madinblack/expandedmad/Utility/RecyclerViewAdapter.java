@@ -37,6 +37,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private List<String> mValuesIds = new ArrayList<>();
     private Context mContext;
     private ChildEventListener mChildEventListener;
+    private MyApplication ma;
 
     private static final String TAG = "MyBalanceActivity";
 
@@ -44,6 +45,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         this.index = index;
         dataref = dr;
         mContext = ct;
+        ma = MyApplication.getInstance();
 
         // Create child event listener
         // [START child_event_listener_recycler]
@@ -156,7 +158,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             holder.mContentView.setText(String.format("%.2f",mValues.get(position).getMyBalance()) + " " + mValues.get(position).getCurrency());
         }
         */
-        if(mValues.get(position).getPaidById()== MyApplication.myself.getId())
+        if(mValues.get(position).getPaidById().equals(ma.getUserPhoneNumber()))
             holder.mPaydBy.setText("Paid by: You");
         else
             holder.mPaydBy.setText("Paid by: " + mValues.get(position).getPaidByName());
