@@ -105,7 +105,7 @@ public class Group {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                List<UserForGroup> userForGroupList = new ArrayList<UserForGroup>();
+                final List<UserForGroup> userForGroupList = new ArrayList<UserForGroup>();
 
                 Balance balance = new Balance(userId, userName, userSurname, 0D);
                 for(DataSnapshot userSnapshot : dataSnapshot.getChildren()){
@@ -117,6 +117,60 @@ public class Group {
                 userForGroup.initializeBalance(userForGroupList);
                 mDatabase.child("groups").child(groupId).child("users").child(userId).setValue(userForGroup);
 
+                mDatabase.child("groups").child(groupId).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            GroupForUser groupForUser = new GroupForUser(dataSnapshot.getValue(Group.class));
+                            mDatabase.child("users").child(userId).child("groups").child(groupId).setValue(groupForUser);
+                        }
+
+                        mDatabase.child("groups").child(groupId).child("size").runTransaction( new Transaction.Handler(){
+
+                            @Override
+                            public Transaction.Result doTransaction(MutableData currentData){
+                                if(currentData.getValue() == null){
+                                    //no default value for data, set one
+                                    currentData.setValue(1);
+                                    mDatabase.child("users").child(userId).child("groups").child(groupId).child("size").setValue(1);
+                                }else{
+                                    // perform the update operations on data
+                                    currentData.setValue((Long) currentData.getValue() + 1);
+
+                                    for(UserForGroup userForGroup : userForGroupList) {
+                                        mDatabase.child("users").child(userForGroup.getId()).child("groups").child(groupId).child("size").setValue((Long)currentData.getValue()+1);
+                                    }
+                                        mDatabase.child("users").child(userId).child("groups").child(groupId).child("size").setValue((Long)currentData.getValue()+2);
+                                }
+                                return Transaction.success(currentData);
+                            }
+
+                            @Override
+                            public void onComplete(DatabaseError databaseError,
+                                                   boolean committed, DataSnapshot currentData){
+                                //This method will be called once with the results of the transaction.
+                                //Update remove the user from the group
+                            }
+                        });
+
+
+
+
+
+
+
+
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
+
             }
 
             @Override
@@ -127,7 +181,7 @@ public class Group {
 
 
 
-
+/*
         mDatabase.child("groups").child(groupId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -143,10 +197,10 @@ public class Group {
 
             }
         });
+*/
 
 
-
-
+/*
         mDatabase.child("groups").child(groupId).child("size").runTransaction( new Transaction.Handler(){
 
             @Override
@@ -172,7 +226,7 @@ public class Group {
             }
         });
 
-
+*/
 
     }
 
