@@ -71,8 +71,8 @@ public class TabView extends AppCompatActivity {
         groupName  = getIntent().getExtras().getString("groupName");
 
 
-        mDatabaseBalancesReference = FirebaseDatabase.getInstance().getReference().child("groups/"+groupIndex+"/users/"+ma.getFirebaseId()+"/"+ma.getUserPhoneNumber()+"/balances");
-        mDatabaseExpenseListReference = FirebaseDatabase.getInstance().getReference().child("users/"+ma.getFirebaseId()+"/"+ma.getUserPhoneNumber()+"/groups/"+groupIndex+"/expenses");
+        mDatabaseBalancesReference = FirebaseDatabase.getInstance().getReference().child("groups/"+groupIndex+"/users/"+ma.getFirebaseId()+"/balances");
+        mDatabaseExpenseListReference = FirebaseDatabase.getInstance().getReference().child("users/"+ma.getUserPhoneNumber()+"/"+ma.getFirebaseId()+"/groups/"+groupIndex+"/expenses");
 
 
 

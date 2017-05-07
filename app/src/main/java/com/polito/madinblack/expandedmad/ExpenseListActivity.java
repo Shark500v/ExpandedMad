@@ -151,14 +151,14 @@ public class ExpenseListActivity extends AppCompatActivity {
             holder.mItem = mValues.get(position);   //mValues.get(position) rappresenta un singolo elemento della nostra lista di spese
             holder.mIdView.setText(mValues.get(position).getName());
             if(mValues.get(position).getMyBalance()>0) {
-                holder.mContentView.setText(String.format("+%.2f",mValues.get(position).getMyBalance()) + " " + mValues.get(position).getCurrencySymbol());
+                holder.mContentView.setText(mValues.get(position).getMyBalance() + " " + mValues.get(position).getCurrencySymbol());
                 holder.mContentView.setTextColor(Color.parseColor("#00c200"));
             }else if(mValues.get(position).getMyBalance()<0) {
-                holder.mContentView.setText(String.format("%.2f",mValues.get(position).getMyBalance()) + " " + mValues.get(position).getCurrencySymbol());
+                holder.mContentView.setText(mValues.get(position).getMyBalance() + " " + mValues.get(position).getCurrencySymbol());
                 holder.mContentView.setTextColor(Color.parseColor("#ff0000"));
             }
             else{
-                holder.mContentView.setText(String.format("%.2f",mValues.get(position).getMyBalance()) + " " + mValues.get(position).getCurrencySymbol());
+                holder.mContentView.setText(mValues.get(position).getMyBalance() + " " + mValues.get(position).getCurrencySymbol());
             }
 
             /*code useful to convert in bold only a piece of string*/
