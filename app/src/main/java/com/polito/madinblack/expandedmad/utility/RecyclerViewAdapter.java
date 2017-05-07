@@ -64,7 +64,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                     @Override
                     public Transaction.Result doTransaction(MutableData currentData) {
-                            if(currentData.getValue()!=0)
+                            if((Long) currentData.getValue()!=0)
                                 currentData.setValue(0L);
 
                         return Transaction.success(currentData);
