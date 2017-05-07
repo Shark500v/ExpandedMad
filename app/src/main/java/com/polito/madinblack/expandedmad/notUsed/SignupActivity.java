@@ -1,4 +1,4 @@
-package com.polito.madinblack.expandedmad;
+package com.polito.madinblack.expandedmad.notUsed;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.groupManaging.GroupListActivity;
 
 public class SignupActivity extends AppCompatActivity {

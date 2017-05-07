@@ -1,6 +1,10 @@
 package com.polito.madinblack.expandedmad.model;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
 import android.graphics.Bitmap;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,15 +32,12 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.email       = email;
         this.id          = phoneNumber;
-
-
     }
 
     public static void writeNewUser(DatabaseReference mDatabase, String firebaseId, String name, String surname, String phoneNumber, String email) {
         User user = new User(name, surname, phoneNumber, email);
         user.setFirebaseId(firebaseId);
-
-        mDatabase.child("users").child(user.getId()).setValue(user);
+        mDatabase.child("users/"+phoneNumber+"/"+firebaseId).setValue(user);
     }
 
 

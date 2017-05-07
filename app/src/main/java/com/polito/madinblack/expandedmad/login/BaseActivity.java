@@ -1,4 +1,4 @@
-package com.polito.madinblack.expandedmad;
+package com.polito.madinblack.expandedmad.login;
 
 /**
  * Created by Ale on 13/04/2017.
