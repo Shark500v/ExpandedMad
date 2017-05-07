@@ -104,7 +104,14 @@ public class SelectContact extends AppCompatActivity {
                                 groupM.remove(selectUser);
                                 invite.add(selectUser);
                             }
-
+                            else{
+                                for(DataSnapshot dataSnapshotChild : dataSnapshot.getChildren()){
+                                    //int index = groupM.indexOf(selectUser);
+                                    String userFirebaseId = dataSnapshotChild.getKey();
+                                    selectUser.setFirebaseId(userFirebaseId);
+                                    //groupM.set(index, selectUser);
+                                }
+                            }
 
                             if(counter.decrementAndGet()==0){
                                 if(invite.isEmpty()){

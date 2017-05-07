@@ -4,7 +4,7 @@ package com.polito.madinblack.expandedmad.model;
 
 public class Balance {
 
-    private String userId;
+    private String userPhoneNumber;
     private String userName;
     private String userSurname;
     private Double balance;
@@ -14,18 +14,14 @@ public class Balance {
 
     }
 
-    public Balance(String userId, String userName, String userSurname, Double balance) {
+    public Balance(String userPhoneNumber, String userName, String userSurname, Double balance) {
+        this.userPhoneNumber = userPhoneNumber;
         this.userName = userName;
-        this.userId = userId;
         this.userSurname = userSurname;
         this.balance = balance;
     }
 
-    public String getUserId() {return userId;}
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
+    public String getUserPhoneNumber() { return userPhoneNumber; }
 
     public String getUserName() {
         return userName;

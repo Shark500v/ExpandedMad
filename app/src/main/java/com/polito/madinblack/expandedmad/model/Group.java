@@ -53,7 +53,7 @@ public class Group {
 
 
         for(UserForGroup userForGroup : usersForGroup){
-            this.users.put(userForGroup.getId(), userForGroup);
+            this.users.put(userForGroup.getFirebaseId(), userForGroup);
         }
 
 
@@ -61,109 +61,109 @@ public class Group {
 
 
     /*return of group id*/
-    public static String writeNewGroup(DatabaseReference mDatabase, String name, List<UserForGroup> usersForGroup) {
-
-        for(UserForGroup userForGroup : usersForGroup) {
-            userForGroup.initializeBalance(usersForGroup);
-        }
+    public static String writeNewGroup(DatabaseReference mDatabaseRootReference, String name, List<UserForGroup> usersForGroup) {
 
 
         Group group = new Group(name, usersForGroup);
 
-
-        DatabaseReference myGroupRef = mDatabase.child("groups").push();
+        DatabaseReference myGroupRef = mDatabaseRootReference.child("groups").push();
         String groupKey = myGroupRef.getKey();
 
         group.setId(groupKey);
 
         myGroupRef.setValue(group);
 
-
         GroupForUser groupForUser = new GroupForUser(group);
 
         for(UserForGroup userForGroup : usersForGroup) {
-            mDatabase.child("users").child(userForGroup.getId()).child("groups").child(groupKey).setValue(groupForUser);
+            mDatabaseRootReference.child("users/"+userForGroup.getPhoneNumber()+"/"+userForGroup.getFirebaseId()+"/groups/"+groupKey).setValue(groupForUser);
         }
-
-
         return groupKey;
 
     }
 
     /*to add single member to a group created yet*/
-    public static void writeUserToGroup(final DatabaseReference mDatabase, final String groupId, final String userId, final String userName, final String userSurname){
+    public static void writeUserToGroup(final DatabaseReference mDatabaseRootReference, final String groupId, final String groupName, final String userFirebaseId, final String userPhoneNumber, final String userName, final String userSurname){
 
 
-        mDatabase.child("groups").child(groupId).child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabaseRootReference.child("groups/"+groupId+"/users").addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                final List<UserForGroup> userForGroupList = new ArrayList<UserForGroup>();
+                final UserForGroup newUserForGroup = new UserForGroup(userPhoneNumber, userFirebaseId, userName, userSurname);
+                Balance balance = new Balance(userPhoneNumber, userName, userSurname, 0D);
 
-                Balance balance = new Balance(userId, userName, userSurname, 0D);
                 for(DataSnapshot userSnapshot : dataSnapshot.getChildren()){
 
-                    userSnapshot.getRef().child("balances").child(userId).setValue(balance);
-                    userForGroupList.add(userSnapshot.getValue(UserForGroup.class));
-                }
-                UserForGroup userForGroup = new UserForGroup(userId, userName, userSurname);
-                userForGroup.initializeBalance(userForGroupList);
-                mDatabase.child("groups").child(groupId).child("users").child(userId).setValue(userForGroup);
-
-                mDatabase.child("groups").child(groupId).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()) {
-                            GroupForUser groupForUser = new GroupForUser(dataSnapshot.getValue(Group.class));
-                            mDatabase.child("users").child(userId).child("groups").child(groupId).setValue(groupForUser);
+                    userSnapshot.getRef().child("balances").child(userFirebaseId).setValue(balance);
+                    UserForGroup userForGroup = userSnapshot.getValue(UserForGroup.class);
+                    newUserForGroup.connect(userForGroup);
+                    mDatabaseRootReference.child("users/"+userForGroup.getPhoneNumber()+"/"+userForGroup.getFirebaseId()+"/groups/"+groupId+"/size").runTransaction(new Transaction.Handler(){
+                        @Override
+                        public Transaction.Result doTransaction(MutableData currentData){
+                            if(currentData.getValue() == null){
+                                //no default value for data, set one
+                                currentData.setValue(1);
+                            }else{
+                                // perform the update operations on data
+                                currentData.setValue((Long) currentData.getValue() + 1);
+                            }
+                            return Transaction.success(currentData);
                         }
 
-                        mDatabase.child("groups").child(groupId).child("size").runTransaction( new Transaction.Handler(){
+                        @Override
+                        public void onComplete(DatabaseError databaseError,
+                                               boolean committed, DataSnapshot currentData){
 
-                            @Override
-                            public Transaction.Result doTransaction(MutableData currentData){
-                                if(currentData.getValue() == null){
-                                    //no default value for data, set one
-                                    currentData.setValue(1);
-                                    mDatabase.child("users").child(userId).child("groups").child(groupId).child("size").setValue(1);
-                                }else{
-                                    // perform the update operations on data
-                                    currentData.setValue((Long) currentData.getValue() + 1);
-
-                                    for(UserForGroup userForGroup : userForGroupList) {
-                                        mDatabase.child("users").child(userForGroup.getId()).child("groups").child(groupId).child("size").setValue((Long)currentData.getValue()+1);
-                                    }
-                                        mDatabase.child("users").child(userId).child("groups").child(groupId).child("size").setValue((Long)currentData.getValue()+2);
-                                }
-                                return Transaction.success(currentData);
-                            }
-
-                            @Override
-                            public void onComplete(DatabaseError databaseError,
-                                                   boolean committed, DataSnapshot currentData){
-                                //This method will be called once with the results of the transaction.
-                                //Update remove the user from the group
-                            }
-                        });
+                        }
 
 
 
 
 
+                    });
 
 
 
+                }
+                mDatabaseRootReference.child("groups/"+groupId+"/users/"+userFirebaseId).setValue(newUserForGroup);
 
+                mDatabaseRootReference.child("groups/"+groupId+"/size").runTransaction(new Transaction.Handler(){
+                    @Override
+                    public Transaction.Result doTransaction(MutableData currentData){
+                        if(currentData.getValue() == null){
+                            //no default value for data, set one
+                            currentData.setValue(1);
+                        }else{
+                            // perform the update operations on data
+                            currentData.setValue((Long) currentData.getValue() + 1);
+                        }
+                        return Transaction.success(currentData);
                     }
 
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                    public void onComplete(DatabaseError databaseError,
+                                           boolean committed, DataSnapshot currentData){
+                        if(committed){
+                            GroupForUser newGroupForUser = new GroupForUser(groupName, groupId, (Long) currentData.getValue(), 0L);
+                            mDatabaseRootReference.child("users"+userPhoneNumber+"/"+userFirebaseId+"/groups/"+groupId).setValue(newGroupForUser);
+
+
+                        }
 
                     }
+
+
+
+
+
                 });
 
 
 
+
+
+
             }
 
             @Override
@@ -173,53 +173,6 @@ public class Group {
         });
 
 
-
-/*
-        mDatabase.child("groups").child(groupId).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    GroupForUser groupForUser = new GroupForUser(dataSnapshot.getValue(Group.class));
-                    mDatabase.child("users").child(userId).child("groups").child(groupId).setValue(groupForUser);
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-*/
-
-
-/*
-        mDatabase.child("groups").child(groupId).child("size").runTransaction( new Transaction.Handler(){
-
-            @Override
-            public Transaction.Result doTransaction(MutableData currentData){
-                if(currentData.getValue() == null){
-                    //no default value for data, set one
-                    currentData.setValue(1);
-                    mDatabase.child("users").child(userId).child("groups").child(groupId).child("size").setValue(1);
-                }else{
-                    // perform the update operations on data
-                    currentData.setValue((Long) currentData.getValue() + 1);
-
-                    mDatabase.child("users").child(userId).child("groups").child(groupId).child("size").setValue(currentData.getValue());
-                }
-                return Transaction.success(currentData);
-            }
-
-            @Override
-            public void onComplete(DatabaseError databaseError,
-                                   boolean committed, DataSnapshot currentData){
-                //This method will be called once with the results of the transaction.
-                //Update remove the user from the group
-            }
-        });
-
-*/
 
     }
 

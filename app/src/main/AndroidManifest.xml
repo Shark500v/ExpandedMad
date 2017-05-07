@@ -105,12 +105,12 @@
                 android:value="com.polito.madinblack.expandedmad.ExpenseListActivity" />
         </activity>
 
-        <activity android:name=".GoogleSignInActivity"
+        <activity android:name=".login.GoogleSignInActivity"
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
 
-        <activity android:name=".CheckLogIn"
+        <activity android:name=".login.CheckLogIn"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -148,6 +148,25 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.newGroup.SelectContact" />
         </activity>
+
+
+        <activity
+            android:name=".login.CheckTelephone"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+
+        <activity
+            android:name=".login.TelephoneInsertion"
+            android:label="Insert account details"
+            android:parentActivityName=".login.GoogleSignInActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.polito.madinblack.expandedmad.login.GoogleSignInActivity" />
+        </activity>
+
+
+
 
     </application>
 

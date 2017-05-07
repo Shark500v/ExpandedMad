@@ -28,7 +28,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.polito.madinblack.expandedmad.Logout;
+import com.polito.madinblack.expandedmad.login.Logout;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.utility.TabView;
 import com.polito.madinblack.expandedmad.model.MyApplication;
@@ -47,7 +47,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
     private TextView tv1, tv2;
 
     private DatabaseReference mUserGroupsReference;
-    private DatabaseReference mDatabase;
+    private DatabaseReference mDatabaseRootReference;
     private SimpleItemRecyclerViewAdapter mAdapter;
 
 
@@ -58,8 +58,10 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
 
         ma = MyApplication.getInstance();   //retrive del DB
 
-        mUserGroupsReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber()).child("groups");
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        mDatabaseRootReference = FirebaseDatabase.getInstance().getReference();
+        mUserGroupsReference   = mDatabaseRootReference.child("users/"+ma.getFirebaseId()+"/"+ma.getUserPhoneNumber()+"/groups");
+
 
         //toolbar settings
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -74,13 +76,6 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener((NavigationView.OnNavigationItemSelectedListener) this);
 
-
-        Bundle extras=getIntent().getExtras();
-        if(extras!=null) {
-            /*manage extra code inserted to a group*/
-            //PHONE_ID = extras.getString("");
-
-        }
 
         //setto nome e cognome nella nav bar
         View header = navigationView.getHeaderView(0);
@@ -292,15 +287,16 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                 @Override
                 public void onClick(View v) {
                     final Context context = v.getContext();
-                    final Intent intent = new Intent(context, TabView.class); //qui setto la nuova attività da mostrare a schermo dopo che clicco
-                    intent.putExtra("index", holder.mItem.getId());    //passo alla nuova activity l'ide del gruppo chè l'utente ha selezionto
 
-                    mDatabase = FirebaseDatabase.getInstance().getReference().child("groups").child(holder.mItem.getId());
 
-                    mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+                    DatabaseReference mDatabaseGroupForUserReference = mDatabaseRootReference.child("users/"+ma.getFirebaseId()+"/"+ma.getUserPhoneNumber()+"groups/"+holder.mItem.getId());
+
+                    mDatabaseGroupForUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            ma.setGroupForUser(dataSnapshot.getValue(GroupForUser.class));
+                            Intent intent = new Intent(context, TabView.class); //qui setto la nuova attività da mostrare a schermo dopo che clicco
+                            intent.putExtra("groupIndex", holder.mItem.getId());    //passo alla nuova activity l'ide del gruppo chè l'utente ha selezionto
+                            intent.putExtra("groupName", holder.mItem.getName());
                             context.startActivity(intent);
                         }
 
@@ -309,11 +305,6 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
 
                         }
                     });
-
-
-
-
-
 
                 }
             });
