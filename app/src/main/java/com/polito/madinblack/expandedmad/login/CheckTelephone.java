@@ -36,15 +36,14 @@ public class CheckTelephone extends BaseActivity {
 
         ma = MyApplication.getInstance();
 
-        mDatabaseTelephoneReference = FirebaseDatabase.getInstance().getReference().child("users/"+ma.getFirebaseId());
+        mDatabaseTelephoneReference = FirebaseDatabase.getInstance().getReference().child("registration/"+ma.getFirebaseId());
 
         /*maybe better to know if user is logged yet*/
         mValueListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-
-                    ma.setUserPhoneNumber(dataSnapshot.getKey());
+                    ma.setUserPhoneNumber(dataSnapshot.getValue(String.class));
                     ma.setIsPhone(true);
 
                     /*google login and number yet inserted jump to group page*/

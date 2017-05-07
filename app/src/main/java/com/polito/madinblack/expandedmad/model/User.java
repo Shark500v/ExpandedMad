@@ -38,6 +38,7 @@ public class User {
         User user = new User(name, surname, phoneNumber, email);
         user.setFirebaseId(firebaseId);
         mDatabase.child("users/"+phoneNumber+"/"+firebaseId).setValue(user);
+        mDatabase.child("registration/"+firebaseId).setValue(phoneNumber);
     }
 
 
