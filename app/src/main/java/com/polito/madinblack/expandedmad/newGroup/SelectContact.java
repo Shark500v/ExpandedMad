@@ -49,15 +49,7 @@ public class SelectContact extends AppCompatActivity {
         }
 
         if (savedInstanceState == null) {
-            // Create the detail fragment and add it to the activity
-            // using a fragment transaction.
-            /*
-            Bundle arguments = new Bundle();
-            arguments.putString(GroupDetailFragment.ARG_G_ID, getIntent().getStringExtra(GroupDetailFragment.ARG_G_ID));    //id del gruppo come stringa
-            GroupDetailFragment fragment = new GroupDetailFragment();
-            fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction().add(R.id.group_detail_container, fragment).commit();
-            */
+            //mostra a video i contatti della mia rubrica
             Bundle arguments = new Bundle();
             arguments.putSerializable("LIST", (Serializable) groupM);
             ContactsFragment fragment = new ContactsFragment();

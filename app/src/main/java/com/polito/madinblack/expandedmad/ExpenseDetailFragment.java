@@ -18,12 +18,7 @@ import com.polito.madinblack.expandedmad.model.MyApplication;
 //ho fatto dei cambiamenti anche in questa classe, non ho ben capito come funziona e come si incastra con le altre
 public class ExpenseDetailFragment extends Fragment {
 
-    public static final String ARG_ITEM_ID = "item_id";
-    public static final String ARG_GROUP_ID = "group_id";
-
     private MyApplication ma;
-
-
     private Expense mItem;
 
     public ExpenseDetailFragment() {
@@ -35,25 +30,18 @@ public class ExpenseDetailFragment extends Fragment {
 
         ma = MyApplication.getInstance();   //retrive del DB
 
-        if (getArguments().containsKey(ARG_ITEM_ID) && getArguments().containsKey(ARG_GROUP_ID)) {  //a quanto ho capito questa verifica mi dice se l'utente ha selezionat qualcosa di valido
-            // Load the dummy content specified by the fragment
-            // arguments. In a real-world scenario, use a Loader
-            // to load content from a content provider.
-            mItem = ma.getSelectedExpense(); //I select the group that I need
-            //mItem = group.getSingleExpense(Long.valueOf(getArguments().getString(ARG_ITEM_ID)));
+        mItem = ma.getSelectedExpense(); //I select the group that I need
 
-            Activity activity = this.getActivity();
-            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
-            if (appBarLayout != null) {
-                appBarLayout.setTitle(mItem.getName());
-            }
+        Activity activity = this.getActivity();
+        CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
+        if (appBarLayout != null) {
+            appBarLayout.setTitle(mItem.getName());
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.expense_detail, container, false);
-
 
         // Show the content.
         if (mItem != null) {
@@ -81,7 +69,6 @@ public class ExpenseDetailFragment extends Fragment {
                 ((TextView) rootView.findViewById(R.id.balance_container)).setText(String.format("%.2f",(balance)));
             }
         }
-
         return rootView;
     }
 }

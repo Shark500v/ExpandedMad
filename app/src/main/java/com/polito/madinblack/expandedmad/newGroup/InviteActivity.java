@@ -24,6 +24,8 @@ import com.polito.madinblack.expandedmad.model.MyApplication;
 
 import java.util.List;
 
+/*Classe con la quale gestisco l'ivio dell'invito ai membri non presenti nel DB
+* */
 public class InviteActivity extends AppCompatActivity {
 
     List<SelectUser> invite;

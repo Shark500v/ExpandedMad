@@ -12,6 +12,10 @@ import com.polito.madinblack.expandedmad.R;
 import java.io.Serializable;
 import java.util.List;
 
+/*Questa classe mostra un semplice dialogo quando vai a selezionare i contatti che vuoi inserire dentro il nuovo gruppo
+* nel caso in cui il contatto non fosse presente nel DB.
+* questa classe NON invia l'invito
+* */
 public class InviteContact extends DialogFragment {
 
     List<SelectUser> invite;
@@ -44,20 +48,12 @@ public class InviteContact extends DialogFragment {
         }else
             list += " " + getString(R.string.dialog_single_invite_request);
 
-
-
         builder.setTitle(getString(R.string.invite_members)).setMessage(list);
         // Add the buttons
         builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked OK button
                 //manage here the invitation activity
-                /*
-                Intent intent = new Intent(getContext(), InviteActivity.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
-                intent.putExtra("InviteList", (Serializable) invite);
-                intent.putExtra("Group Members", getArguments().getSerializable("Group Members"));
-                startActivity(intent);
-                */
                 Intent intent1=new Intent(getContext(), NewGroup.class);
                 intent1.putExtra("Group Members", (Serializable) groupM);
                 intent1.putExtra("invite", (Serializable) invite);

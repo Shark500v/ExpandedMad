@@ -23,8 +23,6 @@ import com.polito.madinblack.expandedmad.model.MyApplication;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
 //questa classe la usa per fare il managing della lista che deve mostrare
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
@@ -172,15 +170,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             @Override
             public void onClick(final View v) {
 
-
-
                 FirebaseDatabase.getInstance().getReference().child("expenses").child(holder.mItem.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-
-
-
-
 
                         Context context = v.getContext();
                         Intent intent = new Intent(context, ExpenseDetailActivity.class);
@@ -196,9 +188,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                     }
                 });
-
-
-
             }
         });*/
     }

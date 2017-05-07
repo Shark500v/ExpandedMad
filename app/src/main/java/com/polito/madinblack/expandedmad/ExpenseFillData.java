@@ -48,6 +48,7 @@ import com.polito.madinblack.expandedmad.model.Expense;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.Payment;
 import com.polito.madinblack.expandedmad.model.UserForGroup;
+import com.polito.madinblack.expandedmad.utility.TabView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -225,14 +226,14 @@ public class ExpenseFillData extends AppCompatActivity {
                 uploadFile();
             }
 
-            intent = new Intent(this, ExpenseListActivity.class);
+            intent = new Intent(this, TabView.class);
             intent.putExtra("index", groupID);
             //startActivity(intent);
             setResult(RESULT_OK, intent);
             finish();
             return true;
         }else if(id == 16908332){
-            Intent intent3 = new Intent(this, ExpenseListActivity.class);
+            Intent intent3 = new Intent(this, TabView.class);
             intent3.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
             navigateUpTo(intent3);
             return true;

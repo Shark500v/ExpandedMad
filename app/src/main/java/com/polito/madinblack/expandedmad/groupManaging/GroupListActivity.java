@@ -48,8 +48,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
 public class GroupListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     private MyApplication ma;
@@ -72,13 +70,10 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
 
         ma = MyApplication.getInstance();   //retrive del DB
 
-       // FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         mDatabaseRootReference = FirebaseDatabase.getInstance().getReference();
 
         mUserGroupsReference   = mDatabaseRootReference.child("users/"+ma.getUserPhoneNumber()+"/"+ma.getFirebaseId()+"/groups");
         mStorage = FirebaseStorage.getInstance().getReference();
-
-
 
         //toolbar settings
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -92,7 +87,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
+        //fine codice per Drawer
 
         //setto nome e cognome nella nav bar
         View header = navigationView.getHeaderView(0);
@@ -175,12 +170,6 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
 
         return super.onCreateOptionsMenu(menu);
     }
-
-
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-
-    }
-
 
     //questa classe la usa per fare il managing della lista che deve mostrare
     public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
@@ -285,8 +274,6 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
 
             // Store reference to listener so it can be removed on app stop
             mChildEventListener = childEventListener;
-
-
         }
 
         //metodo per fare il download dallo storage delle immagini dei gruppi
@@ -320,7 +307,6 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         @Override
         public void onBindViewHolder(final SimpleItemRecyclerViewAdapter.ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);   //mValues.get(position) rappresenta un singolo elemento della nostra lista di gruppi
-            //holder.mImageView.setImageBitmap(bitmap);
             holder.mNumView.setText(Long.toString(mValues.get(position).getSize()) + " " + getString(R.string.members));
             holder.mContentView.setText(mValues.get(position).getName());
             //sopra vengono settati i tre campi che costituisco le informazioni di ogni singolo gruppo, tutti pronti per essere mostriti nella gui
@@ -329,7 +315,6 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                 @Override
                 public void onClick(View v) {
                     final Context context = v.getContext();
-
 
                     DatabaseReference mDatabaseGroupForUserReference = mDatabaseRootReference.child("users/"+ma.getFirebaseId()+"/"+ma.getUserPhoneNumber()+"groups/"+holder.mItem.getId());
 
@@ -347,7 +332,6 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
 
                         }
                     });
-
                 }
             });
         }
@@ -364,12 +348,9 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             }
         }
 
-
-
         //questa è una classe di supporto che viene usata per creare la vista a schermo, non ho ben capito come funziona
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
-            //public final CircleImageView mImageView;
             public final TextView mNumView;
             public final TextView mContentView;
             public GroupForUser mItem;
@@ -377,14 +358,13 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
-                //mImageView = (CircleImageView) findViewById(R.id.group_image_storage);
                 mNumView = (TextView) view.findViewById(R.id.num_members);
                 mContentView = (TextView) view.findViewById(R.id.content);
             }
 
             @Override
             public String toString() {
-                return super.toString() + " '" + mContentView.getText() + "'";
+                return super.toString();
             }
         }
     }

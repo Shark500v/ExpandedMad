@@ -29,16 +29,6 @@
         </activity>
 
         <activity
-            android:name=".ExpenseListActivity"
-            android:label="@string/title_expense_list"
-            android:parentActivityName=".groupManaging.GroupListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.polito.madinblack.expandedmad.groupManaging.GroupListActivity" />
-        </activity>
-
-        <activity
             android:name=".utility.TabView"
             android:label="Tab View"
             android:parentActivityName=".groupManaging.GroupListActivity"
@@ -51,31 +41,31 @@
         <activity
             android:name=".groupManaging.GroupDetailActivity"
             android:label="Group Details"
-            android:parentActivityName=".ExpenseListActivity"
+            android:parentActivityName=".utility.TabView"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.polito.madinblack.expandedmad.ExpenseListActivity" />
+                android:value="com.polito.madinblack.expandedmad.utility.TabView" />
         </activity>
 
         <activity
             android:name=".ExpenseDetailActivity"
             android:label="Expense Details"
-            android:parentActivityName=".ExpenseListActivity"
+            android:parentActivityName=".utility.TabView"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.polito.madinblack.expandedmad.ExpenseListActivity" />
+                android:value="com.polito.madinblack.expandedmad.utility.TabView" />
         </activity>
 
         <activity
             android:name=".groupMembers.GroupMemebersActivity"
             android:label="Group Details"
-            android:parentActivityName=".ExpenseListActivity"
+            android:parentActivityName=".utility.TabView"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.polito.madinblack.expandedmad.ExpenseListActivity" />
+                android:value="com.polito.madinblack.expandedmad.utility.TabView" />
         </activity>
 
         <activity
@@ -101,11 +91,11 @@
         <activity
             android:name=".ExpenseFillData"
             android:label="Add New Expense"
-            android:parentActivityName=".ExpenseListActivity"
+            android:parentActivityName=".utility.TabView"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.polito.madinblack.expandedmad.ExpenseListActivity" />
+                android:value="com.polito.madinblack.expandedmad.utility.TabView" />
         </activity>
 
         <activity android:name=".login.GoogleSignInActivity"
@@ -177,9 +167,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.login.GoogleSignInActivity" />
         </activity>
-
-
-
 
     </application>
 
