@@ -44,14 +44,11 @@ public class UserExpenses extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.inflateMenu(R.menu.menu_detail_user);
 
-
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-
-
 
         if (savedInstanceState == null) {
 
@@ -67,7 +64,6 @@ public class UserExpenses extends AppCompatActivity {
             assert recyclerView != null;
             setupRecyclerView((RecyclerView) recyclerView);
         }
-
     }
 
 
@@ -146,7 +142,7 @@ public class UserExpenses extends AppCompatActivity {
 
                         Context context = v.getContext();
                         Intent intent = new Intent(context, ExpenseDetailActivity.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
-                        intent.putExtra(ExpenseDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                        //intent.putExtra(ExpenseDetailFragment.ARG_ITEM_ID, holder.mItem.id);
 
                         context.startActivity(intent);
                     }

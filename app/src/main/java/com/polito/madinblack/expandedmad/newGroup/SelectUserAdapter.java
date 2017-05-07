@@ -117,23 +117,7 @@ public class SelectUserAdapter extends BaseAdapter {
                 }
             }
         });
-        /*
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                CheckBox checkBox = (CheckBox) v.findViewById(R.id.check);
-                if (checkBox.isChecked()) {
-                    data.setCheckedBox(true);
-                    //agiungo l'utente alla lista di utenti che devo contattare quando creo il gruppo
-                    groupMem.add(data);
-                } else {
-                    data.setCheckedBox(false);
-                    //elimino l'utente precedentemente aggiunto nel caso l'user cambiasse idea
-                    groupMem.remove(data);
-                }
-            }
-        });
-        */
+
         view.setTag(data);
         return view;
     }

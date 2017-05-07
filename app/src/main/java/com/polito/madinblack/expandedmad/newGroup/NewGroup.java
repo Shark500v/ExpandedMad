@@ -61,7 +61,6 @@ public class NewGroup extends AppCompatActivity {
     private DatabaseReference mDatabaseReferenceRoot;
     private StorageReference mStorage;
     private MyApplication ma;
-    String phoneId;
     List<SelectUser> groupM;
     List<SelectUser> invite;
     ListView lv;
@@ -230,8 +229,6 @@ public class NewGroup extends AppCompatActivity {
                 return true;
             }
 
-
-
             List<UserForGroup> userForGroupList = new ArrayList<>();
 
             for(SelectUser selectUser : groupM){
@@ -242,7 +239,6 @@ public class NewGroup extends AppCompatActivity {
                 if(items[1]==null)
                     items[1]=" ";
 
-
                 UserForGroup userForGroup = new UserForGroup(selectUser.getPhone(), selectUser.getFirebaseId(), items[0], items[1]);
                 for(int i=0; i<userForGroupList.size(); i++){
                     userForGroupList.get(i).connect(userForGroup);
@@ -250,7 +246,6 @@ public class NewGroup extends AppCompatActivity {
 
                 }
                 userForGroupList.add(userForGroup);
-
             }
 
             UserForGroup userForGroup = new UserForGroup(ma.getUserPhoneNumber(), ma.getFirebaseId(), ma.getUserName(), ma.getUserSurname());
@@ -260,7 +255,6 @@ public class NewGroup extends AppCompatActivity {
 
             }
             userForGroupList.add(userForGroup);
-
 
             groupCode = Group.writeNewGroup(mDatabaseReferenceRoot, groupName, userForGroupList);
 
@@ -294,8 +288,6 @@ public class NewGroup extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

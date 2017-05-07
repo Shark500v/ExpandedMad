@@ -33,7 +33,7 @@ public class ContactsFragment extends Fragment {
     ContentResolver resolver;
 
     // ArrayList
-    ArrayList<SelectUser> selectUsers = new ArrayList<SelectUser>();;
+    ArrayList<SelectUser> selectUsers = new ArrayList<>();;
     List<SelectUser> groupMembers;
     // Contact List
     ListView listView;
@@ -67,7 +67,6 @@ public class ContactsFragment extends Fragment {
         loadContact.execute();
     }
 
-    //funzione creata da zero
     public void RequestPerm() {
         //l'if verifica che i permessi non siamo già stati concessi all'applicazione
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
@@ -99,7 +98,6 @@ public class ContactsFragment extends Fragment {
                 }
                 return;
             }
-
             // other 'case' lines to check for other
             // permissions this app might request
         }
@@ -168,7 +166,6 @@ public class ContactsFragment extends Fragment {
             super.onPostExecute(aVoid);
             adapter = new SelectUserAdapter(selectUsers, getContext(), groupMembers);
             listView.setAdapter(adapter);
-
             // Select item on listclick
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -179,7 +176,6 @@ public class ContactsFragment extends Fragment {
                     SelectUser data = selectUsers.get(i);   //recupero il singolo utente che vado a clickare
                 }
             });
-
             listView.setFastScrollEnabled(true);
         }
     }

@@ -59,7 +59,6 @@ public class UserDebts extends AppCompatActivity {
             userID = extras.getString("USER_ID");
             actionBar.setTitle(userID+" 2");
 
-
             View recyclerView = findViewById(R.id.item_list);
             assert recyclerView != null;
             setupRecyclerView((RecyclerView) recyclerView);

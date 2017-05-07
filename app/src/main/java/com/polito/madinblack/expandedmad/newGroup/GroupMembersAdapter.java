@@ -84,5 +84,4 @@ public class GroupMembersAdapter extends BaseAdapter {
         ImageView imageView;
         TextView title, phone;
     }
-
 }
