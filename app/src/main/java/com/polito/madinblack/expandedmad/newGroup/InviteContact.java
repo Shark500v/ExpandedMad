@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 
+import com.polito.madinblack.expandedmad.R;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -14,7 +16,6 @@ public class InviteContact extends DialogFragment {
 
     List<SelectUser> invite;
     List<SelectUser> groupM;
-    String phrase = "Do you want to invite new members ?";
     String list = "";
 
     @Override
@@ -30,15 +31,24 @@ public class InviteContact extends DialogFragment {
         for(int i=0; i<invite.size(); i++){
             SelectUser contact= invite.get(i);
             if (i!=0){
-                list +=", ";
+                if(i==(invite.size()-1)){
+                    list += " " + getString(R.string.and) + " ";
+                }else {
+                    list += ", ";
+                }
             }
             list += contact.getName();
         }
-        list += " should be invited to join the Application in order to be added to a group.";
+        if(invite.size()>1){
+            list += " " + getString(R.string.dialog_multiple_invite_request);
+        }else
+            list += " " + getString(R.string.dialog_single_invite_request);
 
-        builder.setTitle(phrase).setMessage(list);
+
+
+        builder.setTitle(getString(R.string.invite_members)).setMessage(list);
         // Add the buttons
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked OK button
                 //manage here the invitation activity
@@ -54,7 +64,7 @@ public class InviteContact extends DialogFragment {
                 startActivity(intent1);
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User cancelled the dialog
                 getActivity().onBackPressed();  //ritorno all'activity precedente che ha chiamato il fragment

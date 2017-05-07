@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?attr/textAppearanceListItem"
-        android:text="Name Surname"
+        android:text="@string/name_surname"
         android:textSize="16dp" />
 
     <EditText

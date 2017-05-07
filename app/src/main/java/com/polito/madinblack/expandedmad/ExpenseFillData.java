@@ -2,6 +2,7 @@ package com.polito.madinblack.expandedmad;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -28,13 +29,20 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnPausedListener;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.polito.madinblack.expandedmad.model.Expense;
 import com.polito.madinblack.expandedmad.model.Group;
 import com.polito.madinblack.expandedmad.model.GroupForUser;
@@ -63,11 +71,16 @@ public class ExpenseFillData extends AppCompatActivity {
     private List<UserForGroup> users;
     private List<Payment> mValues;
     private DatabaseReference databaseReference;
+    private StorageReference mStorage;
     private EditText inputName, inputAmount;
     private TextInputLayout inputLayoutName, inputLayoutAmount;
     private Double amount;
     private String expenseName;
     private boolean onBind;
+    Uri selectedImage;
+    byte[] bytesArr;
+    Bitmap bitmap;
+    String expenseId;
 
     private static int RESULT_LOAD_IMAGE = 1;
     private static int RESULT_REQUEST_CAMERA = 0;
@@ -95,6 +108,8 @@ public class ExpenseFillData extends AppCompatActivity {
         ma = MyApplication.getInstance();   //retrive del DB
 
         users = new ArrayList<>();
+
+        mStorage = FirebaseStorage.getInstance().getReference();
 
         Intent beginner = getIntent();
         groupSelected = ma.getGroupForUser(); //recupero l'id del gruppo selezionato, e quindi il gruppo stesso
@@ -173,7 +188,7 @@ public class ExpenseFillData extends AppCompatActivity {
             }
 
 
-            Expense.writeNewExpense(FirebaseDatabase.getInstance().getReference(),
+            expenseId = Expense.writeNewExpense(FirebaseDatabase.getInstance().getReference(),
                     expenseName,
                     tag,
                     ma.getUserPhoneNumber(),
@@ -208,6 +223,10 @@ public class ExpenseFillData extends AppCompatActivity {
 
             groupSelected.addExpense(newExpense);*/
 
+            if(expenseId != null){
+                uploadFile();
+            }
+
             intent = new Intent(this, ExpenseListActivity.class);
             intent.putExtra("index", groupID);
             //startActivity(intent);
@@ -230,7 +249,6 @@ public class ExpenseFillData extends AppCompatActivity {
         databaseReference.child(groupID).child(expenseId).setValue(expense);
 
         //bisogna aggiungere la spesa anche sotto users
-
     }
 
     @Override
@@ -293,8 +311,8 @@ public class ExpenseFillData extends AppCompatActivity {
             CircleImageView imageView = (CircleImageView) findViewById(R.id.expense_proof);
 
             if (requestCode == RESULT_LOAD_IMAGE && null != data){
-                Uri selectedImage = data.getData();
-                String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                selectedImage = data.getData();
+                //String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
             /*Cursor cursor = getContentResolver().query(selectedImage,
                     filePathColumn, null, null, null);
@@ -310,7 +328,11 @@ public class ExpenseFillData extends AppCompatActivity {
 
                 //imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
                 try {
-                    imageView.setImageBitmap(MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage));
+                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
+                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+                    bytesArr = bytes.toByteArray();
+                    imageView.setImageBitmap(bitmap);
                 } catch (IOException e) {
 
                     //cambio qui come gestire errore
@@ -321,6 +343,7 @@ public class ExpenseFillData extends AppCompatActivity {
                 Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                 thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+                bytesArr = bytes.toByteArray();
 
                 /*File destination = new File(Environment.getExternalStorageDirectory(),
                         System.currentTimeMillis() + ".jpg");
@@ -339,6 +362,51 @@ public class ExpenseFillData extends AppCompatActivity {
 
                 imageView.setImageBitmap(thumbnail);
             }
+        }
+    }
+
+    @SuppressWarnings("VisibleForTests")
+    private void uploadFile() {
+        if(bytesArr != null) {
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Uploading");
+            progressDialog.show();
+
+            StorageReference filePath = mStorage.child("Groups").child(groupID).child("Expenses").child(expenseId);
+            filePath.putBytes(bytesArr).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    //if the upload is successfull
+                    //hiding the progress dialog
+                    progressDialog.dismiss();
+                    //and displaying a success toast
+                    Toast.makeText(getApplicationContext(), getString((R.string.file_uploaded)), Toast.LENGTH_LONG).show();
+                }
+            })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            //if the upload is not successfull
+                            //hiding the progress dialog
+                            progressDialog.dismiss();
+                            //and displaying error message
+                            Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+
+                            progressDialog.setMessage(getString(R.string.uploading) + ": "+ ((int)progress) + "%");
+                        }
+                    })
+                    .addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onPaused(UploadTask.TaskSnapshot taskSnapshot) {
+                            System.out.println(getString(R.string.upload_pause));
+                        }
+                    });
         }
     }
 
@@ -515,7 +583,7 @@ public class ExpenseFillData extends AppCompatActivity {
 
                     @Override
                     public void onCancelled(DatabaseError firebaseError) {
-                        System.out.println("The read failed: " + firebaseError.getMessage());
+                        System.out.println(getString(R.string.read_failed) + firebaseError.getMessage());
                     }
                 });
     }

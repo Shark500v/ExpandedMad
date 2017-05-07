@@ -2,6 +2,8 @@ package com.polito.madinblack.expandedmad.groupManaging;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -22,21 +24,31 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.polito.madinblack.expandedmad.Logout;
 import com.polito.madinblack.expandedmad.R;
+import com.polito.madinblack.expandedmad.StatisticsGraphs;
 import com.polito.madinblack.expandedmad.utility.TabView;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.*;
 import com.polito.madinblack.expandedmad.newGroup.SelectContact;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class GroupListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -48,7 +60,9 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
 
     private DatabaseReference mUserGroupsReference;
     private DatabaseReference mDatabase;
+    private StorageReference mStorage;
     private SimpleItemRecyclerViewAdapter mAdapter;
+    Bitmap bitmap;
 
 
     @Override
@@ -60,6 +74,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
 
         mUserGroupsReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber()).child("groups");
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        mStorage = FirebaseStorage.getInstance().getReference();
 
         //toolbar settings
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -137,6 +152,8 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             startActivity(intent);
             // Handle the camera action
         } else if (id == R.id.nav_expenses) {
+            Intent intent = new Intent(GroupListActivity.this, StatisticsGraphs.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_settings){
 
@@ -262,7 +279,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
                     Log.w(TAG, "Groups:onCancelled", databaseError.toException());
-                    Toast.makeText(mContext, "Failed to load groups.",
+                    Toast.makeText(mContext, getString(R.string.fail_load_group),
                             Toast.LENGTH_SHORT).show();
                 }
             };
@@ -275,6 +292,28 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
 
         }
 
+        //metodo per fare il download dallo storage delle immagini dei gruppi
+        //nella NewGroup non serve, da togliere
+        public void downlaoadGroupImage(String groupCode){
+            StorageReference groupRef = mStorage.child("Groups").child(groupCode).child("GroupPicture").child("groupPicture.jpg");
+            try {
+                final File localFile = File.createTempFile("image", "tmp");
+                groupRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                        bitmap = BitmapFactory.decodeFile(localFile.getPath());
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         @Override
         public GroupListActivity.SimpleItemRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.group_list_content, parent, false);
@@ -284,7 +323,8 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         @Override
         public void onBindViewHolder(final SimpleItemRecyclerViewAdapter.ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);   //mValues.get(position) rappresenta un singolo elemento della nostra lista di gruppi
-            holder.mNumView.setText(Long.toString(mValues.get(position).getSize()) + " members");
+            //holder.mImageView.setImageBitmap(bitmap);
+            holder.mNumView.setText(Long.toString(mValues.get(position).getSize()) + " " + getString(R.string.members));
             holder.mContentView.setText(mValues.get(position).getName());
             //sopra vengono settati i tre campi che costituisco le informazioni di ogni singolo gruppo, tutti pronti per essere mostriti nella gui
 
@@ -336,6 +376,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         //questa è una classe di supporto che viene usata per creare la vista a schermo, non ho ben capito come funziona
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
+            public final CircleImageView mImageView;
             public final TextView mNumView;
             public final TextView mContentView;
             public GroupForUser mItem;
@@ -343,6 +384,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
+                mImageView = (CircleImageView) findViewById(R.id.group_image_storage);
                 mNumView = (TextView) view.findViewById(R.id.num_members);
                 mContentView = (TextView) view.findViewById(R.id.content);
             }

@@ -199,7 +199,7 @@ public class GroupMemebersActivity extends AppCompatActivity {
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
                     Log.w(TAG, "Groups:onCancelled", databaseError.toException());
-                    Toast.makeText(mContext, "Failed to load groups.",
+                    Toast.makeText(mContext, getString(R.string.fail_load_group),
                             Toast.LENGTH_SHORT).show();
                 }
             };

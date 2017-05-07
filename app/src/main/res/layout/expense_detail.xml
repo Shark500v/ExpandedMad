@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:text="Paid/toPay"
+        android:text="@string/paid_topay"
         android:textSize="25dp"/>
 
     <TextView
@@ -62,7 +62,7 @@
         android:layout_toEndOf="@+id/tag"
         android:layout_alignBottom="@+id/tag"
         android:layout_marginEnd="16dp"
-        android:text="Type"
+        android:text="@string/type"
         android:textAlignment="textEnd"
         android:textSize="22dp"/>
 
@@ -90,7 +90,7 @@
         android:id="@+id/buyer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Payed by"
+        android:text="@string/paid_by"
         android:textSize="25dp"
         android:layout_margin="16dp"
         android:layout_below="@+id/currency"/>
@@ -102,7 +102,7 @@
         android:layout_toEndOf="@+id/buyer"
         android:layout_alignBottom="@+id/buyer"
         android:layout_marginEnd="16dp"
-        android:text="user"
+        android:text="@string/user"
         android:textAlignment="textEnd"
         android:textSize="22dp"/>
 
@@ -121,7 +121,7 @@
         android:id="@+id/date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Date"
+        android:text="@string/date"
         android:textSize="25dp"
         android:layout_margin="16dp"
         android:layout_below="@+id/tag"/>
@@ -133,7 +133,7 @@
         android:layout_toEndOf="@+id/date"
         android:layout_alignBottom="@+id/date"
         android:layout_marginEnd="16dp"
-        android:text="dd/mm/yyyy"
+        android:text="@string/date_format"
         android:textAlignment="textEnd"
         android:textSize="22dp"/>
 
@@ -141,7 +141,7 @@
         android:id="@+id/currency"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Currency"
+        android:text="@string/currency"
         android:textSize="25dp"
         android:layout_margin="16dp"
         android:layout_below="@+id/cost"/>

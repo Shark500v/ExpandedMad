@@ -205,7 +205,7 @@ public class Expense {
     }
 
 
-    public static void writeNewExpense(DatabaseReference mDatabase, String name, String tag, String paidById, String paidByName, String paidBySurname, Double cost, String currencyName, String currencySymbol, final String groupId, Long year, Long month, Long day, String description, List<Payment> paymentList){
+    public static String writeNewExpense(DatabaseReference mDatabase, String name, String tag, String paidById, String paidByName, String paidBySurname, Double cost, String currencyName, String currencySymbol, final String groupId, Long year, Long month, Long day, String description, List<Payment> paymentList){
 
         DatabaseReference myExpenseRef = mDatabase.child("expenses").push();
         String expenseKey = myExpenseRef.getKey();
@@ -322,6 +322,7 @@ public class Expense {
 
         mDatabase.child("groups").child(groupId).child("expenses").child(expenseKey).setValue(true);
 
+        return expenseKey;
     }
 
 

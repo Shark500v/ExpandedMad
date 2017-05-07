@@ -120,7 +120,7 @@ public class ContactsFragment extends Fragment {
             if (phones != null) {
                 Log.e("count", "" + phones.getCount());
                 if (phones.getCount() == 0) {
-                    Toast.makeText(getContext(), "No contacts in your contact list.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), getString(R.string.no_contacts_in_list), Toast.LENGTH_LONG).show();
                 }
 
                 while (phones.moveToNext()) {

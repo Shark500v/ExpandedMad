@@ -187,7 +187,7 @@ public class TabView extends AppCompatActivity {
             View rootView = null;
             rootView = inflater.inflate(R.layout.tab_activity_fragment, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText("Coming soon!");
+            textView.setText(getString(R.string.coming_soon));
 
             return rootView;
         }
@@ -346,11 +346,11 @@ public class TabView extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "MY BALANCE";
+                    return getString(R.string.my_balance);
                 case 1:
-                    return "EXPENSES";
+                    return getString(R.string.expenses);
                 case 2:
-                    return "CHAT";
+                    return getString(R.string.chat);
             }
             return null;
         }

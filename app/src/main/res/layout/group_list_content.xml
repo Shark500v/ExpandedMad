@@ -4,13 +4,13 @@
     android:layout_width="fill_parent"
     android:layout_height="72dp">
 
-    <ImageView
-        android:id="@+id/group_image1"
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/group_image_storage"
         android:contentDescription="GroupImage"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginTop="@dimen/text_margin"
-        app:srcCompat="@drawable/teamwork"
+        android:src="@drawable/teamwork"
         android:layout_centerVertical="true"/>
 
     <LinearLayout
@@ -20,7 +20,7 @@
         android:layout_weight="1"
         android:orientation="vertical"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/group_image1">
+        android:layout_toRightOf="@id/group_image_storage">
 
         <TextView
             android:id="@+id/content"

@@ -85,7 +85,7 @@ public class InviteActivity extends AppCompatActivity {
                     Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                     // Vibrate for 250 milliseconds
                     v.vibrate(250);
-                    Snackbar.make(mv, "Please, compile all fields", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                    Snackbar.make(mv, getString(R.string.compile_all_fields), Snackbar.LENGTH_LONG).setAction("Action", null).show();
                     return true;
                 }
 
@@ -127,7 +127,7 @@ public class InviteActivity extends AppCompatActivity {
 
         try {
             //startActivity(Intent.createChooser(emailIntent, "Choose an Email client:"));
-            startActivityForResult(Intent.createChooser(emailIntent, "Choose an Email client:"), 1);
+            startActivityForResult(Intent.createChooser(emailIntent, getString(R.string.choose_email_client)), 1);
         }catch (ActivityNotFoundException e){
             //non ci sono email clients sul telefono
         }
