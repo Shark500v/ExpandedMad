@@ -199,7 +199,7 @@ public class GroupMemebersActivity extends AppCompatActivity {
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
                     Log.w(TAG, "Groups:onCancelled", databaseError.toException());
-                    Toast.makeText(mContext, "Failed to load groups.",
+                    Toast.makeText(mContext, getString(R.string.fail_load_group),
                             Toast.LENGTH_SHORT).show();
                 }
             };
@@ -221,7 +221,7 @@ public class GroupMemebersActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
-            if(holder.mItem.getId().equals(ma.getUserPhoneNumber()))
+            if(holder.mItem.getPhoneNumber().equals(ma.getUserPhoneNumber()))
                 holder.mIdView.setText("You");
             else
                 holder.mIdView.setText(mValues.get(position).getName() + " " + mValues.get(position).getSurname());

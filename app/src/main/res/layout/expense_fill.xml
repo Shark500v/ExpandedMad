@@ -16,6 +16,8 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            app:title="@string/add_new_expense"
+            app:titleMarginStart="0dp"
             />
 
     </android.support.design.widget.AppBarLayout>

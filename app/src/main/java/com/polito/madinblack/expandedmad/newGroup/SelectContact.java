@@ -82,7 +82,7 @@ public class SelectContact extends AppCompatActivity {
                 Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                 // Vibrate for 250 milliseconds
                 v.vibrate(250);
-                Snackbar.make(mv, "Please, select at least one member!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                Snackbar.make(mv, getString(R.string.at_least_one_member), Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 return true;
             }else{
                 //prima di lanciare la nuova activity devo verificare che tutti i contatti selezionati facciano parte dell'applicazione

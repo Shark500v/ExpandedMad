@@ -10,4 +10,5 @@
     <dimen name="nav_header_height">160dp</dimen>
     <dimen name="logo_w_h">150dp</dimen>
     <dimen name="registration_fields">40dp</dimen>
+    <dimen name="circle_image">60dp</dimen>
 </resources>

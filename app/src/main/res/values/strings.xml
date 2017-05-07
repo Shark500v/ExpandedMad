@@ -69,6 +69,9 @@
     <string name="new_group">New group</string>
     <string name="my_expenses">My expenses</string>
     <string name="settings">Settings</string>
+    <string name="logout">Logout</string>
+    <string name="share">Share</string>
+    <string name="send">Send</string>
     <string name="photo">Take Photo</string>
     <string name="gallery">Choose from Gallery</string>
     <string name="cancel">Cancel</string>
@@ -94,4 +97,45 @@
         <item name="USA">USA +1</item>
     </string-array>
 
+    <string name="at_least_one_member">Please, select at least one member!</string>
+    <string name="select_members">Select group members</string>
+    <string name="group_members">Group members</string>
+    <string name="invalid_group_name">Please, insert a valid group name!</string>
+    <string name="dialog_single_invite_request">should be invited to join the Application in order to be added to a group.</string>
+    <string name="dialog_multiple_invite_request">should be invited to join the Application in order to be added to a group.</string>
+    <string name="invite_members">Do you want to invite new members?</string>
+    <string name="and">and</string>
+    <string name="yes">yes</string>
+    <string name="signin_as">Sign in as:</string>
+    <string name="no">no</string>
+    <string name="sure">Are you sure?</string>
+    <string name="fail_load_group">Failed to load groups.</string>
+    <string name="compile_all_fields">Please, compile all fields.</string>
+    <string name="choose_email_client">Choose an Email client:</string>
+    <string name="no_contacts_in_list">No contacts in your contact list.</string>
+    <string name="group_settings">Group settings</string>
+    <string name="debt_credits">My debts/credits</string>
+    <string name="group_members_to_group">Group members</string>
+    <string name="next">Next</string>
+    <string name="invite_new_members">Invite new Members</string>
+    <string name="name_surname">Name Surname</string>
+    <string name="phone_number">Phone number</string>
+    <string name="paid_topay">Paid/toPay</string>
+    <string name="type">Type</string>
+    <string name="currency">Currency</string>
+    <string name="date_format">dd/mm/yyyy</string>
+    <string name="date">Date</string>
+    <string name="paid_by">Paid by</string>
+    <string name="user">User</string>
+    <string name="add_photo">Add Photo</string>
+    <string name="uploading">Uploading</string>
+    <string name="upload_pause">Upload is paused</string>
+    <string name="file_uploaded">File Uploaded</string>
+    <string name="coming_soon">Coming soon…!</string>
+    <string name="my_balance">MY BALANCE</string>
+    <string name="expenses">EXPENSES</string>
+    <string name="chat">CHAT</string>
+    <string name="read_failed">The read failed:</string>
+    <string name="add_new_expense">Add new expense</string>
+    <string name="loading">Loading</string>
 </resources>

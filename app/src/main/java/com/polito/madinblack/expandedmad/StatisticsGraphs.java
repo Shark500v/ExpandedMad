@@ -4,19 +4,36 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.LegendRenderer;
+import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
+import com.polito.madinblack.expandedmad.model.MyApplication;
 
-public class MultipleBarGraph extends AppCompatActivity {
+public class StatisticsGraphs extends AppCompatActivity {
+    private MyApplication ma;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.graph_layout);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
+        ma = MyApplication.getInstance();
 
         GraphView graphView = (GraphView) findViewById(R.id.graph1);
         initGraph(graphView);
@@ -68,6 +85,14 @@ public class MultipleBarGraph extends AppCompatActivity {
         series3.setTitle("Light bill");
         graph.getLegendRenderer().setVisible(true); //visualizza legenda e decide dove posizionarla
         graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+
+        GridLabelRenderer gridLabel = graph.getGridLabelRenderer();
+        gridLabel.setHorizontalAxisTitle("Month of the year");
+
+        StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
+        staticLabelsFormatter.setHorizontalLabels(new String[] {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"});
+        staticLabelsFormatter.setVerticalLabels(new String[] {"low", "middle", "high"});
+        graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
 
     }
 }
