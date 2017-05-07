@@ -76,6 +76,7 @@ public class StatisticsGraphs extends AppCompatActivity {
         series2.setAnimated(true);
         graph.addSeries(series3);
 
+
         graph.getViewport().setXAxisBoundsManual(true); //queste 3 righe permettono di visualizzare solo un intervallo sull'asse delle X
         graph.getViewport().setMinX(-1);
         graph.getViewport().setMaxX(5);

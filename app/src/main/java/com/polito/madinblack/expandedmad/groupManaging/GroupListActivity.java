@@ -79,6 +79,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         mStorage = FirebaseStorage.getInstance().getReference();
 
 
+
         //toolbar settings
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

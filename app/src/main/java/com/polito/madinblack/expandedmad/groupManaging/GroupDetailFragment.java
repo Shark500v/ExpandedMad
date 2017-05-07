@@ -14,6 +14,7 @@ import com.polito.madinblack.expandedmad.model.*;
 
 public class GroupDetailFragment extends Fragment {
 
+
     public static final String ARG_G_ID = "item_id";
 
     private GroupForUser mItem;

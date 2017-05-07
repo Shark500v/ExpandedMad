@@ -33,7 +33,6 @@ public class UserForGroup {
     }
 
 
-
     public String getName() {
         return name;
     }

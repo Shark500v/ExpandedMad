@@ -29,7 +29,6 @@ public class ExpenseForUser {
         this.id                 = expense.getId();
     }
 
-
     public String getName() {
         return name;
     }

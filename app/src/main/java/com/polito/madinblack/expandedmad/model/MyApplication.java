@@ -42,7 +42,6 @@ public class MyApplication {
 
     }
 
-
     public static MyApplication getInstance(){
         if(myApplication==null)
             myApplication = new MyApplication();

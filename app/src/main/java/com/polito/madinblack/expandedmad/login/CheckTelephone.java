@@ -18,7 +18,6 @@ import com.polito.madinblack.expandedmad.model.MyApplication;
 
 public class CheckTelephone extends BaseActivity {
 
-
     private ValueEventListener  mValueListener;
     private DatabaseReference   mDatabaseTelephoneReference;
     private MyApplication       ma;

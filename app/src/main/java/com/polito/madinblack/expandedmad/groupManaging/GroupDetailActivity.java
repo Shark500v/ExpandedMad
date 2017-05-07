@@ -15,6 +15,7 @@ import com.polito.madinblack.expandedmad.R;
 
 public class GroupDetailActivity extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

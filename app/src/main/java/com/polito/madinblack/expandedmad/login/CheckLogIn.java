@@ -15,7 +15,6 @@ import com.polito.madinblack.expandedmad.model.MyApplication;
 public class CheckLogIn extends BaseActivity {
 
 
-
     private FirebaseAuth                    mAuth;
     private FirebaseAuth.AuthStateListener  mAuthListener;
     private MyApplication                   ma;

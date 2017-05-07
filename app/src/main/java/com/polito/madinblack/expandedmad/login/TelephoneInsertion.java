@@ -248,7 +248,6 @@ public class TelephoneInsertion extends AppCompatActivity{
                 ma.setIsPhone(true);
 
 
-
                 if(mInvitationCode!=null && !mInvitationCode.isEmpty()){
 
                     mDatabaseGroupReference = mDatabaseRoot.child("groups/"+mInvitationCode);

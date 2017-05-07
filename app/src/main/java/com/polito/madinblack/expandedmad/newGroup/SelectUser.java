@@ -54,7 +54,6 @@ public class SelectUser implements java.io.Serializable{
         this.email = email;
     }
 
-
     String firebaseId;
 
     public String getFirebaseId() { return firebaseId;  }
