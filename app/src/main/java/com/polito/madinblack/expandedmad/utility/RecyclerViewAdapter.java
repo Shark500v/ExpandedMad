@@ -156,7 +156,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
 
         final SpannableStringBuilder str;
-        if(mValues.get(position).getPaidById().equals(ma.getUserPhoneNumber())) {
+        if(mValues.get(position).getPaidByPhoneNumber().equals(ma.getUserPhoneNumber())) {
             str = new SpannableStringBuilder("Paid by "+ "You");
             str.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), "Paid by ".length(), ("Paid by ".length() + "You".length()), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
