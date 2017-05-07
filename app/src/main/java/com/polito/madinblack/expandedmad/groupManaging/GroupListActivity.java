@@ -36,7 +36,6 @@ import com.polito.madinblack.expandedmad.login.Logout;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.polito.madinblack.expandedmad.Logout;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.StatisticsGraphs;
 import com.polito.madinblack.expandedmad.utility.TabView;
