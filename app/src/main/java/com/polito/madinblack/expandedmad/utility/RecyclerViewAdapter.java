@@ -16,6 +16,9 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.ExpenseForUser;
 import com.polito.madinblack.expandedmad.model.MyApplication;
@@ -33,6 +36,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private Context mContext;
     private ChildEventListener mChildEventListener;
     private MyApplication ma;
+    private DatabaseReference mDatabaseNewExpenseReference;
 
     private static final String TAG = "MyBalanceActivity";
 
@@ -41,6 +45,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         dataref = dr;
         mContext = ct;
         ma = MyApplication.getInstance();
+
 
         // Create child event listener
         // [START child_event_listener_recycler]
@@ -52,12 +57,38 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 // A new expense has been added, add it to the displayed list
                 ExpenseForUser expense = dataSnapshot.getValue(ExpenseForUser.class);
 
+                //upload newExpense
+                mDatabaseNewExpenseReference = FirebaseDatabase.getInstance().getReference().child("users/"+ma.getUserPhoneNumber()+"/"+ma.getFirebaseId()+"/groups/"+expense.getGroupId()+"/newExpenses");
+
+                mDatabaseNewExpenseReference.runTransaction(new Transaction.Handler() {
+
+                    @Override
+                    public Transaction.Result doTransaction(MutableData currentData) {
+
+                            currentData.setValue(0L);
+
+                        return Transaction.success(currentData);
+                    }
+
+                    @Override
+                    public void onComplete(DatabaseError databaseError,
+                                           boolean committed, DataSnapshot currentData) {
+                        //This method will be called once with the results of the transaction.
+                        //Update remove the user from the group
+                    }
+                });
+
                 // [START_EXCLUDE]
                 // Update RecyclerView
                 mValuesIds.add(dataSnapshot.getKey());
                 mValues.add(expense);
                 notifyItemInserted(mValues.size() - 1);
                 // [END_EXCLUDE]
+
+
+
+
+
             }
 
             @Override

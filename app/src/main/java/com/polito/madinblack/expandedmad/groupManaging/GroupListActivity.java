@@ -309,6 +309,8 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             holder.mItem = mValues.get(position);   //mValues.get(position) rappresenta un singolo elemento della nostra lista di gruppi
             holder.mNumView.setText(Long.toString(mValues.get(position).getSize()) + " " + getString(R.string.members));
             holder.mContentView.setText(mValues.get(position).getName());
+            if(mValues.get(position).getNewExpenses()!=0)
+                holder.mNotification.setText(mValues.get(position).getNewExpenses().toString());
             //sopra vengono settati i tre campi che costituisco le informazioni di ogni singolo gruppo, tutti pronti per essere mostriti nella gui
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -316,11 +318,12 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                 public void onClick(View v) {
                     final Context context = v.getContext();
 
-                    DatabaseReference mDatabaseGroupForUserReference = mDatabaseRootReference.child("users/"+ma.getFirebaseId()+"/"+ma.getUserPhoneNumber()+"groups/"+holder.mItem.getId());
+                    final DatabaseReference mDatabaseGroupForUserReference = mDatabaseRootReference.child("users/"+ma.getFirebaseId()+"/"+ma.getUserPhoneNumber()+"groups/"+holder.mItem.getId());
 
                     mDatabaseGroupForUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
+
                             Intent intent = new Intent(context, TabView.class); //qui setto la nuova attività da mostrare a schermo dopo che clicco
                             intent.putExtra("groupIndex", holder.mItem.getId());    //passo alla nuova activity l'ide del gruppo chè l'utente ha selezionto
                             intent.putExtra("groupName", holder.mItem.getName());
@@ -353,6 +356,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             public final View mView;
             public final TextView mNumView;
             public final TextView mContentView;
+            public final TextView mNotification;
             public GroupForUser mItem;
 
             public ViewHolder(View view) {
@@ -360,6 +364,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                 mView = view;
                 mNumView = (TextView) view.findViewById(R.id.num_members);
                 mContentView = (TextView) view.findViewById(R.id.content);
+                mNotification = (TextView) view.findViewById(R.id.notification);
             }
 
             @Override

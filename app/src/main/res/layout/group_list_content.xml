@@ -39,7 +39,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/group_balance"
+        android:id="@+id/notification"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/text_margin"
