@@ -46,7 +46,6 @@ import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.Group;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.UserForGroup;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
