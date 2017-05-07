@@ -72,9 +72,10 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
 
         ma = MyApplication.getInstance();   //retrive del DB
 
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+       // FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         mDatabaseRootReference = FirebaseDatabase.getInstance().getReference();
-        mUserGroupsReference   = mDatabaseRootReference.child("users/"+ma.getFirebaseId()+"/"+ma.getUserPhoneNumber()+"/groups");
+
+        mUserGroupsReference   = mDatabaseRootReference.child("users/"+ma.getUserPhoneNumber()+"/"+ma.getFirebaseId()+"/groups");
         mStorage = FirebaseStorage.getInstance().getReference();
 
 

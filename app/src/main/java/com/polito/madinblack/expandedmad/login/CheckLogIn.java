@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 
 /**
@@ -26,7 +27,7 @@ public class CheckLogIn extends BaseActivity {
         super.onCreate(savedInstanceState);
         showProgressDialog();
         //setContentView(R.layout.google_registration);
-
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         //Local variable of logged user
         ma = MyApplication.getInstance();
         //Set persistence true to database
