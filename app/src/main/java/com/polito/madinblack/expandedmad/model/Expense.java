@@ -222,7 +222,7 @@ public class Expense {
         DatabaseReference myExpenseRef = mDatabaseRootRefenrence.child("expenses").push();
         String expenseKey = myExpenseRef.getKey();
 
-        Expense expense = new Expense(expenseKey, name, tag, paidByFirebaseId, paidByPhoneNumber, paidByName, paidBySurname, cost, currencyName, currencySymbol, groupId, year, month, day, description);
+        Expense expense = new Expense(expenseKey, name, tag, paidByName, paidBySurname, paidByFirebaseId, paidByPhoneNumber, cost, currencyName, currencySymbol, groupId, year, month, day, description);
         myExpenseRef.setValue(expense);
 
         Map<String, PaymentFirebase> payments = new HashMap<>();

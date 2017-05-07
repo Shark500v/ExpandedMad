@@ -86,6 +86,8 @@ public class NewGroup extends AppCompatActivity {
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        ma = MyApplication.getInstance();
+
         mStorage = FirebaseStorage.getInstance().getReference();
 
         groupM = (List<SelectUser>) getIntent().getSerializableExtra("Group Members");
