@@ -9,8 +9,9 @@ public class ExpenseForUser {
     private String paidByPhoneNumber;
     private String id;
     private Double myBalance;
-    private String  currencyName;
-    private String  currencySymbol;
+    private String currencyName;
+    private String currencySymbol;
+    private String groupId;
 
 
     public ExpenseForUser(){
@@ -27,6 +28,7 @@ public class ExpenseForUser {
         this.currencyName       = expense.getCurrencyName();
         this.currencySymbol     = expense.getCurrencySymbol();
         this.id                 = expense.getId();
+        this.groupId            = expense.getGroupId();
     }
 
     public String getName() {
@@ -115,5 +117,11 @@ public class ExpenseForUser {
         this.currencySymbol = currencySymbol;
     }
 
+    public String getGroupId() {
+        return groupId;
+    }
 
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
 }
