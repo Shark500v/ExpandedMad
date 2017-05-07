@@ -16,6 +16,7 @@ public class Logout extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         AlertDialog alertDialog;
 
+
         builder.setTitle(getString(R.string.sure));
         // Add the buttons
         builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {

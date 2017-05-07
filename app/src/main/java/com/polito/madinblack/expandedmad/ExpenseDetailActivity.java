@@ -30,6 +30,7 @@ public class ExpenseDetailActivity extends AppCompatActivity {
             }
         });
         */
+
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {

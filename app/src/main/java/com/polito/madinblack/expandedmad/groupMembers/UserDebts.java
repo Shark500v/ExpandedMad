@@ -23,6 +23,7 @@ import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 public class UserDebts extends AppCompatActivity {
 
+
     private String groupID = "";
     private String userID = "";
 

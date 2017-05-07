@@ -145,6 +145,7 @@ public class ExpenseListActivity extends AppCompatActivity {
             return new ViewHolder(view);
         }
 
+
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);   //mValues.get(position) rappresenta un singolo elemento della nostra lista di spese

@@ -32,6 +32,7 @@ import com.polito.madinblack.expandedmad.model.UserForGroup;
 
 public class GroupMemebersActivity extends AppCompatActivity {
 
+
     public String groupID = "init";
     private String name = "hello";
     private MyApplication ma;

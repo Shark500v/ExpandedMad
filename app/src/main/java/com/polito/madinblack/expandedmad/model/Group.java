@@ -63,7 +63,6 @@ public class Group {
     /*return of group id*/
     public static String writeNewGroup(DatabaseReference mDatabaseRootReference, String name, List<UserForGroup> usersForGroup) {
 
-
         Group group = new Group(name, usersForGroup);
 
         DatabaseReference myGroupRef = mDatabaseRootReference.child("groups").push();

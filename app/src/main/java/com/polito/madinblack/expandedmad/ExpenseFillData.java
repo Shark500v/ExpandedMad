@@ -142,6 +142,7 @@ public class ExpenseFillData extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.users_list);
         assert recyclerView != null;
         setupRecyclerView(recyclerView);
+
     }
 
     @Override

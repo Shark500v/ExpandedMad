@@ -18,7 +18,6 @@ import com.polito.madinblack.expandedmad.model.MyApplication;
 
 public class CheckTelephone extends BaseActivity {
 
-
     private ValueEventListener  mValueListener;
     private DatabaseReference   mDatabaseTelephoneReference;
     private MyApplication       ma;
@@ -30,11 +29,13 @@ public class CheckTelephone extends BaseActivity {
         showProgressDialog();
         setContentView(R.layout.google_registration);
 
+        ma = MyApplication.getInstance();
+
         mStatusTextView = (TextView) findViewById(R.id.status);
 
         mStatusTextView.setText("Sign in as: " + ma.getUserName() + " " +ma.getUserSurname());
 
-        ma = MyApplication.getInstance();
+
 
         mDatabaseTelephoneReference = FirebaseDatabase.getInstance().getReference().child("registration/"+ma.getFirebaseId());
 

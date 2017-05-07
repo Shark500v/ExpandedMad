@@ -29,6 +29,7 @@ import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 public class UserExpenses extends AppCompatActivity {
 
+
     private String groupID = "";
     private String userID = "";
     private Expense eItem;  //quello che vado a mostrare in questa activity è una lista di spese

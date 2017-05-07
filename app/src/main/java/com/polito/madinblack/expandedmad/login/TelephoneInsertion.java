@@ -63,7 +63,6 @@ public class TelephoneInsertion extends AppCompatActivity{
     private MyApplication ma;
 
     private DatabaseReference mDatabaseRoot;
-    private DatabaseReference mDatabaseTelephoneReference;
     private DatabaseReference mDatabaseGroupReference;
 
     private String mPhoneNumber;
@@ -100,7 +99,7 @@ public class TelephoneInsertion extends AppCompatActivity{
         ma = MyApplication.getInstance();
 
         mDatabaseRoot = FirebaseDatabase.getInstance().getReference();
-        mDatabaseTelephoneReference = mDatabaseRoot.child("users");
+
 
 
         mStatusTextView                 = (TextView) findViewById(R.id.status);
@@ -247,7 +246,6 @@ public class TelephoneInsertion extends AppCompatActivity{
 
                 User.writeNewUser(mDatabaseRoot, ma.getFirebaseId(), ma.getUserName(),  ma.getUserSurname(), ma.getUserPhoneNumber(), ma.getUserEmail());
                 ma.setIsPhone(true);
-                mDatabaseTelephoneReference.setValue(mPhoneNumber);
 
 
                 if(mInvitationCode!=null && !mInvitationCode.isEmpty()){

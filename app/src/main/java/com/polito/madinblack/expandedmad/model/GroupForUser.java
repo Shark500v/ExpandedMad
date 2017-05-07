@@ -25,7 +25,6 @@ public class GroupForUser {
     private Long    size;
     private Long    newExpenses;
 
-
     public GroupForUser(){
 
     }
