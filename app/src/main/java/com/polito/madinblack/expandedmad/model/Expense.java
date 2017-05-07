@@ -5,10 +5,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
-
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -26,7 +23,8 @@ public class Expense {
     private String  tag;
     private String  paidByName;
     private String  paidBySurname;
-    private String  paidById;
+    private String  paidByFirebaseId;
+    private String  paidByPhoneNumber;
     private Double  cost;
     private String  currencyName;
     private String  currencySymbol;
@@ -47,31 +45,37 @@ public class Expense {
 
     }
 
-    public Expense(String name, String tag, String paidById, String paidByName, String paidBySurname, Double cost, String currencyName, String currencySymbol, String groupId, Long year, Long month, Long day, String description) {
+    public Expense(String id, String name, String tag, String paidByName, String paidBySurname, String paidByFirebaseId, String paidByPhoneNumber, Double cost, String currencyName, String currencySymbol, String groupId, Long year, Long month, Long day, String description) {
+        this.id = id;
         this.name = name;
         this.tag = tag;
         this.paidByName = paidByName;
         this.paidBySurname = paidBySurname;
-        this.paidById = paidById;
+        this.paidByFirebaseId = paidByFirebaseId;
+        this.paidByPhoneNumber = paidByPhoneNumber;
         this.cost = cost;
         this.currencyName = currencyName;
         this.currencySymbol = currencySymbol;
+        this.groupId = groupId;
         this.year = year;
         this.month = month;
         this.day = day;
         this.description = description;
     }
 
-    public Expense(String name, String tag, String paidById, String paidByName, String paidBySurname, Double cost, String currencyName, String currencySymbol, String groupId, Long year, Long month, Long day, String description, Map<String, PaymentFirebase> payments) {
 
+    public Expense(String id, String name, String tag, String paidByName, String paidBySurname, String paidByFirebaseId, String paidByPhoneNumber, Double cost, String currencyName, String currencySymbol, String groupId, Long year, Long month, Long day, String description, Map<String, PaymentFirebase> payments) {
+        this.id = id;
         this.name = name;
         this.tag = tag;
         this.paidByName = paidByName;
         this.paidBySurname = paidBySurname;
-        this.paidById = paidById;
+        this.paidByFirebaseId = paidByFirebaseId;
+        this.paidByPhoneNumber = paidByPhoneNumber;
         this.cost = cost;
         this.currencyName = currencyName;
         this.currencySymbol = currencySymbol;
+        this.groupId = groupId;
         this.year = year;
         this.month = month;
         this.day = day;
@@ -103,12 +107,20 @@ public class Expense {
         this.tag = tag;
     }
 
-    public String getPaidById() {
-        return paidById;
+    public String getPaidByFirebaseId() {
+        return paidByFirebaseId;
     }
 
-    public void setPaidById(String paidById) {
-        this.paidById = paidById;
+    public void setPaidByFirebaseId(String paidByFirebaseId) {
+        this.paidByFirebaseId = paidByFirebaseId;
+    }
+
+    public String getPaidByPhoneNumber() {
+        return paidByPhoneNumber;
+    }
+
+    public void setPaidByPhoneNumber(String paidByPhoneNumber) {
+        this.paidByPhoneNumber = paidByPhoneNumber;
     }
 
     public String getPaidByName() {
@@ -196,24 +208,22 @@ public class Expense {
         this.payments = payments;
     }
 
-    public PaymentFirebase givePaymentForUser(String userId){
+    public PaymentFirebase givePaymentForUser(String userFirebaseId){
         for(PaymentFirebase pay:payments.values()){
-            if(pay.getUserId().equals(userId))
+            if(pay.getUserFirebaseId().equals(userFirebaseId))
                 return pay;
         }
         return null;
     }
 
 
-    public static String writeNewExpense(DatabaseReference mDatabase, String name, String tag, String paidById, String paidByName, String paidBySurname, Double cost, String currencyName, String currencySymbol, final String groupId, Long year, Long month, Long day, String description, List<Payment> paymentList){
+    public static void writeNewExpense(DatabaseReference mDatabaseRootRefenrence, String name, String tag, String paidByFirebaseId, String paidByPhoneNumber, String paidByName, String paidBySurname, Double cost, String currencyName, String currencySymbol, final String groupId, Long year, Long month, Long day, String description, List<Payment> paymentList){
 
-        DatabaseReference myExpenseRef = mDatabase.child("expenses").push();
+        DatabaseReference myExpenseRef = mDatabaseRootRefenrence.child("expenses").push();
         String expenseKey = myExpenseRef.getKey();
 
-        Expense expense = new Expense(name, tag, paidById, paidByName, paidBySurname, cost, currencyName, currencySymbol, groupId, year, month, day, description);
-        expense.setId(expenseKey);
+        Expense expense = new Expense(expenseKey, name, tag, paidByFirebaseId, paidByPhoneNumber, paidByName, paidBySurname, cost, currencyName, currencySymbol, groupId, year, month, day, description);
         myExpenseRef.setValue(expense);
-
 
         Map<String, PaymentFirebase> payments = new HashMap<>();
         DatabaseReference myPaymentRef;
@@ -227,14 +237,14 @@ public class Expense {
             PaymentFirebase paymentFirebase = new PaymentFirebase(payment);
             paymentFirebase.setId(paymentKey);
 
-            myPaymentRef.setValue(payment);
+            myPaymentRef.setValue(paymentFirebase);
 
             ExpenseForUser expenseForUser = new ExpenseForUser(expense, payment.getBalance());
-            mDatabase.child("users").child(payment.getUserId()).child("groups").child(groupId).child("expenses").child(expenseKey).setValue(expenseForUser);
+            mDatabaseRootRefenrence.child("users/"+payment.getUserPhoneNumber()+"/"+payment.getUserFirebaseId()+"/groups/"+groupId+"/expenses/"+expenseKey).setValue(expenseForUser);
 
-            if(!(payment.getUserId().equals(paidById))) {
+            if(!(payment.getUserFirebaseId().equals(paidByFirebaseId))) {
 
-                mDatabase.child("users").child(payment.getUserId()).child("groups").child(groupId).child("newExpenses").runTransaction(new Transaction.Handler() {
+                mDatabaseRootRefenrence.child("users/"+payment.getUserPhoneNumber()+"/"+payment.getUserFirebaseId()+"/groups/"+groupId+"/newExpenses").runTransaction(new Transaction.Handler() {
 
                     @Override
                     public Transaction.Result doTransaction(MutableData currentData) {
@@ -257,7 +267,7 @@ public class Expense {
                 });
 
                 /*update users balances*/
-                mDatabase.child("groups").child(groupId).child("users").child(payment.getUserId()).child("balances").child(paidById).child("balance").runTransaction(new Transaction.Handler() {
+                mDatabaseRootRefenrence.child("groups/"+groupId+"/users/"+payment.getUserFirebaseId()+"/balances/"+paidByFirebaseId+"/balance").runTransaction(new Transaction.Handler() {
 
                     @Override
                     public Transaction.Result doTransaction(MutableData currentData) {
@@ -279,16 +289,16 @@ public class Expense {
                     }
                 });
 
-                mDatabase.child("groups").child(groupId).child("users").child(paidById).child("balances").child(payment.getUserId()).child("balance").runTransaction(new Transaction.Handler() {
+                mDatabaseRootRefenrence.child("groups/"+groupId+"/users/"+paidByFirebaseId+"/balances/"+payment.getUserFirebaseId()+"/balance").runTransaction(new Transaction.Handler() {
 
                     @Override
                     public Transaction.Result doTransaction(MutableData currentData) {
                         if (currentData.getValue() == null) {
                             //no default value for data, set one
-                            currentData.setValue(payment.getToPaid());
+                            currentData.setValue(payment.getDebit());
                         } else {
                             // perform the update operations on data
-                            currentData.setValue((Long) currentData.getValue() + payment.getToPaid());
+                            currentData.setValue((Long) currentData.getValue() + payment.getDebit());
                         }
                         return Transaction.success(currentData);
                     }
@@ -306,23 +316,10 @@ public class Expense {
             }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
         }
 
-        mDatabase.child("groups").child(groupId).child("expenses").child(expenseKey).setValue(true);
+        mDatabaseRootRefenrence.child("groups/"+groupId+"/expenses/"+expenseKey).setValue(true);
 
-        return expenseKey;
     }
 
 

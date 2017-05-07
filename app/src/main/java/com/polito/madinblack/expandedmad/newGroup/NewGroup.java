@@ -27,10 +27,13 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnPausedListener;
@@ -56,7 +59,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class NewGroup extends AppCompatActivity {
 
 
-    private DatabaseReference mDatabaseReference;
+    private DatabaseReference mDatabaseReferenceRoot;
     private StorageReference mStorage;
     private MyApplication ma;
     String phoneId;
@@ -89,7 +92,7 @@ public class NewGroup extends AppCompatActivity {
 
         groupM = (List<SelectUser>) getIntent().getSerializableExtra("Group Members");
         invite = (List<SelectUser>) getIntent().getSerializableExtra("invite");
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        mDatabaseReferenceRoot = FirebaseDatabase.getInstance().getReference();
 
         groupImage = (CircleImageView)findViewById(R.id.group_icon);
         btn_group_image = (CircleImageView)findViewById(R.id.btn_group_image);
@@ -215,7 +218,7 @@ public class NewGroup extends AppCompatActivity {
 
             EditText inputGroupName = (EditText) findViewById(R.id.group_name);
             String groupName = inputGroupName.getText().toString();
-            if (groupName.isEmpty() || groupName == null) {
+            if (groupName.isEmpty()) {
                 /*
                 intent = new Intent(this, NewGroup.class);
                 startActivity(intent);
@@ -229,32 +232,38 @@ public class NewGroup extends AppCompatActivity {
             }
 
 
-            /*
-            //queste 4 righe sono ancora da modificare, devono creare il gruppo sotto l'utente, e gli utenti all'interno del gruppo
-            mFirebaseInstance=FirebaseDatabase.getInstance();
-            mFirebaseDatabase = mFirebaseInstance.getReference("Groups");
-            mFirebaseDatabase.child(group.getId()+": "+groupName).child("Group").setValue(group);
-            mFirebaseDatabase.child(group.getId()+": "+groupName).child("Users").setValue(phoneId);
-            */
-
 
             List<UserForGroup> userForGroupList = new ArrayList<>();
-            for(SelectUser selectUser : groupM){
-                String[] items = selectUser.getName().split(" ");
-                if(items[0]==null)
-                    items[0] = "";
-                if(items[1]==null)
-                    items[1] = "";
 
-                UserForGroup userForGroup = new UserForGroup(selectUser.getPhone(), items[0], items[1]);
+            for(SelectUser selectUser : groupM){
+
+                String [] items = selectUser.getName().split(" ");
+                if(items[0]==null)
+                    items[0]=" ";
+                if(items[1]==null)
+                    items[1]=" ";
+
+
+                UserForGroup userForGroup = new UserForGroup(selectUser.getPhone(), selectUser.getFirebaseId(), items[0], items[1]);
+                for(int i=0; i<userForGroupList.size(); i++){
+                    userForGroupList.get(i).connect(userForGroup);
+                    userForGroup.connect(userForGroupList.get(i));
+
+                }
                 userForGroupList.add(userForGroup);
 
             }
-            UserForGroup userForGroup = new UserForGroup(ma.getUserPhoneNumber(), ma.getUserName(), ma.getUserSurname());
+
+            UserForGroup userForGroup = new UserForGroup(ma.getUserPhoneNumber(), ma.getFirebaseId(), ma.getUserName(), ma.getUserSurname());
+            for(int i=0; i<userForGroupList.size(); i++){
+                userForGroupList.get(i).connect(userForGroup);
+                userForGroup.connect(userForGroupList.get(i));
+
+            }
             userForGroupList.add(userForGroup);
 
 
-            groupCode = Group.writeNewGroup(mDatabaseReference, groupName, userForGroupList);
+            groupCode = Group.writeNewGroup(mDatabaseReferenceRoot, groupName, userForGroupList);
 
             if(groupCode != null) {
                 uploadGroupPhoto();

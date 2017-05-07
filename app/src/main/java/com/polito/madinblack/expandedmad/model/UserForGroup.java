@@ -7,9 +7,10 @@ import java.util.Map;
 
 public class UserForGroup {
 
+    private String phoneNumber;
     private String name;
     private String surname;
-    private String id;
+    private String firebaseId;
     private Map<String, Balance> balances = new HashMap<>();
 
     public UserForGroup(){
@@ -19,13 +20,16 @@ public class UserForGroup {
     public UserForGroup(User user){
         this.name        = user.getName();
         this.surname     = user.getSurname();
-        this.id          = user.getId();
+        this.firebaseId  = user.getFirebaseId();
+        this.phoneNumber = user.getPhoneNumber();
+
     }
 
-    public UserForGroup(String id, String name, String surname){
+    public UserForGroup(String phoneNumber, String firebaseId, String name, String surname){
         this.name        = name;
         this.surname     = surname;
-        this.id          = id;
+        this.phoneNumber  = phoneNumber;
+        this.firebaseId = firebaseId;
     }
 
 
@@ -46,13 +50,8 @@ public class UserForGroup {
         this.surname = surname;
     }
 
-    public String getId() {
-        return id;
-    }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+    public String getPhoneNumber() { return phoneNumber; }
 
     public Map<String, Balance> getBalances() {
         return balances;
@@ -62,17 +61,31 @@ public class UserForGroup {
         this.balances = balances;
     }
 
+    public String getFirebaseId() {
+        return firebaseId;
+    }
+
+    public void setFirebaseId(String firebaseId) {
+        this.firebaseId = firebaseId;
+    }
+
     public void initializeBalance(List<UserForGroup> usersForGroup){
 
         for(UserForGroup userForGroup : usersForGroup){
-            if(!userForGroup.getId().equals(this.getId())){
-                Balance balance = new Balance(userForGroup.getId(), userForGroup.getName(), userForGroup.getSurname(), 0D);
-                balances.put(userForGroup.getId(), balance);
+            if(!userForGroup.getFirebaseId().equals(this.getFirebaseId())){
+                Balance balance = new Balance(userForGroup.getFirebaseId(), userForGroup.getName(), userForGroup.getSurname(), 0D);
+                balances.put(userForGroup.getFirebaseId(), balance);
 
             }
 
         }
 
+    }
+    //add new user to balance with 0
+    public void connect(UserForGroup userForGroup){
+        Balance balance = new Balance(userForGroup.getFirebaseId(), userForGroup.getName(), userForGroup.getSurname(), 0D);
+        if(!balances.containsKey(userForGroup.getFirebaseId()))
+            balances.put(userForGroup.getFirebaseId(), balance);
     }
 
 

@@ -47,13 +47,13 @@ public class TabView extends AppCompatActivity {
 
     private static MyApplication ma;
 
-    private static String index;
-
-    private static GroupForUser groupSelected;
-
-    private DatabaseReference mDatabase;
+    private static String groupIndex;
+    private static String groupName;
 
     private static List<Expense> eItem;    //usato per la lista di spese da mostrare in una delle tre schede a schermo
+
+    private static DatabaseReference mDatabaseBalancesReference;
+    private static DatabaseReference mDatabaseExpenseListReference;
 
     private MyBalanceFragment balanceFrag = MyBalanceFragment.newInstance();
 
@@ -67,21 +67,18 @@ public class TabView extends AppCompatActivity {
         setContentView(R.layout.tab_activity_details);
 
         ma = MyApplication.getInstance();   //retrive del DB
+        groupIndex = getIntent().getExtras().getString("groupIndex");
+        groupName  = getIntent().getExtras().getString("groupName");
 
-        Intent beginner = getIntent();
 
-        index = beginner.getStringExtra("index");
+        mDatabaseBalancesReference = FirebaseDatabase.getInstance().getReference().child("groups/"+groupIndex+"/users/"+ma.getFirebaseId()+"/"+ma.getUserPhoneNumber()+"/balances");
+        mDatabaseExpenseListReference = FirebaseDatabase.getInstance().getReference().child("users/"+ma.getFirebaseId()+"/"+ma.getUserPhoneNumber()+"/groups/"+groupIndex+"/expenses");
 
-        groupSelected = ma.getGroupForUser();
 
-        /*BUG
-        groupSelected = ma.getSingleGroup(Long.valueOf(beginner.getStringExtra("index"))); //recupero l'id del gruppo selezionato, e quindi il gruppo stesso
-        */
-        //eItem = groupSelected.getExpenses();
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(groupSelected.getName());
+        toolbar.setTitle(groupName);
         setSupportActionBar(toolbar);
 
         // Create the adapter that will return a fragment for each of the three
@@ -104,7 +101,7 @@ public class TabView extends AppCompatActivity {
             public void onClick(View view) {
                 Context c = view.getContext();
                 Intent intent = new Intent(c, ExpenseFillData.class);     //qui setto la nuova attività da mostrare a schermo dopo che clicco
-                intent.putExtra("index", index);                            //passo l'indice del gruppo
+                intent.putExtra("groupIndex", groupIndex);                            //passo l'indice del gruppo
                 startActivityForResult(intent,CONTACT_REQUEST);
 
             }
@@ -137,7 +134,7 @@ public class TabView extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_settings:
                 Intent intent = new Intent(this, GroupDetailActivity.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
-                intent.putExtra(GroupDetailFragment.ARG_G_ID, index);   //il tutto viene passato come stringa
+                intent.putExtra(GroupDetailFragment.ARG_G_ID, groupIndex);   //il tutto viene passato come stringa
                 startActivity(intent);
                 return true;
 
@@ -148,7 +145,7 @@ public class TabView extends AppCompatActivity {
             case R.id.action_members:
                 //insert here the connection
                 Intent intent2 = new Intent(this, GroupMemebersActivity.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
-                intent2.putExtra("GROUP_ID", index);
+                intent2.putExtra("GROUP_ID", groupIndex);
                 startActivity(intent2);
                 return true;
 
@@ -229,12 +226,7 @@ public class TabView extends AppCompatActivity {
         @Override
         public void onStart(){
             super.onStart();
-
-            adapter = new RecyclerViewAdapter(getContext(),
-                    FirebaseDatabase.getInstance().getReference().child("users")
-                            .child(ma.getUserPhoneNumber()).child("groups").child(index)
-                            .child("expenses")
-                    , index);
+            adapter = new RecyclerViewAdapter(getContext(), mDatabaseExpenseListReference, groupIndex);
             recyclerView = (RecyclerView) rootView.findViewById(R.id.expense_list2);
             recyclerView.setAdapter(adapter);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -287,10 +279,7 @@ public class TabView extends AppCompatActivity {
         public void onStart(){
             super.onStart();
 
-            adapter = new RecyclerViewAdapterUsers(getContext(),
-                    FirebaseDatabase.getInstance().getReference().child("groups")
-                            .child(groupSelected.getId()).child("users").
-                            child(ma.getUserPhoneNumber()).child("balances"), groupSelected);
+            adapter = new RecyclerViewAdapterUsers(getContext(), mDatabaseBalancesReference);
 
             recyclerView = (RecyclerView) rootView.findViewById(R.id.item_list);
             recyclerView.setAdapter(adapter);

@@ -44,11 +44,9 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.polito.madinblack.expandedmad.model.Expense;
-import com.polito.madinblack.expandedmad.model.Group;
-import com.polito.madinblack.expandedmad.model.GroupForUser;
+
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.Payment;
-import com.polito.madinblack.expandedmad.model.User;
 import com.polito.madinblack.expandedmad.model.UserForGroup;
 
 import java.io.ByteArrayOutputStream;
@@ -66,7 +64,6 @@ public class ExpenseFillData extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private String groupID = "index";
-    private GroupForUser groupSelected;
     private MyApplication ma;
     private List<UserForGroup> users;
     private List<Payment> mValues;
@@ -112,8 +109,7 @@ public class ExpenseFillData extends AppCompatActivity {
         mStorage = FirebaseStorage.getInstance().getReference();
 
         Intent beginner = getIntent();
-        groupSelected = ma.getGroupForUser(); //recupero l'id del gruppo selezionato, e quindi il gruppo stesso
-        groupID = beginner.getStringExtra("index");   //id del gruppo, che devo considerare
+        groupID = beginner.getStringExtra("groupIndex");   //id del gruppo, che devo considerare
 
 
         //this remove focus from edit text when activity starts
@@ -180,7 +176,7 @@ public class ExpenseFillData extends AppCompatActivity {
 
             /*added to set Paid value*/
             for(Payment payment : mValues){
-                if(payment.getUserId().equals(ma.getUserPhoneNumber())){
+                if(payment.getUserPhoneNumber().equals(ma.getUserPhoneNumber())){
                     payment.setPaid(amount);
 
                 }
@@ -191,6 +187,7 @@ public class ExpenseFillData extends AppCompatActivity {
             expenseId = Expense.writeNewExpense(FirebaseDatabase.getInstance().getReference(),
                     expenseName,
                     tag,
+                    ma.getFirebaseId(),
                     ma.getUserPhoneNumber(),
                     ma.getUserName(),
                     ma.getUserSurname(),
@@ -576,7 +573,7 @@ public class ExpenseFillData extends AppCompatActivity {
 
                         List<Payment> payment = new ArrayList<>();
                         for(int i=0;i<users.size();i++){
-                            payment.add(new Payment(users.get(i).getId(), users.get(i).getName(), null, 0D, 0D));
+                            payment.add(new Payment(users.get(i).getFirebaseId(), users.get(i).getPhoneNumber(), users.get(i).getName(), null, 0D, 0D));
                         }
                         recyclerView.setAdapter(new ExpenseFillData.SimpleItemRecyclerViewAdapter(payment));
                     }
@@ -609,7 +606,7 @@ public class ExpenseFillData extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final ExpenseFillData.SimpleItemRecyclerViewAdapter.ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
-            if(holder.mItem.getUserId().equals(ma.getUserPhoneNumber()))
+            if(holder.mItem.getUserPhoneNumber().equals(ma.getUserPhoneNumber()))
                 holder.mIdView.setText(getString(R.string.you));
             else
                 holder.mIdView.setText( holder.mItem.getUserName());

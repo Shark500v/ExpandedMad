@@ -4,7 +4,8 @@ import android.graphics.drawable.PaintDrawable;
 
 public class Payment {
 
-    private String userId;
+    private String userFirebaseId;
+    String userPhoneNumber;
     private String userName;
     private String expenseId;
     private Double paid;
@@ -13,8 +14,9 @@ public class Payment {
     private boolean isWeightEnabled;
     private boolean isModified;
 
-    public Payment(String userId, String userName, String expenseId, Double paid, Double toPaid){
-        this.userId             = userId;
+    public Payment(String userFirebaseId, String userPhoneNumber, String userName, String expenseId, Double paid, Double toPaid){
+        this.userFirebaseId     = userFirebaseId;
+        this.userPhoneNumber    = userPhoneNumber;
         this.userName           = userName;
         this.expenseId          = expenseId;
         this.paid               = paid;
@@ -25,12 +27,20 @@ public class Payment {
     }
 
 
-    public String getUserId() {
-        return userId;
+    public String getUserFirebaseId() {
+        return userFirebaseId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUserFirebaseId(String userFirebaseId) {
+        this.userFirebaseId = userFirebaseId;
+    }
+
+    public String getUserPhoneNumber() {
+        return userPhoneNumber;
+    }
+
+    public void setUserPhoneNumber(String userPhoneNumber) {
+        this.userPhoneNumber = userPhoneNumber;
     }
 
     public String getUserName() {

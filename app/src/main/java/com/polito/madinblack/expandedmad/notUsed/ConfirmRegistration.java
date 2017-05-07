@@ -1,4 +1,4 @@
-package com.polito.madinblack.expandedmad;
+package com.polito.madinblack.expandedmad.notUsed;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

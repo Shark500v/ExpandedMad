@@ -38,7 +38,12 @@ public class GroupForUser {
 
     }
 
-
+    public GroupForUser(String name, String id, Long size, Long newExpenses) {
+        this.name = name;
+        this.id = id;
+        this.size = size;
+        this.newExpenses = newExpenses;
+    }
 
     public String getName(){ return name; }
 

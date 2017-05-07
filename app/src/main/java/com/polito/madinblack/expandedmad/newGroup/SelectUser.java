@@ -55,4 +55,9 @@ public class SelectUser implements java.io.Serializable{
     }
 
 
+    String firebaseId;
+
+    public String getFirebaseId() { return firebaseId;  }
+
+    public void setFirebaseId(String firebaseId) {  this.firebaseId = firebaseId;   }
 }

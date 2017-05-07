@@ -1,4 +1,4 @@
-package com.polito.madinblack.expandedmad;
+package com.polito.madinblack.expandedmad.login;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
