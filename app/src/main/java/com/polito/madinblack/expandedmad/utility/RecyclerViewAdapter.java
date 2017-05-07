@@ -58,13 +58,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 ExpenseForUser expense = dataSnapshot.getValue(ExpenseForUser.class);
 
                 //upload newExpense
-                mDatabaseNewExpenseReference = FirebaseDatabase.getInstance().getReference().child("users/"+expense.getPaidByPhoneNumber()+"/"+expense.getPaidByFirebaseId()+"/groups/"+expense.getGroupId()+"/newExpenses");
+                mDatabaseNewExpenseReference = FirebaseDatabase.getInstance().getReference().child("users/"+ma.getUserPhoneNumber()+"/"+ma.getFirebaseId()+"/groups/"+expense.getGroupId()+"/newExpenses");
 
                 mDatabaseNewExpenseReference.runTransaction(new Transaction.Handler() {
 
                     @Override
                     public Transaction.Result doTransaction(MutableData currentData) {
-                        currentData.setValue(0L);
+
+                            currentData.setValue(0L);
+
                         return Transaction.success(currentData);
                     }
 
