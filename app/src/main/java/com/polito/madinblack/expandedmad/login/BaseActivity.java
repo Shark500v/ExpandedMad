@@ -9,6 +9,8 @@ import android.app.ProgressDialog;
 import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
 
+import com.polito.madinblack.expandedmad.R;
+
 public class BaseActivity extends AppCompatActivity {
 
     @VisibleForTesting
