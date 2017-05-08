@@ -16,6 +16,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,7 +26,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -61,8 +62,6 @@ public class NewGroup extends AppCompatActivity {
     private List<SelectUser> groupM;
     private List<SelectUser> invite;
     private List<SelectUser> realMembers = new ArrayList<>();
-    private ListView lv;
-    private GroupMembersAdapter adapter;
     private String groupCode;
     private CircleImageView groupImage;
     private CircleImageView btn_group_image;
@@ -71,6 +70,9 @@ public class NewGroup extends AppCompatActivity {
     private Uri uri;
     private byte[] imageData;
     private boolean visible = false; //boolean per visualizzazione a schermo intero
+
+    private RecyclerView recyclerView;
+    private GroupMembersRecyclerViewAdapter adapter;
 
     //a constant to track the file chooser intent
     private static int RESULT_LOAD_IMAGE = 1;
@@ -141,16 +143,16 @@ public class NewGroup extends AppCompatActivity {
             }
         });
 
-        lv = (ListView) findViewById(R.id.list1);
-        adapter = new GroupMembersAdapter(realMembers, this);
-
         // Show the Up button in the action bar
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        lv.setAdapter(adapter);
+        recyclerView = (RecyclerView) findViewById(R.id.group_members_list);
+        adapter = new GroupMembersRecyclerViewAdapter(realMembers, this);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 
     @Override

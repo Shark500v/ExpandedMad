@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+//CLASSE DEPRECATA, DA ELIMINARE DEFINITIVAMENTE
 public class SelectUserAdapter extends BaseAdapter {
 
     public List<SelectUser> _data, groupMem;
@@ -29,7 +30,7 @@ public class SelectUserAdapter extends BaseAdapter {
     public SelectUserAdapter(List<SelectUser> selectUsers, Context context, List<SelectUser> GroupM) {
         _data = selectUsers;
         _c = context;
-        this.arraylist = new ArrayList<SelectUser>();
+        this.arraylist = new ArrayList<>();
         this.arraylist.addAll(_data);
         groupMem = GroupM;      //questa è la lista che devo aggiornre di volta in volta un utente viene aggiunto al gruppo dall'user
     }
@@ -138,6 +139,7 @@ public class SelectUserAdapter extends BaseAdapter {
         }
         notifyDataSetChanged();
     }
+
     static class ViewHolder {
         ImageView imageView;
         TextView title, phone, email;
