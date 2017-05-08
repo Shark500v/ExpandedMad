@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -43,6 +44,7 @@ import com.google.firebase.storage.OnPausedListener;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.polito.madinblack.expandedmad.model.DecimalDigitsInputFilter;
 import com.polito.madinblack.expandedmad.model.Expense;
 
 import com.polito.madinblack.expandedmad.model.MyApplication;
@@ -102,6 +104,8 @@ public class ExpenseFillData extends AppCompatActivity {
         inputLayoutAmount = (TextInputLayout) findViewById(R.id.input_layout_amount);
         inputName = (EditText) findViewById(R.id.input_title);
         inputAmount = (EditText) findViewById(R.id.input_amount);
+
+        inputAmount.setFilters(new InputFilter[] { new DecimalDigitsInputFilter(2)});
 
         ma = MyApplication.getInstance();   //retrive del DB
 
@@ -620,7 +624,6 @@ public class ExpenseFillData extends AppCompatActivity {
             holder.plus.setEnabled( holder.mItem.isWeightEnabled());
             holder.partition.setEnabled( holder.mItem.isWeightEnabled() );
 
-
             /*holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -654,6 +657,7 @@ public class ExpenseFillData extends AppCompatActivity {
                 plus = (Button) view.findViewById(R.id.increase);
                 minus = (Button) view.findViewById(R.id.decrease);
 
+                partition.setFilters(new InputFilter[] { new DecimalDigitsInputFilter(2)});
                 partition.addTextChangedListener( new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
