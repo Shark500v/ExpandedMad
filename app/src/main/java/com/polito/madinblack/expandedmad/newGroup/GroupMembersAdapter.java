@@ -15,6 +15,7 @@ import com.polito.madinblack.expandedmad.R;
 
 import java.util.List;
 
+//CLASSE DEPRECATA, DA ELIMINARE DEFINITIVAMENTE
 public class GroupMembersAdapter extends BaseAdapter {
 
     public List<SelectUser> _data;
