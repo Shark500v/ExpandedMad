@@ -142,6 +142,13 @@ public class TabView extends AppCompatActivity {
                 startActivity(intent2);
                 return true;
 
+            case R.id.action_history:
+                //insert here the connection
+                Intent intent3 = new Intent(this, GroupMemebersActivity.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
+                intent3.putExtra("GROUP_ID", groupIndex);
+                startActivity(intent3);
+                return true;
+
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.

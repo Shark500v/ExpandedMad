@@ -138,4 +138,7 @@
     <string name="read_failed">The read failed:</string>
     <string name="add_new_expense">Add new expense</string>
     <string name="loading">Loading</string>
+    <string name="title_activity_group_history">GroupHistory</string>
+    <string name="no_messages">No available messages</string>
+    <string name="group_history">Group Story</string>
 </resources>
