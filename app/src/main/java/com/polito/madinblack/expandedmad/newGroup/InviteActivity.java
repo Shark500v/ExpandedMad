@@ -28,10 +28,10 @@ import java.util.List;
 * */
 public class InviteActivity extends AppCompatActivity {
 
-    List<SelectUser> invite;
+    private List<SelectUser> invite;
     private MyApplication ma;
-    Intent intent1;
-    String groupCode;
+    private Intent intent1;
+    private String groupCode;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,7 +91,7 @@ public class InviteActivity extends AppCompatActivity {
                 }
 
             case R.id.home:
-                navigateUpTo(new Intent(this, NewGroup.class));    //definisco il parente verso cui devo tornare indietro
+                //navigateUpTo(new Intent(this, NewGroup.class));    //definisco il parente verso cui devo tornare indietro
                 return true;
 
             default:

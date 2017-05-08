@@ -27,13 +27,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnPausedListener;
@@ -61,18 +58,19 @@ public class NewGroup extends AppCompatActivity {
     private DatabaseReference mDatabaseReferenceRoot;
     private StorageReference mStorage;
     private MyApplication ma;
-    List<SelectUser> groupM;
-    List<SelectUser> invite;
-    ListView lv;
-    GroupMembersAdapter adapter;
-    String groupCode;
-    CircleImageView groupImage;
-    CircleImageView btn_group_image;
-    ImageView fullScreen;
-    Bitmap bitmap = null;
-    Uri uri;
-    byte[] imageData;
-    boolean visible = false; //boolean per visualizzazione a schermo intero
+    private List<SelectUser> groupM;
+    private List<SelectUser> invite;
+    private List<SelectUser> realMembers = new ArrayList<>();
+    private ListView lv;
+    private GroupMembersAdapter adapter;
+    private String groupCode;
+    private CircleImageView groupImage;
+    private CircleImageView btn_group_image;
+    private ImageView fullScreen;
+    private Bitmap bitmap = null;
+    private Uri uri;
+    private byte[] imageData;
+    private boolean visible = false; //boolean per visualizzazione a schermo intero
 
     //a constant to track the file chooser intent
     private static int RESULT_LOAD_IMAGE = 1;
@@ -144,7 +142,7 @@ public class NewGroup extends AppCompatActivity {
         });
 
         lv = (ListView) findViewById(R.id.list1);
-        adapter = new GroupMembersAdapter(groupM, this);
+        adapter = new GroupMembersAdapter(realMembers, this);
 
         // Show the Up button in the action bar
         ActionBar actionBar = getSupportActionBar();
@@ -153,6 +151,34 @@ public class NewGroup extends AppCompatActivity {
         }
 
         lv.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        realMembers.clear();
+        if(!invite.isEmpty()){
+            fillMembers();
+        }else {
+            realMembers.addAll(groupM);
+        }
+    }
+
+    void fillMembers(){
+        int i, j;
+        boolean f;
+        for(i=0; i<groupM.size(); i++){
+            f = true;
+            for (j=0; j<invite.size(); j++){
+                if(invite.get(j).getPhone().compareTo(groupM.get(i).getPhone())==0){
+                    f = false;
+                    break;
+                }
+            }
+            if (f){
+                realMembers.add(groupM.get(i)); //inserisco dentro la lista solo gli utenti che inizialmente andranno a creare il gruppo
+            }
+        }
     }
 
     //creo dialog per decidere da dove prendere la foto da caricare
@@ -214,15 +240,10 @@ public class NewGroup extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.confirm_group) {
 
-            Intent intent;
-
             EditText inputGroupName = (EditText) findViewById(R.id.group_name);
             String groupName = inputGroupName.getText().toString();
+
             if (groupName.isEmpty()) {
-                /*
-                intent = new Intent(this, NewGroup.class);
-                startActivity(intent);
-                */
                 View mv = findViewById(R.id.main_content);
                 Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                 v.vibrate(250);
@@ -232,7 +253,7 @@ public class NewGroup extends AppCompatActivity {
 
             List<UserForGroup> userForGroupList = new ArrayList<>();
 
-            for(SelectUser selectUser : groupM){
+            for(SelectUser selectUser : realMembers){
 
                 String [] items = selectUser.getName().split(" ");
                 if(items[0]==null)

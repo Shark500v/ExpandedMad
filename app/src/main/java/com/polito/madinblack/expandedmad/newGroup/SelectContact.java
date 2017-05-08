@@ -93,7 +93,7 @@ public class SelectContact extends AppCompatActivity {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             if(!dataSnapshot.exists()){
-                                groupM.remove(selectUser);
+                                //groupM.remove(selectUser);
                                 invite.add(selectUser);
                             }
                             else{
@@ -109,7 +109,7 @@ public class SelectContact extends AppCompatActivity {
                                 if(invite.isEmpty()){
                                     //se la lista è vuota non ci sono inviti da fare e posso andare oltre, altrimenti devo procedere ad invitare le persone mancanti prima di creare il gruppo
                                     Intent intent1=new Intent(SelectContact.this, NewGroup.class);
-                                    intent1.putExtra("invite", (Serializable) invite);                  //in questo caso la lista sarà vuota, non ci sarà nulla all'interno
+                                    intent1.putExtra("invite", (Serializable) invite);                  //in questo caso la lista sarà vuota
                                     intent1.putExtra("Group Members", (Serializable) groupM);
                                     startActivity(intent1);
                                 }else{
