@@ -47,7 +47,7 @@ public class ExpenseDetailFragment extends Fragment {
         if (mItem != null) {
             ((TextView) rootView.findViewById(R.id.description_field)).setText(mItem.getDescription());
             ((TextView) rootView.findViewById(R.id.paid_container)).setText(mItem.toString());
-            ((TextView) rootView.findViewById(R.id.tag_container)).setText(mItem.getTag().toString());
+            ((TextView) rootView.findViewById(R.id.tag_container)).setText(mItem.getTag());
             ((TextView) rootView.findViewById(R.id.cost_container)).setText(String.format("%.2f",(mItem.getCost())));
             ((TextView) rootView.findViewById(R.id.currency_container)).setText(mItem.getCurrencySymbol());
             if( mItem.getPaidByPhoneNumber().equals(ma.getUserPhoneNumber()) )
@@ -69,6 +69,7 @@ public class ExpenseDetailFragment extends Fragment {
                 ((TextView) rootView.findViewById(R.id.balance_container)).setText(String.format("%.2f",(balance)));
             }
         }
+
         return rootView;
     }
 }

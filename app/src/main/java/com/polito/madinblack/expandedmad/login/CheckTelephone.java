@@ -35,8 +35,6 @@ public class CheckTelephone extends BaseActivity {
 
         mStatusTextView.setText("Sign in as: " + ma.getUserName() + " " +ma.getUserSurname());
 
-
-
         mDatabaseTelephoneReference = FirebaseDatabase.getInstance().getReference().child("registration/"+ma.getFirebaseId());
 
         /*maybe better to know if user is logged yet*/

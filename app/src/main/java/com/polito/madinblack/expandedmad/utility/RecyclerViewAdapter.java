@@ -1,6 +1,7 @@
 package com.polito.madinblack.expandedmad.utility;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
@@ -19,6 +20,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
+import com.polito.madinblack.expandedmad.ExpenseDetailActivity;
+import com.polito.madinblack.expandedmad.ExpenseDetailFragment;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.ExpenseForUser;
 import com.polito.madinblack.expandedmad.model.MyApplication;
@@ -85,11 +88,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 notifyItemInserted(mValues.size() - 1);
                 // [END_EXCLUDE]
 
-
-
-
-
             }
+
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
@@ -197,7 +197,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.mPaydBy.setText(str);
         //sopra vengono settati i tre campi che costituisco le informazioni di ogni singolo gruppo, tutti pronti per essere mostriti nella gui
 
-        /*holder.mView.setOnClickListener(new View.OnClickListener() {
+        /*
+        holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
 
@@ -220,7 +221,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     }
                 });
             }
-        });*/
+        });
+        */
     }
 
     @Override
