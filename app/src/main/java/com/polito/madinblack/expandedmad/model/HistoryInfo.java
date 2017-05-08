@@ -11,6 +11,10 @@ public class HistoryInfo {
     private String content;
     private Date date;
 
+    public HistoryInfo(){
+
+    }
+
     public String getName() {
         return name;
     }

@@ -11,13 +11,13 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.polito.madinblack.expandedmad.groupManaging.GroupListActivity;
@@ -32,16 +32,17 @@ public class ContactsFragment extends Fragment {
     private static final int READ_CONTACTS_PERMISSIONS_REQUEST = 1;
     ContentResolver resolver;
 
+    RecyclerView recyclerView;
+    UserRecyclerViewAdapter adapter;
+    View rootView;
+
     // ArrayList
     ArrayList<SelectUser> selectUsers = new ArrayList<>();;
     List<SelectUser> groupMembers;
-    // Contact List
-    ListView listView;
     // Cursor to load contacts list
     Cursor phones, email;
 
     SearchView search;
-    SelectUserAdapter adapter;
 
     String id_prev = "00000";   //id che non dovrebbe avere nessun contatto
 
@@ -59,7 +60,7 @@ public class ContactsFragment extends Fragment {
         RequestPerm();  //I need to ask for permission in order to access the contact list stored in the device
     }
 
-    private void executeRetrive(){
+    private void executeRetrieve(){
         resolver = getContext().getContentResolver();
         phones = resolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
         //dopo aver fatto il retrieve dei contatti posso procedere
@@ -75,7 +76,7 @@ public class ContactsFragment extends Fragment {
             //non basta inserire dentro il manifest file il permission per leggere i contatti, ma devo anche chiedere all'utente
         }else {
             //se ho tutti i permessi posso fare subito il retrieve dei contatti
-            executeRetrive();
+            executeRetrieve();
         }
     }
 
@@ -85,14 +86,10 @@ public class ContactsFragment extends Fragment {
             case READ_CONTACTS_PERMISSIONS_REQUEST: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
                     //se l'utente mi dà i permessi allora accedo ai contatti facendo il retrieve
-                    executeRetrive();
+                    executeRetrieve();
                 } else {
-
-                    // permission denied, boo! Disable the
+                    // permission denied
                     // allora torno alla pagina precedente
                     getActivity().navigateUpTo(new Intent(getContext(), GroupListActivity.class));
                 }
@@ -164,27 +161,17 @@ public class ContactsFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            adapter = new SelectUserAdapter(selectUsers, getContext(), groupMembers);
-            listView.setAdapter(adapter);
-            // Select item on listclick
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                    Log.e("search", "here---------------- listener");
-
-                    SelectUser data = selectUsers.get(i);   //recupero il singolo utente che vado a clickare
-                }
-            });
-            listView.setFastScrollEnabled(true);
+            adapter = new UserRecyclerViewAdapter(selectUsers, getContext(), groupMembers);
+            recyclerView.setAdapter(adapter);
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.contact_list, container, false);
-        listView = (ListView) rootView.findViewById(R.id.list);
+        rootView = inflater.inflate(R.layout.contact_list, container, false);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.list);
 
         return rootView;
     }

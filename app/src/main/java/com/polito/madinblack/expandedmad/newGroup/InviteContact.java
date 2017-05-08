@@ -18,9 +18,9 @@ import java.util.List;
 * */
 public class InviteContact extends DialogFragment {
 
-    List<SelectUser> invite;
-    List<SelectUser> groupM;
-    String list = "";
+    private List<SelectUser> invite;
+    private List<SelectUser> groupM;
+    private String list = "";
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
