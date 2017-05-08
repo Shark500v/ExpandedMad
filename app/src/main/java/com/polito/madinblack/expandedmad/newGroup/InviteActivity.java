@@ -24,7 +24,7 @@ import com.polito.madinblack.expandedmad.model.MyApplication;
 
 import java.util.List;
 
-/*Classe con la quale gestisco l'ivio dell'invito ai membri non presenti nel DB
+/*Classe con la quale gestisco l'invio dell'invito ai membri non presenti nel DB
 * */
 public class InviteActivity extends AppCompatActivity {
 
@@ -75,7 +75,6 @@ public class InviteActivity extends AppCompatActivity {
                 if(flag){
                     //posso procedere con l'activity successiva, ma prima devo inviare le email
 
-                    //dovrei andare alla pagina del gruppo
                     intent1 = new Intent(InviteActivity.this, GroupListActivity.class);
 
                     sendEmail();

@@ -225,7 +225,6 @@ public class NewGroup extends AppCompatActivity {
                 */
                 View mv = findViewById(R.id.main_content);
                 Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                // Vibrate for 500 milliseconds
                 v.vibrate(250);
                 Snackbar.make(mv, R.string.invalid_group_name, Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 return true;
@@ -264,20 +263,17 @@ public class NewGroup extends AppCompatActivity {
                 uploadGroupPhoto();
             }
 
-            if(invite==null || invite.isEmpty()){
+            //ho eliminato il check per testare se il gruppo fosse null, ho sistemato il codice a monte, quindi non dovrebbe dare più nessun problema,
+            //se l'errore persiste avvisate Fra
+            if(invite.isEmpty()){
                 Intent intent1=new Intent(NewGroup.this, GroupListActivity.class); //da cambiare (dovra' andare alla pagina del gruppo creato)
                 startActivity(intent1);
-            }else{
-                if(invite.isEmpty()){
-                    Intent intent1=new Intent(NewGroup.this, GroupListActivity.class); //da cambiare (dovra' andare alla pagina del gruppo creato)
-                    startActivity(intent1);
-                }else {
-                    //devo invitare i nuovi membri del gruppo
-                    Intent intent2 = new Intent(NewGroup.this, InviteActivity.class);
-                    intent2.putExtra("InviteList", (Serializable) invite);
-                    intent2.putExtra("Code", groupCode);
-                    startActivity(intent2);
-                }
+            }else {
+                //devo invitare i nuovi membri del gruppo
+                Intent intent2 = new Intent(NewGroup.this, InviteActivity.class);
+                intent2.putExtra("InviteList", (Serializable) invite);
+                intent2.putExtra("Code", groupCode);
+                startActivity(intent2);
             }
 
             return true;

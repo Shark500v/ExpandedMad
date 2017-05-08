@@ -31,6 +31,7 @@ public class SelectContact extends AppCompatActivity {
     private List<SelectUser> invite = new ArrayList<>();    //used to invite new membres to join the app
     private DatabaseReference mDatabaseReference;
     private AtomicInteger counter;
+    private ContactsFragment fragment;                              //used to show the contact list
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,15 +49,19 @@ public class SelectContact extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        if (savedInstanceState == null) {
-            //mostra a video i contatti della mia rubrica
-            Bundle arguments = new Bundle();
-            arguments.putSerializable("LIST", (Serializable) groupM);
-            ContactsFragment fragment = new ContactsFragment();
-            fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction().add(R.id.frameLayout, fragment).commit();
+        //preparo il fragment che dovrà mostrare a schermo i contatti di cui ho fatto il retrieve dalla rubbrica
+        Bundle arguments = new Bundle();
+        arguments.putSerializable("LIST", (Serializable) groupM);
+        fragment = new ContactsFragment();
+        fragment.setArguments(arguments);
+        //lancio il fragment
+        getSupportFragmentManager().beginTransaction().add(R.id.frameLayout, fragment).commit();
+    }
 
-        }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        invite.clear();
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -77,13 +82,8 @@ public class SelectContact extends AppCompatActivity {
                 Snackbar.make(mv, getString(R.string.at_least_one_member), Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 return true;
             }else{
-                //prima di lanciare la nuova activity devo verificare che tutti i contatti selezionati facciano parte dell'applicazione
-
-                /*
-                *   verifica contatti e riempo la lista degli invite!
-                * */
-                //se acuni contatti non sono presenti dentro il DB allora li devo invitare
-                invite.clear();
+                //prima di lanciare la nuova activity devo verificare che tutti i contatti selezionati fanno parte del DB
+                //verifico contatti e riempo la lista degli invite (contatti da invitare)!
 
                 counter = new AtomicInteger(groupM.size());
 
@@ -109,6 +109,7 @@ public class SelectContact extends AppCompatActivity {
                                 if(invite.isEmpty()){
                                     //se la lista è vuota non ci sono inviti da fare e posso andare oltre, altrimenti devo procedere ad invitare le persone mancanti prima di creare il gruppo
                                     Intent intent1=new Intent(SelectContact.this, NewGroup.class);
+                                    intent1.putExtra("invite", (Serializable) invite);                  //in questo caso la lista sarà vuota, non ci sarà nulla all'interno
                                     intent1.putExtra("Group Members", (Serializable) groupM);
                                     startActivity(intent1);
                                 }else{
@@ -120,7 +121,6 @@ public class SelectContact extends AppCompatActivity {
                                     fragment.setArguments(arguments);
                                     fragment.show(getSupportFragmentManager(), "InviteContacts");
                                 }
-
                             }
                         }
 
@@ -129,29 +129,7 @@ public class SelectContact extends AppCompatActivity {
 
                         }
                     });
-
-
                 }
-
-                //invite.addAll(groupM);  //funzione di prova
-
-                /*
-                if(invite.isEmpty()){
-                    //se la lista è vuota non ci sono inviti da fare e posso andare oltre, altrimenti devo procedere ad invitare le persone mancanti prima di creare il gruppo
-                    Intent intent1=new Intent(SelectContact.this, NewGroup.class);
-                    intent1.putExtra("Group Members", (Serializable) groupM);
-                    startActivity(intent1);
-                }else{
-                    //invito le persone che non sono ancora nel DB
-                    Bundle arguments = new Bundle();
-                    arguments.putSerializable("invite", (Serializable) invite);
-                    arguments.putSerializable("Group Members", (Serializable) groupM);  //lista di utenti già inscritti
-                    InviteContact fragment = new InviteContact();
-                    fragment.setArguments(arguments);
-                    fragment.show(getSupportFragmentManager(), "InviteContacts");
-                }
-                */
-
             }
         }
         return super.onOptionsItemSelected(item);
