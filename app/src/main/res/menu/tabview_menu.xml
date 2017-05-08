@@ -18,6 +18,11 @@
         app:showAsAction="never"/>
 
     <item
+        android:id="@+id/action_history"
+        android:title="@string/group_history"
+        app:showAsAction="never"/>
+
+    <item
         android:id="@+id/action_members"
         android:title="@string/group_members_to_group"
         app:showAsAction="never"/>

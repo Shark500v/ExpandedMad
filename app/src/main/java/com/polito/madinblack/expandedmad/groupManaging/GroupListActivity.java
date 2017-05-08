@@ -48,6 +48,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class GroupListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     private MyApplication ma;
@@ -278,7 +280,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
 
         //metodo per fare il download dallo storage delle immagini dei gruppi
         //nella NewGroup non serve, da togliere
-        public void downlaoadGroupImage(String groupCode){
+        public Bitmap downlaoadGroupImage(String groupCode){
             StorageReference groupRef = mStorage.child("Groups").child(groupCode).child("GroupPicture").child("groupPicture.jpg");
             try {
                 final File localFile = File.createTempFile("image", "tmp");
@@ -296,7 +298,9 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            return bitmap;
         }
+
 
         @Override
         public GroupListActivity.SimpleItemRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -308,6 +312,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         public void onBindViewHolder(final SimpleItemRecyclerViewAdapter.ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);   //mValues.get(position) rappresenta un singolo elemento della nostra lista di gruppi
             holder.mNumView.setText(Long.toString(mValues.get(position).getSize()) + " " + getString(R.string.members));
+            //holder.mImage.setImageBitmap(downlaoadGroupImage(mValues.get(position).getId()));
             holder.mContentView.setText(mValues.get(position).getName());
             if(mValues.get(position).getNewExpenses()!=0)
                 holder.mNotification.setText(mValues.get(position).getNewExpenses().toString());
@@ -337,6 +342,26 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                     });
                 }
             });
+
+
+            StorageReference groupRef = mStorage.child("Groups").child(mValues.get(position).getId()).child("GroupPicture").child("groupPicture.jpg");
+            try {
+                final File localFile = File.createTempFile("image", "tmp");
+                groupRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                        bitmap = BitmapFactory.decodeFile(localFile.getPath());
+                        holder.mImage.setImageBitmap(bitmap);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         @Override
@@ -357,6 +382,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             public final TextView mNumView;
             public final TextView mContentView;
             public final TextView mNotification;
+            public final CircleImageView mImage;
             public GroupForUser mItem;
 
             public ViewHolder(View view) {
@@ -365,6 +391,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                 mNumView = (TextView) view.findViewById(R.id.num_members);
                 mContentView = (TextView) view.findViewById(R.id.content);
                 mNotification = (TextView) view.findViewById(R.id.notification);
+                mImage = (CircleImageView) view.findViewById(R.id.group_image_storage);
             }
 
             @Override
