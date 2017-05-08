@@ -1,19 +1,24 @@
 package com.polito.madinblack.expandedmad.groupManaging;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.polito.madinblack.expandedmad.R;
+import com.polito.madinblack.expandedmad.groupMembers.GroupMemebersActivity;
 import com.polito.madinblack.expandedmad.model.HistoryInfo;
+import com.polito.madinblack.expandedmad.utility.TabView;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,6 +32,17 @@ public class GroupHistory extends AppCompatActivity {
         //setContentView(R.layout.activity_my);
 
         setContentView(R.layout.activity_group_history);
+
+        //toolbar settings
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        // Show the Up button
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
         RecyclerView recList = (RecyclerView) findViewById(R.id.cardList);
         recList.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
@@ -42,8 +58,16 @@ public class GroupHistory extends AppCompatActivity {
         }
     }
 
-
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == 16908332){
+            Intent intent = new Intent(this, TabView.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            navigateUpTo(intent);
+            return true;
+        }else
+            return super.onOptionsItemSelected(item);
+    }
 
 
     private List<HistoryInfo> createList(int size) {

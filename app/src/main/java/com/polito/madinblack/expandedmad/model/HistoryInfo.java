@@ -36,7 +36,7 @@ public class HistoryInfo {
     }
 
     public String getDateAsString(){
-        SimpleDateFormat sf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        //SimpleDateFormat sf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
         return df.format(date);
     }

@@ -30,6 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.polito.madinblack.expandedmad.ExpenseFillData;
 import com.polito.madinblack.expandedmad.groupManaging.GroupDetailActivity;
 import com.polito.madinblack.expandedmad.groupManaging.GroupDetailFragment;
+import com.polito.madinblack.expandedmad.groupManaging.GroupHistory;
 import com.polito.madinblack.expandedmad.groupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.groupMembers.GroupMemebersActivity;
@@ -144,7 +145,7 @@ public class TabView extends AppCompatActivity {
 
             case R.id.action_history:
                 //insert here the connection
-                Intent intent3 = new Intent(this, GroupMemebersActivity.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
+                Intent intent3 = new Intent(this, GroupHistory.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
                 intent3.putExtra("GROUP_ID", groupIndex);
                 startActivity(intent3);
                 return true;

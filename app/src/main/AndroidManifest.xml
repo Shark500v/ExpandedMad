@@ -150,6 +150,7 @@
         <activity
             android:name=".groupManaging.GroupHistory"
             android:label="@string/title_activity_group_history"
+            android:parentActivityName=".utility.TabView"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

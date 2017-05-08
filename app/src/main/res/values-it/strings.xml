@@ -124,6 +124,6 @@
     <string name="add_new_expense">Aggiungi nuova spesa</string>
     <string name="loading">Caricamento</string>
     <string name="add_proof">Aggiungi Immagine Spesa</string>
-    <string name="no_messages">Non ci sono messaggi</string>
+    <string name="no_reports">Non ci sono notizie</string>
     <string name="group_history">Riepilogo Gruppo</string>
 </resources>
