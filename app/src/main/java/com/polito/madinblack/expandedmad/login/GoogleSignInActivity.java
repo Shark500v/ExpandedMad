@@ -167,6 +167,7 @@ public class GoogleSignInActivity extends BaseActivity implements
 
                             Intent intent = new Intent(GoogleSignInActivity.this, CheckTelephone.class);
                             startActivity(intent);
+                            finish();
                             //updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.

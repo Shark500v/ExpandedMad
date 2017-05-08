@@ -20,7 +20,7 @@ public class Balance {
         this.userPhoneNumber = userPhoneNumber;
         this.userName = userName;
         this.userSurname = userSurname;
-        this.balance = balance;
+        this.balance = CostUtil.round(balance, 2);
         this.currencyName = currencyName;
         this.currencySymbol = currencySymbol;
     }
@@ -48,7 +48,7 @@ public class Balance {
     }
 
     public void setBalance(Double balance) {
-        this.balance = balance;
+        this.balance = CostUtil.round(balance, 2);
     }
 
     public String getCurrencyName() {

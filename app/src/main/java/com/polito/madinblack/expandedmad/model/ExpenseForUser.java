@@ -20,7 +20,7 @@ public class ExpenseForUser {
 
     public ExpenseForUser(Expense expense, Double myBalance){
         this.name               = expense.getName();
-        this.myBalance          = myBalance;
+        this.myBalance          = CostUtil.round(myBalance, 2);
         this.paidByName         = expense.getPaidByName();
         this.paidBySurname      = expense.getPaidBySurname();
         this.paidByFirebaseId   = expense.getPaidByFirebaseId();
@@ -92,7 +92,7 @@ public class ExpenseForUser {
     }
 
     public void setMyBalance(Double myBalance) {
-        this.myBalance = myBalance;
+        this.myBalance = CostUtil.round(myBalance, 2);
     }
 
 
