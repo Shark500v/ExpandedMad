@@ -18,6 +18,7 @@ import com.polito.madinblack.expandedmad.model.MyApplication;
 //ho fatto dei cambiamenti anche in questa classe, non ho ben capito come funziona e come si incastra con le altre
 public class ExpenseDetailFragment extends Fragment {
 
+    public static final String ARG_ITEM_ID = "itemId";
     private MyApplication ma;
     private Expense mItem;
 

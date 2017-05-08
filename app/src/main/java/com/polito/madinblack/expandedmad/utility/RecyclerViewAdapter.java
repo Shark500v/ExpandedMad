@@ -108,6 +108,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                     // Update the RecyclerView
                     notifyItemChanged(expenseIndex);
+
                 } else {
                     Log.w(TAG, "onChildChanged:unknown_child:" + expenseKey);
                 }
@@ -197,32 +198,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.mPaydBy.setText(str);
         //sopra vengono settati i tre campi che costituisco le informazioni di ogni singolo gruppo, tutti pronti per essere mostriti nella gui
 
-        /*
+
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
 
-                FirebaseDatabase.getInstance().getReference().child("expenses").child(holder.mItem.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+                Context context = v.getContext();
+                Intent intent = new Intent(context, ExpenseDetailActivity.class);
+                intent.putExtra(ExpenseDetailFragment.ARG_ITEM_ID, holder.mItem.getId());
+                context.startActivity(intent);
 
-                        Context context = v.getContext();
-                        Intent intent = new Intent(context, ExpenseDetailActivity.class);
-                        intent.putExtra(ExpenseDetailFragment.ARG_ITEM_ID, holder.mItem.getId());
-                        intent.putExtra(ExpenseDetailFragment.ARG_GROUP_ID, index);
-                        ma.setSelectedExpense(dataSnapshot.getValue(Expense.class));
-                        context.startActivity(intent);
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
             }
         });
-        */
+
     }
 
     @Override
