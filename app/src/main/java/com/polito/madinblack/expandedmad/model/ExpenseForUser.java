@@ -12,6 +12,9 @@ public class ExpenseForUser {
     private String currencyName;
     private String currencySymbol;
     private String groupId;
+    private Long day;
+    private Long month;
+    private Long year;
 
 
     public ExpenseForUser(){
@@ -29,6 +32,9 @@ public class ExpenseForUser {
         this.currencySymbol     = expense.getCurrencySymbol();
         this.id                 = expense.getId();
         this.groupId            = expense.getGroupId();
+        this.day                = expense.getDay();
+        this.month              = expense.getMonth();
+        this.year               = expense.getYear();
     }
 
     public String getName() {
@@ -123,5 +129,29 @@ public class ExpenseForUser {
 
     public void setGroupId(String groupId) {
         this.groupId = groupId;
+    }
+
+    public Long getDay() {
+        return day;
+    }
+
+    public void setDay(Long day) {
+        this.day = day;
+    }
+
+    public Long getMonth() {
+        return month;
+    }
+
+    public void setMonth(Long month) {
+        this.month = month;
+    }
+
+    public Long getYear() {
+        return year;
+    }
+
+    public void setYear(Long year) {
+        this.year = year;
     }
 }
