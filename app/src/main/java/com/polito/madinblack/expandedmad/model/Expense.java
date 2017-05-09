@@ -320,17 +320,13 @@ public class Expense {
                     }
                 });
 
-
-
             }
-
-
         }
 
         mDatabaseRootRefenrence.child("groups/"+groupId+"/expenses/"+expenseKey).setValue(true);
 
         /*update the history*/
-        HistoryInfo historyInfo = new HistoryInfo(paidByName+" "+paidBySurname, historyExpense+cost);
+        HistoryInfo historyInfo = new HistoryInfo(paidByName+" "+paidBySurname, historyExpense+" "+cost+" "+currencySymbol);
         mDatabaseRootRefenrence.child("history/"+groupId).push().setValue(historyInfo);
 
         return expenseKey;
