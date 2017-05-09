@@ -2,18 +2,17 @@ package com.polito.madinblack.expandedmad.groupManaging;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 
-import com.polito.madinblack.expandedmad.ExpenseListActivity;
 import com.polito.madinblack.expandedmad.R;
+import com.polito.madinblack.expandedmad.utility.TabView;
 
 
 public class GroupDetailActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +22,7 @@ public class GroupDetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
 
+        /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -30,6 +30,7 @@ public class GroupDetailActivity extends AppCompatActivity {
                 //Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
         });
+        */
 
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
@@ -41,9 +42,9 @@ public class GroupDetailActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(GroupDetailFragment.ARG_G_ID, getIntent().getStringExtra(GroupDetailFragment.ARG_G_ID));    //id del gruppo come stringa
+            //arguments.putString(GroupDetailFragment.ARG_G_ID, getIntent().getStringExtra(GroupDetailFragment.ARG_G_ID));    //id del gruppo come stringa
             GroupDetailFragment fragment = new GroupDetailFragment();
-            fragment.setArguments(arguments);
+            //fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction().add(R.id.group_detail_container, fragment).commit();
         }
     }
@@ -52,7 +53,7 @@ public class GroupDetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            Intent intent = new Intent(this, ExpenseListActivity.class);
+            Intent intent = new Intent(this, TabView.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
             navigateUpTo(intent);
             return true;

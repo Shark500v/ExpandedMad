@@ -23,6 +23,7 @@ import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 public class UserDebts extends AppCompatActivity {
 
+
     private String groupID = "";
     private String userID = "";
 
@@ -57,7 +58,6 @@ public class UserDebts extends AppCompatActivity {
             groupID = extras.getString("GROUP_ID");
             userID = extras.getString("USER_ID");
             actionBar.setTitle(userID+" 2");
-
 
             View recyclerView = findViewById(R.id.item_list);
             assert recyclerView != null;

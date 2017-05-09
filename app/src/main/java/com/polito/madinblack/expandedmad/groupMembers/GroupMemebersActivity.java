@@ -20,7 +20,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.polito.madinblack.expandedmad.ExpenseListActivity;
 import com.polito.madinblack.expandedmad.R;
 
 import java.util.ArrayList;
@@ -29,8 +28,10 @@ import java.util.List;
 import com.polito.madinblack.expandedmad.model.GroupForUser;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.UserForGroup;
+import com.polito.madinblack.expandedmad.utility.TabView;
 
 public class GroupMemebersActivity extends AppCompatActivity {
+
 
     public String groupID = "init";
     private String name = "hello";
@@ -98,14 +99,13 @@ public class GroupMemebersActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            Intent intent = new Intent(this, ExpenseListActivity.class);
+            Intent intent = new Intent(this, TabView.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             navigateUpTo(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
-
 
     public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
@@ -208,8 +208,6 @@ public class GroupMemebersActivity extends AppCompatActivity {
 
             // Store reference to listener so it can be removed on app stop
             mChildEventListener = childEventListener;
-
-
         }
 
         @Override

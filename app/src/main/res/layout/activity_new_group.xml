@@ -86,11 +86,13 @@
 
     </FrameLayout>
 
-    <ListView xmlns:tools="http://schemas.android.com/tools"
+    <FrameLayout
+        android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:id="@+id/list1"
-        tools:listitem="@layout/new_group_items"  />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <include layout="@layout/group_members_list" />
+    </FrameLayout>
+
 </LinearLayout>

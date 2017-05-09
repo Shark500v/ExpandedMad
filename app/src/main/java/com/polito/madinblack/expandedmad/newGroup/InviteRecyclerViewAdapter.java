@@ -65,6 +65,7 @@ public class InviteRecyclerViewAdapter extends RecyclerView.Adapter<InviteRecycl
         public final EditText mContentView;
         public SelectUser mItem;
 
+
         public ViewHolder(View view) {
             super(view);
             mView = view;

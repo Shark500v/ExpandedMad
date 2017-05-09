@@ -16,6 +16,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,16 +26,12 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnPausedListener;
@@ -61,19 +59,20 @@ public class NewGroup extends AppCompatActivity {
     private DatabaseReference mDatabaseReferenceRoot;
     private StorageReference mStorage;
     private MyApplication ma;
-    String phoneId;
-    List<SelectUser> groupM;
-    List<SelectUser> invite;
-    ListView lv;
-    GroupMembersAdapter adapter;
-    String groupCode;
-    CircleImageView groupImage;
-    CircleImageView btn_group_image;
-    ImageView fullScreen;
-    Bitmap bitmap = null;
-    Uri uri;
-    byte[] imageData;
-    boolean visible = false; //boolean per visualizzazione a schermo intero
+    private List<SelectUser> groupM;
+    private List<SelectUser> invite;
+    private List<SelectUser> realMembers = new ArrayList<>();
+    private String groupCode;
+    private CircleImageView groupImage;
+    private CircleImageView btn_group_image;
+    private ImageView fullScreen;
+    private Bitmap bitmap = null;
+    private Uri uri;
+    private byte[] imageData;
+    private boolean visible = false; //boolean per visualizzazione a schermo intero
+
+    private RecyclerView recyclerView;
+    private GroupMembersRecyclerViewAdapter adapter;
 
     //a constant to track the file chooser intent
     private static int RESULT_LOAD_IMAGE = 1;
@@ -86,6 +85,8 @@ public class NewGroup extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        ma = MyApplication.getInstance();
 
         mStorage = FirebaseStorage.getInstance().getReference();
 
@@ -142,16 +143,44 @@ public class NewGroup extends AppCompatActivity {
             }
         });
 
-        lv = (ListView) findViewById(R.id.list1);
-        adapter = new GroupMembersAdapter(groupM, this);
-
         // Show the Up button in the action bar
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        lv.setAdapter(adapter);
+        recyclerView = (RecyclerView) findViewById(R.id.group_members_list);
+        adapter = new GroupMembersRecyclerViewAdapter(realMembers, this);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        realMembers.clear();
+        if(!invite.isEmpty()){
+            fillMembers();
+        }else {
+            realMembers.addAll(groupM);
+        }
+    }
+
+    void fillMembers(){
+        int i, j;
+        boolean f;
+        for(i=0; i<groupM.size(); i++){
+            f = true;
+            for (j=0; j<invite.size(); j++){
+                if(invite.get(j).getPhone().compareTo(groupM.get(i).getPhone())==0){
+                    f = false;
+                    break;
+                }
+            }
+            if (f){
+                realMembers.add(groupM.get(i)); //inserisco dentro la lista solo gli utenti che inizialmente andranno a creare il gruppo
+            }
+        }
     }
 
     //creo dialog per decidere da dove prendere la foto da caricare
@@ -213,35 +242,26 @@ public class NewGroup extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.confirm_group) {
 
-            Intent intent;
-
             EditText inputGroupName = (EditText) findViewById(R.id.group_name);
             String groupName = inputGroupName.getText().toString();
+
             if (groupName.isEmpty()) {
-                /*
-                intent = new Intent(this, NewGroup.class);
-                startActivity(intent);
-                */
                 View mv = findViewById(R.id.main_content);
                 Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                // Vibrate for 500 milliseconds
                 v.vibrate(250);
                 Snackbar.make(mv, R.string.invalid_group_name, Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 return true;
             }
 
-
-
             List<UserForGroup> userForGroupList = new ArrayList<>();
 
-            for(SelectUser selectUser : groupM){
+            for(SelectUser selectUser : realMembers){
 
                 String [] items = selectUser.getName().split(" ");
                 if(items[0]==null)
                     items[0]=" ";
                 if(items[1]==null)
                     items[1]=" ";
-
 
                 UserForGroup userForGroup = new UserForGroup(selectUser.getPhone(), selectUser.getFirebaseId(), items[0], items[1]);
                 for(int i=0; i<userForGroupList.size(); i++){
@@ -250,7 +270,6 @@ public class NewGroup extends AppCompatActivity {
 
                 }
                 userForGroupList.add(userForGroup);
-
             }
 
             UserForGroup userForGroup = new UserForGroup(ma.getUserPhoneNumber(), ma.getFirebaseId(), ma.getUserName(), ma.getUserSurname());
@@ -261,27 +280,23 @@ public class NewGroup extends AppCompatActivity {
             }
             userForGroupList.add(userForGroup);
 
-
             groupCode = Group.writeNewGroup(mDatabaseReferenceRoot, groupName, userForGroupList);
 
             if(groupCode != null) {
                 uploadGroupPhoto();
             }
 
-            if(invite==null || invite.isEmpty()){
+            //ho eliminato il check per testare se il gruppo fosse null, ho sistemato il codice a monte, quindi non dovrebbe dare più nessun problema,
+            //se l'errore persiste avvisate Fra
+            if(invite.isEmpty()){
                 Intent intent1=new Intent(NewGroup.this, GroupListActivity.class); //da cambiare (dovra' andare alla pagina del gruppo creato)
                 startActivity(intent1);
-            }else{
-                if(invite.isEmpty()){
-                    Intent intent1=new Intent(NewGroup.this, GroupListActivity.class); //da cambiare (dovra' andare alla pagina del gruppo creato)
-                    startActivity(intent1);
-                }else {
-                    //devo invitare i nuovi membri del gruppo
-                    Intent intent2 = new Intent(NewGroup.this, InviteActivity.class);
-                    intent2.putExtra("InviteList", (Serializable) invite);
-                    intent2.putExtra("Code", groupCode);
-                    startActivity(intent2);
-                }
+            }else {
+                //devo invitare i nuovi membri del gruppo
+                Intent intent2 = new Intent(NewGroup.this, InviteActivity.class);
+                intent2.putExtra("InviteList", (Serializable) invite);
+                intent2.putExtra("Code", groupCode);
+                startActivity(intent2);
             }
 
             return true;
@@ -294,8 +309,6 @@ public class NewGroup extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

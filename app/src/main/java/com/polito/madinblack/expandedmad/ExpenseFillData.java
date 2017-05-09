@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -43,11 +44,13 @@ import com.google.firebase.storage.OnPausedListener;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.polito.madinblack.expandedmad.model.DecimalDigitsInputFilter;
 import com.polito.madinblack.expandedmad.model.Expense;
 
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.Payment;
 import com.polito.madinblack.expandedmad.model.UserForGroup;
+import com.polito.madinblack.expandedmad.utility.TabView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -102,6 +105,8 @@ public class ExpenseFillData extends AppCompatActivity {
         inputName = (EditText) findViewById(R.id.input_title);
         inputAmount = (EditText) findViewById(R.id.input_amount);
 
+        inputAmount.setFilters(new InputFilter[] { new DecimalDigitsInputFilter(2)});
+
         ma = MyApplication.getInstance();   //retrive del DB
 
         users = new ArrayList<>();
@@ -142,6 +147,7 @@ public class ExpenseFillData extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.users_list);
         assert recyclerView != null;
         setupRecyclerView(recyclerView);
+
     }
 
     @Override
@@ -224,14 +230,14 @@ public class ExpenseFillData extends AppCompatActivity {
                 uploadFile();
             }
 
-            intent = new Intent(this, ExpenseListActivity.class);
+            intent = new Intent(this, TabView.class);
             intent.putExtra("index", groupID);
             //startActivity(intent);
             setResult(RESULT_OK, intent);
             finish();
             return true;
         }else if(id == 16908332){
-            Intent intent3 = new Intent(this, ExpenseListActivity.class);
+            Intent intent3 = new Intent(this, TabView.class);
             intent3.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
             navigateUpTo(intent3);
             return true;
@@ -618,7 +624,6 @@ public class ExpenseFillData extends AppCompatActivity {
             holder.plus.setEnabled( holder.mItem.isWeightEnabled());
             holder.partition.setEnabled( holder.mItem.isWeightEnabled() );
 
-
             /*holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -652,6 +657,7 @@ public class ExpenseFillData extends AppCompatActivity {
                 plus = (Button) view.findViewById(R.id.increase);
                 minus = (Button) view.findViewById(R.id.decrease);
 
+                partition.setFilters(new InputFilter[] { new DecimalDigitsInputFilter(2)});
                 partition.addTextChangedListener( new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {

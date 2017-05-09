@@ -15,6 +15,7 @@ public class UserInfoRegistration extends AppCompatActivity{
     EditText inputName, inputSurname;
     CollapsingToolbarLayout barLayout;
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

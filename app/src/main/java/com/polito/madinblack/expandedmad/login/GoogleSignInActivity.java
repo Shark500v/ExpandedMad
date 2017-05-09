@@ -41,6 +41,7 @@ public class GoogleSignInActivity extends BaseActivity implements
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 9001;
 
+
     // [START declare_auth]
     private FirebaseAuth mAuth;
     // [END declare_auth]
@@ -166,6 +167,7 @@ public class GoogleSignInActivity extends BaseActivity implements
 
                             Intent intent = new Intent(GoogleSignInActivity.this, CheckTelephone.class);
                             startActivity(intent);
+                            finish();
                             //updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.

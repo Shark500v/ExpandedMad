@@ -30,6 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.polito.madinblack.expandedmad.ExpenseFillData;
 import com.polito.madinblack.expandedmad.groupManaging.GroupDetailActivity;
 import com.polito.madinblack.expandedmad.groupManaging.GroupDetailFragment;
+import com.polito.madinblack.expandedmad.groupManaging.GroupHistory;
 import com.polito.madinblack.expandedmad.groupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.groupMembers.GroupMemebersActivity;
@@ -70,13 +71,10 @@ public class TabView extends AppCompatActivity {
         groupIndex = getIntent().getExtras().getString("groupIndex");
         groupName  = getIntent().getExtras().getString("groupName");
 
+        mDatabaseBalancesReference = FirebaseDatabase.getInstance().getReference().child("groups/"+groupIndex+"/users/"+ma.getFirebaseId()+"/balances");
+        mDatabaseExpenseListReference = FirebaseDatabase.getInstance().getReference().child("users/"+ma.getUserPhoneNumber()+"/"+ma.getFirebaseId()+"/groups/"+groupIndex+"/expenses");
 
-        mDatabaseBalancesReference = FirebaseDatabase.getInstance().getReference().child("groups/"+groupIndex+"/users/"+ma.getFirebaseId()+"/"+ma.getUserPhoneNumber()+"/balances");
-        mDatabaseExpenseListReference = FirebaseDatabase.getInstance().getReference().child("users/"+ma.getFirebaseId()+"/"+ma.getUserPhoneNumber()+"/groups/"+groupIndex+"/expenses");
-
-
-
-
+        //toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(groupName);
         setSupportActionBar(toolbar);
@@ -94,8 +92,6 @@ public class TabView extends AppCompatActivity {
         tabLayout.setupWithViewPager(mViewPager);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-
-
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -106,7 +102,6 @@ public class TabView extends AppCompatActivity {
 
             }
         });
-
 
         // Show the Up button in the action bar. (bottone indietro nella pagina 2)
         ActionBar actionBar = getSupportActionBar();
@@ -134,7 +129,6 @@ public class TabView extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_settings:
                 Intent intent = new Intent(this, GroupDetailActivity.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
-                intent.putExtra(GroupDetailFragment.ARG_G_ID, groupIndex);   //il tutto viene passato come stringa
                 startActivity(intent);
                 return true;
 
@@ -149,11 +143,17 @@ public class TabView extends AppCompatActivity {
                 startActivity(intent2);
                 return true;
 
+            case R.id.action_history:
+                //insert here the connection
+                Intent intent3 = new Intent(this, GroupHistory.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
+                intent3.putExtra("GROUP_ID", groupIndex);
+                startActivity(intent3);
+                return true;
+
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
-
         }
     }
 

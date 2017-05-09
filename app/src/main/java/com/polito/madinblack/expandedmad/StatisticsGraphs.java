@@ -98,5 +98,6 @@ public class StatisticsGraphs extends AppCompatActivity {
         staticLabelsFormatter.setVerticalLabels(new String[] {"low", "middle", "high"});
         graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
 
+
     }
 }

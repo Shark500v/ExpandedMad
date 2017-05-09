@@ -15,10 +15,9 @@ import com.polito.madinblack.expandedmad.model.MyApplication;
 public class CheckLogIn extends BaseActivity {
 
 
-
     private FirebaseAuth                    mAuth;
-    private FirebaseAuth.AuthStateListener  mAuthListener;
     private MyApplication                   ma;
+    static boolean calledAlready            = false;
 
     private static final String TAG = "GoogleActivity";
 
@@ -27,7 +26,11 @@ public class CheckLogIn extends BaseActivity {
         super.onCreate(savedInstanceState);
         showProgressDialog();
         //setContentView(R.layout.google_registration);
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        if (!calledAlready) {
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            calledAlready = true;
+        }
+
         //Local variable of logged user
         ma = MyApplication.getInstance();
         //Set persistence true to database
@@ -82,9 +85,6 @@ public class CheckLogIn extends BaseActivity {
 
         Intent intent = new Intent(CheckLogIn.this, CheckTelephone.class);
         startActivity(intent);
-        //finish();
-
-
 
     }
 
@@ -94,8 +94,6 @@ public class CheckLogIn extends BaseActivity {
         ma.setLogged(false);
         Intent intent = new Intent(CheckLogIn.this, GoogleSignInActivity.class);
         startActivity(intent);
-        //finish();
-
     }
 
 }

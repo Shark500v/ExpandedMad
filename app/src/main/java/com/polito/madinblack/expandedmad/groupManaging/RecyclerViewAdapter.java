@@ -17,6 +17,7 @@ import java.util.List;
 //questa classe la usa per fare il managing della lista che deve mostrare
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
+
     private final List<Group> mValues;
 
     public RecyclerViewAdapter(List<Group> groups) {

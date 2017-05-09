@@ -14,6 +14,7 @@ import com.polito.madinblack.expandedmad.model.*;
 
 public class GroupDetailFragment extends Fragment {
 
+
     public static final String ARG_G_ID = "item_id";
 
     private GroupForUser mItem;
@@ -29,17 +30,12 @@ public class GroupDetailFragment extends Fragment {
 
         ma = MyApplication.getInstance();   //retrive del DB
 
-        if (getArguments().containsKey(ARG_G_ID)) {
-            // Load the dummy content specified by the fragment
-            // arguments. In a real-world scenario, use a Loader
-            // to load content from a content provider.
-            mItem = ma.getGroupForUser();
+        mItem = ma.getGroupForUser();
 
-            Activity activity = this.getActivity();
-            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
-            if (appBarLayout != null) {
-                appBarLayout.setTitle(mItem.getName());
-            }
+        Activity activity = this.getActivity();
+        CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
+        if (appBarLayout != null) {
+            appBarLayout.setTitle(mItem.getName());
         }
     }
 

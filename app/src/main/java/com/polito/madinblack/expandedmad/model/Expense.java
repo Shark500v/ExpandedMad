@@ -222,7 +222,7 @@ public class Expense {
         DatabaseReference myExpenseRef = mDatabaseRootRefenrence.child("expenses").push();
         String expenseKey = myExpenseRef.getKey();
 
-        Expense expense = new Expense(expenseKey, name, tag, paidByFirebaseId, paidByPhoneNumber, paidByName, paidBySurname, cost, currencyName, currencySymbol, groupId, year, month, day, description);
+        Expense expense = new Expense(expenseKey, name, tag, paidByName, paidBySurname, paidByFirebaseId, paidByPhoneNumber, CostUtil.round(cost, 2), currencyName, currencySymbol, groupId, year, month, day, description);
         myExpenseRef.setValue(expense);
 
         Map<String, PaymentFirebase> payments = new HashMap<>();
@@ -273,10 +273,10 @@ public class Expense {
                     public Transaction.Result doTransaction(MutableData currentData) {
                         if (currentData.getValue() == null) {
                             //no default value for data, set one
-                            currentData.setValue(payment.getBalance());
+                            currentData.setValue(payment.getDebit());
                         } else {
                             // perform the update operations on data
-                            currentData.setValue((Long) currentData.getValue() + payment.getBalance());
+                            currentData.setValue((Long) currentData.getValue() - payment.getDebit());
                         }
                         return Transaction.success(currentData);
                     }

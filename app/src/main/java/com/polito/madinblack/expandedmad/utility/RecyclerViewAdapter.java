@@ -1,6 +1,7 @@
 package com.polito.madinblack.expandedmad.utility;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
@@ -16,14 +17,17 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
+import com.polito.madinblack.expandedmad.ExpenseDetailActivity;
+import com.polito.madinblack.expandedmad.ExpenseDetailFragment;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.ExpenseForUser;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 
 import java.util.ArrayList;
 import java.util.List;
-
-
 
 //questa classe la usa per fare il managing della lista che deve mostrare
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
@@ -35,6 +39,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private Context mContext;
     private ChildEventListener mChildEventListener;
     private MyApplication ma;
+    private DatabaseReference mDatabaseNewExpenseReference;
 
     private static final String TAG = "MyBalanceActivity";
 
@@ -43,6 +48,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         dataref = dr;
         mContext = ct;
         ma = MyApplication.getInstance();
+
 
         // Create child event listener
         // [START child_event_listener_recycler]
@@ -54,13 +60,36 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 // A new expense has been added, add it to the displayed list
                 ExpenseForUser expense = dataSnapshot.getValue(ExpenseForUser.class);
 
+                //upload newExpense
+                mDatabaseNewExpenseReference = FirebaseDatabase.getInstance().getReference().child("users/"+ma.getUserPhoneNumber()+"/"+ma.getFirebaseId()+"/groups/"+expense.getGroupId()+"/newExpenses");
+
+                mDatabaseNewExpenseReference.runTransaction(new Transaction.Handler() {
+
+                    @Override
+                    public Transaction.Result doTransaction(MutableData currentData) {
+                            if((Long) currentData.getValue()!=0)
+                                currentData.setValue(0L);
+
+                        return Transaction.success(currentData);
+                    }
+
+                    @Override
+                    public void onComplete(DatabaseError databaseError,
+                                           boolean committed, DataSnapshot currentData) {
+                        //This method will be called once with the results of the transaction.
+                        //Update remove the user from the group
+                    }
+                });
+
                 // [START_EXCLUDE]
                 // Update RecyclerView
                 mValuesIds.add(dataSnapshot.getKey());
                 mValues.add(expense);
                 notifyItemInserted(mValues.size() - 1);
                 // [END_EXCLUDE]
+
             }
+
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
@@ -79,6 +108,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                     // Update the RecyclerView
                     notifyItemChanged(expenseIndex);
+
                 } else {
                     Log.w(TAG, "onChildChanged:unknown_child:" + expenseKey);
                 }
@@ -145,14 +175,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.mItem = mValues.get(position);   //mValues.get(position) rappresenta un singolo elemento della nostra lista di spese
         holder.mIdView.setText(mValues.get(position).getName());
         if(mValues.get(position).getMyBalance()>0) {
-            holder.mContentView.setText(mValues.get(position).getMyBalance().toString() + " " + mValues.get(position).getCurrencySymbol());
+            holder.mContentView.setText(String.format("+%.2f", mValues.get(position).getMyBalance()) + " " + mValues.get(position).getCurrencySymbol());
             holder.mContentView.setTextColor(Color.parseColor("#00c200"));
         }else if(mValues.get(position).getMyBalance()<0) {
-            holder.mContentView.setText(mValues.get(position).getMyBalance().toString() + " " + mValues.get(position).getCurrencySymbol());
+            holder.mContentView.setText(String.format("%.2f", mValues.get(position).getMyBalance()) + " " + mValues.get(position).getCurrencySymbol());
             holder.mContentView.setTextColor(Color.parseColor("#ff0000"));
         }
         else{
-            holder.mContentView.setText(mValues.get(position).getMyBalance().toString() + " " + mValues.get(position).getCurrencySymbol());
+            holder.mContentView.setText(String.format("%.2f", mValues.get(position).getMyBalance()) + " " + mValues.get(position).getCurrencySymbol());
         }
 
         final SpannableStringBuilder str;
@@ -168,39 +198,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.mPaydBy.setText(str);
         //sopra vengono settati i tre campi che costituisco le informazioni di ogni singolo gruppo, tutti pronti per essere mostriti nella gui
 
-        /*holder.mView.setOnClickListener(new View.OnClickListener() {
+
+        holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
 
-
-
-                FirebaseDatabase.getInstance().getReference().child("expenses").child(holder.mItem.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-
-
-
-
-
-                        Context context = v.getContext();
-                        Intent intent = new Intent(context, ExpenseDetailActivity.class);
-                        intent.putExtra(ExpenseDetailFragment.ARG_ITEM_ID, holder.mItem.getId());
-                        intent.putExtra(ExpenseDetailFragment.ARG_GROUP_ID, index);
-                        ma.setSelectedExpense(dataSnapshot.getValue(Expense.class));
-                        context.startActivity(intent);
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-
-
+                Context context = v.getContext();
+                Intent intent = new Intent(context, ExpenseDetailActivity.class);
+                intent.putExtra(ExpenseDetailFragment.ARG_ITEM_ID, holder.mItem.getId());
+                context.startActivity(intent);
 
             }
-        });*/
+        });
+
     }
 
     @Override

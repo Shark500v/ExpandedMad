@@ -63,7 +63,6 @@ public class Group {
     /*return of group id*/
     public static String writeNewGroup(DatabaseReference mDatabaseRootReference, String name, List<UserForGroup> usersForGroup) {
 
-
         Group group = new Group(name, usersForGroup);
 
         DatabaseReference myGroupRef = mDatabaseRootReference.child("groups").push();
@@ -91,7 +90,7 @@ public class Group {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 final UserForGroup newUserForGroup = new UserForGroup(userPhoneNumber, userFirebaseId, userName, userSurname);
-                Balance balance = new Balance(userPhoneNumber, userName, userSurname, 0D);
+                Balance balance = new Balance(userPhoneNumber, userName, userSurname, 0D, "Euro", "€");
 
                 for(DataSnapshot userSnapshot : dataSnapshot.getChildren()){
 

@@ -74,12 +74,10 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
 
         ma = MyApplication.getInstance();   //retrive del DB
 
-       // FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         mDatabaseRootReference = FirebaseDatabase.getInstance().getReference();
 
         mUserGroupsReference   = mDatabaseRootReference.child("users/"+ma.getUserPhoneNumber()+"/"+ma.getFirebaseId()+"/groups");
         mStorage = FirebaseStorage.getInstance().getReference();
-
 
         //toolbar settings
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -92,8 +90,8 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener((NavigationView.OnNavigationItemSelectedListener) this);
-
+        navigationView.setNavigationItemSelectedListener(this);
+        //fine codice per Drawer
 
         //setto nome e cognome nella nav bar
         View header = navigationView.getHeaderView(0);
@@ -176,12 +174,6 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
 
         return super.onCreateOptionsMenu(menu);
     }
-
-
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-
-    }
-
 
     //questa classe la usa per fare il managing della lista che deve mostrare
     public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
@@ -286,8 +278,6 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
 
             // Store reference to listener so it can be removed on app stop
             mChildEventListener = childEventListener;
-
-
         }
 
         @Override
@@ -300,7 +290,10 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         public void onBindViewHolder(final SimpleItemRecyclerViewAdapter.ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);   //mValues.get(position) rappresenta un singolo elemento della nostra lista di gruppi
             holder.mNumView.setText(Long.toString(mValues.get(position).getSize()) + " " + getString(R.string.members));
+            //holder.mImage.setImageBitmap(downlaoadGroupImage(mValues.get(position).getId()));
             holder.mContentView.setText(mValues.get(position).getName());
+            if(mValues.get(position).getNewExpenses()!=0)
+                holder.mNotification.setText(mValues.get(position).getNewExpenses().toString());
             //sopra vengono settati i tre campi che costituisco le informazioni di ogni singolo gruppo, tutti pronti per essere mostriti nella gui
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -308,12 +301,12 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                 public void onClick(View v) {
                     final Context context = v.getContext();
 
-
-                    DatabaseReference mDatabaseGroupForUserReference = mDatabaseRootReference.child("users/"+ma.getFirebaseId()+"/"+ma.getUserPhoneNumber()+"groups/"+holder.mItem.getId());
+                    final DatabaseReference mDatabaseGroupForUserReference = mDatabaseRootReference.child("users/"+ma.getFirebaseId()+"/"+ma.getUserPhoneNumber()+"groups/"+holder.mItem.getId());
 
                     mDatabaseGroupForUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
+
                             Intent intent = new Intent(context, TabView.class); //qui setto la nuova attività da mostrare a schermo dopo che clicco
                             intent.putExtra("groupIndex", holder.mItem.getId());    //passo alla nuova activity l'ide del gruppo chè l'utente ha selezionto
                             intent.putExtra("groupName", holder.mItem.getName());
@@ -325,7 +318,6 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
 
                         }
                     });
-
                 }
             });
             if(groupImages != null && groupImages.get(mValues.get(position).getId()) != null) {
@@ -369,14 +361,13 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             }
         }
 
-
-
         //questa è una classe di supporto che viene usata per creare la vista a schermo, non ho ben capito come funziona
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
             public final CircleImageView mImageView;
             public final TextView mNumView;
             public final TextView mContentView;
+            public final TextView mNotification;
             public GroupForUser mItem;
 
             public ViewHolder(View view) {
@@ -385,11 +376,12 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                 mImageView = (CircleImageView) findViewById(R.id.group_image_storage);
                 mNumView = (TextView) view.findViewById(R.id.num_members);
                 mContentView = (TextView) view.findViewById(R.id.content);
+                mNotification = (TextView) view.findViewById(R.id.notification);
             }
 
             @Override
             public String toString() {
-                return super.toString() + " '" + mContentView.getText() + "'";
+                return super.toString();
             }
         }
     }

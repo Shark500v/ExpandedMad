@@ -5,11 +5,11 @@ import android.graphics.drawable.PaintDrawable;
 public class Payment {
 
     private String userFirebaseId;
-    String userPhoneNumber;
+    private String userPhoneNumber;
     private String userName;
     private String expenseId;
     private Double paid;
-    private double toPaid;
+    private Double toPaid;
     private int weight;
     private boolean isWeightEnabled;
     private boolean isModified;
@@ -19,7 +19,7 @@ public class Payment {
         this.userPhoneNumber    = userPhoneNumber;
         this.userName           = userName;
         this.expenseId          = expenseId;
-        this.paid               = paid;
+        this.paid               = CostUtil.round(paid, 2);;
         this.toPaid             = CostUtil.round(toPaid, 2);
         this.weight             = 1;
         this.isWeightEnabled    = false;
@@ -96,7 +96,7 @@ public class Payment {
     }
 
     public void setPaid(Double paid) {
-        this.paid = paid;
+        this.paid = CostUtil.round(paid,2);
     }
 
     public double getToPaid() {
@@ -107,6 +107,7 @@ public class Payment {
 
         this.toPaid = CostUtil.round(toPaid, 2);
     }
+
 
     public Double getDebit(){
 

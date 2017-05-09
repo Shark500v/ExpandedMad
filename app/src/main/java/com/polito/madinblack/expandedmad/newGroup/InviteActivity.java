@@ -24,12 +24,14 @@ import com.polito.madinblack.expandedmad.model.MyApplication;
 
 import java.util.List;
 
+/*Classe con la quale gestisco l'invio dell'invito ai membri non presenti nel DB
+* */
 public class InviteActivity extends AppCompatActivity {
 
-    List<SelectUser> invite;
+    private List<SelectUser> invite;
     private MyApplication ma;
-    Intent intent1;
-    String groupCode;
+    private Intent intent1;
+    private String groupCode;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +75,6 @@ public class InviteActivity extends AppCompatActivity {
                 if(flag){
                     //posso procedere con l'activity successiva, ma prima devo inviare le email
 
-                    //dovrei andare alla pagina del gruppo
                     intent1 = new Intent(InviteActivity.this, GroupListActivity.class);
 
                     sendEmail();
@@ -90,7 +91,7 @@ public class InviteActivity extends AppCompatActivity {
                 }
 
             case R.id.home:
-                navigateUpTo(new Intent(this, NewGroup.class));    //definisco il parente verso cui devo tornare indietro
+                //navigateUpTo(new Intent(this, NewGroup.class));    //definisco il parente verso cui devo tornare indietro
                 return true;
 
             default:
