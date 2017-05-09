@@ -1,33 +1,51 @@
 package com.polito.madinblack.expandedmad.groupMembers;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.polito.madinblack.expandedmad.R;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.polito.madinblack.expandedmad.model.Balance;
+import com.polito.madinblack.expandedmad.utility.RecyclerViewAdapterUsers;
 
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 public class UserDebts extends AppCompatActivity {
 
 
-    private String groupID = "";
-    private String userID = "";
+    private String name = "";
+    private String surname = "";
+    private String groupId = "";
+    private String firebaseId = "";
+    private RecyclerViewAdapterUsers adapter;
+    private RecyclerView recyclerView;
+    private DatabaseReference mDatabaseBalancesReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,121 +75,48 @@ public class UserDebts extends AppCompatActivity {
                     .commit();*/
             //Mostra il parametro passato come titolo
             Bundle extras = getIntent().getExtras();
-            groupID = extras.getString("GROUP_ID");
-            userID = extras.getString("USER_ID");
-            actionBar.setTitle(userID+" 2");
+            name = extras.getString("NAME");
+            surname = extras.getString("SURNAME");
+            groupId = extras.getString("GROUP_ID");
+            firebaseId = extras.getString("FIREBASE_ID");
 
-            View recyclerView = findViewById(R.id.item_list);
-            assert recyclerView != null;
-            setupRecyclerView((RecyclerView) recyclerView);
+            actionBar.setTitle(name + " " + surname + " " + getString(R.string.balance));
+
+            mDatabaseBalancesReference = FirebaseDatabase.getInstance().getReference().child("groups/"+groupId+"/users/"+firebaseId+"/balances");
+
         }
 
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+
+        adapter = new RecyclerViewAdapterUsers(this, mDatabaseBalancesReference);
+
+        recyclerView = (RecyclerView) findViewById(R.id.item_list);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // Clean up comments listener
+        if(adapter!=null)
+            adapter.cleanupListener();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            Intent intent = new Intent(this, UserExpenses.class);
+            Intent intent = new Intent(this, GroupMemebersActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
             navigateUpTo(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
-
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new UserDebts.SimpleItemRecyclerViewAdapter(createList(20)));
-    }
-
-    private List<Balance> createList(int size) {
-
-        List<Balance> result = new ArrayList<Balance>();
-        for (int i=1; i <= size; i++) {
-            Balance ci = new Balance();
-            ci.setUserName("Name " + i);
-            ci.setCurrencyName("Euro");
-            ci.setCurrencySymbol("€");
-            ci.setBalance(i*50.0);
-            result.add(ci);
-
-        }
-
-        return result;
-    }
-
-    public void userMoreInfo(View view) {
-        Intent intent = new Intent(this, UserDebts.class);
-        intent.putExtra(EXTRA_MESSAGE, userID);
-
-        startActivity(intent);
-    }
-
-    public class SimpleItemRecyclerViewAdapter
-            extends RecyclerView.Adapter<UserDebts.SimpleItemRecyclerViewAdapter.ViewHolder> {
-
-        private final List<Balance> mValues;
-
-        public SimpleItemRecyclerViewAdapter(List<Balance> items) {
-            mValues = items;
-        }
-
-        @Override
-        public UserDebts.SimpleItemRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.users_list_content, parent, false);
-            return new UserDebts.SimpleItemRecyclerViewAdapter.ViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(final UserDebts.SimpleItemRecyclerViewAdapter.ViewHolder holder, int position) {
-            holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).getUserName() + " " +mValues.get(position).getUserSurname());               //qui visualizzo nome e cognome
-            if (mValues.get(position).getBalance()>0){
-                holder.mContentView.setText(String.format("+%.2f", mValues.get(position).getBalance()) + " " + mValues.get(position).getCurrencySymbol());
-                holder.mContentView.setTextColor(Color.parseColor("#00c200"));
-            }else if(mValues.get(position).getBalance()<0){
-                holder.mContentView.setText(String.format("%.2f", mValues.get(position).getBalance()) + " " + mValues.get(position).getCurrencySymbol());
-                holder.mContentView.setTextColor(Color.parseColor("#ff0000"));
-            }else{
-                holder.mContentView.setText(String.format("%.2f", mValues.get(position).getBalance()) + " " + mValues.get(position).getCurrencySymbol());
-            }
-
-            holder.mView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    /*Context context = v.getContext();
-                    Intent intent = new Intent(context, ItemDetailActivity.class);
-                    intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, holder.mItem.id);
-
-                    context.startActivity(intent);*/
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return mValues.size();
-        }
-
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            public final View mView;
-            public final TextView mIdView;
-            public final TextView mContentView;
-            public Balance mItem;
-
-            public ViewHolder(View view) {
-                super(view);
-                mView = view;
-                mIdView = (TextView) view.findViewById(R.id.id);
-                mContentView = (TextView) view.findViewById(R.id.content);
-            }
-
-            @Override
-            public String toString() {
-                return super.toString() + " '" + mContentView.getText() + "'";
-            }
-        }
-    }
-
 }
