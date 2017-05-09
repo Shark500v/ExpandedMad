@@ -1,6 +1,7 @@
 package com.polito.madinblack.expandedmad.groupMembers;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
@@ -15,9 +16,10 @@ import android.widget.TextView;
 
 import com.polito.madinblack.expandedmad.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import com.polito.madinblack.expandedmad.dummy.DummyContent;
+import com.polito.madinblack.expandedmad.model.Balance;
 
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
@@ -79,7 +81,23 @@ public class UserDebts extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new UserDebts.SimpleItemRecyclerViewAdapter(DummyContent.ITEMS));
+        recyclerView.setAdapter(new UserDebts.SimpleItemRecyclerViewAdapter(createList(20)));
+    }
+
+    private List<Balance> createList(int size) {
+
+        List<Balance> result = new ArrayList<Balance>();
+        for (int i=1; i <= size; i++) {
+            Balance ci = new Balance();
+            ci.setUserName("Name " + i);
+            ci.setCurrencyName("Euro");
+            ci.setCurrencySymbol("€");
+            ci.setBalance(i*50.0);
+            result.add(ci);
+
+        }
+
+        return result;
     }
 
     public void userMoreInfo(View view) {
@@ -92,9 +110,9 @@ public class UserDebts extends AppCompatActivity {
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<UserDebts.SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<DummyContent.DummyItem> mValues;
+        private final List<Balance> mValues;
 
-        public SimpleItemRecyclerViewAdapter(List<DummyContent.DummyItem> items) {
+        public SimpleItemRecyclerViewAdapter(List<Balance> items) {
             mValues = items;
         }
 
@@ -108,8 +126,16 @@ public class UserDebts extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final UserDebts.SimpleItemRecyclerViewAdapter.ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).id);
-            holder.mContentView.setText(mValues.get(position).content);
+            holder.mIdView.setText(mValues.get(position).getUserName() + " " +mValues.get(position).getUserSurname());               //qui visualizzo nome e cognome
+            if (mValues.get(position).getBalance()>0){
+                holder.mContentView.setText(String.format("+%.2f", mValues.get(position).getBalance()) + " " + mValues.get(position).getCurrencySymbol());
+                holder.mContentView.setTextColor(Color.parseColor("#00c200"));
+            }else if(mValues.get(position).getBalance()<0){
+                holder.mContentView.setText(String.format("%.2f", mValues.get(position).getBalance()) + " " + mValues.get(position).getCurrencySymbol());
+                holder.mContentView.setTextColor(Color.parseColor("#ff0000"));
+            }else{
+                holder.mContentView.setText(String.format("%.2f", mValues.get(position).getBalance()) + " " + mValues.get(position).getCurrencySymbol());
+            }
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -132,7 +158,7 @@ public class UserDebts extends AppCompatActivity {
             public final View mView;
             public final TextView mIdView;
             public final TextView mContentView;
-            public DummyContent.DummyItem mItem;
+            public Balance mItem;
 
             public ViewHolder(View view) {
                 super(view);
