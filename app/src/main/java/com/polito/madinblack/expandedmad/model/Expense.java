@@ -273,10 +273,10 @@ public class Expense {
                     public Transaction.Result doTransaction(MutableData currentData) {
                         if (currentData.getValue() == null) {
                             //no default value for data, set one
-                            currentData.setValue(payment.getBalance());
+                            currentData.setValue(payment.getDebit());
                         } else {
                             // perform the update operations on data
-                            currentData.setValue((Long) currentData.getValue() + payment.getBalance());
+                            currentData.setValue((Long) currentData.getValue() - payment.getDebit());
                         }
                         return Transaction.success(currentData);
                     }
