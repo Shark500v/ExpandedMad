@@ -208,6 +208,9 @@ public class Expense {
         this.description = description;
     }
 
+    public Map<String, PaymentFirebase> getPayments() {
+        return payments;
+    }
 
     public void setPayments(Map<String, PaymentFirebase> payments) {
         this.payments = payments;
@@ -351,6 +354,20 @@ public class Expense {
         else if(e1.getMonth())
     */
         return 1;
+    }
+
+    public PaymentFirebase paymentFromUser(String userId){
+
+        PaymentFirebase paymentToReturn = null;
+        for(PaymentFirebase paymentFirebase : payments.values()){
+            if(paymentFirebase.getUserFirebaseId().equals(userId)){
+                paymentToReturn = paymentFirebase;
+                break;
+            }
+
+        }
+
+        return  paymentToReturn;
     }
 
 

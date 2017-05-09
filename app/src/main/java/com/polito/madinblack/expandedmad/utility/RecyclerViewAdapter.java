@@ -22,6 +22,7 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.polito.madinblack.expandedmad.ExpenseDetailActivity;
 import com.polito.madinblack.expandedmad.ExpenseDetailFragment;
+import com.polito.madinblack.expandedmad.ExpenseDetailFragment2;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.ExpenseForUser;
 import com.polito.madinblack.expandedmad.model.MyApplication;
@@ -199,19 +200,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         //sopra vengono settati i tre campi che costituisco le informazioni di ogni singolo gruppo, tutti pronti per essere mostriti nella gui
 
 
-        /*
+
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
 
                 Context context = v.getContext();
                 Intent intent = new Intent(context, ExpenseDetailActivity.class);
-                intent.putExtra(ExpenseDetailFragment.ARG_ITEM_ID, holder.mItem.getId());
+                intent.putExtra(ExpenseDetailFragment2.ARG_EXPENSE_ID, holder.mItem.getId());
+                intent.putExtra(ExpenseDetailFragment2.ARG_EXPENSE_NAME, holder.mItem.getName());
                 context.startActivity(intent);
 
             }
         });
-        */
+
     }
 
     @Override
