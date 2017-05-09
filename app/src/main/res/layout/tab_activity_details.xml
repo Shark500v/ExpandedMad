@@ -43,7 +43,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/plus"
-        app:layout_behavior="com.polito.madinblack.expandedmad.utility.ScrollingFABBehavior" />
+        app:srcCompat="@drawable/plus" />
 
 </android.support.design.widget.CoordinatorLayout>
