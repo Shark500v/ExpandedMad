@@ -1,10 +1,15 @@
 package com.polito.madinblack.expandedmad.model;
 
+import android.content.Context;
+import android.support.v7.app.AppCompatActivity;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
+import com.polito.madinblack.expandedmad.R;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -217,7 +222,9 @@ public class Expense {
     }
 
 
-    public static String writeNewExpense(DatabaseReference mDatabaseRootRefenrence, String name, String tag, String paidByFirebaseId, String paidByPhoneNumber, String paidByName, String paidBySurname, Double cost, String currencyName, String currencySymbol, final String groupId, Long year, Long month, Long day, String description, List<Payment> paymentList){
+    public static String writeNewExpense(DatabaseReference mDatabaseRootRefenrence, String name, String tag,
+                                         String paidByFirebaseId, String paidByPhoneNumber, String paidByName, String paidBySurname, Double cost,
+                                         String currencyName, String currencySymbol, final String groupId, Long year, Long month, Long day, String description, List<Payment> paymentList, String historyExpense){
 
         DatabaseReference myExpenseRef = mDatabaseRootRefenrence.child("expenses").push();
         String expenseKey = myExpenseRef.getKey();
@@ -321,6 +328,10 @@ public class Expense {
         }
 
         mDatabaseRootRefenrence.child("groups/"+groupId+"/expenses/"+expenseKey).setValue(true);
+
+        /*update the history*/
+        HistoryInfo historyInfo = new HistoryInfo(paidByName+" "+paidBySurname, historyExpense+cost);
+        mDatabaseRootRefenrence.child("history/"+groupId).push().setValue(historyInfo);
 
         return expenseKey;
     }

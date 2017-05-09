@@ -46,7 +46,10 @@ import com.polito.madinblack.expandedmad.newGroup.SelectContact;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -76,6 +79,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
 
         mUserGroupsReference   = mDatabaseRootReference.child("users/"+ma.getUserPhoneNumber()+"/"+ma.getFirebaseId()+"/groups");
         mStorage = FirebaseStorage.getInstance().getReference();
+
 
         //toolbar settings
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

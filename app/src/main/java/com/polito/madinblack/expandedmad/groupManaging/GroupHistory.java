@@ -104,7 +104,7 @@ public class GroupHistory extends AppCompatActivity {
             HistoryInfo ci = contactList.get(i);
             contactViewHolder.vName.setText(ci.getName());
             contactViewHolder.vContent.setText(ci.getContent());
-            contactViewHolder.vTitle.setText(ci.getDateAsString());
+            contactViewHolder.vTitle.setText(ci.convertDateToString());
         }
 
         @Override

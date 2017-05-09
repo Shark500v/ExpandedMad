@@ -15,6 +15,13 @@ public class HistoryInfo {
 
     }
 
+    public HistoryInfo(String name, String content){
+        this.name = name;
+        this.content = content;
+        date = new Date();
+
+    }
+
     public String getName() {
         return name;
     }
@@ -39,7 +46,7 @@ public class HistoryInfo {
         this.date = date;
     }
 
-    public String getDateAsString(){
+    public String convertDateToString(){
         //SimpleDateFormat sf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
         return df.format(date);
