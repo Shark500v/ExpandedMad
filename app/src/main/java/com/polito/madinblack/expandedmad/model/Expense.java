@@ -250,10 +250,10 @@ public class Expense {
                     public Transaction.Result doTransaction(MutableData currentData) {
                         if (currentData.getValue() == null) {
                             //no default value for data, set one
-                            currentData.setValue(1);
+                            currentData.setValue(1L);
                         } else {
                             // perform the update operations on data
-                            currentData.setValue((Long) currentData.getValue() + 1);
+                            currentData.setValue(currentData.getValue(Long.class) + 1);
                         }
                         return Transaction.success(currentData);
                     }
@@ -276,7 +276,7 @@ public class Expense {
                             currentData.setValue(payment.getDebit());
                         } else {
                             // perform the update operations on data
-                            currentData.setValue((Long) currentData.getValue() - payment.getDebit());
+                            currentData.setValue(currentData.getValue(Double.class) - payment.getDebit());
                         }
                         return Transaction.success(currentData);
                     }
@@ -286,6 +286,7 @@ public class Expense {
                                            boolean committed, DataSnapshot currentData) {
                         //This method will be called once with the results of the transaction.
                         //Update remove the user from the group
+
                     }
                 });
 
@@ -298,7 +299,7 @@ public class Expense {
                             currentData.setValue(payment.getDebit());
                         } else {
                             // perform the update operations on data
-                            currentData.setValue((Long) currentData.getValue() + payment.getDebit());
+                            currentData.setValue(currentData.getValue(Double.class) + payment.getDebit());
                         }
                         return Transaction.success(currentData);
                     }
@@ -308,6 +309,7 @@ public class Expense {
                                            boolean committed, DataSnapshot currentData) {
                         //This method will be called once with the results of the transaction.
                         //Update remove the user from the group
+
                     }
                 });
 
