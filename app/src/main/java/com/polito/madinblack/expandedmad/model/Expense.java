@@ -1,10 +1,15 @@
 package com.polito.madinblack.expandedmad.model;
 
+import android.content.Context;
+import android.support.v7.app.AppCompatActivity;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
+import com.polito.madinblack.expandedmad.R;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -203,6 +208,9 @@ public class Expense {
         this.description = description;
     }
 
+    public Map<String, PaymentFirebase> getPayments() {
+        return payments;
+    }
 
     public void setPayments(Map<String, PaymentFirebase> payments) {
         this.payments = payments;
@@ -217,7 +225,9 @@ public class Expense {
     }
 
 
-    public static String writeNewExpense(DatabaseReference mDatabaseRootRefenrence, String name, String tag, String paidByFirebaseId, String paidByPhoneNumber, String paidByName, String paidBySurname, Double cost, String currencyName, String currencySymbol, final String groupId, Long year, Long month, Long day, String description, List<Payment> paymentList){
+    public static String writeNewExpense(DatabaseReference mDatabaseRootRefenrence, String name, String tag,
+                                         String paidByFirebaseId, String paidByPhoneNumber, String paidByName, String paidBySurname, Double cost,
+                                         String currencyName, String currencySymbol, final String groupId, Long year, Long month, Long day, String description, List<Payment> paymentList, String historyExpense){
 
         DatabaseReference myExpenseRef = mDatabaseRootRefenrence.child("expenses").push();
         String expenseKey = myExpenseRef.getKey();
@@ -250,10 +260,10 @@ public class Expense {
                     public Transaction.Result doTransaction(MutableData currentData) {
                         if (currentData.getValue() == null) {
                             //no default value for data, set one
-                            currentData.setValue(1);
+                            currentData.setValue(1L);
                         } else {
                             // perform the update operations on data
-                            currentData.setValue((Long) currentData.getValue() + 1);
+                            currentData.setValue(currentData.getValue(Long.class) + 1);
                         }
                         return Transaction.success(currentData);
                     }
@@ -276,7 +286,7 @@ public class Expense {
                             currentData.setValue(payment.getDebit());
                         } else {
                             // perform the update operations on data
-                            currentData.setValue((Long) currentData.getValue() - payment.getDebit());
+                            currentData.setValue(currentData.getValue(Double.class) - payment.getDebit());
                         }
                         return Transaction.success(currentData);
                     }
@@ -286,6 +296,7 @@ public class Expense {
                                            boolean committed, DataSnapshot currentData) {
                         //This method will be called once with the results of the transaction.
                         //Update remove the user from the group
+
                     }
                 });
 
@@ -298,7 +309,7 @@ public class Expense {
                             currentData.setValue(payment.getDebit());
                         } else {
                             // perform the update operations on data
-                            currentData.setValue((Long) currentData.getValue() + payment.getDebit());
+                            currentData.setValue(currentData.getValue(Double.class) + payment.getDebit());
                         }
                         return Transaction.success(currentData);
                     }
@@ -308,6 +319,7 @@ public class Expense {
                                            boolean committed, DataSnapshot currentData) {
                         //This method will be called once with the results of the transaction.
                         //Update remove the user from the group
+
                     }
                 });
 
@@ -319,6 +331,10 @@ public class Expense {
         }
 
         mDatabaseRootRefenrence.child("groups/"+groupId+"/expenses/"+expenseKey).setValue(true);
+
+        /*update the history*/
+        HistoryInfo historyInfo = new HistoryInfo(paidByName+" "+paidBySurname, historyExpense+cost);
+        mDatabaseRootRefenrence.child("history/"+groupId).push().setValue(historyInfo);
 
         return expenseKey;
     }
@@ -338,6 +354,20 @@ public class Expense {
         else if(e1.getMonth())
     */
         return 1;
+    }
+
+    public PaymentFirebase paymentFromUser(String userId){
+
+        PaymentFirebase paymentToReturn = null;
+        for(PaymentFirebase paymentFirebase : payments.values()){
+            if(paymentFirebase.getUserFirebaseId().equals(userId)){
+                paymentToReturn = paymentFirebase;
+                break;
+            }
+
+        }
+
+        return  paymentToReturn;
     }
 
 

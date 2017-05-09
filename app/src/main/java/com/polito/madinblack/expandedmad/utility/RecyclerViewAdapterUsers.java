@@ -148,16 +148,18 @@ public class RecyclerViewAdapterUsers extends RecyclerView.Adapter<RecyclerViewA
             holder.mContentView.setText(String.format("%.2f", mValues.get(position).getBalance()) + " " + mValues.get(position).getCurrencySymbol());
         }
 
+        /*
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    /*Context context = v.getContext();
+                    Context context = v.getContext();
                     Intent intent = new Intent(context, ItemDetailActivity.class);
                     intent.putExtra(ItemDetailFragment.ARG_ITEM_ID, holder.mItem.id);
 
-                    context.startActivity(intent);*/
+                    context.startActivity(intent);
             }
         });
+        */
     }
 
     @Override

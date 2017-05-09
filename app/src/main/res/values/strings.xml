@@ -115,7 +115,7 @@
     <string name="no_contacts_in_list">No contacts in your contact list.</string>
     <string name="group_settings">Group settings</string>
     <string name="debt_credits">My debts/credits</string>
-    <string name="group_members_to_group">Group members</string>
+    <string name="group_members_to_group">Members balance</string>
     <string name="next">Next</string>
     <string name="invite_new_members">Invite new Members</string>
     <string name="name_surname">Name Surname</string>
@@ -141,6 +141,8 @@
     <string name="title_activity_group_history">GroupHistory</string>
     <string name="no_reports">No available reports</string>
     <string name="group_history">Group Story</string>
+    <string name="history_expense">has added a new expense. Cost: </string>
+    <string name="no_detail">No detail available</string>
     <string name="group">Group</string>
     <string name="all_groups">All groups</string>
 </resources>

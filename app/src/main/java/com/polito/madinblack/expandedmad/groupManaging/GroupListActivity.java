@@ -47,6 +47,7 @@ import com.polito.madinblack.expandedmad.newGroup.SelectContact;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,6 +79,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
 
         mUserGroupsReference   = mDatabaseRootReference.child("users/"+ma.getUserPhoneNumber()+"/"+ma.getFirebaseId()+"/groups");
         mStorage = FirebaseStorage.getInstance().getReference();
+
 
         //toolbar settings
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -280,6 +282,30 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             mChildEventListener = childEventListener;
         }
 
+        //metodo per fare il download dallo storage delle immagini dei gruppi
+        //nella NewGroup non serve, da togliere
+        public Bitmap downlaoadGroupImage(String groupCode){
+            StorageReference groupRef = mStorage.child("Groups").child(groupCode).child("GroupPicture").child("groupPicture.jpg");
+            try {
+                final File localFile = File.createTempFile("image", "tmp");
+                groupRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                        bitmap = BitmapFactory.decodeFile(localFile.getPath());
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return bitmap;
+        }
+
+
         @Override
         public GroupListActivity.SimpleItemRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.group_list_content, parent, false);
@@ -292,7 +318,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             holder.mNumView.setText(Long.toString(mValues.get(position).getSize()) + " " + getString(R.string.members));
             //holder.mImage.setImageBitmap(downlaoadGroupImage(mValues.get(position).getId()));
             holder.mContentView.setText(mValues.get(position).getName());
-            if(mValues.get(position).getNewExpenses()!=0)
+            if (mValues.get(position).getNewExpenses() != 0)
                 holder.mNotification.setText(mValues.get(position).getNewExpenses().toString());
             //sopra vengono settati i tre campi che costituisco le informazioni di ogni singolo gruppo, tutti pronti per essere mostriti nella gui
 
@@ -301,7 +327,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                 public void onClick(View v) {
                     final Context context = v.getContext();
 
-                    final DatabaseReference mDatabaseGroupForUserReference = mDatabaseRootReference.child("users/"+ma.getFirebaseId()+"/"+ma.getUserPhoneNumber()+"groups/"+holder.mItem.getId());
+                    final DatabaseReference mDatabaseGroupForUserReference = mDatabaseRootReference.child("users/" + ma.getFirebaseId() + "/" + ma.getUserPhoneNumber() + "groups/" + holder.mItem.getId());
 
                     mDatabaseGroupForUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -320,33 +346,35 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                     });
                 }
             });
+
             //if(groupImages != null && groupImages.get(mValues.get(position).getId()) != null) {
             //    String filePath = groupImages.get(mValues.get(position).getId());
             //    Bitmap bitmap = BitmapFactory.decodeFile(filePath);
             //    holder.mImageView.setImageBitmap(bitmap);
-                //Toast.makeText(getApplicationContext(), "creato dal file tmp", Toast.LENGTH_LONG).show();;
+            //Toast.makeText(getApplicationContext(), "creato dal file tmp", Toast.LENGTH_LONG).show();;
             //}else{
-            //    StorageReference groupRef = mStorage.child("groups").child(mValues.get(position).getId()).child("groupPicture").child("groupPicture.jpg");
-            //    try {
-            //        final File localFile = File.createTempFile("image", "tmp");
-            //        final String groupCode = mValues.get(position).getId();
-            //        groupRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-            //            @Override
-            //            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-            //                Bitmap bitmap = BitmapFactory.decodeFile(localFile.getPath());
-            //                holder.mImageView.setImageBitmap(bitmap);
-            //                groupImages.put(groupCode, localFile.getPath());
-                            //Toast.makeText(getApplicationContext(), groupImages.get(groupCode), Toast.LENGTH_LONG).show();
-            //            }
-            //        }).addOnFailureListener(new OnFailureListener() {
-            //            @Override
-            //            public void onFailure(@NonNull Exception e) {
-                // }
-            //        });
-            //    } catch (IOException e) {
-            //        e.printStackTrace();
-            //    }
-            //}
+            StorageReference groupRef = mStorage.child("Groups").child(mValues.get(position).getId()).child("GroupPicture").child("groupPicture.jpg");
+            try {
+                final File localFile = File.createTempFile("image", "tmp");
+                //        final String groupCode = mValues.get(position).getId();
+                groupRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                        bitmap = BitmapFactory.decodeFile(localFile.getPath());
+                        holder.mImage.setImageBitmap(bitmap);
+                        //                groupImages.put(groupCode, localFile.getPath());
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        //}
         }
 
         @Override
@@ -364,19 +392,20 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         //questa è una classe di supporto che viene usata per creare la vista a schermo, non ho ben capito come funziona
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
-            public final CircleImageView mImageView;
             public final TextView mNumView;
             public final TextView mContentView;
             public final TextView mNotification;
+            public final CircleImageView mImage;
+
             public GroupForUser mItem;
 
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
-                mImageView = (CircleImageView) findViewById(R.id.group_image_storage);
                 mNumView = (TextView) view.findViewById(R.id.num_members);
                 mContentView = (TextView) view.findViewById(R.id.content);
                 mNotification = (TextView) view.findViewById(R.id.notification);
+                mImage = (CircleImageView) view.findViewById(R.id.group_image_storage);
             }
 
             @Override

@@ -140,6 +140,7 @@ public class TabView extends AppCompatActivity {
                 //insert here the connection
                 Intent intent2 = new Intent(this, GroupMemebersActivity.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
                 intent2.putExtra("GROUP_ID", groupIndex);
+                intent2.putExtra("GROUP_NAME", groupName);
                 startActivity(intent2);
                 return true;
 
