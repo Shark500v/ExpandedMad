@@ -97,7 +97,7 @@
     <string name="no_contacts_in_list">Non ci sono contatti nella tua rubrica.</string>
     <string name="group_settings">Impostazioni gruppo</string>
     <string name="debt_credits">I miei debiti/crediti</string>
-    <string name="group_members_to_group">Partecipanti al gruppo</string>
+    <string name="group_members_to_group">Bilancio dei partecipanti</string>
     <string name="next">Avanti</string>
     <string name="invite_new_members">Invita nuovi partecipanti</string>
     <string name="name_surname">Nome Cognome</string>
@@ -126,4 +126,5 @@
     <string name="add_proof">Aggiungi Immagine Spesa</string>
     <string name="no_reports">Non ci sono notizie</string>
     <string name="group_history">Riepilogo Gruppo</string>
+    <string name="history_expense">ha aggiunto una nuova spesa. Costo: </string>
 </resources>

@@ -102,10 +102,10 @@ public class Group {
                         public Transaction.Result doTransaction(MutableData currentData){
                             if(currentData.getValue() == null){
                                 //no default value for data, set one
-                                currentData.setValue(1);
+                                currentData.setValue(1L);
                             }else{
                                 // perform the update operations on data
-                                currentData.setValue((Long) currentData.getValue() + 1);
+                                currentData.setValue(currentData.getValue(Long.class) + 1);
                             }
                             return Transaction.success(currentData);
                         }
@@ -132,10 +132,10 @@ public class Group {
                     public Transaction.Result doTransaction(MutableData currentData){
                         if(currentData.getValue() == null){
                             //no default value for data, set one
-                            currentData.setValue(1);
+                            currentData.setValue(1L);
                         }else{
                             // perform the update operations on data
-                            currentData.setValue((Long) currentData.getValue() + 1);
+                            currentData.setValue(currentData.getValue(Long.class) + 1);
                         }
                         return Transaction.success(currentData);
                     }
@@ -151,10 +151,6 @@ public class Group {
                         }
 
                     }
-
-
-
-
 
                 });
 

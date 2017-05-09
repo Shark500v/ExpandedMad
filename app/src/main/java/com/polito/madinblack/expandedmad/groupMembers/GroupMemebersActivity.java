@@ -22,6 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.polito.madinblack.expandedmad.R;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +37,6 @@ public class GroupMemebersActivity extends AppCompatActivity {
     public String groupID = "init";
     private String name = "hello";
     private MyApplication ma;
-    private GroupForUser groupSelected;
 
     private static final String TAG = "GroupMemebersActivity";
 
@@ -50,11 +50,9 @@ public class GroupMemebersActivity extends AppCompatActivity {
         setContentView(R.layout.users_of_group);
 
         groupID = getIntent().getStringExtra("GROUP_ID");
-
+        name = getIntent().getStringExtra("GROUP_NAME");
 
         ma = MyApplication.getInstance();
-        groupSelected = ma.getGroupForUser();
-        name = groupSelected.getName();
 
         mUserGroupsReference = FirebaseDatabase.getInstance().getReference()
                 .child("groups").child(groupID).child("users");
@@ -132,9 +130,11 @@ public class GroupMemebersActivity extends AppCompatActivity {
 
                     // [START_EXCLUDE]
                     // Update RecyclerView
-                    mValuesIds.add(dataSnapshot.getKey());
-                    mValues.add(userForGroup);
-                    notifyItemInserted(mValues.size() - 1);
+                    if(!userForGroup.getPhoneNumber().equals(ma.getUserPhoneNumber())){
+                        mValuesIds.add(dataSnapshot.getKey());
+                        mValues.add(userForGroup);
+                        notifyItemInserted(mValues.size() - 1);
+                    }
                     // [END_EXCLUDE]
                 }
 
@@ -219,27 +219,26 @@ public class GroupMemebersActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
-            if(holder.mItem.getPhoneNumber().equals(ma.getUserPhoneNumber()))
-                holder.mIdView.setText("You");
-            else
-                holder.mIdView.setText(mValues.get(position).getName() + " " + mValues.get(position).getSurname());
-            holder.mContentView.setText("");
+            final UserForGroup us = holder.mItem;
+            holder.mIdView.setText(mValues.get(position).getName() + " " + mValues.get(position).getSurname());
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    /*
                     Context context = v.getContext();
-                    Intent intent = new Intent(context, UserExpenses.class);
+                    Intent intent = new Intent(context, UserDebts.class);
                     Bundle extras = new Bundle();
                     extras.putString("GROUP_ID",groupID);
-                    extras.putString("USER_ID",holder.mItem.id);
+                    extras.putString("FIREBASE_ID",us.getFirebaseId());
+                    extras.putString("NAME",us.getName());
+                    extras.putString("SURNAME", us.getSurname());
                     intent.putExtras(extras);
 
                     context.startActivity(intent);
-                    */
+
                 }
             });
+            holder.mContentView.setText("");
         }
 
         public void cleanupListener() {
