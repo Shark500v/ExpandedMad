@@ -2,6 +2,7 @@ package com.polito.madinblack.expandedmad.groupManaging;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -11,6 +12,8 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -248,7 +251,10 @@ public class GroupHistory extends AppCompatActivity {
         @Override
         public void onBindViewHolder(ContactViewHolder contactViewHolder, int i) {
             HistoryInfo ci = mValues.get(i);
-            contactViewHolder.vContent.setText( ci.getName() + " " + ci.getContent());
+
+            SpannableString spanString = new SpannableString(ci.getName() + " " + ci.getContent());
+            spanString.setSpan(new StyleSpan(Typeface.BOLD), 0, ci.getName().length(), 0);
+            contactViewHolder.vContent.setText( spanString );
             contactViewHolder.vTitle.setText(ci.convertDateToString());
         }
 
