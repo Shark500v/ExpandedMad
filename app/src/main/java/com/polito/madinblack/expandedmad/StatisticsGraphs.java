@@ -71,14 +71,16 @@ public class StatisticsGraphs extends AppCompatActivity {
                 new DataPoint(3, 6),
                 new DataPoint(4, 1),
         });
-        series2.setColor(Color.GREEN);
-        series2.setSpacing(30);
-        series2.setAnimated(true);
+        series3.setColor(Color.GREEN);
+        series3.setSpacing(30);
+        series3.setAnimated(true);
         graph.addSeries(series3);
 
-        graph.getViewport().setXAxisBoundsManual(true); //queste 3 righe permettono di visualizzare solo un intervallo sull'asse delle X
-        graph.getViewport().setMinX(-1);
-        graph.getViewport().setMaxX(5);
+        graph.getViewport().setXAxisBoundsManual(true);
+        graph.getViewport().setMinX(0.0);
+        graph.getViewport().setMaxX(12.0);
+        graph.getViewport().setScrollable(true);
+        graph.getViewport().setScrollableY(true);
 
         series.setTitle("Food");  //etichetta della serie di dati
         series2.setTitle("Water bill");
@@ -88,6 +90,8 @@ public class StatisticsGraphs extends AppCompatActivity {
 
         GridLabelRenderer gridLabel = graph.getGridLabelRenderer();
         gridLabel.setHorizontalAxisTitle("Month of the year");
+        gridLabel.setNumHorizontalLabels(12);
+        gridLabel.setHorizontalLabelsVisible(true);
 
         StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
         staticLabelsFormatter.setHorizontalLabels(new String[] {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"});
