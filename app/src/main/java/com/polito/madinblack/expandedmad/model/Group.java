@@ -152,10 +152,6 @@ public class Group {
 
                     }
 
-
-
-
-
                 });
 
 
