@@ -36,7 +36,6 @@ public class GroupMemebersActivity extends AppCompatActivity {
     public String groupID = "init";
     private String name = "hello";
     private MyApplication ma;
-    private GroupForUser groupSelected;
 
     private static final String TAG = "GroupMemebersActivity";
 
@@ -50,11 +49,9 @@ public class GroupMemebersActivity extends AppCompatActivity {
         setContentView(R.layout.users_of_group);
 
         groupID = getIntent().getStringExtra("GROUP_ID");
-
+        name = getIntent().getStringExtra("GROUP_NAME");
 
         ma = MyApplication.getInstance();
-        groupSelected = ma.getGroupForUser();
-        name = groupSelected.getName();
 
         mUserGroupsReference = FirebaseDatabase.getInstance().getReference()
                 .child("groups").child(groupID).child("users");
