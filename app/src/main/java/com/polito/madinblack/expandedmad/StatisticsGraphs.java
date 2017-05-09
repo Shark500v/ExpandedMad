@@ -7,7 +7,18 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.LegendRenderer;
@@ -15,10 +26,25 @@ import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
+import com.polito.madinblack.expandedmad.model.ExpenseForUser;
+import com.polito.madinblack.expandedmad.model.GroupForUser;
 import com.polito.madinblack.expandedmad.model.MyApplication;
+import com.polito.madinblack.expandedmad.model.UserForGroup;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class StatisticsGraphs extends AppCompatActivity {
+    private Spinner spinner;
     private MyApplication ma;
+    private List<String> groupArray = new ArrayList<>();
+    private Map<String,String> groupMap = new HashMap<String,String>(); //key->groupName value->groupId
+    private Map<Integer,Double> groupExpensesByMonth = new HashMap<>();
+    //private DatabaseReference mDatabase;
+    //private String firebaseId;
+    //private String phoneNumber;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,56 +61,95 @@ public class StatisticsGraphs extends AppCompatActivity {
 
         ma = MyApplication.getInstance();
 
-        GraphView graphView = (GraphView) findViewById(R.id.graph1);
-        initGraph(graphView);
-    }
-    //metodo per inizializzare i dati del grafico
-    public void initGraph(GraphView graph) {
-        BarGraphSeries<DataPoint> series = new BarGraphSeries<>(new DataPoint[]{
-                new DataPoint(0, 3),
-                new DataPoint(1, 5),
-                new DataPoint(2, 6),
-                new DataPoint(3, 2),
-                new DataPoint(4, 5),
+        spinner = (Spinner)findViewById(R.id.group_spinner);
+
+
+
+        populateSpinner();
+
+        ArrayAdapter<String> groupAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, groupArray);
+        groupAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        spinner.setAdapter(groupAdapter);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String groupSelected = parent.getItemAtPosition(position).toString();
+                if(groupSelected == getString(R.string.all_groups)){
+                    GraphView graph = (GraphView)findViewById(R.id.graph1);
+                    initGraph(graph,groupMap.get(groupSelected));
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
         });
+    }
+
+    private void populateSpinner() {
+        FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber()).child(ma.getFirebaseId()).child("groups").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                groupArray.add(getString(R.string.all_groups));
+                for (DataSnapshot groupSnapshot : dataSnapshot.getChildren()) {
+                    GroupForUser groupForUser = groupSnapshot.getValue(GroupForUser.class);
+                    String groupName = groupForUser.getName();
+                    groupArray.add(groupName);
+                    groupMap.put(groupName,groupForUser.getId());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
+    //metodo per inizializzare i dati del grafico
+    public void initGraph(GraphView graph, String groupId) {
+        FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber())
+                .child(ma.getFirebaseId()).child("groups").child(groupId).child("expenses").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(int i = 1; i <= 12; i++){
+                    groupExpensesByMonth.put(i, 0.0);
+                }
+                groupExpensesByMonth.clear();
+                for(DataSnapshot expenseSnapshot : dataSnapshot.getChildren()){
+                    ExpenseForUser expenseForUser = expenseSnapshot.getValue(ExpenseForUser.class);
+                    Double expenseBalance = expenseForUser.getMyBalance();
+                    //expenseBalance += groupExpensesByMonth.get(expenseForUser.getMonth);
+                    //groupExpensesByMonth.put(expenseForUser.getMonth(), expenseBalance);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        for(int i = 0; i <= 12; i++){
+            new DataPoint(i,groupExpensesByMonth.get(i));
+        }
+
+        BarGraphSeries<DataPoint> series = new BarGraphSeries<>();
         series.setColor(Color.BLUE); //colore della barra
         series.setSpacing(30); //percentuale di spazio tra le barre. 0->no spazio, 100->spazio tra una barra e l'altra e pari alla larghezza di una barra
         series.setAnimated(true);
         graph.addSeries(series); //aggiunge la serie di dati al grafico
 
-        BarGraphSeries<DataPoint> series2 = new BarGraphSeries<>(new DataPoint[]{
-                new DataPoint(0, 5),
-                new DataPoint(1, 4),
-                new DataPoint(2, 1),
-                new DataPoint(3, 5),
-                new DataPoint(4, 3),
-        });
-        series2.setColor(Color.RED);
-        series2.setSpacing(30);
-        series2.setAnimated(true);
-        graph.addSeries(series2);
-
-        BarGraphSeries<DataPoint> series3 = new BarGraphSeries<>(new DataPoint[]{
-                new DataPoint(0, 3),
-                new DataPoint(1, 2),
-                new DataPoint(2, 5),
-                new DataPoint(3, 6),
-                new DataPoint(4, 1),
-        });
-        series3.setColor(Color.GREEN);
-        series3.setSpacing(30);
-        series3.setAnimated(true);
-        graph.addSeries(series3);
-
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setMinX(0.0);
-        graph.getViewport().setMaxX(12.0);
+        graph.getViewport().setMaxX(2.0);
         graph.getViewport().setScrollable(true);
         graph.getViewport().setScrollableY(true);
 
-        series.setTitle("Food");  //etichetta della serie di dati
-        series2.setTitle("Water bill");
-        series3.setTitle("Light bill");
+        series.setTitle(ma.getUserName());  //etichetta della serie di dati
         graph.getLegendRenderer().setVisible(true); //visualizza legenda e decide dove posizionarla
         graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
 
@@ -93,11 +158,23 @@ public class StatisticsGraphs extends AppCompatActivity {
         gridLabel.setNumHorizontalLabels(12);
         gridLabel.setHorizontalLabelsVisible(true);
 
-        StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
-        staticLabelsFormatter.setHorizontalLabels(new String[] {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"});
-        staticLabelsFormatter.setVerticalLabels(new String[] {"low", "middle", "high"});
-        graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
+        graph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter(){
+            @Override
+            public String formatLabel(double value, boolean isValueX){
+                if(isValueX) {
+                    return super.formatLabel(value, isValueX);
+                }else{
+                    return super.formatLabel(value, isValueX);
+                }
+            }
+        });
+
+        //StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
+        //staticLabelsFormatter.setHorizontalLabels(new String[] {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"});
+        //staticLabelsFormatter.setVerticalLabels(new String[] {"low", "middle", "high"});
+        //graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
 
 
     }
+
 }

@@ -320,33 +320,33 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                     });
                 }
             });
-            if(groupImages != null && groupImages.get(mValues.get(position).getId()) != null) {
-                String filePath = groupImages.get(mValues.get(position).getId());
-                Bitmap bitmap = BitmapFactory.decodeFile(filePath);
-                holder.mImageView.setImageBitmap(bitmap);
+            //if(groupImages != null && groupImages.get(mValues.get(position).getId()) != null) {
+            //    String filePath = groupImages.get(mValues.get(position).getId());
+            //    Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+            //    holder.mImageView.setImageBitmap(bitmap);
                 //Toast.makeText(getApplicationContext(), "creato dal file tmp", Toast.LENGTH_LONG).show();;
-            }else{
-                StorageReference groupRef = mStorage.child("Groups").child(mValues.get(position).getId()).child("GroupPicture").child("groupPicture.jpg");
-                try {
-                    final File localFile = File.createTempFile("image", "tmp");
-                    final String groupCode = mValues.get(position).getId();
-                    groupRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                            Bitmap bitmap = BitmapFactory.decodeFile(localFile.getPath());
-                            holder.mImageView.setImageBitmap(bitmap);
-                            groupImages.put(groupCode, localFile.getPath());
+            //}else{
+            //    StorageReference groupRef = mStorage.child("groups").child(mValues.get(position).getId()).child("groupPicture").child("groupPicture.jpg");
+            //    try {
+            //        final File localFile = File.createTempFile("image", "tmp");
+            //        final String groupCode = mValues.get(position).getId();
+            //        groupRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+            //            @Override
+            //            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+            //                Bitmap bitmap = BitmapFactory.decodeFile(localFile.getPath());
+            //                holder.mImageView.setImageBitmap(bitmap);
+            //                groupImages.put(groupCode, localFile.getPath());
                             //Toast.makeText(getApplicationContext(), groupImages.get(groupCode), Toast.LENGTH_LONG).show();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            //            }
+            //        }).addOnFailureListener(new OnFailureListener() {
+            //            @Override
+            //            public void onFailure(@NonNull Exception e) {
+                // }
+            //        });
+            //    } catch (IOException e) {
+            //        e.printStackTrace();
+            //    }
+            //}
         }
 
         @Override

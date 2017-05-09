@@ -324,7 +324,7 @@ public class NewGroup extends AppCompatActivity {
             progressDialog.setTitle(getString(R.string.uploading));
             progressDialog.show();
 
-            final StorageReference filePathGroups = mStorage.child("Groups").child(groupCode).child("GroupPicture").child("groupPicture.jpg");
+            final StorageReference filePathGroups = mStorage.child("groups").child(groupCode).child("groupPicture").child("groupPicture.jpg");
 
             filePathGroups.putBytes(imageData).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -333,8 +333,8 @@ public class NewGroup extends AppCompatActivity {
                     //hiding the progress dialog
                     progressDialog.dismiss();
 
-                    StorageMetadata metadata = new StorageMetadata.Builder().setCustomMetadata("Group", groupCode).build(); //da cambiare, solo per prova
-                    filePathGroups.updateMetadata(metadata);
+                    //StorageMetadata metadata = new StorageMetadata.Builder().setCustomMetadata("Group", groupCode).build(); //da cambiare, solo per prova
+                    //filePathGroups.updateMetadata(metadata);
                     //and displaying a success toast
                     Toast.makeText(getApplicationContext(), getString(R.string.file_uploaded), Toast.LENGTH_LONG).show();
                 }

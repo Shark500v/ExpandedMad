@@ -20,12 +20,53 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
     </android.support.design.widget.AppBarLayout>
 
-    <com.jjoe64.graphview.GraphView
-        android:id="@+id/graph1"
+    <RelativeLayout
+        android:id="@+id/spinner_items"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="50dp">
+        android:layout_height="150dp"
+        android:layout_below="@+id/app_bar"
+        android:layout_alignParentStart="true">
 
-    </com.jjoe64.graphview.GraphView>
+        <TextView
+            android:id="@+id/group_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:text="@string/group"
+
+            />
+
+        <Spinner
+            android:id="@+id/group_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/group_label"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin">
+        </Spinner>
+
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/spinner_items">
+
+        <com.jjoe64.graphview.GraphView
+            android:id="@+id/graph1"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="50dp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+
+            >
+
+        </com.jjoe64.graphview.GraphView>
+
+    </RelativeLayout>
+
 </RelativeLayout>
