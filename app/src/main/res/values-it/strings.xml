@@ -126,7 +126,7 @@
     <string name="add_proof">Aggiungi Immagine Spesa</string>
     <string name="no_reports">Non ci sono notizie</string>
     <string name="group_history">Riepilogo Gruppo</string>
-    <string name="history_expense">ha aggiunto una nuova spesa. Costo: </string>
+    <string name="history_expense">ha aggiunto una nuova spesa. Costo : </string>
     <string name="no_detail">Nessun dettaglio disponibile</string>
 
     <string name="group">Gruppo</string>

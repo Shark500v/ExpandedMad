@@ -2,6 +2,8 @@ package com.polito.madinblack.expandedmad.utility;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.MenuItemCompat;
@@ -23,6 +25,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.view.ViewParent;
 import android.widget.TextView;
 
 import com.google.firebase.database.DatabaseReference;
@@ -62,6 +65,9 @@ public class TabView extends AppCompatActivity {
 
     private static final int CONTACT_REQUEST = 1;
 
+    private FloatingActionButton fab;
+    private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +81,7 @@ public class TabView extends AppCompatActivity {
         mDatabaseExpenseListReference = FirebaseDatabase.getInstance().getReference().child("users/"+ma.getUserPhoneNumber()+"/"+ma.getFirebaseId()+"/groups/"+groupIndex+"/expenses");
 
         //toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(groupName);
         setSupportActionBar(toolbar);
 
@@ -91,14 +97,14 @@ public class TabView extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Context c = view.getContext();
-                Intent intent = new Intent(c, ExpenseFillData.class);     //qui setto la nuova attività da mostrare a schermo dopo che clicco
-                intent.putExtra("groupIndex", groupIndex);                            //passo l'indice del gruppo
-                startActivityForResult(intent,CONTACT_REQUEST);
+                Intent intent = new Intent(c, ExpenseFillData.class);       //qui setto la nuova attività da mostrare a schermo dopo che clicco
+                intent.putExtra("groupIndex", groupIndex);                  //passo l'indice del gruppo
+                startActivityForResult(intent, CONTACT_REQUEST);
 
             }
         });
@@ -108,19 +114,51 @@ public class TabView extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+    }
 
+    //show the toolbar
+    public void expandToolbar(){
+        //setExpanded(boolean expanded, boolean animate)
+        AppBarLayout appBarLayout = (AppBarLayout)findViewById(R.id.appbar);
+        appBarLayout.setExpanded(true, true);
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //usato per mostrare il bottone di aggiunta spesa nella pagina giusta
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+                expandToolbar();
+
+                if (position == 0) {
+                    fab.hide();
+                } else if (position == 1) {
+                    fab.show();
+                } else if (position == 2){
+                    fab.hide();
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.tabview_menu, menu);
-
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-
-        // Configure the search info and add any event listeners...
-
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -229,6 +267,22 @@ public class TabView extends AppCompatActivity {
             super.onStart();
             adapter = new RecyclerViewAdapter(getContext(), mDatabaseExpenseListReference, groupIndex);
             recyclerView = (RecyclerView) rootView.findViewById(R.id.expense_list2);
+
+            final FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+
+            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    if(dy > 0){
+                        fab.hide();
+                    } else{
+                        fab.show();
+                    }
+
+                    super.onScrolled(recyclerView, dx, dy);
+                }
+            });
+
             recyclerView.setAdapter(adapter);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
         }
@@ -281,7 +335,6 @@ public class TabView extends AppCompatActivity {
             super.onStart();
 
             adapter = new RecyclerViewAdapterUsers(getContext(), mDatabaseBalancesReference);
-
             recyclerView = (RecyclerView) rootView.findViewById(R.id.item_list);
             recyclerView.setAdapter(adapter);
             recyclerView.setItemAnimator(new DefaultItemAnimator());

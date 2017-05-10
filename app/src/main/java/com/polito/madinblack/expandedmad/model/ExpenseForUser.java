@@ -9,6 +9,7 @@ public class ExpenseForUser {
     private String paidByPhoneNumber;
     private String id;
     private Double myBalance;
+    private Double cost;
     private String currencyName;
     private String currencySymbol;
     private String groupId;
@@ -35,7 +36,13 @@ public class ExpenseForUser {
         this.day                = expense.getDay();
         this.month              = expense.getMonth();
         this.year               = expense.getYear();
+        this.cost               = expense.getCost();
+
     }
+
+
+
+
 
     public String getName() {
         return name;
@@ -102,7 +109,13 @@ public class ExpenseForUser {
     }
 
 
+    public Double getCost() {
+        return cost;
+    }
 
+    public void setCost(Double cost) {
+        this.cost = cost;
+    }
 
     public String getCurrencyName() {
         return currencyName;

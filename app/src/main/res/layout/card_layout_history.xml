@@ -25,26 +25,17 @@
             android:textSize="18sp"/>
 
         <TextView
-            android:id="@+id/txtName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:textSize="16sp"
-            android:layout_below="@id/title"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"/>
-
-        <TextView
             android:id="@+id/txtContent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:textSize="16sp"
-            android:layout_below="@id/txtName"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginBottom="5dp"
-            />
+            android:layout_below="@id/title"
+            android:paddingLeft="10dp"
+            android:paddingTop="7dp"
+            android:paddingBottom="7dp"
+            android:paddingRight="10dp"/>
+
 
 
     </RelativeLayout>
