@@ -34,6 +34,13 @@
         <item name="exclude">Escludi membro</item>
         <item name="custom_policy">Personalizzata</item>
     </string-array>
+    <string-array name="years">
+        <item name="Select year">Seleziona anno</item>
+        <item name="2017">2017</item>
+        <item name="2018">2018</item>
+        <item name="2019">2019</item>
+        <item name="2020">2020</item>
+    </string-array>
 
     <string name="who">Chi paga?</string>
     <string name="how">Quanto paga?</string>
@@ -128,5 +135,28 @@
     <string name="group_history">Riepilogo Gruppo</string>
     <string name="history_expense">ha aggiunto una nuova spesa. Costo : </string>
     <string name="no_detail">Nessun dettaglio disponibile</string>
+    <string name="pay_button">Salda</string>
+    <string name="list_payment">Lista di pagamenti</string>
+    <string name="pay_everyone">Salda tutti</string>
+    <string name="confirm_inserted">Conferma selezionati</string>
 
+    <string name="group">Gruppo</string>
+    <string name="all_groups">Tutti i gruppi</string>
+    <string name="choose_group">Seleziona un gruppo</string>
+    <string name="year">Anno</string>
+    <string name="select_year">Seleziona anno</string>
+    <string name="january">GEN</string>
+    <string name="february">FEB</string>
+    <string name="march">MAR</string>
+    <string name="april">APR</string>
+    <string name="may">MAG</string>
+    <string name="june">GIU</string>
+    <string name="july">LUG</string>
+    <string name="august">AGO</string>
+    <string name="september">SET</string>
+    <string name="october">OTT</string>
+    <string name="november">NOV</string>
+    <string name="december">DIC</string>
+    <string name="show_graph">VISUALIZZA</string>
+    <string name="months">Mesi</string>
 </resources>

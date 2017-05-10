@@ -196,19 +196,16 @@ public class TabView extends AppCompatActivity {
         }
     }
 
-    /**
-     * questo è un semplice fragment, in questo caso un esempio
-     */
-    public static class PlaceholderFragment extends Fragment {
+    public static class ChatFragment extends Fragment {
 
         //memorizzo dentro questa variabile il fragment che sto visualizzando a schermo
         private static final String ARG_SECTION_NUMBER = "section_number";
 
-        public PlaceholderFragment() {
+        public ChatFragment() {
         }
 
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
+        public static ChatFragment newInstance(int sectionNumber) {
+            ChatFragment fragment = new ChatFragment();
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             fragment.setArguments(args);
@@ -373,7 +370,7 @@ public class TabView extends AppCompatActivity {
                     return listFrag;
                 case 2:
                     //return new BlankFragment();
-                    return PlaceholderFragment.newInstance(position + 1);
+                    return ChatFragment.newInstance(position + 1);
                 default:
                     return null;
             }

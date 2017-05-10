@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="55dp"
+    android:orientation="horizontal"
+    android:id="@+id/item_list"
+    >
+
+    <TextView
+        android:id="@+id/user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:textSize="18sp"
+        android:text = "User name"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_weight="3"
+         />
+
+    <EditText
+        android:id="@+id/paid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:text="11"
+        />
+
+    <TextView
+        android:id="@+id/to_paid"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:textSize="18sp"
+        android:text = "/ 55"
+        android:gravity="center"
+        android:layout_weight="1"
+        />
+
+    <ImageButton
+        android:id="@+id/fill_paid"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/cash"
+        android:background="@color/colorPrimaryLight"
+        android:layout_weight="1"
+        android:layout_marginRight="10dp"
+        />
+
+
+</LinearLayout>

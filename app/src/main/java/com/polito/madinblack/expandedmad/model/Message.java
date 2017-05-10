@@ -11,6 +11,11 @@ public class Message {
     public Message() {
     }
 
+    public Message(String sentBy, String message){
+        this.sentBy = sentBy;
+        this.message = message;
+    }
+
     public String getSentBy() {
         return sentBy;
     }
