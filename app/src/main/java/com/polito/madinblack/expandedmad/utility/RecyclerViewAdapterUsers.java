@@ -17,9 +17,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.Balance;
 import com.polito.madinblack.expandedmad.model.GroupForUser;
+import com.polito.madinblack.expandedmad.model.MyApplication;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.security.AccessController.getContext;
 
 //used to fill the my balance tab
 public class RecyclerViewAdapterUsers extends RecyclerView.Adapter<RecyclerViewAdapterUsers.ViewHolder>{
@@ -136,7 +139,11 @@ public class RecyclerViewAdapterUsers extends RecyclerView.Adapter<RecyclerViewA
     @Override
     public void onBindViewHolder(final RecyclerViewAdapterUsers.ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);                           //singolo utente
-        holder.mIdView.setText(mValues.get(position).getUserName() + " " +mValues.get(position).getUserSurname());               //qui visualizzo nome e cognome
+        MyApplication ma = MyApplication.getInstance();
+        if(holder.mItem.getUserPhoneNumber().equals(ma.getUserPhoneNumber()))
+            holder.mIdView.setText(mContext.getString(R.string.you));
+        else
+            holder.mIdView.setText(mValues.get(position).getUserName() + " " +mValues.get(position).getUserSurname());               //qui visualizzo nome e cognome
         //qui invece quanto deve o meno
         if (mValues.get(position).getBalance()>0){
             holder.mContentView.setText(String.format("+%.2f", mValues.get(position).getBalance()) + " " + mValues.get(position).getCurrencySymbol());
