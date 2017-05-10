@@ -2,6 +2,7 @@ package com.polito.madinblack.expandedmad.utility;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -65,6 +66,7 @@ public class TabView extends AppCompatActivity {
     private static final int CONTACT_REQUEST = 1;
 
     private FloatingActionButton fab;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +81,7 @@ public class TabView extends AppCompatActivity {
         mDatabaseExpenseListReference = FirebaseDatabase.getInstance().getReference().child("users/"+ma.getUserPhoneNumber()+"/"+ma.getFirebaseId()+"/groups/"+groupIndex+"/expenses");
 
         //toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(groupName);
         setSupportActionBar(toolbar);
 
@@ -114,6 +116,14 @@ public class TabView extends AppCompatActivity {
         }
     }
 
+    //show the toolbar
+    public void expandToolbar(){
+        //setExpanded(boolean expanded, boolean animate)
+        AppBarLayout appBarLayout = (AppBarLayout)findViewById(R.id.appbar);
+        appBarLayout.setExpanded(true, true);
+    }
+
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -126,6 +136,9 @@ public class TabView extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
+
+                expandToolbar();
+
                 if (position == 0) {
                     fab.hide();
                 } else if (position == 1) {
@@ -146,12 +159,6 @@ public class TabView extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.tabview_menu, menu);
-
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-
-        // Configure the search info and add any event listeners...
-
         return super.onCreateOptionsMenu(menu);
     }
 
