@@ -208,6 +208,9 @@ public class Expense {
         this.description = description;
     }
 
+    public Map<String, PaymentFirebase> getPayments() {
+        return payments;
+    }
 
     public void setPayments(Map<String, PaymentFirebase> payments) {
         this.payments = payments;
@@ -320,17 +323,13 @@ public class Expense {
                     }
                 });
 
-
-
             }
-
-
         }
 
         mDatabaseRootRefenrence.child("groups/"+groupId+"/expenses/"+expenseKey).setValue(true);
 
         /*update the history*/
-        HistoryInfo historyInfo = new HistoryInfo(paidByName+" "+paidBySurname, historyExpense+cost);
+        HistoryInfo historyInfo = new HistoryInfo(paidByName+" "+paidBySurname, historyExpense+" "+String.format("%.2d",cost) +" "+currencySymbol);
         mDatabaseRootRefenrence.child("history/"+groupId).push().setValue(historyInfo);
 
         return expenseKey;
@@ -351,6 +350,20 @@ public class Expense {
         else if(e1.getMonth())
     */
         return 1;
+    }
+
+    public PaymentFirebase paymentFromUser(String userId){
+
+        PaymentFirebase paymentToReturn = null;
+        for(PaymentFirebase paymentFirebase : payments.values()){
+            if(paymentFirebase.getUserFirebaseId().equals(userId)){
+                paymentToReturn = paymentFirebase;
+                break;
+            }
+
+        }
+
+        return  paymentToReturn;
     }
 
 

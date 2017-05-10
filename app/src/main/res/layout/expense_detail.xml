@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:text="@string/paid_topay"
-        android:textSize="25dp"/>
+        android:textSize="20sp"/>
 
     <TextView
         android:id="@+id/paid_container"
@@ -22,7 +22,8 @@
         android:layout_alignBottom="@+id/paid"
         android:layout_toEndOf="@+id/paid"
         android:text="x/y"
-        android:textSize="22dp"
+        android:textStyle="bold"
+        android:textSize="18sp"
         android:gravity="end"
         android:layout_marginEnd="16dp"/>
 
@@ -32,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:text="@string/balance"
-        android:textSize="25dp"
+        android:textSize="20sp"
         android:layout_below="@+id/paid"/>
 
     <TextView
@@ -43,8 +44,9 @@
         android:layout_alignBottom="@+id/balance"
         android:layout_marginEnd="16dp"
         android:text="75"
+        android:textStyle="bold"
         android:textAlignment="textEnd"
-        android:textSize="22dp"/>
+        android:textSize="18sp"/>
 
     <TextView
         android:id="@+id/tag"
@@ -52,11 +54,12 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:text="@string/tag"
-        android:textSize="25dp"
+        android:textSize="20sp"
         android:layout_below="@+id/buyer"/>
 
     <TextView
         android:id="@+id/tag_container"
+        android:textStyle="bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@+id/tag"
@@ -64,14 +67,14 @@
         android:layout_marginEnd="16dp"
         android:text="@string/type"
         android:textAlignment="textEnd"
-        android:textSize="22dp"/>
+        android:textSize="18sp"/>
 
     <TextView
         android:id="@+id/cost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/cost"
-        android:textSize="25dp"
+        android:textSize="20sp"
         android:layout_margin="16dp"
         android:layout_below="@+id/balance"/>
 
@@ -83,15 +86,16 @@
         android:layout_alignBottom="@+id/cost"
         android:layout_marginEnd="16dp"
         android:text="Value"
+        android:textStyle="bold"
         android:textAlignment="textEnd"
-        android:textSize="22dp"/>
+        android:textSize="18sp"/>
 
     <TextView
         android:id="@+id/buyer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/paid_by"
-        android:textSize="25dp"
+        android:textSize="20sp"
         android:layout_margin="16dp"
         android:layout_below="@+id/currency"/>
 
@@ -103,8 +107,9 @@
         android:layout_alignBottom="@+id/buyer"
         android:layout_marginEnd="16dp"
         android:text="@string/user"
+        android:textStyle="bold"
         android:textAlignment="textEnd"
-        android:textSize="22dp"/>
+        android:textSize="18sp"/>
 
     <TextView
         android:id="@+id/currency_container"
@@ -114,15 +119,16 @@
         android:layout_alignBottom="@+id/currency"
         android:layout_marginEnd="16dp"
         android:text="Euro"
+        android:textStyle="bold"
         android:textAlignment="textEnd"
-        android:textSize="22dp"/>
+        android:textSize="18sp"/>
 
     <TextView
         android:id="@+id/date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/date"
-        android:textSize="25dp"
+        android:textSize="20sp"
         android:layout_margin="16dp"
         android:layout_below="@+id/tag"/>
 
@@ -135,14 +141,15 @@
         android:layout_marginEnd="16dp"
         android:text="@string/date_format"
         android:textAlignment="textEnd"
-        android:textSize="22dp"/>
+        android:textStyle="bold"
+        android:textSize="18sp"/>
 
     <TextView
         android:id="@+id/currency"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/currency"
-        android:textSize="25dp"
+        android:textSize="20sp"
         android:layout_margin="16dp"
         android:layout_below="@+id/cost"/>
 
@@ -151,7 +158,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/description"
-        android:textSize="25dp"
+        android:textSize="20sp"
         android:layout_margin="16dp"
         android:layout_below="@+id/date"/>
 
@@ -166,7 +173,8 @@
         android:textColorHint="@color/secondary_text"
         android:layout_marginEnd="16dp"
         android:text="@string/type_description_here"
-        android:textSize="20dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
         android:layout_alignBaseline="@+id/description"/>
 
 </RelativeLayout>

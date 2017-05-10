@@ -141,5 +141,6 @@
     <string name="title_activity_group_history">GroupHistory</string>
     <string name="no_reports">No available reports</string>
     <string name="group_history">Group Story</string>
-    <string name="history_expense">has added a new expense. Cost: </string>
+    <string name="history_expense">has added a new expense. Cost : </string>
+    <string name="no_detail">No detail available</string>
 </resources>

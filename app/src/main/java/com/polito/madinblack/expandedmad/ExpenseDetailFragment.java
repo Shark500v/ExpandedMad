@@ -52,7 +52,7 @@ public class ExpenseDetailFragment extends Fragment {
             ((TextView) rootView.findViewById(R.id.cost_container)).setText(String.format("%.2f",(mItem.getCost())));
             ((TextView) rootView.findViewById(R.id.currency_container)).setText(mItem.getCurrencySymbol());
             if( mItem.getPaidByPhoneNumber().equals(ma.getUserPhoneNumber()) )
-                ((TextView) rootView.findViewById(R.id.buyer_container)).setText("You");
+                ((TextView) rootView.findViewById(R.id.buyer_container)).setText(getString(R.string.you));
             else
                 ((TextView) rootView.findViewById(R.id.buyer_container)).setText(mItem.getPaidByName()+" "+mItem.getPaidBySurname());
             ((TextView) rootView.findViewById(R.id.date_container)).setText(Long.toString(mItem.getDay()) + "/" + Long.toString(mItem.getMonth()) + "/" + Long.toString(mItem.getYear()));

@@ -1,8 +1,10 @@
 package com.polito.madinblack.expandedmad.utility;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -22,6 +24,7 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.polito.madinblack.expandedmad.ExpenseDetailActivity;
 import com.polito.madinblack.expandedmad.ExpenseDetailFragment;
+import com.polito.madinblack.expandedmad.ExpenseDetailFragment2;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.ExpenseForUser;
 import com.polito.madinblack.expandedmad.model.MyApplication;
@@ -40,6 +43,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private ChildEventListener mChildEventListener;
     private MyApplication ma;
     private DatabaseReference mDatabaseNewExpenseReference;
+    private Context context;
+    private String strin;
 
     private static final String TAG = "MyBalanceActivity";
 
@@ -48,7 +53,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         dataref = dr;
         mContext = ct;
         ma = MyApplication.getInstance();
-
 
         // Create child event listener
         // [START child_event_listener_recycler]
@@ -187,31 +191,32 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         final SpannableStringBuilder str;
         if(mValues.get(position).getPaidByPhoneNumber().equals(ma.getUserPhoneNumber())) {
-            str = new SpannableStringBuilder("Paid by "+ "You");
-            str.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), "Paid by ".length(), ("Paid by ".length() + "You".length()), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            str = new SpannableStringBuilder(mContext.getString(R.string.paid_by)+" "+ mContext.getString(R.string.you));
+            str.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), mContext.getString(R.string.paid_by).length()+1, (mContext.getString(R.string.paid_by).length()+1 + mContext.getString(R.string.you).length()), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         else {
-            str = new SpannableStringBuilder("Paid by "+ mValues.get(position).getPaidByName());
-            str.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), "Paid by ".length(), ("Paid by ".length() + mValues.get(position).getPaidByName().length()), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            str = new SpannableStringBuilder(mContext.getString(R.string.paid_by)+" "+ mValues.get(position).getPaidByName());
+            str.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), mContext.getString(R.string.paid_by).length()+1, (mContext.getString(R.string.paid_by).length()+1 + mValues.get(position).getPaidByName().length()), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         }
         holder.mPaydBy.setText(str);
         //sopra vengono settati i tre campi che costituisco le informazioni di ogni singolo gruppo, tutti pronti per essere mostriti nella gui
 
 
-        /*
+
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
 
                 Context context = v.getContext();
                 Intent intent = new Intent(context, ExpenseDetailActivity.class);
-                intent.putExtra(ExpenseDetailFragment.ARG_ITEM_ID, holder.mItem.getId());
+                intent.putExtra(ExpenseDetailFragment2.ARG_EXPENSE_ID, holder.mItem.getId());
+                intent.putExtra(ExpenseDetailFragment2.ARG_EXPENSE_NAME, holder.mItem.getName());
                 context.startActivity(intent);
 
             }
         });
-        */
+
     }
 
     @Override
