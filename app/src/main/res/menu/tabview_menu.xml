@@ -2,14 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!--search icon on the toolbar-->
-    <item
-        android:id="@+id/action_search"
-        android:icon="@drawable/search"
-        android:title="@string/action_search"
-        app:showAsAction="always"
-        app:actionViewClass="android.support.v7.widget.SearchView"/>
-
     <!--setting button-->
     <item
         android:id="@+id/action_settings"
