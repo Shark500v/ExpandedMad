@@ -24,7 +24,6 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.polito.madinblack.expandedmad.ExpenseDetailActivity;
 import com.polito.madinblack.expandedmad.ExpenseDetailFragment;
-import com.polito.madinblack.expandedmad.ExpenseDetailFragment2;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.ExpenseForUser;
 import com.polito.madinblack.expandedmad.model.MyApplication;
@@ -204,7 +203,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
 
-        holder.mView.setOnClickListener(new View.OnClickListener() {
+        /*holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
 
@@ -215,7 +214,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 context.startActivity(intent);
 
             }
-        });
+        });*/
 
     }
 
