@@ -324,7 +324,7 @@ public class NewGroup extends AppCompatActivity {
             progressDialog.setTitle(getString(R.string.uploading));
             progressDialog.show();
 
-            final StorageReference filePathGroups = mStorage.child("Groups").child(groupCode).child("GroupPicture").child("groupPicture.jpg");
+            final StorageReference filePathGroups = mStorage.child("groups").child(groupCode).child("groupPicture").child("groupPicture.jpg");
 
             filePathGroups.putBytes(imageData).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -333,8 +333,8 @@ public class NewGroup extends AppCompatActivity {
                     //hiding the progress dialog
                     progressDialog.dismiss();
 
-                    StorageMetadata metadata = new StorageMetadata.Builder().setCustomMetadata("Group", groupCode).build(); //da cambiare, solo per prova
-                    filePathGroups.updateMetadata(metadata);
+                    //StorageMetadata metadata = new StorageMetadata.Builder().setCustomMetadata("Group", groupCode).build(); //da cambiare, solo per prova
+                    //filePathGroups.updateMetadata(metadata);
                     //and displaying a success toast
                     Toast.makeText(getApplicationContext(), getString(R.string.file_uploaded), Toast.LENGTH_LONG).show();
                 }
@@ -373,28 +373,5 @@ public class NewGroup extends AppCompatActivity {
         super.onSaveInstanceState(toSave);
         toSave.putParcelable("bitmap", bitmap);
         toSave.putBoolean("visible", visible);
-    }
-
-    //metodo per fare il download dallo storage delle immagini dei gruppi
-    //nella NewGroup non serve, da togliere
-    public void downlaoadGroupImage(){
-        StorageReference groupRef = mStorage.child("Groups").child(groupCode).child("GroupPicture").child("groupPicture.jpg");
-        try {
-            final File localFile = File.createTempFile("image", "tmp");
-            groupRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                    bitmap = BitmapFactory.decodeFile(localFile.getPath());
-                    groupImage.setImageBitmap(bitmap);
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }
