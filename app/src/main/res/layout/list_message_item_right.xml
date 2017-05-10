@@ -15,7 +15,7 @@
             android:id="@+id/imageView"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginRight="40dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             android:layout_weight="1"
             android:layout_gravity="top|right"
@@ -30,8 +30,8 @@
             android:background="@drawable/rounded_corner1"
             android:padding="16dp"
             android:text="Android charting application xml ui design tutorial with example. Android charting application xml ui design tutorial with example. Android charting application xml ui design tutorial with example. Android charting application xml ui design tutorial with example."
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="60dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="25dp"
             android:textColor="#000" />
 
 
@@ -43,6 +43,7 @@
             android:layout_marginRight="5dp"
             android:layout_weight="3"
             android:layout_gravity="top|right"
+            android:visibility="gone"
             android:src="@drawable/user_pacific" />
     </FrameLayout>
 
