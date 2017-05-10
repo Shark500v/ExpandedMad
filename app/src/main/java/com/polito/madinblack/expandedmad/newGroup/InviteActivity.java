@@ -91,7 +91,9 @@ public class InviteActivity extends AppCompatActivity {
                 }
 
             case R.id.home:
-                //navigateUpTo(new Intent(this, NewGroup.class));    //definisco il parente verso cui devo tornare indietro
+                //in questo caso il gruppo è gia stato creato, con l'activity presente posso invitare i nuovi membri che ho selezionato, per il resto posso tornare indietro
+                //alla pagina dei gruppi.
+                navigateUpTo(new Intent(this, GroupListActivity.class));    //definisco il parente verso cui devo tornare indietro
                 return true;
 
             default:
@@ -99,6 +101,12 @@ public class InviteActivity extends AppCompatActivity {
                 // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        navigateUpTo(new Intent(this, GroupListActivity.class));
     }
 
     private void sendEmail(){

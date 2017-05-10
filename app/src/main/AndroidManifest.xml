@@ -7,7 +7,6 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CAMERA" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -120,11 +119,11 @@
         <activity
             android:name=".newGroup.InviteActivity"
             android:label="Invite New Contacts"
-            android:parentActivityName=".newGroup.SelectContact"
+            android:parentActivityName=".groupManaging.GroupListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.polito.madinblack.expandedmad.newGroup.SelectContact" />
+                android:value="com.polito.madinblack.expandedmad.groupManaging.GroupListActivity" />
         </activity>
         <activity
             android:name=".StatisticsGraphs"
