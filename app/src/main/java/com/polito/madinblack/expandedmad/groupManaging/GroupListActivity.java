@@ -67,6 +67,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
     private StorageReference mStorage;
     private SimpleItemRecyclerViewAdapter mAdapter;
     private static Map<String,String> groupImages = new HashMap<String,String>();
+    Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -283,9 +284,9 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         }
 
         //metodo per fare il download dallo storage delle immagini dei gruppi
-        //nella NewGroup non serve, da togliere
+        //da togliere
         public Bitmap downlaoadGroupImage(String groupCode){
-            StorageReference groupRef = mStorage.child("Groups").child(groupCode).child("GroupPicture").child("groupPicture.jpg");
+            StorageReference groupRef = mStorage.child("groups").child(groupCode).child("groupPicture").child("groupPicture.jpg");
             try {
                 final File localFile = File.createTempFile("image", "tmp");
                 groupRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
@@ -347,22 +348,22 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                 }
             });
 
-            //if(groupImages != null && groupImages.get(mValues.get(position).getId()) != null) {
-            //    String filePath = groupImages.get(mValues.get(position).getId());
-            //    Bitmap bitmap = BitmapFactory.decodeFile(filePath);
-            //    holder.mImageView.setImageBitmap(bitmap);
-            //Toast.makeText(getApplicationContext(), "creato dal file tmp", Toast.LENGTH_LONG).show();;
-            //}else{
-            StorageReference groupRef = mStorage.child("Groups").child(mValues.get(position).getId()).child("GroupPicture").child("groupPicture.jpg");
+            if(groupImages != null && groupImages.get(mValues.get(position).getId()) != null) {
+                String filePath = groupImages.get(mValues.get(position).getId());
+                Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+                holder.mImage.setImageBitmap(bitmap);
+                //Toast.makeText(getApplicationContext(), "creato dal file tmp", Toast.LENGTH_LONG).show();;
+            }else{
+            StorageReference groupRef = mStorage.child("groups").child(mValues.get(position).getId()).child("groupPicture").child("groupPicture.jpg");
             try {
                 final File localFile = File.createTempFile("image", "tmp");
-                //        final String groupCode = mValues.get(position).getId();
+                final String groupCode = mValues.get(position).getId();
                 groupRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                         bitmap = BitmapFactory.decodeFile(localFile.getPath());
                         holder.mImage.setImageBitmap(bitmap);
-                        //                groupImages.put(groupCode, localFile.getPath());
+                        groupImages.put(groupCode, localFile.getPath());
 
                     }
                 }).addOnFailureListener(new OnFailureListener() {
@@ -374,7 +375,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        //}
+        }
         }
 
         @Override

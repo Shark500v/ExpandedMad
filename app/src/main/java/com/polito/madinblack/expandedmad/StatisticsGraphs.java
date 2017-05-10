@@ -59,13 +59,18 @@ public class StatisticsGraphs extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+
+
         ma = MyApplication.getInstance();
+        String id = ma.getFirebaseId();
+        String phone = ma.getUserPhoneNumber();
+
+        populateSpinner();
 
         spinner = (Spinner)findViewById(R.id.group_spinner);
 
-
-
-        populateSpinner();
+        groupArray.add(getString(R.string.all_groups));
+        groupMap.put(getString(R.string.all_groups), getString(R.string.all_groups));
 
         ArrayAdapter<String> groupAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, groupArray);
         groupAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
@@ -75,9 +80,9 @@ public class StatisticsGraphs extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String groupSelected = parent.getItemAtPosition(position).toString();
-                if(groupSelected == getString(R.string.all_groups)){
-                    GraphView graph = (GraphView)findViewById(R.id.graph1);
-                    initGraph(graph,groupMap.get(groupSelected));
+                GraphView graph = (GraphView)findViewById(R.id.graph1);
+                if(groupMap.get(groupSelected) != null) {
+                    //initGraph(graph, groupMap.get(groupSelected));
                 }
             }
 
@@ -89,15 +94,16 @@ public class StatisticsGraphs extends AppCompatActivity {
     }
 
     private void populateSpinner() {
-        FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber()).child(ma.getFirebaseId()).child("groups").addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber())
+                .child(ma.getFirebaseId()).child("groups").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                groupArray.add(getString(R.string.all_groups));
                 for (DataSnapshot groupSnapshot : dataSnapshot.getChildren()) {
                     GroupForUser groupForUser = groupSnapshot.getValue(GroupForUser.class);
                     String groupName = groupForUser.getName();
                     groupArray.add(groupName);
-                    groupMap.put(groupName,groupForUser.getId());
+                    String groupId = groupForUser.getId();
+                    groupMap.put(groupName, groupId);
                 }
             }
 
@@ -108,44 +114,67 @@ public class StatisticsGraphs extends AppCompatActivity {
         });
     }
 
-
     //metodo per inizializzare i dati del grafico
     public void initGraph(GraphView graph, String groupId) {
-        FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber())
-                .child(ma.getFirebaseId()).child("groups").child(groupId).child("expenses").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(int i = 1; i <= 12; i++){
-                    groupExpensesByMonth.put(i, 0.0);
+        if(!groupId.equals(getString(R.string.all_groups))) {
+            FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber())
+                    .child(ma.getFirebaseId()).child("groups").child(groupId).child("expenses").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (int i = 1; i <= 12; i++) {
+                        groupExpensesByMonth.put(i, 0.0);
+                    }
+                    for (DataSnapshot expenseSnapshot : dataSnapshot.getChildren()) {
+                        ExpenseForUser expenseForUser = expenseSnapshot.getValue(ExpenseForUser.class);
+                        Double expenseBalance = expenseForUser.getMyBalance();
+                        expenseBalance += groupExpensesByMonth.get(expenseForUser.getMonth().intValue());
+                        groupExpensesByMonth.put(expenseForUser.getMonth().intValue(), expenseBalance);
+                    }
                 }
-                groupExpensesByMonth.clear();
-                for(DataSnapshot expenseSnapshot : dataSnapshot.getChildren()){
-                    ExpenseForUser expenseForUser = expenseSnapshot.getValue(ExpenseForUser.class);
-                    Double expenseBalance = expenseForUser.getMyBalance();
-                    //expenseBalance += groupExpensesByMonth.get(expenseForUser.getMonth);
-                    //groupExpensesByMonth.put(expenseForUser.getMonth(), expenseBalance);
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
                 }
-            }
+            });
+        }else{
+            FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber())
+                    .child(ma.getFirebaseId()).child("groups").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (int i = 1; i <= 12; i++) {
+                        groupExpensesByMonth.put(i, 0.0);
+                    }
+                    for (DataSnapshot expenseSnapshot : dataSnapshot.getChildren()) {
+                        //Double expenseBalance = expenseSnapshot.child("myBalance").getValue(Double.class);
+                        //Double expenseBalance = expenseForUser.getMyBalance();
+                        //expenseBalance += groupExpensesByMonth.get(expenseForUser.getMonth().intValue());
+                        //groupExpensesByMonth.put(expenseForUser.getMonth().intValue(), expenseBalance);
+                    }
+                }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
-
-        for(int i = 0; i <= 12; i++){
-            new DataPoint(i,groupExpensesByMonth.get(i));
+                }
+            });
         }
 
-        BarGraphSeries<DataPoint> series = new BarGraphSeries<>();
+        DataPoint[] dataPoints = new DataPoint[12];
+        for(int i = 0; i < 12; i++){
+            dataPoints[i] = new DataPoint(i,groupExpensesByMonth.get(i));
+        }
+
+        BarGraphSeries<DataPoint> series = new BarGraphSeries<>(dataPoints);
+
         series.setColor(Color.BLUE); //colore della barra
         series.setSpacing(30); //percentuale di spazio tra le barre. 0->no spazio, 100->spazio tra una barra e l'altra e pari alla larghezza di una barra
         series.setAnimated(true);
         graph.addSeries(series); //aggiunge la serie di dati al grafico
 
         graph.getViewport().setXAxisBoundsManual(true);
-        graph.getViewport().setMinX(0.0);
-        graph.getViewport().setMaxX(2.0);
+        graph.getViewport().setMinX(1.0);
+        graph.getViewport().setMaxX(12.0);
         graph.getViewport().setScrollable(true);
         graph.getViewport().setScrollableY(true);
 

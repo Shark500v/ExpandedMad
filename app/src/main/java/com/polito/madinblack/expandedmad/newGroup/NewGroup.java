@@ -374,27 +374,4 @@ public class NewGroup extends AppCompatActivity {
         toSave.putParcelable("bitmap", bitmap);
         toSave.putBoolean("visible", visible);
     }
-
-    //metodo per fare il download dallo storage delle immagini dei gruppi
-    //nella NewGroup non serve, da togliere
-    public void downlaoadGroupImage(){
-        StorageReference groupRef = mStorage.child("Groups").child(groupCode).child("GroupPicture").child("groupPicture.jpg");
-        try {
-            final File localFile = File.createTempFile("image", "tmp");
-            groupRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                    bitmap = BitmapFactory.decodeFile(localFile.getPath());
-                    groupImage.setImageBitmap(bitmap);
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }
