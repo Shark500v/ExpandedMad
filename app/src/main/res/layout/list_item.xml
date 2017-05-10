@@ -13,6 +13,7 @@
         android:textSize="18sp"
         android:text = "User name"
         android:gravity="center_vertical"
+        android:layout_marginLeft="10dp"
         android:layout_weight="3"
          />
 
@@ -43,6 +44,7 @@
         android:src="@drawable/cash"
         android:background="@color/colorPrimaryLight"
         android:layout_weight="1"
+        android:layout_marginRight="10dp"
         />
 
 

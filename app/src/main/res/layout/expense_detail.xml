@@ -156,7 +156,6 @@
         android:layout_marginEnd="16dp"
         android:text="@string/date_format"
         android:textAlignment="textEnd"
-        android:textStyle="bold"
         android:textSize="18sp"/>
 
     <TextView
