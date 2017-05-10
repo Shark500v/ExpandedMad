@@ -249,6 +249,13 @@ public class TabView extends AppCompatActivity {
                 }
             });
 
+            recyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                @Override
+                public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                    v.scrollBy(0, 1000);
+                }
+            });
+
             return rootView;
         }
 
@@ -257,7 +264,6 @@ public class TabView extends AppCompatActivity {
             // Read the input field and push a new instance
             // of ChatMessage to the Firebase database
             ref.push().setValue(new Message(ma.getUserName() + " " + ma.getUserSurname(), ma.getFirebaseId(), inputMessage.getText().toString()));
-            //recyclerView.scrollBy(0, 1000);
 
             // Clear the input
             inputMessage.setText("");
