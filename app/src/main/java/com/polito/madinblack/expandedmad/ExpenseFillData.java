@@ -313,6 +313,7 @@ public class ExpenseFillData extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
 
             CircleImageView imageView = (CircleImageView) findViewById(R.id.expense_proof);
+            imageView.setPadding(4,4,4,4);
 
             if (requestCode == RESULT_LOAD_IMAGE && null != data){
                 selectedImage = data.getData();

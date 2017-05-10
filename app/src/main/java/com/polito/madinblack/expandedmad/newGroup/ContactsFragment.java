@@ -6,9 +6,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -23,6 +25,7 @@ import android.widget.Toast;
 import com.polito.madinblack.expandedmad.groupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.R;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -128,7 +131,8 @@ public class ContactsFragment extends Fragment {
                         //email.moveToNext();
                         String EmailAddr = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA2));
                         //email.close();
-                        /*String image_thumb = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI));
+                        //retrieving and setting the contact image
+                        String image_thumb = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI));
                         try {
                             if (image_thumb != null) {
                                 bit_thumb = MediaStore.Images.Media.getBitmap(resolver, Uri.parse(image_thumb));
@@ -138,10 +142,13 @@ public class ContactsFragment extends Fragment {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        */
 
                         SelectUser selectUser = new SelectUser();
-                        selectUser.setThumb(bit_thumb);
+                        try {
+                            selectUser.setThumb(bit_thumb);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                         selectUser.setName(name);
                         selectUser.setPhone(phoneNumber);
                         selectUser.setEmail(EmailAddr);
