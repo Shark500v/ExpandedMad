@@ -1,6 +1,8 @@
 package com.polito.madinblack.expandedmad.newGroup;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,12 +18,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerViewAdapter.ViewHolder>{
 
     public List<SelectUser> _data, groupMem;
     private ArrayList<SelectUser> arraylist;
     Context _c;
-    //RoundImage roundedImage;
 
     public UserRecyclerViewAdapter(List<SelectUser> selectUsers, Context context, List<SelectUser> GroupM) {
         _data = selectUsers;
@@ -45,7 +48,7 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
         holder.phone.setText(data.getPhone());
         //holder.email.setText(data.getEmail());
 
-        /*
+
         // Set image if exists
         try {
             if (data.getThumb() != null) {
@@ -53,20 +56,11 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
             } else {
                 holder.imageView.setImageResource(R.drawable.icon_utente);
             }
-            // Setting round image
-            /*
-            Bitmap bm = BitmapFactory.decodeResource(view.getResources(), R.drawable.icon_utente); // Load default image
-            roundedImage = new RoundImage(bm);
-            holder.imageView.setImageDrawable(roundedImage);
-
         } catch (OutOfMemoryError e) {
             // Add default picture
             holder.imageView.setImageDrawable(this._c.getDrawable(R.drawable.icon_utente));
             e.printStackTrace();
         }
-        */
-        holder.imageView.setImageDrawable(this._c.getDrawable(R.drawable.icon_utente));
-
         Log.e("Image Thumb", "--------------" + data.getThumb());
 
         // Set check box listener android
@@ -94,7 +88,7 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        ImageView imageView;
+        CircleImageView imageView;
         TextView title, phone, email;
         CheckBox check;
 
@@ -104,7 +98,7 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
             title = (TextView) view.findViewById(R.id.name);
             check = (CheckBox) view.findViewById(R.id.check);
             phone = (TextView) view.findViewById(R.id.no);
-            imageView = (ImageView) view.findViewById(R.id.pic);
+            imageView = (CircleImageView) view.findViewById(R.id.pic);
             email = (TextView) view.findViewById(R.id.email);
         }
     }
