@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_below="@+id/layout1"
-    android:layout_marginTop="30dp"
+    android:layout_marginTop="4dp"
     android:orientation="horizontal"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -29,7 +29,6 @@
             android:padding="16dp"
             android:text="Android charting application xml ui design tutorial with example. Android charting application xml ui design tutorial with example. Android charting application xml ui design tutorial with example. Android charting application xml ui design tutorial with example."
             android:layout_marginLeft="15dp"
-            android:layout_marginRight="30dp"
             android:textColor="#000" />
 
         <ImageView
