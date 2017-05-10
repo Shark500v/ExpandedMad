@@ -11,6 +11,7 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.Query;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.Message;
+import com.polito.madinblack.expandedmad.model.MyApplication;
 
 //questa classe la usa per fare il managing della lista che deve mostrare
 public class ChatRecyclerViewAdapter extends FirebaseRecyclerAdapter<Message,RecyclerView.ViewHolder> {
@@ -24,15 +25,18 @@ public class ChatRecyclerViewAdapter extends FirebaseRecyclerAdapter<Message,Rec
      * @param ref             The Firebase location to watch for data changes. Can also be a slice of a location,
      *                        using some combination of {@code limit()}, {@code startAt()}, and {@code endAt()}.
      */
+    private MyApplication ma;
+
     public ChatRecyclerViewAdapter(Class<Message> modelClass, int modelLayout, Class<RecyclerView.ViewHolder> viewHolderClass, Query ref) {
         super(modelClass, modelLayout, viewHolderClass, ref);
+        ma =  MyApplication.getInstance();
     }
 
 
     @Override
     protected void populateViewHolder(RecyclerView.ViewHolder viewHolder, Message model, int position) {
         //da cambiare il controllo, è solo per ricordarmi che se mio mess va a destra
-        if(model.getSentBy().equals("ME")){
+        if(model.getSentById().equals(ma.getFirebaseId())){
             ViewHolderRight holder = (ViewHolderRight)viewHolder;
             holder.mContentView.setText(model.getMessage());
         }
@@ -62,7 +66,7 @@ public class ChatRecyclerViewAdapter extends FirebaseRecyclerAdapter<Message,Rec
         // 0 : right
         // 1 : left
         //da cambiare il controllo, è solo per ricordarmi che se mio mess va a destra
-        if(message.getSentBy().equals("ME"))
+        if(message.getSentById().equals(ma.getFirebaseId()))
             return 0;
         else
             return 1;
