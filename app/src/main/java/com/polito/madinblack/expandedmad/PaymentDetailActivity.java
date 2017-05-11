@@ -1,5 +1,6 @@
 package com.polito.madinblack.expandedmad;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.ActionBar;
@@ -19,6 +20,7 @@ import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.Payment;
 import com.polito.madinblack.expandedmad.model.PaymentFirebase;
 import com.polito.madinblack.expandedmad.utility.PaymentRecyclerAdapter;
+import com.polito.madinblack.expandedmad.utility.TabView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -221,7 +223,13 @@ public class PaymentDetailActivity extends AppCompatActivity {
 
 
 
+        }else if(id == 16908332){
+            Intent intent3 = new Intent(this, TabView.class);
+            intent3.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            navigateUpTo(intent3);
+            return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
