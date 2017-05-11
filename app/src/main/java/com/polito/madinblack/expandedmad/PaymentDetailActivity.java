@@ -219,8 +219,8 @@ public class PaymentDetailActivity extends AppCompatActivity {
                 //payments.put(paymentFirebase.getId(), paymentFirebase);
 
                 /*update the history*/
-                /*HistoryInfo historyInfo = new HistoryInfo(paymentInfo.getUserNameDisplayed(), 1L, expenseCost, currencySymbol, paidTo);
-                mDatabaseRootReference.child("history/"+groupId).push().setValue(historyInfo);*/
+                HistoryInfo historyInfo = new HistoryInfo(paymentInfo.getUserNameDisplayed(), 1L, expenseCost, currencySymbol, expenseUserName + " " + expenseUserSurname);
+                mDatabaseRootReference.child("history/"+groupId).push().setValue(historyInfo);
 
 
             }
