@@ -48,7 +48,7 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
         holder.phone.setText(data.getPhone());
         //holder.email.setText(data.getEmail());
 
-
+        /*
         // Set image if exists
         try {
             if (data.getThumb() != null) {
@@ -62,7 +62,8 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
             e.printStackTrace();
         }
         Log.e("Image Thumb", "--------------" + data.getThumb());
-
+        */
+        holder.imageView.setImageDrawable(this._c.getDrawable(R.drawable.icon_utente));
         // Set check box listener android
         holder.check.setOnClickListener(new View.OnClickListener() {
             @Override
