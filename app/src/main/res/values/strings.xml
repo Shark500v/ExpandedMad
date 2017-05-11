@@ -156,21 +156,9 @@
     <string name="confirm_inserted">Confirm inserted</string>
     <string name="group">Group</string>
     <string name="all_groups">All groups</string>
-    <string name="choose_group">Select a group</string>
     <string name="year">Year</string>
+    <string name="select_group">Select a group</string>
     <string name="select_year">Select year</string>
-    <string name="january">JAN</string>
-    <string name="february">FEB</string>
-    <string name="march">MAR</string>
-    <string name="april">APR</string>
-    <string name="may">MAY</string>
-    <string name="june">JUN</string>
-    <string name="july">JUL</string>
-    <string name="august">AUG</string>
-    <string name="september">SEP</string>
-    <string name="october">OCT</string>
-    <string name="november">NOV</string>
-    <string name="december">DEC</string>
     <string name="show_graph">SHOW</string>
     <string name="months">Months</string>
 </resources>

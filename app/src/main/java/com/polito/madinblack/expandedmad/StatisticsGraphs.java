@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.TypedArrayUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -45,13 +46,15 @@ public class StatisticsGraphs extends AppCompatActivity {
     private Spinner yearSpinner;
     //private Button show_button;
     private MyApplication ma;
+    private GraphView graph;
     private ValueEventListener mValueEventListener;
-    private ValueEventListener mEventListener;
     private DatabaseReference mDatabaseGroupReference;
     private DatabaseReference mDatabaseExpenseReference;
+    private DatabaseReference mDatabaseAllExpenseReference;
     private List<String> groupArray = new ArrayList<>();
     private Map<String,String> groupMap = new HashMap<String,String>(); //key->groupName value->groupId
     private Map<Double,Double> groupExpensesByMonth = new HashMap<>();
+    private DataPoint[] dataPoints;
     private String groupSelected;
     private String yearSelected;
     private String groupId;
@@ -72,9 +75,17 @@ public class StatisticsGraphs extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        for (int i = 1; i <= 12; i++) {
-            groupExpensesByMonth.put(Double.valueOf(i), 0.0);                                           //inizializzo la mappa <numero_del_mese, spesa_totale>
+        graph = (GraphView) findViewById(R.id.graph1);
+        setGraph(graph);
+
+        if(savedInstanceState != null){
+
         }
+
+        resetMap(groupExpensesByMonth);
+
+        groupSelected = getString(R.string.select_group);
+        yearSelected = getString(R.string.select_year);
 
         ma = MyApplication.getInstance();
         mDatabaseGroupReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber()).child(ma.getFirebaseId()).child("groups");
@@ -82,8 +93,10 @@ public class StatisticsGraphs extends AppCompatActivity {
         mValueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                groupArray.add(getString(R.string.choose_group)); //aggiungo all'array e alla mappa <groupName,groupId> il valore di default
-                groupMap.put(getString(R.string.choose_group), getString(R.string.choose_group));
+                groupArray.add(getString(R.string.select_group)); //aggiungo all'array e alla mappa <groupName,groupId> il valore di default
+                groupArray.add(getString(R.string.all_groups));
+                groupMap.put(getString(R.string.select_group), getString(R.string.select_group));
+                groupMap.put(getString(R.string.all_groups), getString(R.string.all_groups));
 
                 for (DataSnapshot groupSnapshot : dataSnapshot.getChildren()) {
                     GroupForUser groupForUser = groupSnapshot.getValue(GroupForUser.class);
@@ -105,9 +118,21 @@ public class StatisticsGraphs extends AppCompatActivity {
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         groupSelected = parent.getItemAtPosition(position).toString();
                         groupId = groupMap.get(groupSelected);
-                        //if(groupMap.get(groupSelected) != null) {
-                        //initGraph(graph, groupMap.get(groupSelected));
-                        //}
+                        if ((!groupMap.get(groupSelected).equals(getString(R.string.select_group))) && (!yearSelected.equals(getString(R.string.select_year)))) {
+                            if(groupMap.get(groupSelected).equals(getString(R.string.all_groups))){
+                                mDatabaseAllExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber())
+                                        .child(ma.getFirebaseId()).child("groups");
+                                initGraph(graph, groupMap.get(groupSelected), yearSelected, groupSelected);   //una volta selezionati sia l'anno che il gruppo chiama il metodo
+                            }else {
+                                mDatabaseExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber())
+                                        .child(ma.getFirebaseId()).child("groups").child(groupId).child("expenses");
+                                initGraph(graph, groupMap.get(groupSelected), yearSelected, groupSelected);   //una volta selezionati sia l'anno che il gruppo chiama il metodo
+
+                                //if(groupMap.get(groupSelected) != null) {
+                                //initGraph(graph, groupMap.get(groupSelected));
+                                //}
+                            }
+                        }
                     }
 
                     @Override
@@ -119,11 +144,18 @@ public class StatisticsGraphs extends AppCompatActivity {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         yearSelected = parent.getItemAtPosition(position).toString();
-                        GraphView graph = (GraphView) findViewById(R.id.graph1);
-                        if ((!groupMap.get(groupSelected).equals(getString(R.string.choose_group))) && (!yearSelected.equals(getString(R.string.select_year)))) {
-                            mDatabaseExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber())
-                                    .child(ma.getFirebaseId()).child("groups").child(groupId).child("expenses");
-                            initGraph(graph, groupMap.get(groupSelected), yearSelected, groupSelected);   //una volta selezionati sia l'anno che il gruppo chiama il metodo
+
+                        if ((!groupMap.get(groupSelected).equals(getString(R.string.select_group))) && (!yearSelected.equals(getString(R.string.select_year)))) {
+                            if (groupMap.get(groupSelected).equals(getString(R.string.all_groups))) {
+                                mDatabaseAllExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber())
+                                        .child(ma.getFirebaseId()).child("groups");
+                                initGraph(graph, groupMap.get(groupSelected), yearSelected, groupSelected);   //una volta selezionati sia l'anno che il gruppo chiama il metodo
+
+                            } else {
+                                mDatabaseExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber())
+                                        .child(ma.getFirebaseId()).child("groups").child(groupId).child("expenses");
+                                initGraph(graph, groupMap.get(groupSelected), yearSelected, groupSelected);   //una volta selezionati sia l'anno che il gruppo chiama il metodo
+                            }
                         }
 
                     }
@@ -157,31 +189,66 @@ public class StatisticsGraphs extends AppCompatActivity {
 
     }
 
+    private void setGraph(GraphView graph){
+        graph.getViewport().setMinX(0.0);       //setto i margini del grafico
+        graph.getViewport().setMaxX(13.0);
+        graph.getViewport().setMinY(0.0);       //setto i margini del grafico
+        graph.getViewport().setMaxY(13.0);
+
+        graph.getViewport().setXAxisBoundsManual(true);  //questo e' la riga che me lo permette
+
+        graph.getViewport().setScrollable(true);         //mi fa scorrere il grafico
+        graph.getViewport().setScrollableY(true);
+
+        graph.getGridLabelRenderer().setHorizontalAxisTitle(getString(R.string.months)); //da il titolo all'asse delle x
+        graph.getGridLabelRenderer().setPadding(16);
+
+        graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+    }
+
     //metodo per inizializzare i dati del grafico
     public void initGraph(final GraphView graph, String groupId, String year, final String groupName) {
         final String yearSelected = year;
-        mDatabaseExpenseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot expenseSnapshot : dataSnapshot.getChildren()) {
-                    ExpenseForUser expenseForUser = expenseSnapshot.getValue(ExpenseForUser.class);     //prendo l'expenseForUser
-                    String yearStr = String.valueOf(expenseForUser.getYear());
-                    if (yearStr.equals(yearSelected)) {                      //controllo che appartenga all'anno selezionato
-                        Double expenseCost = expenseForUser.getCost();                                  //prendo il costo della expenseForUser
-                        Double month = Double.valueOf(expenseForUser.getMonth());
-                        expenseCost += groupExpensesByMonth.get(month);                                 //gli aggiungo il valore già presente nella mappa ai passi precedenti
-                        groupExpensesByMonth.put(month, expenseCost);    //aggiorno la mappa alla posizione del mese della expense
-                        //Toast.makeText(getApplicationContext(), String.valueOf(groupExpensesByMonth.get(5.0)), Toast.LENGTH_LONG).show();
+        resetMap(groupExpensesByMonth);
+        if(!groupName.equals(getString(R.string.all_groups))) {
+            mDatabaseExpenseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot expenseSnapshot : dataSnapshot.getChildren()) {
+                        ExpenseForUser expenseForUser = expenseSnapshot.getValue(ExpenseForUser.class);     //prendo l'expenseForUser
+                        String yearStr = String.valueOf(expenseForUser.getYear());
+                        if (yearStr.equals(yearSelected)) {                      //controllo che appartenga all'anno selezionato
+                            Double expenseCost = expenseForUser.getCost();                                  //prendo il costo della expenseForUser
+                            Double month = Double.valueOf(expenseForUser.getMonth());
+                            expenseCost += groupExpensesByMonth.get(month);                                 //gli aggiungo il valore già presente nella mappa ai passi precedenti
+                            groupExpensesByMonth.put(month, expenseCost);    //aggiorno la mappa alla posizione del mese della expense
+                            //Toast.makeText(getApplicationContext(), String.valueOf(groupExpensesByMonth.get(5.0)), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                    printGraph(graph, groupName);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }else{
+            mDatabaseAllExpenseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for(DataSnapshot groupSnapshot : dataSnapshot.getChildren()){
+                        GroupForUser groupForUser = groupSnapshot.getValue(GroupForUser.class);
+
                     }
                 }
-                printGraph(graph, groupName);
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        }
 
 
 
@@ -203,7 +270,9 @@ public class StatisticsGraphs extends AppCompatActivity {
     }
 
     private void printGraph(GraphView graph, String groupName){
-        DataPoint[] dataPoints = new DataPoint[13];                 //creo un array di DataPoint
+        graph.removeAllSeries();
+
+        dataPoints = new DataPoint[13];                 //creo un array di DataPoint
         dataPoints[0] = new DataPoint(0.0, 0.0);                    //il primo e' 0,0 per motivi di visualizzazione (mia supposizione, penso che partendo
 
         for (int i = 1; i <= 12; i++) {                               // da 0 venga visualizzato male
@@ -213,25 +282,22 @@ public class StatisticsGraphs extends AppCompatActivity {
 
         BarGraphSeries<DataPoint> series = new BarGraphSeries<>(dataPoints); //creo questo oggeto partendo dall'array precedentemente costruito
 
-        series.setColor(Color.GREEN); //colore della barra
+        series.setColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent)); //colore della barra
         series.setSpacing(30); //percentuale di spazio tra le barre. 0->no spazio, 100->spazio tra una barra e l'altra e pari alla larghezza di una barra
         series.setAnimated(true);
         series.setValuesOnTopColor(Color.RED);
+        series.setTitle(groupName + "-" + yearSelected);                     //etichetta della serie di dati
         graph.addSeries(series); //aggiunge la serie di dati al grafico
 
-        graph.getViewport().setMinX(0.0);       //setto i margini del grafico
-        graph.getViewport().setMaxX(13.0);
-        graph.getViewport().setXAxisBoundsManual(true);  //questo e' la riga che me lo permette
-
-        graph.getViewport().setScrollable(true);         //mi fa scorrere il grafico
-        graph.getViewport().setScrollableY(true);
-
-        series.setTitle(groupName + "-" + yearSelected);                     //etichetta della serie di dati
         graph.getLegendRenderer().setVisible(true);     //visualizza legenda e decide dove posizionarla
-        graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
 
-        graph.getGridLabelRenderer().setHorizontalAxisTitle(getString(R.string.months)); //da il titolo all'asse delle x
-        graph.getGridLabelRenderer().setPadding(16);
+
+    }
+
+    private void resetMap(Map <Double,Double> map){
+        for(int i = 1; i <= 12; i++){
+            map.put(Double.valueOf(i), 0.0);
+        }
     }
 
     @Override
@@ -246,6 +312,10 @@ public class StatisticsGraphs extends AppCompatActivity {
         super.onStop();
         if(mValueEventListener!=null)
             mDatabaseGroupReference.removeEventListener(mValueEventListener);
+    }
+
+    public void onSaveInstanceState(Bundle toSave) {
+        super.onSaveInstanceState(toSave);
     }
 
 }
