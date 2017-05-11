@@ -97,10 +97,9 @@
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="50dp"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
-
             >
 
         </com.jjoe64.graphview.GraphView>
