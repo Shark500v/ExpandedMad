@@ -3,17 +3,24 @@ package com.polito.madinblack.expandedmad.utility;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.polito.madinblack.expandedmad.R;
+import com.polito.madinblack.expandedmad.chat.ChatRecyclerViewAdapter;
 import com.polito.madinblack.expandedmad.model.Balance;
 import com.polito.madinblack.expandedmad.model.CostUtil;
+import com.polito.madinblack.expandedmad.model.Message;
 import com.polito.madinblack.expandedmad.model.MyApplication;
+import com.polito.madinblack.expandedmad.model.Payment;
 import com.polito.madinblack.expandedmad.model.PaymentFirebase;
 import java.util.Map;
 
@@ -44,15 +51,18 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
 
     }
 
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
+            return new PaymentRecyclerAdapter.ViewHolder(view);
 
-
+    }
 
     @Override
     protected void populateViewHolder(RecyclerView.ViewHolder viewHolder, PaymentFirebase model, int position) {
         final PaymentFirebase paymentFirebase = model;
-        //da cambiare il controllo, è solo per ricordarmi che se mio mess va a destra
         if(!model.getUserFirebaseId().equals(ma.getFirebaseId())){
-            final ViewHolder holder = (ViewHolder) viewHolder;
+            final ViewHolder holder = (PaymentRecyclerAdapter.ViewHolder) viewHolder;
             holder.mUserView.setText(model.getUserNameDisplayed());
             holder.mToPaid.setText(model.getDebit().toString());
             if(model.getDebit()==0){
