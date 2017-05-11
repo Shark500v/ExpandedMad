@@ -205,8 +205,7 @@ public class ExpenseFillData extends AppCompatActivity {
                     month,
                     day,
                     descriptionS,
-                    mValues,
-                    getString(R.string.history_expense)
+                    mValues
                     );
             /*
             Sarà da chiamare write new payment
