@@ -33,7 +33,7 @@ public class CheckTelephone extends BaseActivity {
 
         mStatusTextView = (TextView) findViewById(R.id.status);
 
-        mStatusTextView.setText("Sign in as: " + ma.getUserName() + " " +ma.getUserSurname());
+        mStatusTextView.setText(getString(R.string.signin_as) + " " + ma.getUserName() + " " +ma.getUserSurname());
 
         mDatabaseTelephoneReference = FirebaseDatabase.getInstance().getReference().child("registration/"+ma.getFirebaseId());
 

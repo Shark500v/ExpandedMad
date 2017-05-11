@@ -27,6 +27,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -271,10 +273,13 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    Log.w(TAG, "Groups:onCancelled", databaseError.toException());
-                    Toast.makeText(mContext, getString(R.string.fail_load_group),
-                            Toast.LENGTH_SHORT).show();
-                }
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    if(user!=null) {
+                        Log.w(TAG, "Groups:onCancelled", databaseError.toException());
+                        Toast.makeText(mContext, getString(R.string.fail_load_group),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                    }
             };
             ref.addChildEventListener(childEventListener);
             // [END child_event_listener_recycler]
