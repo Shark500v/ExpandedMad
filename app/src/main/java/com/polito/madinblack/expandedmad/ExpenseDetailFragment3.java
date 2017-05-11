@@ -55,8 +55,8 @@ public class ExpenseDetailFragment3 extends Fragment {
     }
 /*
     //usato per instanziare un ogetto fragment
-    public static ExpenseDetailFragment2 newInstance() {
-        ExpenseDetailFragment2 fragment = new ExpenseDetailFragment2();
+    public static ExpenseDetailFragment3 newInstance() {
+        ExpenseDetailFragment3 fragment = new ExpenseDetailFragment3();
         Bundle args = new Bundle();
         //args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         //fragment.setArguments(args);
