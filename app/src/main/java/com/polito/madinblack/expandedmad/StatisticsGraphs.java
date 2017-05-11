@@ -51,7 +51,7 @@ public class StatisticsGraphs extends AppCompatActivity {
     private DatabaseReference mDatabaseGroupReference;
     private DatabaseReference mDatabaseExpenseReference;
     private DatabaseReference mDatabaseAllExpenseReference;
-    private List<String> groupArray = new ArrayList<>();
+    private List<String> groupArray = new ArrayList<>(); //groupName
     private Map<String,String> groupMap = new HashMap<String,String>(); //key->groupName value->groupId
     private Map<Double,Double> groupExpensesByMonth = new HashMap<>();
     private DataPoint[] dataPoints;
@@ -237,10 +237,21 @@ public class StatisticsGraphs extends AppCompatActivity {
             mDatabaseAllExpenseReference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    for(DataSnapshot groupSnapshot : dataSnapshot.getChildren()){
-                        GroupForUser groupForUser = groupSnapshot.getValue(GroupForUser.class);
-
+                    for(int i = 2; i < groupArray.size(); i++){
+                        String groupIdSelected = groupMap.get(groupArray.get(i));
+                        for(DataSnapshot expenseSnapshot : dataSnapshot.child(groupIdSelected).child("expenses").getChildren()){
+                            ExpenseForUser expenseForUser = expenseSnapshot.getValue(ExpenseForUser.class);
+                            String yearStr = String.valueOf(expenseForUser.getYear());
+                            //Toast.makeText(getApplicationContext(), expenseForUser.getName(), Toast.LENGTH_LONG).show();
+                            if (yearStr.equals(yearSelected)) {
+                                Double expenseCost = expenseForUser.getCost();
+                                Double month = Double.valueOf(expenseForUser.getMonth());
+                                expenseCost += groupExpensesByMonth.get(month);
+                                groupExpensesByMonth.put(month, expenseCost);
+                            }
+                        }
                     }
+                    printGraph(graph,groupName);
                 }
 
                 @Override
