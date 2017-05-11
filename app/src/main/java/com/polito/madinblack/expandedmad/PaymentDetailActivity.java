@@ -245,7 +245,7 @@ public class PaymentDetailActivity extends AppCompatActivity {
 
 
         }else if(id == 16908332){
-            Intent intent3 = new Intent(this, TabView.class);
+            Intent intent3 = new Intent(this, ExpenseDetailFragment3.class);
             intent3.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
             navigateUpTo(intent3);
             return true;

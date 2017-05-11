@@ -64,7 +64,7 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
         if(!model.getUserFirebaseId().equals(ma.getFirebaseId())){
             holder.mUserView.setText(model.getUserNameDisplayed());
             holder.mPaid.setText("");
-            holder.mToPaid.setText(model.getDebit().toString());
+            holder.mToPaid.setText(String.format("%.2f",model.getDebit()));
             if(model.getDebit()==0){
                 holder.mPaid.setEnabled(false);
             }
@@ -120,8 +120,8 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
             paymentInfo.setId(paymentFirebase.getId());
             changedPayment.put(paymentFirebase.getUserFirebaseId(), paymentInfo);
             holder.mUserView.setText(contex.getString(R.string.you));
-            holder.mToPaid.setText(model.getToPaid().toString());
-            holder.mPaid.setText(model.getPaid().toString());
+            holder.mToPaid.setText(String.format("%.2f",model.getToPaid()));
+            holder.mPaid.setText(String.format("%.2f",model.getPaid()));
             if(model.getPaid()!=0){
                 holder.mPaid.setTextColor(Color.parseColor("#00c200"));
             }
