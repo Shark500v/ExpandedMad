@@ -106,7 +106,7 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
             });
         } else{
             paymentUserPaidExpense = new PaymentInfo(model, 0D);
-            paymentUserPaidExpenseId = model.getExpenseId();
+            paymentUserPaidExpenseId = model.getId();
 
         }
     }
