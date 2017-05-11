@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
+import com.polito.madinblack.expandedmad.model.HistoryInfo;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.Payment;
 import com.polito.madinblack.expandedmad.model.PaymentFirebase;
@@ -143,7 +144,7 @@ public class PaymentDetailActivity extends AppCompatActivity {
                                                    boolean committed, DataSnapshot currentData) {
                                 //This method will be called once with the results of the transaction.
                                 //Update remove the user from the group
-                                int x = 1;
+                            
                             }
                         });
 
@@ -170,7 +171,7 @@ public class PaymentDetailActivity extends AppCompatActivity {
                                                    boolean committed, DataSnapshot currentData) {
                                 //This method will be called once with the results of the transaction.
                                 //Update remove the user from the group
-                                int x = 1;
+
                             }
                         });
 
@@ -178,7 +179,7 @@ public class PaymentDetailActivity extends AppCompatActivity {
                 mDatabaseRootReference
                         .child("users/"+paymentInfo.getUserPhoneNumber()
                                 +"/"+paymentInfo.getUserFirebaseId()+"/groups/"+groupId
-                                +"/expenses/"+expenseId+"myBalance")
+                                +"/expenses/"+expenseId+"/myBalance")
                         .runTransaction(new Transaction.Handler() {
 
                             @Override
@@ -198,7 +199,7 @@ public class PaymentDetailActivity extends AppCompatActivity {
                                                    boolean committed, DataSnapshot currentData) {
                                 //This method will be called once with the results of the transaction.
                                 //Update remove the user from the group
-                                int x = 1;
+
                             }
                         });
 
@@ -213,14 +214,18 @@ public class PaymentDetailActivity extends AppCompatActivity {
                 //paymentFirebase.setPaid(paymentFirebase.getPaid()+_listPaid.get(i));
                 //payments.put(paymentFirebase.getId(), paymentFirebase);
 
+                /*update the history*/
+                /*HistoryInfo historyInfo = new HistoryInfo(paidByName+" "+paidBySurname, 1L, cost, currencySymbol, null);
+                mDatabaseRootReference.child("history/"+groupId).push().setValue(historyInfo);*/
+
 
             }
 
             mDatabaseRootReference
                     .child("users/"+paymentInfoUserPaid.getUserPhoneNumber()
                             +"/"+paymentInfoUserPaid.getUserFirebaseId()+"/groups/"+groupId
-                            +"/expenses/"+expenseId+"myBalance")
-                    .setValue(paymentInfoUserPaid.getPaidBefore()-totPaid);
+                            +"/expenses/"+expenseId+"/myBalance")
+                    .setValue(paymentInfoUserPaid.getBalance()-totPaid);
 
 
             //paymentPaidFirebase.setPaid(paymentPaidFirebase.getPaid()-totPaid);
