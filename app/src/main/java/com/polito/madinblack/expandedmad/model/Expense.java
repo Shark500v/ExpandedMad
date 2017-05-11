@@ -31,6 +31,7 @@ public class Expense {
     private String  paidByFirebaseId;
     private String  paidByPhoneNumber;
     private Double  cost;
+    private Double  roundedCost;
     private String  currencyName;
     private String  currencySymbol;
     //private String state
@@ -50,7 +51,7 @@ public class Expense {
 
     }
 
-    public Expense(String id, String name, String tag, String paidByName, String paidBySurname, String paidByFirebaseId, String paidByPhoneNumber, Double cost, String currencyName, String currencySymbol, String groupId, Long year, Long month, Long day, String description) {
+    public Expense(String id, String name, String tag, String paidByName, String paidBySurname, String paidByFirebaseId, String paidByPhoneNumber, Double cost, Double roundedCost, String currencyName, String currencySymbol, String groupId, Long year, Long month, Long day, String description) {
         this.id = id;
         this.name = name;
         this.tag = tag;
@@ -59,6 +60,7 @@ public class Expense {
         this.paidByFirebaseId = paidByFirebaseId;
         this.paidByPhoneNumber = paidByPhoneNumber;
         this.cost = cost;
+        this.roundedCost = roundedCost;
         this.currencyName = currencyName;
         this.currencySymbol = currencySymbol;
         this.groupId = groupId;
@@ -69,7 +71,7 @@ public class Expense {
     }
 
 
-    public Expense(String id, String name, String tag, String paidByName, String paidBySurname, String paidByFirebaseId, String paidByPhoneNumber, Double cost, String currencyName, String currencySymbol, String groupId, Long year, Long month, Long day, String description, Map<String, PaymentFirebase> payments) {
+    public Expense(String id, String name, String tag, String paidByName, String paidBySurname, String paidByFirebaseId, String paidByPhoneNumber, Double cost, Double roundedCost, String currencyName, String currencySymbol, String groupId, Long year, Long month, Long day, String description, Map<String, PaymentFirebase> payments) {
         this.id = id;
         this.name = name;
         this.tag = tag;
@@ -78,6 +80,7 @@ public class Expense {
         this.paidByFirebaseId = paidByFirebaseId;
         this.paidByPhoneNumber = paidByPhoneNumber;
         this.cost = cost;
+        this.roundedCost = roundedCost;
         this.currencyName = currencyName;
         this.currencySymbol = currencySymbol;
         this.groupId = groupId;
@@ -150,6 +153,14 @@ public class Expense {
 
     public void setCost(Double cost) {
         this.cost = cost;
+    }
+
+    public Double getRoundedCost() {
+        return roundedCost;
+    }
+
+    public void setRoundedCost(Double roundedCost) {
+        this.roundedCost = roundedCost;
     }
 
     public String getCurrencyName() {
@@ -226,16 +237,15 @@ public class Expense {
 
 
     public static String writeNewExpense(DatabaseReference mDatabaseRootRefenrence, String name, String tag,
-                                         String paidByFirebaseId, String paidByPhoneNumber, String paidByName, String paidBySurname, Double cost,
+                                         String paidByFirebaseId, String paidByPhoneNumber, String paidByName, String paidBySurname, Double cost, Double roundedCost,
                                          String currencyName, String currencySymbol, final String groupId, Long year, Long month, Long day, String description, List<Payment> paymentList){
 
         DatabaseReference myExpenseRef = mDatabaseRootRefenrence.child("expenses").push();
         String expenseKey = myExpenseRef.getKey();
 
-        Expense expense = new Expense(expenseKey, name, tag, paidByName, paidBySurname, paidByFirebaseId, paidByPhoneNumber, CostUtil.round(cost, 2), currencyName, currencySymbol, groupId, year, month, day, description);
+        Expense expense = new Expense(expenseKey, name, tag, paidByName, paidBySurname, paidByFirebaseId, paidByPhoneNumber, CostUtil.round(cost, 2), roundedCost, currencyName, currencySymbol, groupId, year, month, day, description);
         myExpenseRef.setValue(expense);
 
-        Map<String, PaymentFirebase> payments = new HashMap<>();
         DatabaseReference myPaymentRef;
         String paymentKey;
 

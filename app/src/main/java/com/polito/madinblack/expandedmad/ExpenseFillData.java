@@ -75,6 +75,7 @@ public class ExpenseFillData extends AppCompatActivity {
     private EditText inputName, inputAmount;
     private TextInputLayout inputLayoutName, inputLayoutAmount;
     private Double amount;
+    private Double roundedAmount = 0d;
     private String expenseName;
     private boolean onBind;
     Uri selectedImage;
@@ -180,13 +181,16 @@ public class ExpenseFillData extends AppCompatActivity {
             TextView description = (TextView) findViewById(R.id.input_description);
             String descriptionS = description.getText().toString();
 
+            for(Payment payment : mValues){
+                roundedAmount += payment.getToPaid();
+            }
+
             /*added to set Paid value*/
             for(Payment payment : mValues){
                 if(payment.getUserPhoneNumber().equals(ma.getUserPhoneNumber())){
-                    payment.setPaid(amount);
+                    payment.setPaid(roundedAmount);
 
                 }
-
             }
 
 
@@ -198,6 +202,7 @@ public class ExpenseFillData extends AppCompatActivity {
                     ma.getUserName(),
                     ma.getUserSurname(),
                     amount,
+                    roundedAmount,
                     "Euro",
                     "€",
                     groupID,

@@ -66,160 +66,202 @@
     </LinearLayout>
 
 
-
-    <TextView
-        android:id="@+id/balance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:text="@string/balance"
-        android:textSize="20sp"
-        android:layout_below="@+id/paidBy"/>
-
-    <TextView
-        android:id="@+id/balance_container"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/balance"
-        android:layout_alignBottom="@+id/balance"
-        android:layout_marginEnd="16dp"
-        android:text="75"
-        android:textStyle="bold"
-        android:textAlignment="textEnd"
-        android:textSize="18sp"/>
+        android:id="@+id/balanceLayout"
+        android:layout_below="@+id/paidBy">
+        <TextView
+            android:id="@+id/balance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/balance"
+            android:textSize="20sp"/>
 
-    <TextView
-        android:id="@+id/tag"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:text="@string/tag"
-        android:textSize="20sp"
-        android:layout_below="@+id/buyer"/>
+        <TextView
+            android:id="@+id/balance_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="75"
+            android:textStyle="bold"
+            android:textAlignment="textEnd"
+            android:textSize="18sp"/>
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/tag_container"
-        android:textStyle="bold"
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/tag"
-        android:layout_alignBottom="@+id/tag"
-        android:layout_marginEnd="16dp"
-        android:text="@string/type"
-        android:textAlignment="textEnd"
-        android:textSize="18sp"/>
+        android:id="@+id/costLayout"
+        android:layout_below="@+id/balanceLayout">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cost"
+            android:textSize="20sp"
+            android:layout_margin="16dp"/>
 
-    <TextView
-        android:id="@+id/cost"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/cost"
-        android:textSize="20sp"
-        android:layout_margin="16dp"
-        android:layout_below="@+id/balance"/>
+        <TextView
+            android:id="@+id/cost_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="Value"
+            android:textStyle="bold"
+            android:textAlignment="textEnd"
+            android:textSize="18sp"/>
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/cost_container"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/cost"
-        android:layout_alignBottom="@+id/cost"
-        android:layout_marginEnd="16dp"
-        android:text="Value"
-        android:textStyle="bold"
-        android:textAlignment="textEnd"
-        android:textSize="18sp"/>
+        android:id="@+id/roundedCostLayout"
+        android:layout_below="@+id/costLayout">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="Rounded"
+            android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/buyer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/paid_by"
-        android:textSize="20sp"
-        android:layout_margin="16dp"
-        android:layout_below="@+id/currency"/>
+        <TextView
+            android:id="@+id/roundedCost"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Value"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:gravity="end"
+            android:layout_margin="16dp"
+            android:textAlignment="textEnd"
+            />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/buyer_container"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/buyer"
-        android:layout_alignBottom="@+id/buyer"
-        android:layout_marginEnd="16dp"
-        android:text="@string/user"
-        android:textStyle="bold"
-        android:textAlignment="textEnd"
-        android:textSize="18sp"/>
+        android:id="@+id/currencyLayout"
+        android:layout_below="@+id/roundedCostLayout">
 
-    <TextView
-        android:id="@+id/currency_container"
+        <TextView
+            android:id="@+id/currency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/currency"
+            android:textSize="20sp"
+            android:layout_margin="16dp"/>
+        <TextView
+            android:id="@+id/currency_container"
+            android:text="Euro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:gravity="end"
+            android:layout_margin="16dp"
+            android:textAlignment="textEnd"/>
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/currency"
-        android:layout_alignBottom="@+id/currency"
-        android:layout_marginEnd="16dp"
-        android:text="Euro"
-        android:textStyle="bold"
-        android:textAlignment="textEnd"
-        android:textSize="18sp"/>
+        android:id="@+id/paidByLayout"
+        android:layout_below="@+id/currencyLayout">
 
-    <TextView
-        android:id="@+id/date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/date"
-        android:textSize="20sp"
-        android:layout_margin="16dp"
-        android:layout_below="@+id/tag"/>
+        <TextView
+            android:id="@+id/buyer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/paid_by"
+            android:textSize="20sp"
+            android:layout_margin="16dp"/>
 
-    <TextView
-        android:id="@+id/date_container"
+        <TextView
+            android:id="@+id/buyer_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="@string/user"
+            android:textStyle="bold"
+            android:textAlignment="textEnd"
+            android:textSize="18sp"/>
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/date"
-        android:layout_alignBottom="@+id/date"
-        android:layout_marginEnd="16dp"
-        android:text="@string/date_format"
-        android:textAlignment="textEnd"
-        android:textSize="18sp"/>
+        android:id="@+id/tagLayout"
+        android:layout_below="@+id/paidByLayout">
+        <TextView
+            android:id="@+id/tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/tag"
+            android:textSize="20sp"/>
 
-    <TextView
-        android:id="@+id/currency"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/currency"
-        android:textSize="20sp"
-        android:layout_margin="16dp"
-        android:layout_below="@+id/cost"/>
+        <TextView
+            android:id="@+id/tag_container"
+            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/type"
+            android:textAlignment="textEnd"
+            android:textSize="18sp"/>
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/description"
-        android:textSize="20sp"
-        android:layout_margin="16dp"
-        android:layout_below="@+id/date"/>
-
-    <TextView
-        android:id="@+id/description_field"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_toEndOf="@id/description"
-        android:layout_alignTop="@+id/description"
-        android:paddingRight="16dp"
-        android:paddingLeft="16dp"
-        android:textColorHint="@color/secondary_text"
-        android:layout_marginEnd="16dp"
-        android:text="@string/type_description_here"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_alignBaseline="@+id/description"/>
+        android:layout_height="wrap_content"
+        android:id="@+id/dateLayout"
+        android:layout_below="@+id/tagLayout">
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/date"
+            android:textSize="20sp"
+            android:layout_margin="16dp"/>
+
+        <TextView
+            android:id="@+id/date_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/date_format"
+            android:textAlignment="textEnd"
+            android:textSize="18sp"/>
+    </LinearLayout>
 
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/descriptionLayout"
+        android:layout_below="@+id/dateLayout">
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/description"
+            android:textSize="20sp"
+            android:layout_margin="16dp"/>
 
-
-
-
+        <TextView
+            android:id="@+id/description_field"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="16dp"
+            android:textColorHint="@color/secondary_text"
+            android:layout_margin="16dp"
+            android:gravity="end"
+            android:text="@string/type_description_here"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+    </LinearLayout>
 
 </RelativeLayout>
