@@ -19,9 +19,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,8 +40,10 @@ import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.polito.madinblack.expandedmad.login.Logout;
+import com.polito.madinblack.expandedmad.model.Expense;
 import com.polito.madinblack.expandedmad.model.GroupForUser;
 import com.polito.madinblack.expandedmad.model.MyApplication;
+import com.polito.madinblack.expandedmad.model.Payment;
 import com.polito.madinblack.expandedmad.newGroup.SelectContact;
 import com.polito.madinblack.expandedmad.utility.TabView;
 
@@ -98,6 +103,7 @@ public class PaymentDetailActivity extends AppCompatActivity implements Navigati
 
     }
 
+
     @Override
     public void onStart(){
         super.onStart();
@@ -132,44 +138,27 @@ public class PaymentDetailActivity extends AppCompatActivity implements Navigati
         }
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
 
-        if (id == R.id.nav_addgroup) {
-            //handle add group activity
-            Intent intent=new Intent(com.polito.madinblack.expandedmad.groupManaging.GroupListActivity.this, SelectContact.class);
-            //intent.putExtra("phoneId",phoneId);
-            startActivity(intent);
-            // Handle the camera action
-        } else if (id == R.id.nav_expenses) {
-            Intent intent = new Intent(com.polito.madinblack.expandedmad.groupManaging.GroupListActivity.this, StatisticsGraphs.class);
-            startActivity(intent);
-
-        } else if (id == R.id.nav_settings){
-
-        } else if (id == R.id.nav_logout) {
-            Logout fragment = new Logout();
-            fragment.show(getSupportFragmentManager(), "LogoutFragment");
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
 
     @Override   //questo serve per il search button
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_onlysearch, menu);
-
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-
-        // Configure the search info and add any event listeners...
-
+        getMenuInflater().inflate(R.menu.menu_payment, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.confirm_payment) {
+
+
+        }else if(id == R.id.fill_all_paid){
+
+
+
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     //questa classe la usa per fare il managing della lista che deve mostrare

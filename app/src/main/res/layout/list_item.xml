@@ -59,29 +59,24 @@ android:layout_height="72dp">
     />
 
 
+    <ImageButton
+        android:id="@+id/fill_paid"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/cash"
+        android:layout_margin="10dp"
+        android:background="@color/colorPrimaryLight"
+        android:layout_alignParentRight="true"
+
+        />
 
 
 
-
-
-<ImageButton
-    android:id="@+id/fill_paid"
-    android:layout_width="50dp"
-    android:layout_height="50dp"
-    android:src="@drawable/cash"
-    android:layout_margin="10dp"
-    android:background="@color/colorPrimaryLight"
-    android:layout_alignParentRight="true"
-
-    />
-
-
-
-<View
-    android:id="@+id/line"
-    android:layout_width="match_parent"
-    android:layout_height="1dp"
-    android:background="@color/dividerColor"
-    android:layout_alignParentBottom="true"/>
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/dividerColor"
+        android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>
