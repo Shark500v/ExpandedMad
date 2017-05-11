@@ -31,13 +31,19 @@ public class PaymentDetailActivity extends AppCompatActivity {
     public static final String ARG_EXPENSE_ID = "expenseId";
     public static final String ARG_GROUP_ID ="expenseName";
     public static final String ARG_EXPENSE_COST ="expenseCost";
+    public static final String ARG_CURRENCY_SYMBOL ="currencySymbol";
+    public static final String ARG_USER_NAME ="userName" ;
+    public static final String ARG_USER_SURNAME = "userName";
 
     private DatabaseReference mDatabaseRootReference;
     private DatabaseReference mDatabasePaymentsReference;
     private RecyclerView recyclerView;
     private Map<String, PaymentRecyclerAdapter.PaymentInfo> changedPayments;
-    private String groupId;
     private String expenseId;
+    private String groupId;
+    private String currencySymbol;
+    private String expenseUserName;
+    private String expenseUserSurname;
     private Double expenseCost;
     private MyApplication ma;
     private PaymentRecyclerAdapter mAdapter;
@@ -50,9 +56,12 @@ public class PaymentDetailActivity extends AppCompatActivity {
 
         ma = MyApplication.getInstance();
 
-        expenseId = getIntent().getStringExtra(ARG_EXPENSE_ID);
-        groupId = getIntent().getStringExtra(ARG_GROUP_ID);
-        expenseCost = Double.valueOf(getIntent().getStringExtra(ARG_EXPENSE_COST));
+        expenseId           = getIntent().getStringExtra(ARG_EXPENSE_ID);
+        groupId             = getIntent().getStringExtra(ARG_GROUP_ID);
+        expenseCost         = Double.valueOf(getIntent().getStringExtra(ARG_EXPENSE_COST));
+        currencySymbol      = getIntent().getStringExtra(ARG_CURRENCY_SYMBOL);
+        expenseUserName     = getIntent().getStringExtra(ARG_USER_NAME);
+        expenseUserSurname  = getIntent().getStringExtra(ARG_USER_SURNAME);
 
         mDatabaseRootReference = FirebaseDatabase.getInstance().getReference();
         mDatabasePaymentsReference = mDatabaseRootReference.child("expenses/"+expenseId+"/payments");

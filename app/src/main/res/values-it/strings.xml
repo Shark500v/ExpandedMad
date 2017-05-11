@@ -138,7 +138,7 @@
     <string name="history_payment_part2">. Costo :</string>
     <string name="no_detail">Nessun dettaglio disponibile</string>
     <string name="pay_button">Salda</string>
-    <string name="list_payment">Lista di pagamenti</string>
+    <string name="list_payment">Pagamenti pendenti</string>
     <string name="pay_everyone">Salda tutti</string>
     <string name="confirm_inserted">Conferma selezionati</string>
     <string name="go_to_list_of_payments">Vai alla lista di pagamenti</string>

@@ -103,6 +103,9 @@ public class ExpenseDetailFragment3 extends Fragment {
                                 intent.putExtra(PaymentDetailActivity.ARG_EXPENSE_ID, expense.getId());
                                 intent.putExtra(PaymentDetailActivity.ARG_GROUP_ID, expense.getGroupId());
                                 intent.putExtra(PaymentDetailActivity.ARG_EXPENSE_COST, expense.getCost().toString());
+                                intent.putExtra(PaymentDetailActivity.ARG_USER_NAME, expense.getPaidByName());
+                                intent.putExtra(PaymentDetailActivity.ARG_USER_SURNAME, expense.getPaidBySurname());
+                                intent.putExtra(PaymentDetailActivity.ARG_CURRENCY_SYMBOL, expense.getCurrencySymbol());
                                 startActivity(intent);
                             }
                         });
