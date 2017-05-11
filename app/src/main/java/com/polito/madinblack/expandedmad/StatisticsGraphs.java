@@ -237,7 +237,7 @@ public class StatisticsGraphs extends AppCompatActivity {
             mDatabaseAllExpenseReference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    for(int i = 2; i < groupArray.size(); i++){
+                    for(int i = 2; i < groupArray.size(); i++){             //parto da perche i primi 2 campi dell'array sono quello di default e "tutti i gruppi"
                         String groupIdSelected = groupMap.get(groupArray.get(i));
                         for(DataSnapshot expenseSnapshot : dataSnapshot.child(groupIdSelected).child("expenses").getChildren()){
                             ExpenseForUser expenseForUser = expenseSnapshot.getValue(ExpenseForUser.class);
