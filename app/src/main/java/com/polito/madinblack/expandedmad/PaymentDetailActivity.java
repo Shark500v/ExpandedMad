@@ -120,30 +120,6 @@ public class PaymentDetailActivity extends AppCompatActivity {
         recyclerView.setAdapter(mAdapter);
     }
 
-
-    @Override
-    public void onStart(){
-        super.onStart();
-        //in questo punto il codice prende la lista principale e la mostra come recyclerview
-        View recyclerView = findViewById(R.id.group_list);
-        assert recyclerView != null;
-
-        if(mUserGroupsReference!=null) {
-            mAdapter = new com.polito.madinblack.expandedmad.groupManaging.GroupListActivity.SimpleItemRecyclerViewAdapter(this, mUserGroupsReference);
-            ((RecyclerView) recyclerView).setAdapter(mAdapter);
-        }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        // Clean up comments listener
-        if(mAdapter!=null)
-            mAdapter.cleanupListener();
-    }
-
-
     //le due funzioni sottostanti servono al menù laterale che esce
     @Override
     public void onBackPressed() {
