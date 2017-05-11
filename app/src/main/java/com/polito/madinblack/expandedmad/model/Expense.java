@@ -329,7 +329,7 @@ public class Expense {
         mDatabaseRootRefenrence.child("groups/"+groupId+"/expenses/"+expenseKey).setValue(true);
 
         /*update the history*/
-        HistoryInfo historyInfo = new HistoryInfo(paidByName+" "+paidBySurname, historyExpense+" "+String.format("%.2d",cost) +" "+currencySymbol);
+        HistoryInfo historyInfo = new HistoryInfo(paidByName+" "+paidBySurname, historyExpense+" "+String.format("%.2f",cost) +" "+currencySymbol);
         mDatabaseRootRefenrence.child("history/"+groupId).push().setValue(historyInfo);
 
         return expenseKey;

@@ -7,17 +7,23 @@
     android:orientation="horizontal">
 
     <EditText
+        android:id="@+id/input_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:maxLines="4"
+        android:paddingLeft="8dp"
+        android:layout_marginLeft="16dp"
         android:textColorHint="#CFD8DC"
         android:textColor="#CFD8DC"
         android:hint="Write a message" />
 
     <ImageView
+        android:id="@+id/send_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="5"
         android:padding="4dp"
-        android:src="@android:drawable/ic_menu_send" />
+        android:onClick="sendMessage"
+        android:src="@drawable/ic_send" />
 </LinearLayout>

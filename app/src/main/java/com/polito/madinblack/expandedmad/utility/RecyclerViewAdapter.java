@@ -24,7 +24,6 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.polito.madinblack.expandedmad.ExpenseDetailActivity;
 import com.polito.madinblack.expandedmad.ExpenseDetailFragment;
-//import com.polito.madinblack.expandedmad.ExpenseDetailFragment2;
 import com.polito.madinblack.expandedmad.ExpenseDetailFragment2;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.ExpenseForUser;
@@ -72,8 +71,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                     @Override
                     public Transaction.Result doTransaction(MutableData currentData) {
-                            if((Long) currentData.getValue()!=0)
-                                currentData.setValue(0L);
+                        if((Long) currentData.getValue()!=0)
+                            currentData.setValue(0L);
 
                         return Transaction.success(currentData);
                     }
