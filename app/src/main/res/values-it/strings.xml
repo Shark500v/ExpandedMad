@@ -144,21 +144,11 @@
 
     <string name="group">Gruppo</string>
     <string name="all_groups">Tutti i gruppi</string>
-    <string name="choose_group">Seleziona un gruppo</string>
     <string name="year">Anno</string>
+    <string name="select_group">Seleziona un gruppo</string>
     <string name="select_year">Seleziona anno</string>
-    <string name="january">GEN</string>
-    <string name="february">FEB</string>
-    <string name="march">MAR</string>
-    <string name="april">APR</string>
-    <string name="may">MAG</string>
-    <string name="june">GIU</string>
-    <string name="july">LUG</string>
-    <string name="august">AGO</string>
-    <string name="september">SET</string>
-    <string name="october">OTT</string>
-    <string name="november">NOV</string>
-    <string name="december">DIC</string>
     <string name="show_graph">VISUALIZZA</string>
     <string name="months">Mesi</string>
+    <string name="expenses_in_euro">Spese (€)</string>
+
 </resources>
