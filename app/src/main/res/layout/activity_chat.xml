@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/colorPrimaryLight"
+    android:background="#c7e7e4"
     android:orientation="vertical"
     tools:context=".utility.TabView">
 
@@ -22,6 +22,6 @@
         layout="@layout/type_message_area"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="bottom" />
+        android:gravity="bottom"/>
 
 </LinearLayout>
