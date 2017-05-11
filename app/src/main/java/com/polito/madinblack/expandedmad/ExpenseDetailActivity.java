@@ -35,10 +35,10 @@ public class ExpenseDetailActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(ExpenseDetailFragment2.ARG_EXPENSE_ID, getIntent().getStringExtra(ExpenseDetailFragment2.ARG_EXPENSE_ID));
-            arguments.putString(ExpenseDetailFragment2.ARG_EXPENSE_NAME, getIntent().getStringExtra(ExpenseDetailFragment2.ARG_EXPENSE_NAME));
-            ExpenseDetailFragment2 fragmentExpense;
-            fragmentExpense = new ExpenseDetailFragment2();
+            arguments.putString(ExpenseDetailFragment3.ARG_EXPENSE_ID, getIntent().getStringExtra(ExpenseDetailFragment3.ARG_EXPENSE_ID));
+            arguments.putString(ExpenseDetailFragment3.ARG_EXPENSE_NAME, getIntent().getStringExtra(ExpenseDetailFragment3.ARG_EXPENSE_NAME));
+            ExpenseDetailFragment3 fragmentExpense;
+            fragmentExpense = new ExpenseDetailFragment3();
             fragmentExpense.setArguments(arguments);
             getSupportFragmentManager().beginTransaction().add(R.id.expense_detail_container, fragmentExpense).commit();
         }
