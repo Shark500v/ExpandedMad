@@ -5,7 +5,7 @@
     <!--detail button-->
     <item
         android:id="@+id/fill_all_paid"
-        android:icon="@drawable/cash"
+        android:icon="@drawable/cash2"
         android:title="@string/settings"
         app:showAsAction="always"/>
 
