@@ -50,10 +50,12 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/btn_group_image"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:padding="3dp"
             android:layout_gravity="center"
             android:background="@drawable/color"
+            android:src="@drawable/ic_camera"
             android:onClick="selectImage"
             android:layout_alignBottom="@id/group_icon"
             android:layout_alignEnd="@id/group_icon"/>

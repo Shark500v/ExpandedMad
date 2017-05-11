@@ -26,11 +26,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.view.ViewParent;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.polito.madinblack.expandedmad.ExpenseFillData;
+import com.polito.madinblack.expandedmad.chat.ChatRecyclerViewAdapter;
 import com.polito.madinblack.expandedmad.groupManaging.GroupDetailActivity;
 import com.polito.madinblack.expandedmad.groupManaging.GroupDetailFragment;
 import com.polito.madinblack.expandedmad.groupManaging.GroupHistory;
@@ -39,6 +42,7 @@ import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.groupMembers.GroupMemebersActivity;
 import com.polito.madinblack.expandedmad.model.Expense;
 import com.polito.madinblack.expandedmad.model.GroupForUser;
+import com.polito.madinblack.expandedmad.model.Message;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 
 import java.util.List;
@@ -198,31 +202,71 @@ public class TabView extends AppCompatActivity {
 
     public static class ChatFragment extends Fragment {
 
-        //memorizzo dentro questa variabile il fragment che sto visualizzando a schermo
-        private static final String ARG_SECTION_NUMBER = "section_number";
+        private EditText inputMessage;
+        private MyApplication ma;
+        private RecyclerView recyclerView;
+        private DatabaseReference ref;
+        private View rootView = null;
+
 
         public ChatFragment() {
         }
 
         public static ChatFragment newInstance(int sectionNumber) {
             ChatFragment fragment = new ChatFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
+            //Bundle args = new Bundle();
+            //args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            //fragment.setArguments(args);
             return fragment;
         }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            //da qui in poi bisogna differenziare la righe di codice da eseguire in base al tab di interesse
-            //le posizioni che arrivano quì sono 1, 2, 3, non comincia dallo 0
 
-            View rootView = null;
-            rootView = inflater.inflate(R.layout.tab_activity_fragment, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.coming_soon));
+            rootView = inflater.inflate(R.layout.activity_chat, container, false);
+
+            inputMessage = (EditText) rootView.findViewById(R.id.input_message);
+            ma = MyApplication.getInstance();
+
+            recyclerView = (RecyclerView) rootView.findViewById(R.id.message_list);
+
+            ref = FirebaseDatabase.getInstance().getReference().child("messages/" + groupIndex);
+
+            ChatRecyclerViewAdapter mAdapter = new ChatRecyclerViewAdapter(
+                    Message.class,
+                    R.layout.list_message_item_left,
+                    RecyclerView.ViewHolder.class,
+                    ref
+            );
+            recyclerView.setAdapter(mAdapter);
+
+            ImageView send = (ImageView) rootView.findViewById(R.id.send_button);
+
+            send.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    sendMessage(v);
+                }
+            });
+
+            recyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                @Override
+                public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                    v.scrollBy(0, 1000);
+                }
+            });
 
             return rootView;
+        }
+
+        public void sendMessage(View view) {
+
+            // Read the input field and push a new instance
+            // of ChatMessage to the Firebase database
+            ref.push().setValue(new Message(ma.getUserName() + " " + ma.getUserSurname(), ma.getUserPhoneNumber(), inputMessage.getText().toString()));
+
+            // Clear the input
+            inputMessage.setText("");
         }
     }
 

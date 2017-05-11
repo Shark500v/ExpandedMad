@@ -4,15 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#ffffff"
+    android:background="@color/colorPrimaryLight"
     android:orientation="vertical"
-    tools:context=".chat.ChatActivity">
+    tools:context=".utility.TabView">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/message_list"
-        android:name="com.polito.madinblack.expandedmad.ExpenseListFragment"
         android:layout_width="match_parent"
-        android:layout_height="500dp"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         app:layoutManager="LinearLayoutManager"
@@ -21,7 +21,6 @@
     <include
         layout="@layout/type_message_area"
         android:layout_width="match_parent"
-        android:layout_weight="1"
         android:layout_height="wrap_content"
         android:gravity="bottom" />
 

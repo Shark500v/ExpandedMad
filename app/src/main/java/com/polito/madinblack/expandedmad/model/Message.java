@@ -4,24 +4,34 @@ import java.util.Date;
 
 public class Message {
 
-    private String sentBy;
+    private String sentByName;
+    private String sentById;
     private String message;
     private Date date;
 
     public Message() {
     }
 
-    public Message(String sentBy, String message){
-        this.sentBy = sentBy;
+    public Message(String sentByName, String sentById, String message){
+        this.sentByName = sentByName;
+        this.sentById = sentById;
         this.message = message;
     }
 
-    public String getSentBy() {
-        return sentBy;
+    public String getSentByName() {
+        return sentByName;
     }
 
-    public void setSentBy(String sentBy) {
-        this.sentBy = sentBy;
+    public void setSentByName(String sentByName) {
+        this.sentByName = sentByName;
+    }
+
+    public String getSentById() {
+        return sentById;
+    }
+
+    public void setSentById(String sentById) {
+        this.sentById = sentById;
     }
 
     public String getMessage() {
