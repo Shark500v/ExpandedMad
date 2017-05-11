@@ -118,7 +118,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/roundedCostLayout"
-        android:layout_below="@+id/costLayout">
+        android:layout_below="@+id/costLayout"
+        android:visibility="gone"
+        tools:visibility="visible">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -182,7 +184,7 @@
             android:id="@+id/buyer_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
+            android:layout_margin="16dp"
             android:text="@string/user"
             android:textStyle="bold"
             android:textAlignment="textEnd"
