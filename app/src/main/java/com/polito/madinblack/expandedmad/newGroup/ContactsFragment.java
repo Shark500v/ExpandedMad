@@ -141,7 +141,7 @@ public class ContactsFragment extends Fragment {
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
-                        }
+                        }   //il retrieve delle foto contatto è corretto, non ci sono errori, verificato tramite debbug
 
                         SelectUser selectUser = new SelectUser();
                         try {
