@@ -36,15 +36,15 @@ public class ChatRecyclerViewAdapter extends FirebaseRecyclerAdapter<Message,Rec
     @Override
     protected void populateViewHolder(RecyclerView.ViewHolder viewHolder, Message model, int position) {
         //da cambiare il controllo, è solo per ricordarmi che se mio mess va a destra
-        //if(model.getSentById().equals(ma.getUserPhoneNumber())){
+        if(model.getSentById().equals(ma.getUserPhoneNumber())){
             ViewHolderRight holder = (ViewHolderRight)viewHolder;
             holder.mContentView.setText(model.getMessage());
-        //}
-        //else{
-        //    ViewHolderLeft holder = (ViewHolderLeft)viewHolder;
-        //    holder.mContentView.setText(model.getMessage());
+        }
+        else{
+            ViewHolderLeft holder = (ViewHolderLeft)viewHolder;
+            holder.mContentView.setText(model.getMessage());
             //devo poi settare la foto
-        //}
+        }
     }
 
     @Override
@@ -65,12 +65,10 @@ public class ChatRecyclerViewAdapter extends FirebaseRecyclerAdapter<Message,Rec
         Message message = getItem(position);
         // 0 : right
         // 1 : left
-        //da cambiare il controllo, è solo per ricordarmi che se mio mess va a destra
-        /*if(message.getSentById().equals(ma.getUserPhoneNumber()))
+        if(message.getSentById().equals(ma.getUserPhoneNumber()))
             return 0;
         else
-            return 1;*/
-        return 0;
+            return 1;
     }
 
     //questa è una classe di supporto che viene usata per creare la vista a schermo
