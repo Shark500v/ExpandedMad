@@ -152,5 +152,6 @@
     <string name="show_graph">VISUALIZZA</string>
     <string name="months">Mesi</string>
     <string name="expenses_in_euro">Spese (€)</string>
+    <string name="chat_hint">Scrivi un messaggio</string>
 
 </resources>

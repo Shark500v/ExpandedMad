@@ -1,5 +1,7 @@
 package com.polito.madinblack.expandedmad.utility;
 
+import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -8,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,15 +43,15 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
     private Map<String, PaymentInfo> changedPayment;
     private String paymentUserPaidExpenseId;
     private PaymentInfo paymentUserPaidExpense;
-
-    public PaymentRecyclerAdapter(Class<PaymentFirebase> modelClass, int modelLayout, Class<RecyclerView.ViewHolder> viewHolderClass, Query ref,
+    private Context contex;
+    public PaymentRecyclerAdapter(Class<PaymentFirebase> modelClass, int modelLayout, Class<RecyclerView.ViewHolder> viewHolderClass, Context contex, Query ref,
                                   Map<String, PaymentInfo> changedPayment, PaymentInfo paymentUserPaidExpense, String paymentUserPaidExpenseId) {
         super(modelClass, modelLayout, viewHolderClass, ref);
         ma =  MyApplication.getInstance();
         this.changedPayment = changedPayment;
         this.paymentUserPaidExpense = paymentUserPaidExpense;
         this.paymentUserPaidExpenseId = paymentUserPaidExpenseId;
-
+        this.contex = contex;
     }
 
     @Override
@@ -61,8 +64,8 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
     @Override
     protected void populateViewHolder(RecyclerView.ViewHolder viewHolder, PaymentFirebase model, int position) {
         final PaymentFirebase paymentFirebase = model;
+        final ViewHolder holder = (PaymentRecyclerAdapter.ViewHolder) viewHolder;
         if(!model.getUserFirebaseId().equals(ma.getFirebaseId())){
-            final ViewHolder holder = (PaymentRecyclerAdapter.ViewHolder) viewHolder;
             holder.mUserView.setText(model.getUserNameDisplayed());
             holder.mToPaid.setText(model.getDebit().toString());
             if(model.getDebit()==0){
@@ -85,11 +88,12 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
 
                 public void afterTextChanged(Editable s) {
                     if(s.length() != 0 && CostUtil.isParsableAsDouble(s.toString()) && Double.valueOf(s.toString())!=0){
-                        if(Double.valueOf(s.toString())>Double.valueOf(holder.mPaid.getText().toString())){
+                        if(Double.valueOf(s.toString())>Double.valueOf(holder.mToPaid.getText().toString())){
+                            /*
                             PaymentInfo paymentInfo
                                     = new PaymentInfo(paymentFirebase, paymentFirebase.getDebit());
 
-                            changedPayment.put(paymentFirebase.getId(), paymentInfo);
+                            changedPayment.put(paymentFirebase.getId(), paymentInfo);*/
                             holder.mPaid.setText(paymentFirebase.getDebit().toString());
 
                         }else{
@@ -117,6 +121,14 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
         } else{
             paymentUserPaidExpense = new PaymentInfo(model, 0D);
             paymentUserPaidExpenseId = model.getId();
+            holder.mUserView.setText(contex.getString(R.string.you));
+            holder.mToPaid.setText(model.getToPaid().toString());
+            holder.mPaid.setText(model.getPaid().toString());
+            if(model.getPaid()!=0){
+                holder.mPaid.setTextColor(Color.parseColor("#00c200"));
+            }
+            holder.mPaid.setEnabled(false);
+            holder.mFillPaid.setVisibility(View.INVISIBLE);
 
         }
     }
@@ -128,6 +140,7 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
         public final EditText mPaid;
         public final TextView mToPaid;
         public final ImageButton mFillPaid;
+        public final View mView;
 
         public ViewHolder(View view) {
             super(view);
@@ -135,6 +148,7 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
             mPaid = (EditText) view.findViewById(R.id.paid);
             mToPaid = (TextView) view.findViewById(R.id.to_paid);
             mFillPaid = (ImageButton) view.findViewById(R.id.fill_paid);
+            mView = view;
         }
 
         @Override

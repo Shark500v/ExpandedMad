@@ -58,7 +58,7 @@ public class PaymentDetailActivity extends AppCompatActivity {
         expenseCost = Double.valueOf(getIntent().getStringExtra(ARG_EXPENSE_COST));
 
         mDatabaseRootReference = FirebaseDatabase.getInstance().getReference();
-        mDatabasePaymentsReference = mDatabaseRootReference.child("expense/"+expenseId+"/payments");
+        mDatabasePaymentsReference = mDatabaseRootReference.child("expenses/"+expenseId+"/payments");
 
 
 
@@ -80,6 +80,7 @@ public class PaymentDetailActivity extends AppCompatActivity {
                 PaymentFirebase.class,
                 R.layout.list_item,
                 RecyclerView.ViewHolder.class,
+                getApplicationContext(),
                 mDatabasePaymentsReference,
                 changedPayments,
                 paymentUserPaidExpense,

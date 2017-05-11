@@ -13,7 +13,7 @@
         android:layout_height="wrap_content">
         <TextView
             android:id="@+id/head_title"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="@string/list_payment"
@@ -27,7 +27,7 @@
             android:id="@+id/go_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/right_arrow"
+            android:src="@drawable/right_arrow_accent"
             android:background="#00000000"
             android:gravity="end"
             android:layout_margin="16dp"
