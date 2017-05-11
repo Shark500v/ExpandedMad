@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.Message;
@@ -30,10 +31,12 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
      */
     private MyApplication ma;
 
-    public PaymentRecyclerAdapter(Class<PaymentFirebase> modelClass, int modelLayout, Class<RecyclerView.ViewHolder> viewHolderClass, Query ref) {
+    public PaymentRecyclerAdapter(Class<PaymentFirebase> modelClass, int modelLayout, Class<PaymentRecyclerAdapter.ViewHolder> viewHolderClass, Query ref) {
         super(modelClass, modelLayout, viewHolderClass, ref);
         ma =  MyApplication.getInstance();
     }
+
+
 
 
     @Override
@@ -54,17 +57,14 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
 
 
     //questa è una classe di supporto che viene usata per creare la vista a schermo
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         public final TextView mUserView;
         public final EditText mPaid;
         public final TextView mToPaid;
         public final ImageButton mFillPaid;
-        public PaymentFirebase mItem;
 
         public ViewHolder(View view) {
             super(view);
-            mView = view;
             mUserView = (TextView) view.findViewById(R.id.user_name);
             mPaid = (EditText) view.findViewById(R.id.paid);
             mToPaid = (TextView) view.findViewById(R.id.to_paid);

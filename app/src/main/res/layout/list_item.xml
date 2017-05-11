@@ -27,7 +27,7 @@ android:layout_height="72dp">
         android:text="11"
         android:textAlignment="center"
         android:inputType="numberDecimal"
-        android:layout_toLeftOf="@id/slash"
+        android:layout_toLeftOf="@+id/slash"
         android:textAppearance="?attr/textAppearanceListItem"
 
 
@@ -41,7 +41,7 @@ android:layout_height="72dp">
         android:text = "/"
         android:layout_marginRight="10dp"
         android:gravity="center"
-        android:layout_toLeftOf="@id/to_paid"
+        android:layout_toLeftOf="@+id/to_paid"
         android:textAppearance="?attr/textAppearanceListItem"
         />
 
@@ -54,7 +54,7 @@ android:layout_height="72dp">
         android:text = "55"
         android:layout_marginRight="10dp"
         android:gravity="center"
-        android:layout_toLeftOf="@id/fill_paid"
+        android:layout_toLeftOf="@+id/fill_paid"
         android:textAppearance="?attr/textAppearanceListItem"
     />
 

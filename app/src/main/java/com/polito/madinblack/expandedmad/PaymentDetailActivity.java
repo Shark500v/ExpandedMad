@@ -114,7 +114,7 @@ public class PaymentDetailActivity extends AppCompatActivity {
         PaymentRecyclerAdapter mAdapter = new PaymentRecyclerAdapter(
                 PaymentFirebase.class,
                 R.layout.list_item,
-                RecyclerView.ViewHolder.class,
+                PaymentRecyclerAdapter.ViewHolder.class,
                 ref
         );
         recyclerView.setAdapter(mAdapter);
