@@ -161,6 +161,7 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
         private Double balance;
         private Double paidBefore;
         private String id;
+        private String userNameDisplayed;
 
 
 
@@ -178,6 +179,7 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
             this.paidNow = paidNow;
             this.balance = paymentFirebase.getBalance();
             this.paidBefore = paymentFirebase.getPaid();
+            this.userNameDisplayed = paymentFirebase.getUserNameDisplayed();
 
         }
 
@@ -228,6 +230,14 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
 
         public void setId(String id) {
             this.id = id;
+        }
+
+        public String getUserNameDisplayed() {
+            return userNameDisplayed;
+        }
+
+        public void setUserNameDisplayed(String userNameDisplayed) {
+            this.userNameDisplayed = userNameDisplayed;
         }
     }
 
