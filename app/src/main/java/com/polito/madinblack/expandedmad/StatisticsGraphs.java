@@ -78,7 +78,6 @@ public class StatisticsGraphs extends AppCompatActivity {
 
         ma = MyApplication.getInstance();
         mDatabaseGroupReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber()).child(ma.getFirebaseId()).child("groups");
-        mDatabaseExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber()).child(ma.getFirebaseId()).child("groups");
 
         mValueEventListener = new ValueEventListener() {
             @Override
@@ -122,6 +121,8 @@ public class StatisticsGraphs extends AppCompatActivity {
                         yearSelected = parent.getItemAtPosition(position).toString();
                         GraphView graph = (GraphView) findViewById(R.id.graph1);
                         if ((!groupMap.get(groupSelected).equals(getString(R.string.choose_group))) && (!yearSelected.equals(getString(R.string.select_year)))) {
+                            mDatabaseExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber())
+                                    .child(ma.getFirebaseId()).child("groups").child(groupId).child("expenses");
                             initGraph(graph, groupMap.get(groupSelected), yearSelected, groupSelected);   //una volta selezionati sia l'anno che il gruppo chiama il metodo
                         }
 
@@ -157,9 +158,9 @@ public class StatisticsGraphs extends AppCompatActivity {
     }
 
     //metodo per inizializzare i dati del grafico
-    public void initGraph(GraphView graph, String groupId, String year, String groupName) {
+    public void initGraph(final GraphView graph, String groupId, String year, final String groupName) {
         final String yearSelected = year;
-        mEventListener = new ValueEventListener() {
+        mDatabaseExpenseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot expenseSnapshot : dataSnapshot.getChildren()) {
@@ -173,17 +174,35 @@ public class StatisticsGraphs extends AppCompatActivity {
                         //Toast.makeText(getApplicationContext(), String.valueOf(groupExpensesByMonth.get(5.0)), Toast.LENGTH_LONG).show();
                     }
                 }
+                printGraph(graph, groupName);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        };
+        });
 
 
 
 
+
+        //GridLabelRenderer gridLabel = graph.getGridLabelRenderer();
+        //gridLabel.setHorizontalAxisTitle("Month of the year");
+        //gridLabel.setNumHorizontalLabels(12);
+        //gridLabel.setHorizontalLabelsVisible(true);
+
+        //StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
+        //staticLabelsFormatter.setHorizontalLabels(new String[] {getString(R.string.january),getString(R.string.february), getString(R.string.march),
+        //        getString(R.string.april), getString(R.string.may), getString(R.string.june), getString(R.string.july), getString(R.string.august),
+        //        getString(R.string.september), getString(R.string.october), getString(R.string.november), getString(R.string.december)});
+        //staticLabelsFormatter.setVerticalLabels(new String[] {"low", "middle", "high"});
+        //graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
+
+
+    }
+
+    private void printGraph(GraphView graph, String groupName){
         DataPoint[] dataPoints = new DataPoint[13];                 //creo un array di DataPoint
         dataPoints[0] = new DataPoint(0.0, 0.0);                    //il primo e' 0,0 per motivi di visualizzazione (mia supposizione, penso che partendo
 
@@ -212,20 +231,7 @@ public class StatisticsGraphs extends AppCompatActivity {
         graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
 
         graph.getGridLabelRenderer().setHorizontalAxisTitle(getString(R.string.months)); //da il titolo all'asse delle x
-
-        //GridLabelRenderer gridLabel = graph.getGridLabelRenderer();
-        //gridLabel.setHorizontalAxisTitle("Month of the year");
-        //gridLabel.setNumHorizontalLabels(12);
-        //gridLabel.setHorizontalLabelsVisible(true);
-
-        //StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
-        //staticLabelsFormatter.setHorizontalLabels(new String[] {getString(R.string.january),getString(R.string.february), getString(R.string.march),
-        //        getString(R.string.april), getString(R.string.may), getString(R.string.june), getString(R.string.july), getString(R.string.august),
-        //        getString(R.string.september), getString(R.string.october), getString(R.string.november), getString(R.string.december)});
-        //staticLabelsFormatter.setVerticalLabels(new String[] {"low", "middle", "high"});
-        //graph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
-
-
+        graph.getGridLabelRenderer().setPadding(16);
     }
 
     @Override
@@ -233,9 +239,6 @@ public class StatisticsGraphs extends AppCompatActivity {
         super.onStart();
         if(mValueEventListener!=null)
             mDatabaseGroupReference.addValueEventListener(mValueEventListener);
-        if(mEventListener!=null)
-            mDatabaseExpenseReference.child(groupId).child("expenses").addValueEventListener(mEventListener);
-
     }
 
     @Override
@@ -243,8 +246,6 @@ public class StatisticsGraphs extends AppCompatActivity {
         super.onStop();
         if(mValueEventListener!=null)
             mDatabaseGroupReference.removeEventListener(mValueEventListener);
-        if(mEventListener!=null)
-            mDatabaseExpenseReference.child(groupId).child("expenses").removeEventListener(mEventListener);
     }
 
 }
