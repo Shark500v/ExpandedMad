@@ -275,26 +275,27 @@ public class StatisticsGraphs extends AppCompatActivity {
     private void printGraph(GraphView graph, String groupName){
         graph.removeAllSeries();
 
-        dataPoints = new DataPoint[13];                 //creo un array di DataPoint
-        dataPoints[0] = new DataPoint(0.0, 0.0);                    //il primo e' 0,0 per motivi di visualizzazione (mia supposizione, penso che partendo
+        dataPoints = new DataPoint[12];                 //creo un array di DataPoint
 
         double max = 0.0;
 
-        for (int i = 1; i <= 12; i++) {                               // da 0 venga visualizzato male
-            double cost = groupExpensesByMonth.get(Double.valueOf(i));
+        for (int i = 0; i < 12; i++) {                               // da 0 venga visualizzato male
+            double cost = groupExpensesByMonth.get(Double.valueOf(i+1));
             if(cost > max) {
                 max = cost;
             }
-            dataPoints[i] = new DataPoint(i, cost);  //inserisco i valori della mappa nella forma <numero_mese, spesa_totale>
+            dataPoints[i] = new DataPoint(i+1, cost);  //inserisco i valori della mappa nella forma <numero_mese, spesa_totale>
         }
 
         BarGraphSeries<DataPoint> series = new BarGraphSeries<>(dataPoints); //creo questo oggeto partendo dall'array precedentemente costruito
 
         series.setColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent)); //colore della barra
-        series.setSpacing(30); //percentuale di spazio tra le barre. 0->no spazio, 100->spazio tra una barra e l'altra e pari alla larghezza di una barra
+        series.setSpacing(20); //percentuale di spazio tra le barre. 0->no spazio, 100->spazio tra una barra e l'altra e pari alla larghezza di una barra
         series.setAnimated(true);
-        series.setValuesOnTopColor(Color.RED);
-        series.setTitle(groupName + "-" + yearSelected);                     //etichetta della serie di dati
+        series.setDrawValuesOnTop(true);
+        series.setValuesOnTopColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
+        //series.setTitle(groupName + "-" + yearSelected);                     //etichetta della serie di dati
+        //graph.setTitle(groupName + "-" + yearSelected);
         graph.addSeries(series); //aggiunge la serie di dati al grafico
         if(max>10) {
             graph.getViewport().setMaxY(max + max / 4);
