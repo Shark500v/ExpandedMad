@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompatSideChannelService;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -124,6 +126,15 @@ public class ExpenseDetailFragment3 extends Fragment {
                     ((TextView) rootView.findViewById(R.id.tag_container)).setText(expense.getTag());
                     ((TextView) rootView.findViewById(R.id.cost_container)).setText(String.format("%.2f",(expense.getCost())));
                     ((TextView) rootView.findViewById(R.id.currency_container)).setText(expense.getCurrencySymbol());
+
+                    if(expense.getRoundedCost().equals(expense.getCost())){
+                        (rootView.findViewById(R.id.roundedCostLayout)).setVisibility(View.GONE);
+                    }
+                    else {
+                        (rootView.findViewById(R.id.roundedCostLayout)).setVisibility(View.VISIBLE);
+                        ((TextView) rootView.findViewById(R.id.roundedCost)).setText(String.format("%.2f",(expense.getRoundedCost().toString())));
+                        //((LinearLayout) rootView.findViewById(R.id.currencyLayout)).setLayou
+                    }
 
                     if( expense.getPaidByPhoneNumber().equals(ma.getUserPhoneNumber()) )
                         ((TextView) rootView.findViewById(R.id.buyer_container)).setText(getString(R.string.you));
