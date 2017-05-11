@@ -27,6 +27,8 @@ import com.polito.madinblack.expandedmad.model.Payment;
 import com.polito.madinblack.expandedmad.model.PaymentFirebase;
 import java.util.Map;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 //questa classe la usa per fare il managing della lista che deve mostrare
 public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFirebase,RecyclerView.ViewHolder> {
     /**
@@ -137,7 +139,7 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
         public final TextView mUserView;
         public final EditText mPaid;
         public final TextView mToPaid;
-        public final ImageButton mFillPaid;
+        public final CircleImageView mFillPaid;
         public final View mView;
 
         public ViewHolder(View view) {
@@ -145,7 +147,7 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
             mUserView = (TextView) view.findViewById(R.id.user_name);
             mPaid = (EditText) view.findViewById(R.id.paid);
             mToPaid = (TextView) view.findViewById(R.id.to_paid);
-            mFillPaid = (ImageButton) view.findViewById(R.id.fill_paid);
+            mFillPaid = (CircleImageView) view.findViewById(R.id.fill_paid);
             mView = view;
         }
 

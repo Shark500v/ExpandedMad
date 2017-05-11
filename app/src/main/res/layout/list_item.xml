@@ -61,13 +61,14 @@ android:layout_height="72dp"
     />
 
 
-    <ImageButton
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/fill_paid"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/cash"
+        android:src="@drawable/cash2"
+        android:scaleType="centerCrop"
+        android:background="@drawable/color3"
         android:layout_margin="10dp"
-        android:background="@color/colorPrimaryLight"
         android:layout_alignParentEnd="true"
 
         />
