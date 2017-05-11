@@ -63,6 +63,7 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
         final ViewHolder holder = (PaymentRecyclerAdapter.ViewHolder) viewHolder;
         if(!model.getUserFirebaseId().equals(ma.getFirebaseId())){
             holder.mUserView.setText(model.getUserNameDisplayed());
+            holder.mPaid.setText("");
             holder.mToPaid.setText(model.getDebit().toString());
             if(model.getDebit()==0){
                 holder.mPaid.setEnabled(false);
