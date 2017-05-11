@@ -290,6 +290,7 @@ public class NewGroup extends AppCompatActivity {
             //se l'errore persiste avvisate Fra
             if(invite.isEmpty()){
                 Intent intent1=new Intent(NewGroup.this, GroupListActivity.class); //da cambiare (dovra' andare alla pagina del gruppo creato)
+                intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent1);
             }else {
                 //devo invitare i nuovi membri del gruppo

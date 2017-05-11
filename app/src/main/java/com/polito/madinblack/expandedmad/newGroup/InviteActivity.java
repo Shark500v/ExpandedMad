@@ -76,7 +76,7 @@ public class InviteActivity extends AppCompatActivity {
                     //posso procedere con l'activity successiva, ma prima devo inviare le email
 
                     intent1 = new Intent(InviteActivity.this, GroupListActivity.class);
-
+                    intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     sendEmail();
 
                     return true;
@@ -93,7 +93,9 @@ public class InviteActivity extends AppCompatActivity {
             case R.id.home:
                 //in questo caso il gruppo è gia stato creato, con l'activity presente posso invitare i nuovi membri che ho selezionato, per il resto posso tornare indietro
                 //alla pagina dei gruppi.
-                navigateUpTo(new Intent(this, GroupListActivity.class));    //definisco il parente verso cui devo tornare indietro
+                intent1 = new Intent(this, GroupListActivity.class);
+                intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                navigateUpTo(intent1);    //definisco il parente verso cui devo tornare indietro
                 return true;
 
             default:
