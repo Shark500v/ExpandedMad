@@ -31,7 +31,7 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
      */
     private MyApplication ma;
 
-    public PaymentRecyclerAdapter(Class<PaymentFirebase> modelClass, int modelLayout, Class<PaymentRecyclerAdapter.ViewHolder> viewHolderClass, Query ref) {
+    public PaymentRecyclerAdapter(Class<PaymentFirebase> modelClass, int modelLayout, Class<RecyclerView.ViewHolder> viewHolderClass, Query ref) {
         super(modelClass, modelLayout, viewHolderClass, ref);
         ma =  MyApplication.getInstance();
     }
