@@ -78,10 +78,6 @@ public class StatisticsGraphs extends AppCompatActivity {
         graph = (GraphView) findViewById(R.id.graph1);
         setGraph(graph);
 
-        if(savedInstanceState != null){
-
-        }
-
         resetMap(groupExpensesByMonth);
 
         groupSelected = getString(R.string.select_group);
@@ -193,17 +189,13 @@ public class StatisticsGraphs extends AppCompatActivity {
         graph.getViewport().setMinX(0.0);       //setto i margini del grafico
         graph.getViewport().setMaxX(13.0);
         graph.getViewport().setMinY(0.0);       //setto i margini del grafico
-        graph.getViewport().setMaxY(13.0);
+        graph.getViewport().setMaxY(10.0);
 
         graph.getViewport().setXAxisBoundsManual(true);  //questo e' la riga che me lo permette
-
-        graph.getViewport().setScrollable(true);         //mi fa scorrere il grafico
-        graph.getViewport().setScrollableY(true);
+        graph.getViewport().setYAxisBoundsManual(true);
 
         graph.getGridLabelRenderer().setHorizontalAxisTitle(getString(R.string.months)); //da il titolo all'asse delle x
-        graph.getGridLabelRenderer().setPadding(16);
-
-        graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+        graph.getGridLabelRenderer().setVerticalAxisTitle(getString(R.string.expenses_in_euro));
     }
 
     //metodo per inizializzare i dati del grafico
@@ -286,8 +278,13 @@ public class StatisticsGraphs extends AppCompatActivity {
         dataPoints = new DataPoint[13];                 //creo un array di DataPoint
         dataPoints[0] = new DataPoint(0.0, 0.0);                    //il primo e' 0,0 per motivi di visualizzazione (mia supposizione, penso che partendo
 
+        double max = 0.0;
+
         for (int i = 1; i <= 12; i++) {                               // da 0 venga visualizzato male
             double cost = groupExpensesByMonth.get(Double.valueOf(i));
+            if(cost > max) {
+                max = cost;
+            }
             dataPoints[i] = new DataPoint(i, cost);  //inserisco i valori della mappa nella forma <numero_mese, spesa_totale>
         }
 
@@ -299,9 +296,12 @@ public class StatisticsGraphs extends AppCompatActivity {
         series.setValuesOnTopColor(Color.RED);
         series.setTitle(groupName + "-" + yearSelected);                     //etichetta della serie di dati
         graph.addSeries(series); //aggiunge la serie di dati al grafico
+        if(max>10) {
+            graph.getViewport().setMaxY(max + max / 4);
+        }
 
-        graph.getLegendRenderer().setVisible(true);     //visualizza legenda e decide dove posizionarla
-
+        //graph.getLegendRenderer().setVisible(true);     //visualizza legenda e decide dove posizionarla
+        //graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
 
     }
 
@@ -324,10 +324,5 @@ public class StatisticsGraphs extends AppCompatActivity {
         if(mValueEventListener!=null)
             mDatabaseGroupReference.removeEventListener(mValueEventListener);
     }
-
-    public void onSaveInstanceState(Bundle toSave) {
-        super.onSaveInstanceState(toSave);
-    }
-
 }
 
