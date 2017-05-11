@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
+import android.support.v4.content.res.TypedArrayUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -45,12 +46,15 @@ public class StatisticsGraphs extends AppCompatActivity {
     //private Button show_button;
     private MyApplication ma;
     private ValueEventListener mValueEventListener;
+    private ValueEventListener mEventListener;
     private DatabaseReference mDatabaseGroupReference;
+    private DatabaseReference mDatabaseExpenseReference;
     private List<String> groupArray = new ArrayList<>();
     private Map<String,String> groupMap = new HashMap<String,String>(); //key->groupName value->groupId
     private Map<Double,Double> groupExpensesByMonth = new HashMap<>();
     private String groupSelected;
     private String yearSelected;
+    private String groupId;
     //private DatabaseReference mDatabase;
     //private String firebaseId;
     //private String phoneNumber;
@@ -68,10 +72,13 @@ public class StatisticsGraphs extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-
+        for (int i = 1; i <= 12; i++) {
+            groupExpensesByMonth.put(Double.valueOf(i), 0.0);                                           //inizializzo la mappa <numero_del_mese, spesa_totale>
+        }
 
         ma = MyApplication.getInstance();
         mDatabaseGroupReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber()).child(ma.getFirebaseId()).child("groups");
+        mDatabaseExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber()).child(ma.getFirebaseId()).child("groups");
 
         mValueEventListener = new ValueEventListener() {
             @Override
@@ -98,6 +105,7 @@ public class StatisticsGraphs extends AppCompatActivity {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         groupSelected = parent.getItemAtPosition(position).toString();
+                        groupId = groupMap.get(groupSelected);
                         //if(groupMap.get(groupSelected) != null) {
                         //initGraph(graph, groupMap.get(groupSelected));
                         //}
@@ -151,33 +159,37 @@ public class StatisticsGraphs extends AppCompatActivity {
     //metodo per inizializzare i dati del grafico
     public void initGraph(GraphView graph, String groupId, String year, String groupName) {
         final String yearSelected = year;
-        FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber())
-            .child(ma.getFirebaseId()).child("groups").child(groupId).child("expenses").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (int i = 1; i <= 12; i++) {
-                        groupExpensesByMonth.put((double)i, 0.0);                                           //inizializzo la mappa <numero_del_mese, spesa_totale>
-                    }
-                    for (DataSnapshot expenseSnapshot : dataSnapshot.getChildren()) {
-                        ExpenseForUser expenseForUser = expenseSnapshot.getValue(ExpenseForUser.class);     //prendo l'expenseForUser
-                        if(expenseForUser.getYear().toString().equals(yearSelected)) {                      //controllo che appartenga all'anno selezionato
-                            Double expenseCost = expenseForUser.getCost();                                  //prendo il costo della expenseForUser
-                            expenseCost += groupExpensesByMonth.get((double) expenseForUser.getMonth());    //gli aggiungo il valore già presente nella mappa ai passi precedenti
-                            groupExpensesByMonth.put(((double) expenseForUser.getMonth()), expenseCost);    //aggiorno la mappa alla posizione del mese della expense
-                        }
+        mEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot expenseSnapshot : dataSnapshot.getChildren()) {
+                    ExpenseForUser expenseForUser = expenseSnapshot.getValue(ExpenseForUser.class);     //prendo l'expenseForUser
+                    String yearStr = String.valueOf(expenseForUser.getYear());
+                    if (yearStr.equals(yearSelected)) {                      //controllo che appartenga all'anno selezionato
+                        Double expenseCost = expenseForUser.getCost();                                  //prendo il costo della expenseForUser
+                        Double month = Double.valueOf(expenseForUser.getMonth());
+                        expenseCost += groupExpensesByMonth.get(month);                                 //gli aggiungo il valore già presente nella mappa ai passi precedenti
+                        groupExpensesByMonth.put(month, expenseCost);    //aggiorno la mappa alla posizione del mese della expense
+                        //Toast.makeText(getApplicationContext(), String.valueOf(groupExpensesByMonth.get(5.0)), Toast.LENGTH_LONG).show();
                     }
                 }
+            }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-                }
-            });
+            }
+        };
+
+
+
 
         DataPoint[] dataPoints = new DataPoint[13];                 //creo un array di DataPoint
         dataPoints[0] = new DataPoint(0.0, 0.0);                    //il primo e' 0,0 per motivi di visualizzazione (mia supposizione, penso che partendo
-        for(int i = 1; i <= 12; i++){                               // da 0 venga visualizzato male
-            dataPoints[i] = new DataPoint((double)i,groupExpensesByMonth.get(i));  //inserisco i valori della mappa nella forma <numero_mese, spesa_totale>
+
+        for (int i = 1; i <= 12; i++) {                               // da 0 venga visualizzato male
+            double cost = groupExpensesByMonth.get(Double.valueOf(i));
+            dataPoints[i] = new DataPoint(i, cost);  //inserisco i valori della mappa nella forma <numero_mese, spesa_totale>
         }
 
         BarGraphSeries<DataPoint> series = new BarGraphSeries<>(dataPoints); //creo questo oggeto partendo dall'array precedentemente costruito
@@ -189,13 +201,13 @@ public class StatisticsGraphs extends AppCompatActivity {
         graph.addSeries(series); //aggiunge la serie di dati al grafico
 
         graph.getViewport().setMinX(0.0);       //setto i margini del grafico
-        graph.getViewport().setMaxX(12.0);
+        graph.getViewport().setMaxX(13.0);
         graph.getViewport().setXAxisBoundsManual(true);  //questo e' la riga che me lo permette
 
         graph.getViewport().setScrollable(true);         //mi fa scorrere il grafico
         graph.getViewport().setScrollableY(true);
 
-        series.setTitle(groupName);                     //etichetta della serie di dati
+        series.setTitle(groupName + "-" + yearSelected);                     //etichetta della serie di dati
         graph.getLegendRenderer().setVisible(true);     //visualizza legenda e decide dove posizionarla
         graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
 
@@ -221,6 +233,8 @@ public class StatisticsGraphs extends AppCompatActivity {
         super.onStart();
         if(mValueEventListener!=null)
             mDatabaseGroupReference.addValueEventListener(mValueEventListener);
+        if(mEventListener!=null)
+            mDatabaseExpenseReference.child(groupId).child("expenses").addValueEventListener(mEventListener);
 
     }
 
@@ -229,6 +243,8 @@ public class StatisticsGraphs extends AppCompatActivity {
         super.onStop();
         if(mValueEventListener!=null)
             mDatabaseGroupReference.removeEventListener(mValueEventListener);
+        if(mEventListener!=null)
+            mDatabaseExpenseReference.child(groupId).child("expenses").removeEventListener(mEventListener);
     }
 
 }
