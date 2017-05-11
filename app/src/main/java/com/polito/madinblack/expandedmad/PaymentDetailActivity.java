@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
+import com.polito.madinblack.expandedmad.model.HistoryInfo;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.Payment;
 import com.polito.madinblack.expandedmad.model.PaymentFirebase;
@@ -212,6 +213,10 @@ public class PaymentDetailActivity extends AppCompatActivity {
 
                 //paymentFirebase.setPaid(paymentFirebase.getPaid()+_listPaid.get(i));
                 //payments.put(paymentFirebase.getId(), paymentFirebase);
+
+                /*update the history*/
+                /*HistoryInfo historyInfo = new HistoryInfo(paidByName+" "+paidBySurname, 1L, cost, currencySymbol, null);
+                mDatabaseRootReference.child("history/"+groupId).push().setValue(historyInfo);*/
 
 
             }
