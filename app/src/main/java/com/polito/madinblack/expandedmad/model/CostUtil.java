@@ -10,7 +10,8 @@ public class CostUtil {
         for (int i = 1; i < scale; i++)
             pow *= 10;
         double tmp = number * pow;
-        return (double) (int) ((tmp - (int) tmp) >= 0.5f ? tmp + 1 : tmp) / pow;
+        //return (double) (int) ((tmp - (int) tmp) >= 0.5f ? tmp + 1 : tmp) / pow;
+        return (double) (int)( tmp + 1 ) / pow;
     }
 
     public static boolean validateTelFaxNumber(String number)
