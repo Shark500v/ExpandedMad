@@ -24,6 +24,9 @@
         android:gravity="center"
         android:layout_weight="1"
         android:text="11"
+        android:inputType="numberDecimal"
+
+
         />
 
     <TextView

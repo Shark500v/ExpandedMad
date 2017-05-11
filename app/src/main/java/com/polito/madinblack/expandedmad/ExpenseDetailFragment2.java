@@ -1,6 +1,7 @@
 package com.polito.madinblack.expandedmad;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -10,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -22,6 +24,9 @@ import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.PaymentFirebase;
 import com.polito.madinblack.expandedmad.utility.RecyclerViewAdapter;
 import com.polito.madinblack.expandedmad.utility.TabView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Ale on 08/05/2017.
@@ -39,6 +44,9 @@ public class ExpenseDetailFragment2 extends Fragment {
     private ValueEventListener mValueEventListener;
     private MyApplication ma;
     private View rootView;
+    private ExpandableListView expandableListView;
+    private ExpandableListAdapter listAdapter;
+    private Context context;
 
     public ExpenseDetailFragment2() {
         // Required empty public constructor
@@ -79,6 +87,26 @@ public class ExpenseDetailFragment2 extends Fragment {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Expense expense = dataSnapshot.getValue(Expense.class);
+
+                    if(expense.getPaidByFirebaseId().equals(ma.getFirebaseId())) {
+                        (expandableListView = (ExpandableListView) rootView.findViewById(R.id.expanded_list)).setVisibility(View.VISIBLE);
+                        List<PaymentFirebase> paymentFirebaseList= new ArrayList<PaymentFirebase>();
+                        PaymentFirebase paymentPaidFirebase = null;
+                        for(PaymentFirebase paymentFirebase : expense.getPayments().values()){
+                            if(!paymentFirebase.getUserFirebaseId().equals(ma.getFirebaseId())){
+                                paymentPaidFirebase = paymentFirebase;
+                            }else {
+                                paymentFirebaseList.add(paymentFirebase);
+                            }
+
+                        }
+                        listAdapter = new ExpandableListAdapter(getContext(), paymentFirebaseList, expense.getGroupId(), paymentPaidFirebase, expense.getCost());
+                        // setting list adapter
+                        expandableListView.setAdapter(listAdapter);
+                    }else {
+                        ((ExpandableListView) rootView.findViewById(R.id.expanded_list)).setVisibility(View.GONE);
+                    }
+
                     if(expense.getDescription()!=null && !(expense.getDescription().isEmpty()))
                         ((TextView) rootView.findViewById(R.id.description_field)).setText(expense.getDescription());
                     else {

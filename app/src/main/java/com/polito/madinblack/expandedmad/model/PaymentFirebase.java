@@ -4,6 +4,7 @@ public class PaymentFirebase {
     private String id;
     private String userFirebaseId;
     private String userPhoneNumber;
+    private String userNameDisplayed;
     private String expenseId;
     private Double paid;
     private Double toPaid;
@@ -19,6 +20,7 @@ public class PaymentFirebase {
         this.expenseId       = payment.getExpenseId();
         this.paid            = CostUtil.round(payment.getPaid(), 2);
         this.toPaid          = CostUtil.round(payment.getToPaid(), 2);
+        this.userNameDisplayed = payment.getUserName();
     }
 
     public String getUserFirebaseId() {
@@ -35,6 +37,14 @@ public class PaymentFirebase {
 
     public void setUserPhoneNumber(String userPhoneNumber) {
         this.userPhoneNumber = userPhoneNumber;
+    }
+
+    public String getUserNameDisplayed() {
+        return userNameDisplayed;
+    }
+
+    public void setUserNameDisplayed(String userNameDisplayed) {
+        this.userNameDisplayed = userNameDisplayed;
     }
 
     public String getExpenseId() {

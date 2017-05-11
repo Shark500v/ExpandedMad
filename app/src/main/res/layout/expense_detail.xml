@@ -7,13 +7,7 @@
     tools:context="com.polito.madinblack.expandedmad.ExpenseDetailFragment">
 
 
-    <ExpandableListView
-        android:id="@+id/expanded_list"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        android:layout_alignParentTop="true"
-        android:visibility="gone"
-    />
+
 
 
     <TextView
@@ -23,7 +17,7 @@
         android:layout_margin="16dp"
         android:text="@string/paid_topay"
         android:textSize="20sp"
-        android:layout_below="@id/expanded_list"
+
 
     />
 
@@ -38,7 +32,7 @@
         android:textSize="18sp"
         android:gravity="end"
         android:layout_marginEnd="16dp"
-        android:layout_below="@id/expanded_list"
+
 
     />
 
@@ -191,6 +185,15 @@
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_alignBaseline="@+id/description"/>
+
+    <ExpandableListView
+        android:id="@+id/expanded_list"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:visibility="visible"
+        android:layout_below="@id/description_field"
+        android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
+        />
 
 
 
