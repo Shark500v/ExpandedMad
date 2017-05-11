@@ -153,7 +153,7 @@
     <string name="history_payment_part2">. Cost :</string>
     <string name="no_detail">No detail available</string>
     <string name="pay_button">Pay</string>
-    <string name="list_payment">List of payments</string>
+    <string name="list_payment">Pending payments</string>
     <string name="pay_everyone">Pay everyone</string>
     <string name="confirm_inserted">Confirm inserted</string>
     <string name="group">Group</string>
