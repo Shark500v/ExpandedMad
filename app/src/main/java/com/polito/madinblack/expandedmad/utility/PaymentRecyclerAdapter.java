@@ -75,11 +75,12 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
 
                 public void afterTextChanged(Editable s) {
                     if(s.length() != 0 && CostUtil.isParsableAsDouble(s.toString()) && Double.valueOf(s.toString())!=0){
-                        if(Double.valueOf(s.toString())>Double.valueOf(holder.mPaid.getText().toString())){
+                        if(Double.valueOf(s.toString())>Double.valueOf(holder.mToPaid.getText().toString())){
+                            /*
                             PaymentInfo paymentInfo
                                     = new PaymentInfo(paymentFirebase, paymentFirebase.getDebit());
 
-                            changedPayment.put(paymentFirebase.getId(), paymentInfo);
+                            changedPayment.put(paymentFirebase.getId(), paymentInfo);*/
                             holder.mPaid.setText(paymentFirebase.getDebit().toString());
 
                         }else{
