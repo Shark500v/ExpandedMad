@@ -161,4 +161,6 @@
     <string name="select_year">Select year</string>
     <string name="show_graph">SHOW</string>
     <string name="months">Months</string>
+    <string name="go_to_list_of_payments">Go to list of payments</string>
+    <string name="payments_detail">Payments Detail</string>
 </resources>

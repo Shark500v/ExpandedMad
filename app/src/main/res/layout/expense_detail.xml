@@ -7,13 +7,32 @@
     tools:context="com.polito.madinblack.expandedmad.ExpenseDetailFragment">
 
 
-    <ExpandableListView
-        android:id="@+id/expanded_list"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        android:layout_alignParentTop="true"
+    <TextView
+        android:id="@+id/head_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="@string/list_payment"
+        android:textSize="20sp"
         android:visibility="gone"
-    />
+
+        />
+
+    <ImageButton
+        android:id="@+id/go_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/head_title"
+        android:layout_toEndOf="@+id/head_title"
+        android:src="@drawable/right_arrow"
+        android:layout_marginEnd="16dp"
+        android:background="#00000000"
+        android:gravity="end"
+        android:contentDescription="@string/go_to_list_of_payments"
+        android:visibility="gone"
+        />
+
+
 
 
     <TextView
@@ -23,9 +42,9 @@
         android:layout_margin="16dp"
         android:text="@string/paid_topay"
         android:textSize="20sp"
-        android:layout_below="@id/expanded_list"
+        android:layout_below="@id/head_title"
 
-    />
+        />
 
     <TextView
         android:id="@+id/paid_container"
@@ -38,7 +57,8 @@
         android:textSize="18sp"
         android:gravity="end"
         android:layout_marginEnd="16dp"
-        android:layout_below="@id/expanded_list"
+        android:layout_below="@id/go_button"
+        android:textAlignment="textEnd"
 
     />
 
@@ -190,6 +210,8 @@
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_alignBaseline="@+id/description"/>
+
+
 
 
 

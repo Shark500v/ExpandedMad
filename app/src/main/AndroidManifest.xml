@@ -155,6 +155,18 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.utility.TabView" />
         </activity>
+
+        <activity
+            android:name=".PaymentDetailActivity"
+            android:label="@string/payments_detail"
+            android:parentActivityName=".ExpenseDetailActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.polito.madinblack.expandedmad.ExpenseDetailActivity" />
+        </activity>
+
+
     </application>
 
 </manifest>

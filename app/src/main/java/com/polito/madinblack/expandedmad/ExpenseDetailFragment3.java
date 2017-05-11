@@ -2,6 +2,7 @@ package com.polito.madinblack.expandedmad;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -19,6 +21,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.polito.madinblack.expandedmad.groupManaging.GroupListActivity;
+import com.polito.madinblack.expandedmad.login.TelephoneInsertion;
 import com.polito.madinblack.expandedmad.model.Expense;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.PaymentFirebase;
@@ -32,7 +36,7 @@ import java.util.List;
  * Created by Ale on 08/05/2017.
  */
 
-public class ExpenseDetailFragment2 extends Fragment {
+public class ExpenseDetailFragment3 extends Fragment {
     public static final String ARG_EXPENSE_NAME = "expenseName";
     public static final String ARG_EXPENSE_ID = "expenseId";
 
@@ -44,11 +48,9 @@ public class ExpenseDetailFragment2 extends Fragment {
     private ValueEventListener mValueEventListener;
     private MyApplication ma;
     private View rootView;
-    private ExpandableListView expandableListView;
-    private ExpandableListAdapter listAdapter;
-    private Context context;
 
-    public ExpenseDetailFragment2() {
+
+    public ExpenseDetailFragment3() {
         // Required empty public constructor
     }
 /*
@@ -86,25 +88,26 @@ public class ExpenseDetailFragment2 extends Fragment {
             mValueEventListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    Expense expense = dataSnapshot.getValue(Expense.class);
+                    final Expense expense = dataSnapshot.getValue(Expense.class);
 
                     if(expense.getPaidByFirebaseId().equals(ma.getFirebaseId())) {
-                        (expandableListView = (ExpandableListView) rootView.findViewById(R.id.expanded_list)).setVisibility(View.VISIBLE);
-                        List<PaymentFirebase> paymentFirebaseList= new ArrayList<PaymentFirebase>();
-                        PaymentFirebase paymentPaidFirebase = null;
-                        for(PaymentFirebase paymentFirebase : expense.getPayments().values()){
-                            if(!paymentFirebase.getUserFirebaseId().equals(ma.getFirebaseId())){
-                                paymentPaidFirebase = paymentFirebase;
-                            }else {
-                                paymentFirebaseList.add(paymentFirebase);
+                        ImageButton imageButtonGo;
+                        (rootView.findViewById(R.id.head_title)).setVisibility(View.VISIBLE);
+                        (imageButtonGo = (ImageButton)rootView.findViewById(R.id.go_button)).setVisibility(View.VISIBLE);
+                        imageButtonGo.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(getContext(), PaymentDetailActivity.class);
+                                intent.putExtra(PaymentDetailActivity.ARG_EXPENSE_ID, expense.getId());
+                                intent.putExtra(PaymentDetailActivity.ARG_EXPENSE_NAME, expense.getName());
+                                startActivity(intent);
                             }
+                        });
 
-                        }
-                        listAdapter = new ExpandableListAdapter(getContext(), paymentFirebaseList, expense.getGroupId(), paymentPaidFirebase, expense.getCost());
-                        // setting list adapter
-                        expandableListView.setAdapter(listAdapter);
+
                     }else {
-                        ((ExpandableListView) rootView.findViewById(R.id.expanded_list)).setVisibility(View.GONE);
+                        (rootView.findViewById(R.id.head_title)).setVisibility(View.GONE);
+                        (rootView.findViewById(R.id.go_button)).setVisibility(View.GONE);
                     }
 
                     if(expense.getDescription()!=null && !(expense.getDescription().isEmpty()))
