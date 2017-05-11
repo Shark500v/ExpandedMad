@@ -5,7 +5,6 @@ public class PaymentFirebase {
     private String userFirebaseId;
     private String userPhoneNumber;
     private String userNameDisplayed;
-    private String expenseId;
     private Double paid;
     private Double toPaid;
 
@@ -17,10 +16,10 @@ public class PaymentFirebase {
     public PaymentFirebase(Payment payment){
         this.userPhoneNumber = payment.getUserPhoneNumber();
         this.userFirebaseId  = payment.getUserFirebaseId();
-        this.expenseId       = payment.getExpenseId();
         this.paid            = CostUtil.round(payment.getPaid(), 2);
         this.toPaid          = CostUtil.round(payment.getToPaid(), 2);
         this.userNameDisplayed = payment.getUserName();
+
     }
 
     public String getUserFirebaseId() {
@@ -47,13 +46,6 @@ public class PaymentFirebase {
         this.userNameDisplayed = userNameDisplayed;
     }
 
-    public String getExpenseId() {
-        return expenseId;
-    }
-
-    public void setExpense(String expenseId) {
-        this.expenseId = expenseId;
-    }
 
     public String getId() {
         return id;
@@ -71,13 +63,13 @@ public class PaymentFirebase {
         this.paid = paid;
     }
 
-    public double getToPaid() {
+    public Double getToPaid() {
         return toPaid;
     }
 
-    public void setToPaid(double toPaid) {
 
-        this.toPaid = CostUtil.round(toPaid, 2);
+    public void setToPaid(Double toPaid) {
+        this.toPaid = toPaid;
     }
 
     public Double getDebit(){
@@ -100,6 +92,8 @@ public class PaymentFirebase {
     public Double getBalance(){
         return (paid-toPaid);
     }
+
+
 
 
     @Override
