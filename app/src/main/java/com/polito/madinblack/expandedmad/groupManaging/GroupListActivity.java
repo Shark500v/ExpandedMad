@@ -156,9 +156,9 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             Intent intent = new Intent(GroupListActivity.this, StatisticsGraphs.class);
             startActivity(intent);
 
-        } else if (id == R.id.nav_settings){
+        } /*else if (id == R.id.nav_settings){
 
-        } else if (id == R.id.nav_logout) {
+        }*/ else if (id == R.id.nav_logout) {
             Logout fragment = new Logout();
             fragment.show(getSupportFragmentManager(), "LogoutFragment");
         }
@@ -172,8 +172,8 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_onlysearch, menu);
 
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        /*MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);*/
 
         // Configure the search info and add any event listeners...
 
