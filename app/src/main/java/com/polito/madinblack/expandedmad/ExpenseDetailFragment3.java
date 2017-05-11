@@ -132,8 +132,7 @@ public class ExpenseDetailFragment3 extends Fragment {
                     }
                     else {
                         (rootView.findViewById(R.id.roundedCostLayout)).setVisibility(View.VISIBLE);
-                        ((TextView) rootView.findViewById(R.id.roundedCost)).setText(String.format("%.2f",(expense.getRoundedCost().toString())));
-                        //((LinearLayout) rootView.findViewById(R.id.currencyLayout)).setLayou
+                        ((TextView) rootView.findViewById(R.id.roundedCost)).setText(String.format("%.2f",(expense.getRoundedCost())));
                     }
 
                     if( expense.getPaidByPhoneNumber().equals(ma.getUserPhoneNumber()) )
