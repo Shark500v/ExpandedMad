@@ -112,21 +112,6 @@ public class GroupHistory extends AppCompatActivity {
     }
 
 
-    private List<HistoryInfo> createList(int size) {
-
-        List<HistoryInfo> result = new ArrayList<HistoryInfo>();
-        for (int i=1; i <= size; i++) {
-            HistoryInfo ci = new HistoryInfo();
-            ci.setName("Name " + i);
-            ci.setContent("Surname " + i + " Ciao ho aggiunto la spesa");
-            ci.setDate(new Date());
-            result.add(ci);
-
-        }
-
-        return result;
-    }
-
     public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ContactViewHolder> {
 
         private List<HistoryInfo> mValues = new ArrayList<>();
@@ -252,10 +237,24 @@ public class GroupHistory extends AppCompatActivity {
         public void onBindViewHolder(ContactViewHolder contactViewHolder, int i) {
             HistoryInfo ci = mValues.get(i);
 
-            SpannableString spanString = new SpannableString(ci.getName() + " " + ci.getContent());
+            String message = getMessageFromNumber(ci);
+            SpannableString spanString = new SpannableString(ci.getName() + " " + message );
             spanString.setSpan(new StyleSpan(Typeface.BOLD), 0, ci.getName().length(), 0);
             contactViewHolder.vContent.setText( spanString );
             contactViewHolder.vTitle.setText(ci.convertDateToString());
+        }
+
+        private String getMessageFromNumber(HistoryInfo hi){
+            long l = hi.getContent();
+            switch ((int)l){
+                case 0:
+                    return getString(R.string.history_expense)+ " "+String.format("%.2f",hi.getCost()) +" "+hi.getCurrecnySymbol();
+                case 1:
+                    return getString(R.string.history_payment_part1)+ " "+ hi.getPaidTo()+ " "
+                            +getString(R.string.history_payment_part2)+String.format("%.2f",hi.getCost()) +" "+hi.getCurrecnySymbol();
+                default:
+                    return "Error";
+            }
         }
 
         @Override

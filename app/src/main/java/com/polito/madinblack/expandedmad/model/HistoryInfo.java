@@ -6,18 +6,28 @@ import java.util.Date;
 import java.util.Locale;
 
 public class HistoryInfo {
-
+    /**
+     *
+     *  0: New Expense
+     *  1: New Payment
+     */
     private String name;
-    private String content;
+    private Long content;
+    private Double cost;
+    private String currecnySymbol;
+    private String paidTo;
     private Date date;
 
     public HistoryInfo(){
 
     }
 
-    public HistoryInfo(String name, String content){
+    public HistoryInfo(String name, Long content, Double cost, String currencySymbol, String paidTo){
         this.name = name;
         this.content = content;
+        this.cost = cost;
+        this.currecnySymbol = currencySymbol;
+        this.paidTo = paidTo;
         date = new Date();
 
     }
@@ -30,12 +40,37 @@ public class HistoryInfo {
         this.name = name;
     }
 
-    public String getContent() {
+    public Long getContent() {
         return content;
     }
 
-    public void setContent(String content) {
+    public void setContent(Long content) {
         this.content = content;
+    }
+
+    public Double getCost() {
+        return cost;
+    }
+
+    public void setCost(Double cost) {
+        this.cost = cost;
+    }
+
+    public String getCurrecnySymbol() {
+        return currecnySymbol;
+    }
+
+    public void setCurrecnySymbol(String currecnySymbol) {
+        this.currecnySymbol = currecnySymbol;
+    }
+
+
+    public String getPaidTo() {
+        return paidTo;
+    }
+
+    public void setPaidTo(String paidTo) {
+        this.paidTo = paidTo;
     }
 
     public Date getDate() {
