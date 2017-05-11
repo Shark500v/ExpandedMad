@@ -26,11 +26,6 @@ import com.polito.madinblack.expandedmad.utility.TabView;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by Ale on 11/05/2017.
- */
-
-
 public class PaymentDetailActivity extends AppCompatActivity {
 
     public static final String ARG_EXPENSE_ID = "expenseId";
@@ -224,8 +219,8 @@ public class PaymentDetailActivity extends AppCompatActivity {
                 //payments.put(paymentFirebase.getId(), paymentFirebase);
 
                 /*update the history*/
-                /*HistoryInfo historyInfo = new HistoryInfo(paidByName+" "+paidBySurname, 1L, cost, currencySymbol, null);
-                mDatabaseRootReference.child("history/"+groupId).push().setValue(historyInfo);*/
+                HistoryInfo historyInfo = new HistoryInfo(paymentInfo.getUserNameDisplayed(), 1L, expenseCost, currencySymbol, expenseUserName + " " + expenseUserSurname);
+                mDatabaseRootReference.child("history/"+groupId).push().setValue(historyInfo);
 
 
             }
