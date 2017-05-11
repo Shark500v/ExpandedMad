@@ -43,8 +43,7 @@ public class PaymentDetailActivity extends AppCompatActivity {
     private Double expenseCost;
     private MyApplication ma;
     private PaymentRecyclerAdapter mAdapter;
-    private PaymentRecyclerAdapter.PaymentInfo paymentUserPaidExpense;
-    private String paymentUserPaidExpenseId;
+    private PaymentRecyclerAdapter.PaymentInfo paymentInfoUserPaid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,9 +81,7 @@ public class PaymentDetailActivity extends AppCompatActivity {
                 RecyclerView.ViewHolder.class,
                 getApplicationContext(),
                 mDatabasePaymentsReference,
-                changedPayments,
-                paymentUserPaidExpense,
-                paymentUserPaidExpenseId
+                changedPayments
         );
         recyclerView.setAdapter(mAdapter);
     }
@@ -116,13 +113,15 @@ public class PaymentDetailActivity extends AppCompatActivity {
 
 
             Double totPaid = 0D;
+            paymentInfoUserPaid = changedPayments.remove(ma.getFirebaseId());
+
             for(String paymentKey : changedPayments.keySet()){
 
                 final PaymentRecyclerAdapter.PaymentInfo paymentInfo= changedPayments.get(paymentKey);
                 totPaid += paymentInfo.getPaidNow();
 
                 mDatabaseRootReference
-                        .child("groups/"+groupId+"/users/"+paymentInfo.getUserFirebaseId()+"/balances/"+paymentInfo.getUserFirebaseId()+"/balance")
+                        .child("groups/"+groupId+"/users/"+paymentInfo.getUserFirebaseId()+"/balances/"+paymentInfoUserPaid.getUserFirebaseId()+"/balance")
                         .runTransaction(new Transaction.Handler() {
 
                             @Override
@@ -142,13 +141,14 @@ public class PaymentDetailActivity extends AppCompatActivity {
                                                    boolean committed, DataSnapshot currentData) {
                                 //This method will be called once with the results of the transaction.
                                 //Update remove the user from the group
+                                int x = 1;
                             }
                         });
 
 
 
                 mDatabaseRootReference
-                        .child("groups/"+groupId+"/users/"+paymentInfo.getUserFirebaseId()+"/balances/"+paymentInfo.getUserFirebaseId()+"/balance")
+                        .child("groups/"+groupId+"/users/"+paymentInfoUserPaid.getUserFirebaseId()+"/balances/"+paymentInfo.getUserFirebaseId()+"/balance")
                         .runTransaction(new Transaction.Handler() {
 
                             @Override
@@ -168,6 +168,7 @@ public class PaymentDetailActivity extends AppCompatActivity {
                                                    boolean committed, DataSnapshot currentData) {
                                 //This method will be called once with the results of the transaction.
                                 //Update remove the user from the group
+                                int x = 1;
                             }
                         });
 
@@ -182,10 +183,10 @@ public class PaymentDetailActivity extends AppCompatActivity {
                             public Transaction.Result doTransaction(MutableData currentData) {
                                 if (currentData.getValue() == null) {
                                     //no default value for data, set one
-                                    currentData.setValue(paymentInfo.getBalance() - paymentInfo.getPaidNow());
+                                    currentData.setValue(paymentInfo.getBalance() + paymentInfo.getPaidNow());
                                 } else {
                                     // perform the update operations on data
-                                    currentData.setValue(currentData.getValue(Double.class) - paymentInfo.getPaidNow());
+                                    currentData.setValue(currentData.getValue(Double.class) + paymentInfo.getPaidNow());
                                 }
                                 return Transaction.success(currentData);
                             }
@@ -195,8 +196,13 @@ public class PaymentDetailActivity extends AppCompatActivity {
                                                    boolean committed, DataSnapshot currentData) {
                                 //This method will be called once with the results of the transaction.
                                 //Update remove the user from the group
+                                int x = 1;
                             }
                         });
+
+
+
+
 
                 mDatabaseRootReference
                         .child("expenses/"+expenseId+"/payments/"+paymentKey+"/paid")
@@ -208,12 +214,18 @@ public class PaymentDetailActivity extends AppCompatActivity {
 
             }
 
+            mDatabaseRootReference
+                    .child("users/"+paymentInfoUserPaid.getUserPhoneNumber()
+                            +"/"+paymentInfoUserPaid.getUserFirebaseId()+"/groups/"+groupId
+                            +"/expenses/"+expenseId+"myBalance")
+                    .setValue(paymentInfoUserPaid.getPaidBefore()-totPaid);
+
 
             //paymentPaidFirebase.setPaid(paymentPaidFirebase.getPaid()-totPaid);
             //payments.put(paymentPaidFirebase.getId(), paymentPaidFirebase);
             mDatabaseRootReference
-                    .child("expenses/"+expenseId+"/payments/"+paymentUserPaidExpenseId+"/paid")
-                    .setValue(paymentUserPaidExpense.getPaidBefore());
+                    .child("expenses/"+expenseId+"/payments/"+paymentInfoUserPaid.getId()+"/paid")
+                    .setValue(paymentInfoUserPaid.getPaidBefore()-totPaid);
 
 
         }else if(id == R.id.fill_all_paid){
@@ -222,6 +234,8 @@ public class PaymentDetailActivity extends AppCompatActivity {
 
 
         }
+
+
         return super.onOptionsItemSelected(item);
     }
 

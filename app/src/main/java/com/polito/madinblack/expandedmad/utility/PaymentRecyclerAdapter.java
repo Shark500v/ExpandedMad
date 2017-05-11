@@ -41,16 +41,12 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
      */
     private MyApplication ma;
     private Map<String, PaymentInfo> changedPayment;
-    private String paymentUserPaidExpenseId;
-    private PaymentInfo paymentUserPaidExpense;
     private Context contex;
     public PaymentRecyclerAdapter(Class<PaymentFirebase> modelClass, int modelLayout, Class<RecyclerView.ViewHolder> viewHolderClass, Context contex, Query ref,
-                                  Map<String, PaymentInfo> changedPayment, PaymentInfo paymentUserPaidExpense, String paymentUserPaidExpenseId) {
+                                  Map<String, PaymentInfo> changedPayment) {
         super(modelClass, modelLayout, viewHolderClass, ref);
         ma =  MyApplication.getInstance();
         this.changedPayment = changedPayment;
-        this.paymentUserPaidExpense = paymentUserPaidExpense;
-        this.paymentUserPaidExpenseId = paymentUserPaidExpenseId;
         this.contex = contex;
     }
 
@@ -119,8 +115,9 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
                 }
             });
         } else{
-            paymentUserPaidExpense = new PaymentInfo(model, 0D);
-            paymentUserPaidExpenseId = model.getId();
+            PaymentInfo paymentInfo  = new PaymentInfo(paymentFirebase, 0D);
+            paymentInfo.setId(paymentFirebase.getId());
+            changedPayment.put(paymentFirebase.getUserFirebaseId(), paymentInfo);
             holder.mUserView.setText(contex.getString(R.string.you));
             holder.mToPaid.setText(model.getToPaid().toString());
             holder.mPaid.setText(model.getPaid().toString());
@@ -163,6 +160,9 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
         private Double paidNow;
         private Double balance;
         private Double paidBefore;
+        private String id;
+
+
 
         public PaymentInfo(String userFirebaseId, String userPhoneNumber, Double paidBefore, Double paidNow, Double balance) {
             this.userFirebaseId = userFirebaseId;
@@ -220,6 +220,14 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
 
         public void setPaidBefore(Double paidBefore) {
             this.paidBefore = paidBefore;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
         }
     }
 
