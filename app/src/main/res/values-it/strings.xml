@@ -139,6 +139,8 @@
     <string name="list_payment">Lista di pagamenti</string>
     <string name="pay_everyone">Salda tutti</string>
     <string name="confirm_inserted">Conferma selezionati</string>
+    <string name="go_to_list_of_payments">Vai alla lista di pagamenti</string>
+    <string name="payments_detail">Dettaglio Pagamenti</string>
 
     <string name="group">Gruppo</string>
     <string name="all_groups">Tutti i gruppi</string>
