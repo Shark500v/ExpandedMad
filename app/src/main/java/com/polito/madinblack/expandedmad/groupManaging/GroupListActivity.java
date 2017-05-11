@@ -283,6 +283,8 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             mChildEventListener = childEventListener;
         }
 
+
+
         //metodo per fare il download dallo storage delle immagini dei gruppi
         //da togliere
         public Bitmap downlaoadGroupImage(String groupCode){

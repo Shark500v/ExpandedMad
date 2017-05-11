@@ -7,9 +7,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
@@ -17,10 +22,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.polito.madinblack.expandedmad.R;
 
 
-public class Logout extends DialogFragment  {
+public class Logout extends DialogFragment implements
+        GoogleApiClient.OnConnectionFailedListener {
 
     private FirebaseAuth mAuth;
     private GoogleApiClient mGoogleApiClient;
+    private static final String TAG = "GoogleActivity";
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -38,6 +45,7 @@ public class Logout extends DialogFragment  {
 
 
         mGoogleApiClient = new GoogleApiClient.Builder(getContext())
+                .enableAutoManage(getActivity(), this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
@@ -47,6 +55,7 @@ public class Logout extends DialogFragment  {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked OK button
                 //manager here the logout
+
 
                     // Firebase sign out
                     mAuth.signOut();
@@ -58,6 +67,7 @@ public class Logout extends DialogFragment  {
                                 public void onResult(@NonNull Status status) {
                                     Intent intent = new Intent(getActivity(), CheckLogIn.class);
                                     startActivity(intent);
+                                    getActivity().finish();
 
                                 }
                             });
@@ -74,4 +84,20 @@ public class Logout extends DialogFragment  {
         alertDialog = builder.create();
         return alertDialog;
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        // An unresolvable error has occurred and Google APIs (including Sign-In) will not
+        // be available.
+        Log.d(TAG, "onConnectionFailed:" + connectionResult);
+        Toast.makeText(getActivity(), "Google Play Services error.", Toast.LENGTH_SHORT).show();
+    }
+
+
 }
