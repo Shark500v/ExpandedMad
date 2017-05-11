@@ -1,20 +1,20 @@
 package com.polito.madinblack.expandedmad.utility;
 
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.Query;
 import com.polito.madinblack.expandedmad.R;
-import com.polito.madinblack.expandedmad.model.Message;
+import com.polito.madinblack.expandedmad.model.Balance;
+import com.polito.madinblack.expandedmad.model.CostUtil;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.PaymentFirebase;
+import java.util.Map;
 
 //questa classe la usa per fare il managing della lista che deve mostrare
 public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFirebase,RecyclerView.ViewHolder> {
@@ -29,26 +29,82 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
      *                        using some combination of {@code limit()}, {@code startAt()}, and {@code endAt()}.
      */
     private MyApplication ma;
+    private Map<String, PaymentInfo> changedPayment;
+    private String paymentUserPaidExpenseId;
+    private PaymentInfo paymentUserPaidExpense;
 
-    public PaymentRecyclerAdapter(Class<PaymentFirebase> modelClass, int modelLayout, Class<RecyclerView.ViewHolder> viewHolderClass, Query ref) {
+    public PaymentRecyclerAdapter(Class<PaymentFirebase> modelClass, int modelLayout, Class<RecyclerView.ViewHolder> viewHolderClass, Query ref,
+                                  Map<String, PaymentInfo> changedPayment, PaymentInfo paymentUserPaidExpense, String paymentUserPaidExpenseId) {
         super(modelClass, modelLayout, viewHolderClass, ref);
         ma =  MyApplication.getInstance();
+        this.changedPayment = changedPayment;
+        this.paymentUserPaidExpense = paymentUserPaidExpense;
+        this.paymentUserPaidExpenseId = paymentUserPaidExpenseId;
+
     }
 
 
     @Override
     protected void populateViewHolder(RecyclerView.ViewHolder viewHolder, PaymentFirebase model, int position) {
+        final PaymentFirebase paymentFirebase = model;
         //da cambiare il controllo, è solo per ricordarmi che se mio mess va a destra
         if(!model.getUserFirebaseId().equals(ma.getFirebaseId())){
-            ViewHolder holder = (ViewHolder) viewHolder;
+            final ViewHolder holder = (ViewHolder) viewHolder;
             holder.mUserView.setText(model.getUserNameDisplayed());
             holder.mToPaid.setText(model.getDebit().toString());
+            if(model.getDebit()==0){
+                holder.mPaid.setEnabled(false);
+            }
+
             holder.mFillPaid.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
+                    PaymentInfo paymentInfo
+                            = new PaymentInfo(paymentFirebase, paymentFirebase.getDebit());
+
+                    changedPayment.put(paymentFirebase.getId(), paymentInfo);
+                    holder.mPaid.setText(paymentFirebase.getDebit().toString());
                 }
             });
+
+            holder.mPaid.addTextChangedListener(new TextWatcher() {
+
+                public void afterTextChanged(Editable s) {
+                    if(s.length() != 0 && CostUtil.isParsableAsDouble(s.toString()) && Double.valueOf(s.toString())!=0){
+                        if(Double.valueOf(s.toString())>Double.valueOf(holder.mPaid.getText().toString())){
+                            PaymentInfo paymentInfo
+                                    = new PaymentInfo(paymentFirebase, paymentFirebase.getDebit());
+
+                            changedPayment.put(paymentFirebase.getId(), paymentInfo);
+                            holder.mPaid.setText(paymentFirebase.getDebit().toString());
+
+                        }else{
+                            PaymentInfo paymentInfo
+                                    = new PaymentInfo(paymentFirebase, Double.valueOf(holder.mPaid.getText().toString()));
+                            changedPayment.put(paymentFirebase.getId(), paymentInfo);
+                        }
+
+
+                    }
+                    else{
+                        changedPayment.remove(paymentFirebase.getId());
+                    }
+                }
+
+                public void beforeTextChanged(CharSequence s, int start,
+                                              int count, int after) {
+                }
+
+                public void onTextChanged(CharSequence s, int start,
+                                          int before, int count) {
+
+                }
+            });
+        } else{
+            paymentUserPaidExpense = new PaymentInfo(model, 0D);
+            paymentUserPaidExpenseId = model.getExpenseId();
+
         }
     }
 
@@ -76,4 +132,72 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
             return super.toString() + " '" + mUserView.getText() + "'";
         }
     }
+
+    public class PaymentInfo{
+        private String userFirebaseId;
+        private String userPhoneNumber;
+        private Double paidNow;
+        private Double balance;
+        private Double paidBefore;
+
+        public PaymentInfo(String userFirebaseId, String userPhoneNumber, Double paidBefore, Double paidNow, Double balance) {
+            this.userFirebaseId = userFirebaseId;
+            this.userPhoneNumber = userPhoneNumber;
+            this.paidNow = paidNow;
+            this.balance = balance;
+            this.paidBefore = paidBefore;
+        }
+
+        public PaymentInfo(PaymentFirebase paymentFirebase, Double paidNow){
+            this.userFirebaseId = paymentFirebase.getUserFirebaseId();
+            this.userPhoneNumber = paymentFirebase.getUserPhoneNumber();
+            this.paidNow = paidNow;
+            this.balance = paymentFirebase.getBalance();
+            this.paidBefore = paymentFirebase.getPaid();
+
+        }
+
+        public String getUserFirebaseId() {
+            return userFirebaseId;
+        }
+
+        public void setUserFirebaseId(String userFirebaseId) {
+            this.userFirebaseId = userFirebaseId;
+        }
+
+        public String getUserPhoneNumber() {
+            return userPhoneNumber;
+        }
+
+        public void setUserPhoneNumber(String userPhoneNumber) {
+            this.userPhoneNumber = userPhoneNumber;
+        }
+
+
+        public Double getBalance() {
+            return balance;
+        }
+
+        public void setBalance(Double balance) {
+            this.balance = balance;
+        }
+
+        public Double getPaidNow() {
+            return paidNow;
+        }
+
+        public void setPaidNow(Double paidNow) {
+            this.paidNow = paidNow;
+        }
+
+        public Double getPaidBefore() {
+            return paidBefore;
+        }
+
+        public void setPaidBefore(Double paidBefore) {
+            this.paidBefore = paidBefore;
+        }
+    }
+
+
 }
