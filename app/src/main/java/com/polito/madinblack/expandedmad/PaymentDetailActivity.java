@@ -80,6 +80,7 @@ public class PaymentDetailActivity extends AppCompatActivity {
                 PaymentFirebase.class,
                 R.layout.list_item,
                 RecyclerView.ViewHolder.class,
+                getApplicationContext(),
                 mDatabasePaymentsReference,
                 changedPayments,
                 paymentUserPaidExpense,
