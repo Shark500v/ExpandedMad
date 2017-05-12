@@ -86,8 +86,10 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
             holder.mPaid.addTextChangedListener(new TextWatcher() {
 
                 public void afterTextChanged(Editable s) {
-                    if(s.length() != 0 && CostUtil.isParsableAsDouble(s.toString()) && Double.valueOf(s.toString())!=0){
-                        if(Double.valueOf(s.toString())>Double.valueOf(holder.mToPaid.getText().toString())){
+
+                    String editString = CostUtil.replaceDecimalComma(s.toString());
+                    if(s.length() != 0 && CostUtil.isParsableAsDouble(editString) && Double.valueOf(editString)!=0){
+                        if(Double.valueOf(editString)>Double.valueOf(CostUtil.replaceDecimalComma(holder.mToPaid.getText().toString()))){
                             /*
                             PaymentInfo paymentInfo
                                     = new PaymentInfo(paymentFirebase, paymentFirebase.getDebit());
@@ -97,7 +99,7 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
 
                         }else{
                             PaymentInfo paymentInfo
-                                    = new PaymentInfo(paymentFirebase, Double.valueOf(holder.mPaid.getText().toString()));
+                                    = new PaymentInfo(paymentFirebase, Double.valueOf(CostUtil.replaceDecimalComma(holder.mPaid.getText().toString())));
                             changedPayment.put(paymentFirebase.getId(), paymentInfo);
                         }
 
