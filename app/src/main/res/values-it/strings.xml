@@ -156,4 +156,7 @@
     <string name="rounded_cost">Costo arrotondato</string>
 
     <string name="zero">0,00</string>
+    <string name="no_expenses">Nessuna spesa in</string>
+    <string name="in">nel</string>
+    <string name="no_expenses_in">Nessuna spesa nel</string>
 </resources>

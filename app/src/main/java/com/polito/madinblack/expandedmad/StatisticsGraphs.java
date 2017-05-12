@@ -286,7 +286,11 @@ public class StatisticsGraphs extends AppCompatActivity {
         series.setValuesOnTopColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
         //series.setTitle(groupName + "-" + yearSelected);                     //etichetta della serie di dati
         if(max == 0.0) {
-            Toast.makeText(getApplicationContext(), "No expenses for " + groupName + " in " + yearSelected, Toast.LENGTH_LONG).show();
+            if(!groupName.equals(getString(R.string.all_groups))) {
+                Toast.makeText(getApplicationContext(), getString(R.string.no_expenses) + " " + groupName + " " + getString(R.string.in) + " " + yearSelected, Toast.LENGTH_LONG).show();
+            }else{
+                Toast.makeText(getApplicationContext(), getString(R.string.no_expenses_in) + " " + yearSelected, Toast.LENGTH_LONG).show();
+            }
         }
         graph.addSeries(series); //aggiunge la serie di dati al grafico
         if(max>10) {
