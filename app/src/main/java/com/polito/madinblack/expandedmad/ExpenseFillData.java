@@ -55,11 +55,14 @@ import com.polito.madinblack.expandedmad.utility.TabView;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -514,7 +517,12 @@ public class ExpenseFillData extends AppCompatActivity {
             amount = 0d;
             enableWeight = false;
         }else{
-            amount = Double.parseDouble(value);
+            NumberFormat format = NumberFormat.getInstance(Locale.getDefault());
+            try {
+                amount = format.parse(value).doubleValue();
+            } catch (ParseException e) {
+                amount = 0.00;
+            }
             enableWeight = true;
         }
 
@@ -679,7 +687,13 @@ public class ExpenseFillData extends AppCompatActivity {
                     public void afterTextChanged(Editable s) {
 
                         if(!onBind){
-                            Float value = s.toString().equals("")?0:Float.parseFloat(s.toString());
+                            NumberFormat format = NumberFormat.getInstance(Locale.getDefault());
+                            Double value = null;
+                            try {
+                                value = s.toString().equals("")?0:format.parse(s.toString()).doubleValue();
+                            } catch (ParseException e) {
+                                value = 0.00;
+                            }
                             mItem.setToPaid(value);
                             mItem.setModified(true);
                             mNumber.setText("-");
