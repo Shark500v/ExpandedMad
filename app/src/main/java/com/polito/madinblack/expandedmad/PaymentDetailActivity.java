@@ -23,6 +23,7 @@ import com.polito.madinblack.expandedmad.utility.PaymentRecyclerAdapter;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class PaymentDetailActivity extends AppCompatActivity {
 
@@ -119,10 +120,11 @@ public class PaymentDetailActivity extends AppCompatActivity {
 
             Double totPaid = 0D;
             paymentInfoUserPaid = changedPayments.remove(ma.getFirebaseId());
+            Set<String> keySet = changedPayments.keySet();
 
-            for(String paymentKey : changedPayments.keySet()){
+            for(String paymentKey : keySet){
 
-                final PaymentRecyclerAdapter.PaymentInfo paymentInfo= changedPayments.get(paymentKey);
+                final PaymentRecyclerAdapter.PaymentInfo paymentInfo= changedPayments.remove(paymentKey);
                 totPaid += paymentInfo.getPaidNow();
 
                 mDatabaseRootReference
@@ -236,6 +238,7 @@ public class PaymentDetailActivity extends AppCompatActivity {
                     .child("expenses/"+expenseId+"/payments/"+paymentInfoUserPaid.getId()+"/paid")
                     .setValue(paymentInfoUserPaid.getPaidBefore()-totPaid);
 
+            //changedPayments.clear();
 
         }else if(id == R.id.fill_all_paid){
 

@@ -22,6 +22,11 @@ public class CostUtil {
         return new BigDecimal(val.toString()).setScale(2, RoundingMode.UP).doubleValue();
     }
 
+    public static Double roundDown(Double val, int scale) {
+        return new BigDecimal(val.toString()).setScale(2, RoundingMode.DOWN).doubleValue();
+    }
+
+
     public static boolean validateTelFaxNumber(String number)
     {
         if (number == null || number.isEmpty())

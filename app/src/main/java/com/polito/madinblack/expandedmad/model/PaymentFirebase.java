@@ -76,21 +76,21 @@ public class PaymentFirebase {
 
 
         if(paid < toPaid)
-            return (toPaid-paid);
+            return CostUtil.roundDown(toPaid-paid, 2);
         else
             return 0d;
     }
 
     public Double getCredit(){
         if(paid > toPaid)
-            return (paid-toPaid);
+            return CostUtil.roundDown(paid-toPaid, 2);
         else
             return 0d;
 
     }
 
     public Double getBalance(){
-        return (paid-toPaid);
+        return CostUtil.roundDown((paid-toPaid), 2);
     }
 
 
