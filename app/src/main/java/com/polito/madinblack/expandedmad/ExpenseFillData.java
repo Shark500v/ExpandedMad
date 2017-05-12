@@ -44,6 +44,7 @@ import com.google.firebase.storage.OnPausedListener;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.polito.madinblack.expandedmad.model.CostUtil;
 import com.polito.madinblack.expandedmad.model.DecimalDigitsInputFilter;
 import com.polito.madinblack.expandedmad.model.Expense;
 
@@ -109,7 +110,7 @@ public class ExpenseFillData extends AppCompatActivity {
         inputName = (EditText) findViewById(R.id.input_title);
         inputAmount = (EditText) findViewById(R.id.input_amount);
 
-        inputAmount.setFilters(new InputFilter[] { new DecimalDigitsInputFilter(2)});
+       // inputAmount.setFilters(new InputFilter[] { new DecimalDigitsInputFilter(2)});
 
         ma = MyApplication.getInstance();   //retrive del DB
 
@@ -141,7 +142,7 @@ public class ExpenseFillData extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                modifyProportion(s.toString());
+                modifyProportion(CostUtil.replaceDecimalComma(s.toString()));
             }
         });
 
@@ -384,7 +385,7 @@ public class ExpenseFillData extends AppCompatActivity {
             progressDialog.setTitle("Uploading");
             progressDialog.show();
 
-            StorageReference filePath = mStorage.child("Groups").child(groupID).child("Expenses").child(expenseId);
+            StorageReference filePath = mStorage.child("groups").child(groupID).child("expenses").child(expenseId);
             filePath.putBytes(bytesArr).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -437,7 +438,7 @@ public class ExpenseFillData extends AppCompatActivity {
     }
 
     private boolean validateAmount() {
-        String amountS = inputAmount.getText().toString().trim();
+        String amountS = CostUtil.replaceDecimalComma(inputAmount.getText().toString().trim());
         if (amountS.isEmpty()) {
             inputLayoutAmount.setError(getString(R.string.err_msg_amount));
             requestFocus(inputAmount);
@@ -469,7 +470,7 @@ public class ExpenseFillData extends AppCompatActivity {
             amount = 0d;
             enableWeight = false;
         }else{
-            amount = Double.parseDouble(inputAmount.getText().toString());
+            amount = Double.parseDouble(CostUtil.replaceDecimalComma(inputAmount.getText().toString()));
             enableWeight = true;
         }
 
@@ -510,6 +511,7 @@ public class ExpenseFillData extends AppCompatActivity {
     }
 
     private void modifyProportion(String value) {
+
         boolean enableWeight;
         int totalWeigth = 0;
 
@@ -666,7 +668,8 @@ public class ExpenseFillData extends AppCompatActivity {
                 plus = (Button) view.findViewById(R.id.increase);
                 minus = (Button) view.findViewById(R.id.decrease);
 
-                partition.setFilters(new InputFilter[] { new DecimalDigitsInputFilter(2)});
+                /*to Modify*/
+                //partition.setFilters(new InputFilter[] { new DecimalDigitsInputFilter(2)});
                 partition.addTextChangedListener( new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -682,7 +685,7 @@ public class ExpenseFillData extends AppCompatActivity {
                     public void afterTextChanged(Editable s) {
 
                         if(!onBind){
-                            Double value = s.toString().equals("")?0:Double.parseDouble(s.toString());
+                            Double value = CostUtil.replaceDecimalComma(s.toString()).equals("")?0:Double.parseDouble(CostUtil.replaceDecimalComma(s.toString()));
                             mItem.setToPaid(value);
                             mItem.setModified(true);
                             mNumber.setText("-");
