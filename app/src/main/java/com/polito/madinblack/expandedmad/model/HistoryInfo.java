@@ -29,7 +29,6 @@ public class HistoryInfo {
         this.currecnySymbol = currencySymbol;
         this.paidTo = paidTo;
         date = new Date();
-
     }
 
     public String getName() {

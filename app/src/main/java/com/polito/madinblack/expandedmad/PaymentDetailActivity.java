@@ -219,7 +219,7 @@ public class PaymentDetailActivity extends AppCompatActivity {
                 //payments.put(paymentFirebase.getId(), paymentFirebase);
 
                 /*update the history*/
-                HistoryInfo historyInfo = new HistoryInfo(paymentInfo.getUserNameDisplayed(), 1L, expenseCost, currencySymbol, expenseUserName + " " + expenseUserSurname);
+                HistoryInfo historyInfo = new HistoryInfo(paymentInfo.getUserNameDisplayed(), 1L, expenseCost, currencySymbol, expenseUserName);
                 mDatabaseRootReference.child("history/"+groupId).push().setValue(historyInfo);
 
 
@@ -241,9 +241,6 @@ public class PaymentDetailActivity extends AppCompatActivity {
             //changedPayments.clear();
 
         }else if(id == R.id.fill_all_paid){
-
-
-
 
         }else if(id == 16908332){
             Intent intent3 = new Intent(this, ExpenseDetailFragment3.class);
