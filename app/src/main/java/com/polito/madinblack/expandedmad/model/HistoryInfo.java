@@ -9,6 +9,7 @@ public class HistoryInfo {
      *
      *  0: New Expense
      *  1: New Payment
+     *  2: New User In Group
      */
     private String name;
     private Long content;
