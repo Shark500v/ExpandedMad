@@ -168,4 +168,5 @@
     <string name="expenses_in_euro">Expenses (€)</string>
     <string name="chat_hint">Write a message</string>
     <string name="rounded_cost">Rounded cost</string>
+    <string name="zero">0.00</string>
 </resources>

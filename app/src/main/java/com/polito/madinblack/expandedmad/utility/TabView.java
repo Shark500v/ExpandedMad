@@ -221,6 +221,13 @@ public class TabView extends AppCompatActivity {
         }
 
         @Override
+        public void onStart(){
+            super.onStart();
+            FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+            fab.hide();
+        }
+
+        @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
             rootView = inflater.inflate(R.layout.activity_chat, container, false);
@@ -293,6 +300,7 @@ public class TabView extends AppCompatActivity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+
         }
 
         @Override
@@ -374,6 +382,10 @@ public class TabView extends AppCompatActivity {
         @Override
         public void onStart(){
             super.onStart();
+
+            FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+            fab.hide();
+
 
             adapter = new RecyclerViewAdapterUsers(getContext(), mDatabaseBalancesReference);
             recyclerView = (RecyclerView) rootView.findViewById(R.id.item_list);
