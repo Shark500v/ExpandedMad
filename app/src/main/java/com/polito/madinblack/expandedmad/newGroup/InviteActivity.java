@@ -125,8 +125,8 @@ public class InviteActivity extends AppCompatActivity {
                 userName + " would like to add you in his/her group.<br><br>" +
                 "To join your friend " +
                 //"<a href=\"%%APPINVITE_LINK_PLACEHOLDER%%\">install</a>" +
-                "install" +
-                " our app now using this code: " + code +".<br><br>" +
+                "install our app now using this code.<br><br>" +
+                "Invitation code: <br><br>" + code + "<br><br>" +
                 "We are waiting for you on MadExpenses,<br><br>" +
                 "Your MadExpenses Team";
 
