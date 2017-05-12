@@ -145,6 +145,9 @@ public class Group {
                             GroupForUser newGroupForUser = new GroupForUser(groupName, groupId, (Long) currentData.getValue(), 0L);
                             mDatabaseRootReference.child("users/"+userPhoneNumber+"/"+userFirebaseId+"/groups/"+groupId).setValue(newGroupForUser);
 
+                            /*update the history*/
+                            HistoryInfo historyInfo = new HistoryInfo(userName+" "+userSurname, 2L, 0D, null, null);
+                            mDatabaseRootReference.child("history/"+groupId).push().setValue(historyInfo);
 
                         }
 

@@ -44,6 +44,7 @@ import com.google.firebase.storage.OnPausedListener;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.polito.madinblack.expandedmad.model.CostUtil;
 import com.polito.madinblack.expandedmad.model.DecimalDigitsInputFilter;
 import com.polito.madinblack.expandedmad.model.Expense;
 
@@ -56,11 +57,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -139,7 +142,7 @@ public class ExpenseFillData extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                modifyProportion(s.toString());
+                modifyProportion(CostUtil.replaceDecimalComma(s.toString()));
             }
         });
 
@@ -382,7 +385,7 @@ public class ExpenseFillData extends AppCompatActivity {
             progressDialog.setTitle("Uploading");
             progressDialog.show();
 
-            StorageReference filePath = mStorage.child("Groups").child(groupID).child("Expenses").child(expenseId);
+            StorageReference filePath = mStorage.child("groups").child(groupID).child("expenses").child(expenseId);
             filePath.putBytes(bytesArr).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -435,7 +438,7 @@ public class ExpenseFillData extends AppCompatActivity {
     }
 
     private boolean validateAmount() {
-        String amountS = inputAmount.getText().toString().trim();
+        String amountS = CostUtil.replaceDecimalComma(inputAmount.getText().toString().trim());
         if (amountS.isEmpty()) {
             inputLayoutAmount.setError(getString(R.string.err_msg_amount));
             requestFocus(inputAmount);
@@ -467,7 +470,7 @@ public class ExpenseFillData extends AppCompatActivity {
             amount = 0d;
             enableWeight = false;
         }else{
-            amount = Double.parseDouble(inputAmount.getText().toString());
+            amount = Double.parseDouble(CostUtil.replaceDecimalComma(inputAmount.getText().toString()));
             enableWeight = true;
         }
 
@@ -508,6 +511,7 @@ public class ExpenseFillData extends AppCompatActivity {
     }
 
     private void modifyProportion(String value) {
+
         boolean enableWeight;
         int totalWeigth = 0;
 
@@ -680,7 +684,7 @@ public class ExpenseFillData extends AppCompatActivity {
                     public void afterTextChanged(Editable s) {
 
                         if(!onBind){
-                            Double value = s.toString().equals("")?0:Double.parseDouble(s.toString());
+                            Double value = CostUtil.replaceDecimalComma(s.toString()).equals("")?0:Double.parseDouble(CostUtil.replaceDecimalComma(s.toString()));
                             mItem.setToPaid(value);
                             mItem.setModified(true);
                             mNumber.setText("-");

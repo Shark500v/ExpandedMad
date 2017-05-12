@@ -28,10 +28,9 @@ android:layout_height="72dp"
         android:hint="@string/zero"
         android:textAlignment="center"
         android:inputType="numberDecimal"
+        android:digits="0123456789.,"
         android:layout_toStartOf="@+id/slash"
         android:textAppearance="?attr/textAppearanceListItem"
-
-
         />
 
     <TextView

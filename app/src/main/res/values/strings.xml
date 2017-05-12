@@ -152,6 +152,7 @@
     <string name="history_expense">has added a new expense. Cost : </string>
     <string name="history_payment_part1">has paid to</string>
     <string name="history_payment_part2">. Cost :</string>
+    <string name="history_new_memeber">has joined to the group.</string>
     <string name="no_detail">No detail available</string>
     <string name="pay_button">Pay</string>
     <string name="list_payment">Pending payments</string>

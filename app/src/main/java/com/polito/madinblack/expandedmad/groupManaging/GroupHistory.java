@@ -241,6 +241,8 @@ public class GroupHistory extends AppCompatActivity {
                 case 1:
                     return getString(R.string.history_payment_part1)+ " "+ hi.getPaidTo()+ " "
                             +getString(R.string.history_payment_part2)+String.format("%.2f",hi.getCost()) +" "+hi.getCurrecnySymbol();
+                case 2:
+                    return getString(R.string.history_new_memeber);
                 default:
                     return "Error";
             }

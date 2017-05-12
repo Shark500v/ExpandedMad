@@ -55,5 +55,9 @@ public class CostUtil {
         }
     }
 
+    public static String replaceDecimalComma(String string){
+        return string.replace(',', '.');
+    }
+
 
 }
