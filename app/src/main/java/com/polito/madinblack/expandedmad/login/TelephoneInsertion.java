@@ -114,7 +114,7 @@ public class TelephoneInsertion extends AppCompatActivity{
 
         isFirst = true;
 
-        mStatusTextView.setText("Logged as: " + ma.getUserName() + " " + ma.getUserSurname());
+        mStatusTextView.setText(getString(R.string.signin_as) + " " + ma.getUserName() + " " + ma.getUserSurname());
         findViewById(R.id.fields).setVisibility(View.VISIBLE);
         findViewById(R.id.button_field).setVisibility(View.VISIBLE);
         findViewById(R.id.sign_in_button).setVisibility(View.GONE);
