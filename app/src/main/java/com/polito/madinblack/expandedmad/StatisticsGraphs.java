@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -283,7 +285,9 @@ public class StatisticsGraphs extends AppCompatActivity {
         series.setDrawValuesOnTop(true);
         series.setValuesOnTopColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
         //series.setTitle(groupName + "-" + yearSelected);                     //etichetta della serie di dati
-        //graph.setTitle(groupName + "-" + yearSelected);
+        if(max == 0.0) {
+            Toast.makeText(getApplicationContext(), "No expenses for " + groupName + " in " + yearSelected, Toast.LENGTH_LONG).show();
+        }
         graph.addSeries(series); //aggiunge la serie di dati al grafico
         if(max>10) {
             graph.getViewport().setMaxY(max + max / 4);
