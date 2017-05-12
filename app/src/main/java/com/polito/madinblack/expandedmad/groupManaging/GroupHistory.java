@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -21,24 +19,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.MutableData;
-import com.google.firebase.database.Transaction;
 import com.polito.madinblack.expandedmad.R;
-import com.polito.madinblack.expandedmad.groupMembers.GroupMemebersActivity;
-import com.polito.madinblack.expandedmad.model.ExpenseForUser;
 import com.polito.madinblack.expandedmad.model.HistoryInfo;
-import com.polito.madinblack.expandedmad.model.MyApplication;
-import com.polito.madinblack.expandedmad.utility.RecyclerViewAdapterUsers;
 import com.polito.madinblack.expandedmad.utility.TabView;
-
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class GroupHistory extends AppCompatActivity {

@@ -1,8 +1,6 @@
 package com.polito.madinblack.expandedmad.model;
 
 
-import com.polito.madinblack.expandedmad.R;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;

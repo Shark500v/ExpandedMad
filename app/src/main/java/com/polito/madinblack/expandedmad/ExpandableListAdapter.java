@@ -5,13 +5,9 @@ package com.polito.madinblack.expandedmad;
  */
 
 import java.util.ArrayList;
-import java.util.EventListener;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -22,15 +18,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.MutableData;
-import com.google.firebase.database.Transaction;
 import com.polito.madinblack.expandedmad.model.CostUtil;
-import com.polito.madinblack.expandedmad.model.Payment;
 import com.polito.madinblack.expandedmad.model.PaymentFirebase;
 
 public class ExpandableListAdapter extends BaseExpandableListAdapter {

@@ -1,6 +1,6 @@
 package com.polito.madinblack.expandedmad.model;
 
-import android.graphics.drawable.PaintDrawable;
+
 
 public class Payment {
 

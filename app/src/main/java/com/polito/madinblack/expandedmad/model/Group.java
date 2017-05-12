@@ -7,8 +7,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -145,7 +143,7 @@ public class Group {
                                            boolean committed, DataSnapshot currentData){
                         if(committed){
                             GroupForUser newGroupForUser = new GroupForUser(groupName, groupId, (Long) currentData.getValue(), 0L);
-                            mDatabaseRootReference.child("users"+userPhoneNumber+"/"+userFirebaseId+"/groups/"+groupId).setValue(newGroupForUser);
+                            mDatabaseRootReference.child("users/"+userPhoneNumber+"/"+userFirebaseId+"/groups/"+groupId).setValue(newGroupForUser);
 
 
                         }

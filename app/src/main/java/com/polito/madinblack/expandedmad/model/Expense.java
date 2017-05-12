@@ -1,15 +1,11 @@
 package com.polito.madinblack.expandedmad.model;
 
-import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
-import com.polito.madinblack.expandedmad.R;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
