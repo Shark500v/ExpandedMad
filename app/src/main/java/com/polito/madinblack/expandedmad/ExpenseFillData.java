@@ -110,7 +110,7 @@ public class ExpenseFillData extends AppCompatActivity {
         inputName = (EditText) findViewById(R.id.input_title);
         inputAmount = (EditText) findViewById(R.id.input_amount);
 
-        inputAmount.setFilters(new InputFilter[] { new DecimalDigitsInputFilter(2)});
+       // inputAmount.setFilters(new InputFilter[] { new DecimalDigitsInputFilter(2)});
 
         ma = MyApplication.getInstance();   //retrive del DB
 
@@ -668,7 +668,8 @@ public class ExpenseFillData extends AppCompatActivity {
                 plus = (Button) view.findViewById(R.id.increase);
                 minus = (Button) view.findViewById(R.id.decrease);
 
-                partition.setFilters(new InputFilter[] { new DecimalDigitsInputFilter(2)});
+                /*to Modify*/
+                //partition.setFilters(new InputFilter[] { new DecimalDigitsInputFilter(2)});
                 partition.addTextChangedListener( new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
