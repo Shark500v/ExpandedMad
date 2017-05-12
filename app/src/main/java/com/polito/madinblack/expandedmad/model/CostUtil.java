@@ -1,17 +1,25 @@
 package com.polito.madinblack.expandedmad.model;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CostUtil {
-
+    /*
     public static double round(double number, double scale) {
         int pow = 10;
         for (int i = 1; i < scale; i++)
             pow *= 10;
         double tmp = number * pow;
         //return (double) (int) ((tmp - (int) tmp) >= 0.5f ? tmp + 1 : tmp) / pow;
-        return (double) (int) ((tmp - (int) tmp) > 0.0d ? tmp + 1 : tmp) / pow;
+        int result = (int) ((tmp - (int) tmp) > 0 ? tmp + 1 : tmp);
+        double division = (double) result / pow;
+        return division;
+    }*/
+
+    public static Double round(Double val, int scale) {
+        return new BigDecimal(val.toString()).setScale(2, RoundingMode.UP).doubleValue();
     }
 
     public static boolean validateTelFaxNumber(String number)
