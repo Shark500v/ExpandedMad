@@ -55,14 +55,12 @@ import com.polito.madinblack.expandedmad.utility.TabView;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
-import java.text.NumberFormat;
-import java.text.ParseException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -626,7 +624,7 @@ public class ExpenseFillData extends AppCompatActivity {
             else
                 holder.mIdView.setText( holder.mItem.getUserName());
             onBind = true;
-            holder.partition.setText( String.format("%.2f", holder.mItem.getToPaid()));
+            holder.partition.setText( new DecimalFormat("#0.00").format( holder.mItem.getToPaid()));
             onBind = false;
             holder.mNumber.setText( String.valueOf(holder.mItem.getWeight()) );
             holder.minus.setEnabled( holder.mItem.isWeightEnabled());
@@ -682,13 +680,7 @@ public class ExpenseFillData extends AppCompatActivity {
                     public void afterTextChanged(Editable s) {
 
                         if(!onBind){
-                            NumberFormat format = NumberFormat.getInstance(Locale.getDefault());
-                            Double value = null;
-                            try {
-                                value = s.toString().equals("")?0:format.parse(s.toString()).doubleValue();
-                            } catch (ParseException e) {
-                                value = 0.00;
-                            }
+                            Double value = s.toString().equals("")?0:Double.parseDouble(s.toString());
                             mItem.setToPaid(value);
                             mItem.setModified(true);
                             mNumber.setText("-");
