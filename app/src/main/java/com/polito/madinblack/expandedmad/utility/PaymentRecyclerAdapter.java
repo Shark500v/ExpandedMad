@@ -79,7 +79,7 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
                             = new PaymentInfo(paymentFirebase, paymentFirebase.getDebit());
 
                     changedPayment.put(paymentFirebase.getId(), paymentInfo);
-                    holder.mPaid.setText(paymentFirebase.getDebit().toString());
+                    holder.mPaid.setText(String.format("%.2f",paymentFirebase.getDebit()));
                 }
             });
 
@@ -93,7 +93,7 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
                                     = new PaymentInfo(paymentFirebase, paymentFirebase.getDebit());
 
                             changedPayment.put(paymentFirebase.getId(), paymentInfo);*/
-                            holder.mPaid.setText(paymentFirebase.getDebit().toString());
+                            holder.mPaid.setText(String.format("%.2f",paymentFirebase.getDebit()));
 
                         }else{
                             PaymentInfo paymentInfo
