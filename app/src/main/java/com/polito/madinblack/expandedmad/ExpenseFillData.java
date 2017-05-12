@@ -193,7 +193,6 @@ public class ExpenseFillData extends AppCompatActivity {
             for(Payment payment : mValues){
                 if(payment.getUserPhoneNumber().equals(ma.getUserPhoneNumber())){
                     payment.setPaid(roundedAmount);
-
                 }
             }
 
@@ -483,7 +482,6 @@ public class ExpenseFillData extends AppCompatActivity {
             currentPayment.setWeightEnabled(enableWeight);
             recyclerView.getAdapter().notifyItemChanged(i, currentPayment);
         }
-
     }
 
     private void modifyPayment() {
