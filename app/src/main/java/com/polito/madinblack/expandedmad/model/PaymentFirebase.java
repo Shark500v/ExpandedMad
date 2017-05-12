@@ -60,7 +60,7 @@ public class PaymentFirebase {
     }
 
     public void setPaid(Double paid) {
-        this.paid = paid;
+        this.paid = CostUtil.round(paid,2);
     }
 
     public Double getToPaid() {
@@ -69,7 +69,7 @@ public class PaymentFirebase {
 
 
     public void setToPaid(Double toPaid) {
-        this.toPaid = toPaid;
+        this.toPaid = CostUtil.round(toPaid,2);
     }
 
     public Double getDebit(){
