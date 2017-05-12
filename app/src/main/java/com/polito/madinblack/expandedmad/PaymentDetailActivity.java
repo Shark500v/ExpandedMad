@@ -18,6 +18,7 @@ import com.google.firebase.database.Transaction;
 import com.polito.madinblack.expandedmad.model.HistoryInfo;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.PaymentFirebase;
+import com.polito.madinblack.expandedmad.model.PaymentInfo;
 import com.polito.madinblack.expandedmad.utility.PaymentRecyclerAdapter;
 
 
@@ -37,7 +38,7 @@ public class PaymentDetailActivity extends AppCompatActivity {
     private DatabaseReference mDatabaseRootReference;
     private DatabaseReference mDatabasePaymentsReference;
     private RecyclerView recyclerView;
-    private Map<String, PaymentRecyclerAdapter.PaymentInfo> changedPayments;
+    private Map<String, PaymentInfo> changedPayments;
     private String expenseId;
     private String groupId;
     private String currencySymbol;
@@ -46,7 +47,7 @@ public class PaymentDetailActivity extends AppCompatActivity {
     private Double expenseCost;
     private MyApplication ma;
     private PaymentRecyclerAdapter mAdapter;
-    private PaymentRecyclerAdapter.PaymentInfo paymentInfoUserPaid;
+    private PaymentInfo paymentInfoUserPaid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +116,7 @@ public class PaymentDetailActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.confirm_payment) {
+        if (id == R.id.confirm_payment && changedPayments.size()>1) {
 
 
             Double totPaid = 0D;
@@ -124,7 +125,7 @@ public class PaymentDetailActivity extends AppCompatActivity {
 
             for(String paymentKey : keySet){
 
-                final PaymentRecyclerAdapter.PaymentInfo paymentInfo= changedPayments.remove(paymentKey);
+                final PaymentInfo paymentInfo = new PaymentInfo(changedPayments.get(paymentKey));
                 totPaid += paymentInfo.getPaidNow();
 
                 mDatabaseRootReference
