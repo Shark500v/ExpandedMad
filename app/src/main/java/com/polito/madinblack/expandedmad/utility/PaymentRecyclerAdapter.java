@@ -75,10 +75,10 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
                 @Override
                 public void onClick(View v) {
 
-                    PaymentInfo paymentInfo
+                    /*PaymentInfo paymentInfo
                             = new PaymentInfo(paymentFirebase, paymentFirebase.getDebit());
 
-                    changedPayment.put(paymentFirebase.getId(), paymentInfo);
+                    changedPayment.put(paymentFirebase.getId(), paymentInfo);*/
                     holder.mPaid.setText(String.format("%.2f",paymentFirebase.getDebit()));
                 }
             });
