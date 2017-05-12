@@ -44,6 +44,7 @@ import com.google.firebase.storage.OnPausedListener;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.polito.madinblack.expandedmad.model.CostUtil;
 import com.polito.madinblack.expandedmad.model.DecimalDigitsInputFilter;
 import com.polito.madinblack.expandedmad.model.Expense;
 
@@ -141,7 +142,7 @@ public class ExpenseFillData extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                modifyProportion(s.toString());
+                modifyProportion(CostUtil.replaceDecimalComma(s.toString()));
             }
         });
 
@@ -384,7 +385,7 @@ public class ExpenseFillData extends AppCompatActivity {
             progressDialog.setTitle("Uploading");
             progressDialog.show();
 
-            StorageReference filePath = mStorage.child("Groups").child(groupID).child("Expenses").child(expenseId);
+            StorageReference filePath = mStorage.child("groups").child(groupID).child("expenses").child(expenseId);
             filePath.putBytes(bytesArr).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -510,6 +511,7 @@ public class ExpenseFillData extends AppCompatActivity {
     }
 
     private void modifyProportion(String value) {
+
         boolean enableWeight;
         int totalWeigth = 0;
 
@@ -682,7 +684,7 @@ public class ExpenseFillData extends AppCompatActivity {
                     public void afterTextChanged(Editable s) {
 
                         if(!onBind){
-                            Double value = s.toString().equals("")?0:Double.parseDouble(s.toString());
+                            Double value = CostUtil.replaceDecimalComma(s.toString()).equals("")?0:Double.parseDouble(CostUtil.replaceDecimalComma(s.toString()));
                             mItem.setToPaid(value);
                             mItem.setModified(true);
                             mNumber.setText("-");
