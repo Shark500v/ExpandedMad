@@ -36,6 +36,7 @@
     </string-array>
     <string-array name="years">
         <item name="select_year">Select year</item>
+        <item name="all_years">General</item>
         <item name="2017">2017</item>
         <item name="2018">2018</item>
         <item name="2019">2019</item>
@@ -172,4 +173,5 @@
     <string name="no_expenses">No expenses for</string>
     <string name="in">in</string>
     <string name="no_expenses_in">No expenses in</string>
+    <string name="all_years">General</string>
 </resources>

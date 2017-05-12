@@ -199,12 +199,19 @@ public class StatisticsGraphs extends AppCompatActivity {
                     for (DataSnapshot expenseSnapshot : dataSnapshot.getChildren()) {
                         ExpenseForUser expenseForUser = expenseSnapshot.getValue(ExpenseForUser.class);     //prendo l'expenseForUser
                         String yearStr = String.valueOf(expenseForUser.getYear());
-                        if (yearStr.equals(yearSelected)) {                      //controllo che appartenga all'anno selezionato
+                        if(!yearSelected.equals(getString(R.string.all_years))) {
+                            if (yearStr.equals(yearSelected)) {                      //controllo che appartenga all'anno selezionato
+                                Double expenseCost = expenseForUser.getCost();                                  //prendo il costo della expenseForUser
+                                Double month = Double.valueOf(expenseForUser.getMonth());
+                                expenseCost += groupExpensesByMonth.get(month);                                 //gli aggiungo il valore già presente nella mappa ai passi precedenti
+                                groupExpensesByMonth.put(month, expenseCost);    //aggiorno la mappa alla posizione del mese della expense
+                                //Toast.makeText(getApplicationContext(), String.valueOf(groupExpensesByMonth.get(5.0)), Toast.LENGTH_LONG).show();
+                            }
+                        }else{
                             Double expenseCost = expenseForUser.getCost();                                  //prendo il costo della expenseForUser
                             Double month = Double.valueOf(expenseForUser.getMonth());
                             expenseCost += groupExpensesByMonth.get(month);                                 //gli aggiungo il valore già presente nella mappa ai passi precedenti
                             groupExpensesByMonth.put(month, expenseCost);    //aggiorno la mappa alla posizione del mese della expense
-                            //Toast.makeText(getApplicationContext(), String.valueOf(groupExpensesByMonth.get(5.0)), Toast.LENGTH_LONG).show();
                         }
                     }
                     printGraph(graph, groupName);
@@ -225,11 +232,18 @@ public class StatisticsGraphs extends AppCompatActivity {
                             ExpenseForUser expenseForUser = expenseSnapshot.getValue(ExpenseForUser.class);
                             String yearStr = String.valueOf(expenseForUser.getYear());
                             //Toast.makeText(getApplicationContext(), expenseForUser.getName(), Toast.LENGTH_LONG).show();
-                            if (yearStr.equals(yearSelected)) {
-                                Double expenseCost = expenseForUser.getCost();
+                            if(!yearSelected.equals(getString(R.string.all_years))) {
+                                if (yearStr.equals(yearSelected)) {
+                                    Double expenseCost = expenseForUser.getCost();
+                                    Double month = Double.valueOf(expenseForUser.getMonth());
+                                    expenseCost += groupExpensesByMonth.get(month);
+                                    groupExpensesByMonth.put(month, expenseCost);
+                                }
+                            }else{
+                                Double expenseCost = expenseForUser.getCost();                                  //prendo il costo della expenseForUser
                                 Double month = Double.valueOf(expenseForUser.getMonth());
-                                expenseCost += groupExpensesByMonth.get(month);
-                                groupExpensesByMonth.put(month, expenseCost);
+                                expenseCost += groupExpensesByMonth.get(month);                                 //gli aggiungo il valore già presente nella mappa ai passi precedenti
+                                groupExpensesByMonth.put(month, expenseCost);    //aggiorno la mappa alla posizione del mese della expense
                             }
                         }
                     }
