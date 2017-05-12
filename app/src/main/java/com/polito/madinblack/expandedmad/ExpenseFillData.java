@@ -517,12 +517,7 @@ public class ExpenseFillData extends AppCompatActivity {
             amount = 0d;
             enableWeight = false;
         }else{
-            NumberFormat format = NumberFormat.getInstance(Locale.getDefault());
-            try {
-                amount = format.parse(value).doubleValue();
-            } catch (ParseException e) {
-                amount = 0.00;
-            }
+            amount = Double.parseDouble(value);
             enableWeight = true;
         }
 
