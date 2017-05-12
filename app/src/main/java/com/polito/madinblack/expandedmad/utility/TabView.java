@@ -127,7 +127,7 @@ public class TabView extends AppCompatActivity {
         appBarLayout.setExpanded(true, true);
     }
 
-
+    
     @Override
     protected void onResume() {
         super.onResume();
@@ -220,12 +220,7 @@ public class TabView extends AppCompatActivity {
             return fragment;
         }
 
-        @Override
-        public void onStart(){
-            super.onStart();
-            FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
-            fab.hide();
-        }
+
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -382,10 +377,6 @@ public class TabView extends AppCompatActivity {
         @Override
         public void onStart(){
             super.onStart();
-
-            FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
-            fab.hide();
-
 
             adapter = new RecyclerViewAdapterUsers(getContext(), mDatabaseBalancesReference);
             recyclerView = (RecyclerView) rootView.findViewById(R.id.item_list);
