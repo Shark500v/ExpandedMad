@@ -14,6 +14,14 @@ public class CostUtil {
         return (double) (int) ((tmp - (int) tmp) > 0.0d ? tmp + 1 : tmp) / pow;
     }
 
+    public static double round2(double number, double scale) {
+        int pow = 10;
+        for (int i = 1; i < scale; i++)
+            pow *= 10;
+        double tmp = number * pow;
+        return (double) (int) ((tmp - (int) tmp) >= 0.5f ? tmp + 1 : tmp) / pow;
+    }
+
     public static boolean validateTelFaxNumber(String number)
     {
         if (number == null || number.isEmpty())
