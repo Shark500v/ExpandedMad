@@ -154,4 +154,6 @@
     <string name="expenses_in_euro">Spese (€)</string>
     <string name="chat_hint">Scrivi un messaggio</string>
     <string name="rounded_cost">Costo arrotondato</string>
+
+    <string name="zero">0,00</string>
 </resources>
