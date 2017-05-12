@@ -438,7 +438,7 @@ public class ExpenseFillData extends AppCompatActivity {
     }
 
     private boolean validateAmount() {
-        String amountS = inputAmount.getText().toString().trim();
+        String amountS = CostUtil.replaceDecimalComma(inputAmount.getText().toString().trim());
         if (amountS.isEmpty()) {
             inputLayoutAmount.setError(getString(R.string.err_msg_amount));
             requestFocus(inputAmount);
@@ -470,7 +470,7 @@ public class ExpenseFillData extends AppCompatActivity {
             amount = 0d;
             enableWeight = false;
         }else{
-            amount = Double.parseDouble(inputAmount.getText().toString());
+            amount = Double.parseDouble(CostUtil.replaceDecimalComma(inputAmount.getText().toString()));
             enableWeight = true;
         }
 
