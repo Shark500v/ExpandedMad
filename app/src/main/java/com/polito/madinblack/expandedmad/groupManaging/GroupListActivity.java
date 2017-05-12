@@ -320,8 +320,10 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             holder.mNumView.setText(Long.toString(mValues.get(position).getSize()) + " " + getString(R.string.members));
             //holder.mImage.setImageBitmap(downlaoadGroupImage(mValues.get(position).getId()));
             holder.mContentView.setText(mValues.get(position).getName());
-            if (mValues.get(position).getNewExpenses() != 0)
+            if (mValues.get(position).getNewExpenses() != 0) {
                 holder.mNotification.setText(mValues.get(position).getNewExpenses().toString());
+                holder.mNotification.setVisibility(View.VISIBLE);
+            }
             //sopra vengono settati i tre campi che costituisco le informazioni di ogni singolo gruppo, tutti pronti per essere mostriti nella gui
 
             holder.mView.setOnClickListener(new View.OnClickListener() {

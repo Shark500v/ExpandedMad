@@ -38,15 +38,26 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/notification"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/text_margin"
-        android:textSize="20dp"
-        android:textAppearance="?attr/textAppearanceListItem"
         android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"/>
+        android:layout_marginRight="4dp"
+        android:layout_centerVertical="true">
+
+        <TextView
+            android:id="@+id/notification"
+            android:visibility="gone"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/bg_green"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:gravity="center"
+            android:textColor="#FFFFFF"
+            android:textSize="15dp" />
+
+    </RelativeLayout>
+
 
     <View
         android:id="@+id/line"
