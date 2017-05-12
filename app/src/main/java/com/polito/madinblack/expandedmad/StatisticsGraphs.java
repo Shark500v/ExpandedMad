@@ -285,13 +285,13 @@ public class StatisticsGraphs extends AppCompatActivity {
         series.setDrawValuesOnTop(true);
         series.setValuesOnTopColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
         //series.setTitle(groupName + "-" + yearSelected);                     //etichetta della serie di dati
-        if(max == 0.0) {
-            if(!groupName.equals(getString(R.string.all_groups))) {
-                Toast.makeText(getApplicationContext(), getString(R.string.no_expenses) + " " + groupName + " " + getString(R.string.in) + " " + yearSelected, Toast.LENGTH_LONG).show();
-            }else{
-                Toast.makeText(getApplicationContext(), getString(R.string.no_expenses_in) + " " + yearSelected, Toast.LENGTH_LONG).show();
-            }
-        }
+        //if(max == 0.0) {
+        //    if(!groupName.equals(getString(R.string.all_groups))) {
+        //        Toast.makeText(getApplicationContext(), getString(R.string.no_expenses) + " " + groupName + " " + getString(R.string.in) + " " + yearSelected, Toast.LENGTH_LONG).show();
+        //    }else{
+        //        Toast.makeText(getApplicationContext(), getString(R.string.no_expenses_in) + " " + yearSelected, Toast.LENGTH_LONG).show();
+        //    }
+        //}
         graph.addSeries(series); //aggiunge la serie di dati al grafico
         if(max>10) {
             graph.getViewport().setMaxY(max + max / 4);
