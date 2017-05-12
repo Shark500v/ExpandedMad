@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -197,12 +199,19 @@ public class StatisticsGraphs extends AppCompatActivity {
                     for (DataSnapshot expenseSnapshot : dataSnapshot.getChildren()) {
                         ExpenseForUser expenseForUser = expenseSnapshot.getValue(ExpenseForUser.class);     //prendo l'expenseForUser
                         String yearStr = String.valueOf(expenseForUser.getYear());
-                        if (yearStr.equals(yearSelected)) {                      //controllo che appartenga all'anno selezionato
+                        if(!yearSelected.equals(getString(R.string.all_years))) {
+                            if (yearStr.equals(yearSelected)) {                      //controllo che appartenga all'anno selezionato
+                                Double expenseCost = expenseForUser.getCost();                                  //prendo il costo della expenseForUser
+                                Double month = Double.valueOf(expenseForUser.getMonth());
+                                expenseCost += groupExpensesByMonth.get(month);                                 //gli aggiungo il valore già presente nella mappa ai passi precedenti
+                                groupExpensesByMonth.put(month, expenseCost);    //aggiorno la mappa alla posizione del mese della expense
+                                //Toast.makeText(getApplicationContext(), String.valueOf(groupExpensesByMonth.get(5.0)), Toast.LENGTH_LONG).show();
+                            }
+                        }else{
                             Double expenseCost = expenseForUser.getCost();                                  //prendo il costo della expenseForUser
                             Double month = Double.valueOf(expenseForUser.getMonth());
                             expenseCost += groupExpensesByMonth.get(month);                                 //gli aggiungo il valore già presente nella mappa ai passi precedenti
                             groupExpensesByMonth.put(month, expenseCost);    //aggiorno la mappa alla posizione del mese della expense
-                            //Toast.makeText(getApplicationContext(), String.valueOf(groupExpensesByMonth.get(5.0)), Toast.LENGTH_LONG).show();
                         }
                     }
                     printGraph(graph, groupName);
@@ -223,11 +232,18 @@ public class StatisticsGraphs extends AppCompatActivity {
                             ExpenseForUser expenseForUser = expenseSnapshot.getValue(ExpenseForUser.class);
                             String yearStr = String.valueOf(expenseForUser.getYear());
                             //Toast.makeText(getApplicationContext(), expenseForUser.getName(), Toast.LENGTH_LONG).show();
-                            if (yearStr.equals(yearSelected)) {
-                                Double expenseCost = expenseForUser.getCost();
+                            if(!yearSelected.equals(getString(R.string.all_years))) {
+                                if (yearStr.equals(yearSelected)) {
+                                    Double expenseCost = expenseForUser.getCost();
+                                    Double month = Double.valueOf(expenseForUser.getMonth());
+                                    expenseCost += groupExpensesByMonth.get(month);
+                                    groupExpensesByMonth.put(month, expenseCost);
+                                }
+                            }else{
+                                Double expenseCost = expenseForUser.getCost();                                  //prendo il costo della expenseForUser
                                 Double month = Double.valueOf(expenseForUser.getMonth());
-                                expenseCost += groupExpensesByMonth.get(month);
-                                groupExpensesByMonth.put(month, expenseCost);
+                                expenseCost += groupExpensesByMonth.get(month);                                 //gli aggiungo il valore già presente nella mappa ai passi precedenti
+                                groupExpensesByMonth.put(month, expenseCost);    //aggiorno la mappa alla posizione del mese della expense
                             }
                         }
                     }
@@ -283,7 +299,13 @@ public class StatisticsGraphs extends AppCompatActivity {
         series.setDrawValuesOnTop(true);
         series.setValuesOnTopColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
         //series.setTitle(groupName + "-" + yearSelected);                     //etichetta della serie di dati
-        //graph.setTitle(groupName + "-" + yearSelected);
+        //if(max == 0.0) {
+        //    if(!groupName.equals(getString(R.string.all_groups))) {
+        //        Toast.makeText(getApplicationContext(), getString(R.string.no_expenses) + " " + groupName + " " + getString(R.string.in) + " " + yearSelected, Toast.LENGTH_LONG).show();
+        //    }else{
+        //        Toast.makeText(getApplicationContext(), getString(R.string.no_expenses_in) + " " + yearSelected, Toast.LENGTH_LONG).show();
+        //    }
+        //}
         graph.addSeries(series); //aggiunge la serie di dati al grafico
         if(max>10) {
             graph.getViewport().setMaxY(max + max / 4);

@@ -36,6 +36,7 @@
     </string-array>
     <string-array name="years">
         <item name="Select year">Seleziona anno</item>
+        <item name="all_years">Generale</item>
         <item name="2017">2017</item>
         <item name="2018">2018</item>
         <item name="2019">2019</item>
@@ -157,4 +158,8 @@
     <string name="rounded_cost">Costo arrotondato</string>
 
     <string name="zero">0,00</string>
+    <string name="no_expenses">Nessuna spesa in</string>
+    <string name="in">nel</string>
+    <string name="no_expenses_in">Nessuna spesa nel</string>
+    <string name="all_years">Generale</string>
 </resources>
