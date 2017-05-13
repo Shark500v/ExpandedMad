@@ -38,6 +38,8 @@ public class StatisticsGraphs extends AppCompatActivity {
     private MyApplication ma;
     private GraphView graph;
     private ValueEventListener mValueEventListener;
+    private ValueEventListener mGroupsEventListener;
+    private ValueEventListener mExpensesEventListener;
     private DatabaseReference mDatabaseGroupReference;
     private DatabaseReference mDatabaseExpenseReference;
     private DatabaseReference mDatabaseAllExpenseReference;
@@ -193,7 +195,7 @@ public class StatisticsGraphs extends AppCompatActivity {
         final String yearSelected = year;
         resetMap(groupExpensesByMonth);
         if(!groupName.equals(getString(R.string.all_groups))) {
-            mDatabaseExpenseReference.addValueEventListener(new ValueEventListener() {
+            mGroupsEventListener = mDatabaseExpenseReference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot expenseSnapshot : dataSnapshot.getChildren()) {
@@ -223,7 +225,7 @@ public class StatisticsGraphs extends AppCompatActivity {
                 }
             });
         }else{
-            mDatabaseAllExpenseReference.addValueEventListener(new ValueEventListener() {
+            mExpensesEventListener = mDatabaseAllExpenseReference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for(int i = 2; i < groupArray.size(); i++){             //parto da perche i primi 2 campi dell'array sono quello di default e "tutti i gruppi"
@@ -299,13 +301,13 @@ public class StatisticsGraphs extends AppCompatActivity {
         series.setDrawValuesOnTop(true);
         series.setValuesOnTopColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
         //series.setTitle(groupName + "-" + yearSelected);                     //etichetta della serie di dati
-        //if(max == 0.0) {
-        //    if(!groupName.equals(getString(R.string.all_groups))) {
-        //        Toast.makeText(getApplicationContext(), getString(R.string.no_expenses) + " " + groupName + " " + getString(R.string.in) + " " + yearSelected, Toast.LENGTH_LONG).show();
-        //    }else{
-        //        Toast.makeText(getApplicationContext(), getString(R.string.no_expenses_in) + " " + yearSelected, Toast.LENGTH_LONG).show();
-        //    }
-        //}
+        if(max == 0.0) {
+            if(!groupName.equals(getString(R.string.all_groups))) {
+                Toast.makeText(getApplicationContext(), getString(R.string.no_expenses) + " " + groupName + " " + getString(R.string.in) + " " + yearSelected, Toast.LENGTH_LONG).show();
+            }else{
+                Toast.makeText(getApplicationContext(), getString(R.string.no_expenses_in) + " " + yearSelected, Toast.LENGTH_LONG).show();
+            }
+        }
         graph.addSeries(series); //aggiunge la serie di dati al grafico
         if(max>10) {
             graph.getViewport().setMaxY(max + max / 4);
@@ -334,6 +336,10 @@ public class StatisticsGraphs extends AppCompatActivity {
         super.onStop();
         if(mValueEventListener!=null)
             mDatabaseGroupReference.removeEventListener(mValueEventListener);
+        if(mGroupsEventListener!=null)
+            mDatabaseExpenseReference.removeEventListener(mGroupsEventListener);
+        if(mExpensesEventListener!=null)
+            mDatabaseAllExpenseReference.removeEventListener(mExpensesEventListener);
     }
 }
 
