@@ -52,7 +52,6 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
         ma =  MyApplication.getInstance();
         this.changedPayment = changedPayment;
         this.contex = contex;
-        this.changedPayment.clear();
     }
 
     @Override
@@ -77,11 +76,6 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
             holder.mFillPaid.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    /*PaymentInfo paymentInfo
-                            = new PaymentInfo(paymentFirebase, paymentFirebase.getDebit());
-
-                    changedPayment.put(paymentFirebase.getId(), paymentInfo);*/
                     holder.mPaid.setText(String.format("%.2f",paymentFirebase.getDebit()));
                 }
             });
@@ -93,23 +87,17 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
                     String editString = CostUtil.replaceDecimalComma(s.toString());
                     if(s.length() != 0 && CostUtil.isParsableAsDouble(editString) && Double.valueOf(editString)!=0){
                         if(Double.valueOf(editString)>Double.valueOf(CostUtil.replaceDecimalComma(holder.mToPaid.getText().toString()))){
-                            /*
-                            PaymentInfo paymentInfo
-                                    = new PaymentInfo(paymentFirebase, paymentFirebase.getDebit());
-
-                            changedPayment.put(paymentFirebase.getId(), paymentInfo);*/
                             holder.mPaid.setText(String.format("%.2f",paymentFirebase.getDebit()));
-
                         }else{
                             PaymentInfo paymentInfo
                                     = new PaymentInfo(paymentFirebase, Double.valueOf(CostUtil.replaceDecimalComma(holder.mPaid.getText().toString())));
-                            changedPayment.put(paymentFirebase.getId(), paymentInfo);
+                            changedPayment.put(paymentFirebase.getUserPhoneNumber(), paymentInfo);
                         }
 
 
                     }
                     else{
-                        changedPayment.remove(paymentFirebase.getId());
+                        changedPayment.remove(paymentFirebase.getUserPhoneNumber());
                     }
                 }
 
@@ -125,7 +113,7 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
         } else{
             PaymentInfo paymentInfo  = new PaymentInfo(paymentFirebase, 0D);
             paymentInfo.setId(paymentFirebase.getId());
-            changedPayment.put(paymentFirebase.getUserFirebaseId(), paymentInfo);
+            changedPayment.put(paymentFirebase.getUserPhoneNumber(), paymentInfo);
             holder.mUserView.setText(contex.getString(R.string.you));
             holder.mToPaid.setText(String.format("%.2f",model.getToPaid()));
             holder.mPaid.setText(String.format("%.2f",model.getPaid()));

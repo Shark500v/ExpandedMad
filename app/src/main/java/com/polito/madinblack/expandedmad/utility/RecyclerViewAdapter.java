@@ -1,10 +1,8 @@
 package com.polito.madinblack.expandedmad.utility;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -24,7 +22,6 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.polito.madinblack.expandedmad.ExpenseDetailActivity;
 import com.polito.madinblack.expandedmad.ExpenseDetailFragment;
-import com.polito.madinblack.expandedmad.ExpenseDetailFragment3;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.ExpenseForUser;
 import com.polito.madinblack.expandedmad.model.MyApplication;
@@ -210,8 +207,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                 Context context = v.getContext();
                 Intent intent = new Intent(context, ExpenseDetailActivity.class);
-                intent.putExtra(ExpenseDetailFragment3.ARG_EXPENSE_ID, holder.mItem.getId());
-                intent.putExtra(ExpenseDetailFragment3.ARG_EXPENSE_NAME, holder.mItem.getName());
+                intent.putExtra(ExpenseDetailFragment.ARG_EXPENSE_ID, holder.mItem.getId());
+                intent.putExtra(ExpenseDetailFragment.ARG_EXPENSE_NAME, holder.mItem.getName());
                 context.startActivity(intent);
 
             }

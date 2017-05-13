@@ -12,16 +12,11 @@ public class PaymentInfo {
     private Double paidBefore;
     private String id;
     private String userNameDisplayed;
+    private Double toPaid;
 
 
 
-    public PaymentInfo(String userFirebaseId, String userPhoneNumber, Double paidBefore, Double paidNow, Double balance) {
-        this.userFirebaseId = userFirebaseId;
-        this.userPhoneNumber = userPhoneNumber;
-        this.paidNow = paidNow;
-        this.balance = balance;
-        this.paidBefore = paidBefore;
-    }
+
 
     public PaymentInfo(PaymentFirebase paymentFirebase, Double paidNow){
         this.userFirebaseId = paymentFirebase.getUserFirebaseId();
@@ -30,18 +25,10 @@ public class PaymentInfo {
         this.balance = paymentFirebase.getBalance();
         this.paidBefore = paymentFirebase.getPaid();
         this.userNameDisplayed = paymentFirebase.getUserNameDisplayed();
+        this.toPaid = paymentFirebase.getToPaid();
 
     }
 
-    public PaymentInfo(PaymentInfo paymentInfo) {
-        this.userFirebaseId = paymentInfo.getUserFirebaseId();
-        this.userPhoneNumber = paymentInfo.getUserPhoneNumber();
-        this.paidNow = paymentInfo.getPaidNow();
-        this.balance = paymentInfo.getBalance();
-        this.paidBefore = paymentInfo.getPaidBefore();
-        this.id = paymentInfo.getId();
-        this.userNameDisplayed = paymentInfo.getUserNameDisplayed();
-    }
 
     public String getUserFirebaseId() {
         return userFirebaseId;
@@ -98,5 +85,13 @@ public class PaymentInfo {
 
     public void setUserNameDisplayed(String userNameDisplayed) {
         this.userNameDisplayed = userNameDisplayed;
+    }
+
+    public Double getToPaid() {
+        return toPaid;
+    }
+
+    public void setToPaid(Double toPaid) {
+        this.toPaid = toPaid;
     }
 }

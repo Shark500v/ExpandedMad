@@ -1,4 +1,4 @@
-package com.polito.madinblack.expandedmad;
+package com.polito.madinblack.expandedmad.notUsed;
 
 /**
  * Created by Ale on 10/05/2017.
@@ -18,6 +18,8 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.CostUtil;
 import com.polito.madinblack.expandedmad.model.PaymentFirebase;
 
