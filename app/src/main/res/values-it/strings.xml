@@ -162,4 +162,5 @@
     <string name="in">nel</string>
     <string name="no_expenses_in">Nessuna spesa nel</string>
     <string name="all_years">Generale</string>
+    <string name="member">partecipante</string>
 </resources>
