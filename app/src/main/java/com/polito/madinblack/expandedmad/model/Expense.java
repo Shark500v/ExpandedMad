@@ -9,6 +9,7 @@ import com.google.firebase.database.Transaction;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 public class Expense {
@@ -237,7 +238,7 @@ public class Expense {
                                          String currencyName, String currencySymbol, final String groupId, Long year, Long month, Long day, String description, List<Payment> paymentList){
 
         DatabaseReference myExpenseRef = mDatabaseRootRefenrence.child("expenses").push();
-        String expenseKey = myExpenseRef.getKey();
+        final String expenseKey = myExpenseRef.getKey();
 
         Expense expense = new Expense(expenseKey, name, tag, paidByName, paidBySurname, paidByFirebaseId, paidByPhoneNumber, CostUtil.round(cost, 2), CostUtil.round(roundedCost, 2), currencyName, currencySymbol, groupId, year, month, day, description);
         myExpenseRef.setValue(expense);
@@ -245,7 +246,14 @@ public class Expense {
         DatabaseReference myPaymentRef;
         String paymentKey;
 
-        for(final Payment payment : paymentList){
+        final Map<String, Double> toUpdate = new HashMap<>();
+
+        /*Initiaze the map*/
+        for(Payment payment: paymentList)
+            toUpdate.put(payment.getUserPhoneNumber()+expenseKey, payment.getDebit());
+
+
+        for(Payment payment : paymentList){
 
             myPaymentRef = myExpenseRef.child("payments").push();
             paymentKey = myPaymentRef.getKey();
@@ -283,17 +291,23 @@ public class Expense {
                 });
 
                 /*update users balances*/
-                mDatabaseRootRefenrence.child("groups/"+groupId+"/users/"+payment.getUserFirebaseId()+"/balances/"+paidByFirebaseId+"/balance").runTransaction(new Transaction.Handler() {
+
+
+
+                mDatabaseRootRefenrence.child("groups/"+groupId+"/users/"+payment.getUserFirebaseId()+"/balances/"+paidByFirebaseId).runTransaction(new Transaction.Handler() {
 
                     @Override
                     public Transaction.Result doTransaction(MutableData currentData) {
-                        if (currentData.getValue() == null) {
-                            //no default value for data, set one
-                            currentData.setValue(payment.getDebit());
-                        } else {
-                            // perform the update operations on data
-                            currentData.setValue(currentData.getValue(Double.class) - payment.getDebit());
+                        if (currentData.getValue() != null) {
+                            Balance balance = currentData.getValue(Balance.class);
+                            for(MutableData currentDataChild : currentData.getChildren()){
+                                if(currentDataChild.getKey().equals("balance"))
+                                    currentDataChild.setValue(balance.getBalance() - toUpdate.get(balance.getUserPhoneNumber()+expenseKey));
+                            }
+
                         }
+
+
                         return Transaction.success(currentData);
                     }
 
@@ -302,20 +316,24 @@ public class Expense {
                                            boolean committed, DataSnapshot currentData) {
                         //This method will be called once with the results of the transaction.
                         //Update remove the user from the group
+
 
                     }
                 });
 
-                mDatabaseRootRefenrence.child("groups/"+groupId+"/users/"+paidByFirebaseId+"/balances/"+payment.getUserFirebaseId()+"/balance").runTransaction(new Transaction.Handler() {
+                mDatabaseRootRefenrence.child("groups/"+groupId+"/users/"+paidByFirebaseId+"/balances/"+payment.getUserFirebaseId()).runTransaction(new Transaction.Handler() {
 
                     @Override
                     public Transaction.Result doTransaction(MutableData currentData) {
-                        if (currentData.getValue() == null) {
-                            //no default value for data, set one
-                            currentData.setValue(payment.getDebit());
-                        } else {
-                            // perform the update operations on data
-                            currentData.setValue(currentData.getValue(Double.class) + payment.getDebit());
+                        if (currentData.getValue() != null) {
+                            if (currentData.getValue() != null) {
+                                Balance balance = currentData.getValue(Balance.class);
+                                for(MutableData currentDataChild : currentData.getChildren()){
+                                    if(currentDataChild.getKey().equals("balance"))
+                                        currentDataChild.setValue(balance.getBalance() + toUpdate.get(balance.getUserPhoneNumber()+expenseKey));
+                                }
+
+                            }
                         }
                         return Transaction.success(currentData);
                     }
@@ -325,6 +343,7 @@ public class Expense {
                                            boolean committed, DataSnapshot currentData) {
                         //This method will be called once with the results of the transaction.
                         //Update remove the user from the group
+
 
                     }
                 });
