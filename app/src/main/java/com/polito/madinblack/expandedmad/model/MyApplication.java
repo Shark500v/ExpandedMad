@@ -22,9 +22,6 @@ public class MyApplication {
     private static Boolean logged = false;
     private static Boolean isPhone = false;
     private static GroupForUser groupForUser;
-    private static Expense selectedExpense;
-
-
 
 
 
@@ -139,11 +136,5 @@ public class MyApplication {
         MyApplication.groupForUser = groupForUser;
     }
 
-    public Expense getSelectedExpense() {
-        return selectedExpense;
-    }
 
-    public void setSelectedExpense(Expense selectedExpense) {
-        MyApplication.selectedExpense = selectedExpense;
-    }
 }

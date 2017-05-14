@@ -175,4 +175,6 @@
     <string name="in">in</string>
     <string name="no_expenses_in">No expenses in</string>
     <string name="all_years">General</string>
+    <string name="member">member</string>
+    <string name="user_info">My profile</string>
 </resources>

@@ -31,6 +31,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.polito.madinblack.expandedmad.UserPage;
 import com.polito.madinblack.expandedmad.login.Logout;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
@@ -160,6 +161,11 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void userInfo(View view){
+        Intent intent = new Intent(GroupListActivity.this, UserPage.class);
+        startActivity(intent);
     }
 
     @Override   //questo serve per il search button
@@ -317,7 +323,11 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         @Override
         public void onBindViewHolder(final SimpleItemRecyclerViewAdapter.ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);   //mValues.get(position) rappresenta un singolo elemento della nostra lista di gruppi
-            holder.mNumView.setText(Long.toString(mValues.get(position).getSize()) + " " + getString(R.string.members));
+            if(mValues.get(position).getSize() > 1) {
+                holder.mNumView.setText(Long.toString(mValues.get(position).getSize()) + " " + getString(R.string.members));
+            }else{
+                holder.mNumView.setText(Long.toString(mValues.get(position).getSize()) + " " + getString(R.string.member));
+            }
             //holder.mImage.setImageBitmap(downlaoadGroupImage(mValues.get(position).getId()));
             holder.mContentView.setText(mValues.get(position).getName());
             if (mValues.get(position).getNewExpenses() != 0) {
