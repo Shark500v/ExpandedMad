@@ -1,4 +1,4 @@
-package com.polito.madinblack.expandedmad;
+package com.polito.madinblack.expandedmad.expenseDetail;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,20 +14,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
+import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.login.BaseActivity;
 import com.polito.madinblack.expandedmad.model.Balance;
 import com.polito.madinblack.expandedmad.model.HistoryInfo;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.PaymentFirebase;
 import com.polito.madinblack.expandedmad.model.PaymentInfo;
-import com.polito.madinblack.expandedmad.utility.PaymentRecyclerAdapter;
 
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class PaymentDetailActivity extends BaseActivity {
 

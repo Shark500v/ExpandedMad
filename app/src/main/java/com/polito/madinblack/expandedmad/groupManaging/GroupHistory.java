@@ -26,7 +26,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.HistoryInfo;
-import com.polito.madinblack.expandedmad.utility.TabView;
+import com.polito.madinblack.expandedmad.tabViewGroup.TabView;
 import java.util.ArrayList;
 import java.util.List;
 
