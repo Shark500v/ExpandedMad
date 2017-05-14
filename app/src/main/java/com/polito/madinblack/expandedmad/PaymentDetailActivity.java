@@ -126,7 +126,7 @@ public class PaymentDetailActivity extends BaseActivity {
             showProgressDialog();
 
             Double totPaid = 0D;
-            PaymentInfo paymentInfoUserPaid = changedPayments.remove(ma.getFirebaseId());
+            PaymentInfo paymentInfoUserPaid = changedPayments.remove(ma.getUserPhoneNumber());
             final Map<String, PaymentInfo> paymentToUpdate = new HashMap<>();
             paymentToUpdate.putAll(changedPayments);
             changedPayments.clear();
@@ -202,7 +202,7 @@ public class PaymentDetailActivity extends BaseActivity {
 
 
                 mDatabaseRootReference
-                        .child("expenses/"+expenseId+"/payments/"+paymentKey+"/paid")
+                        .child("expenses/"+expenseId+"/payments/"+paymentInfo.getId()+"/paid")
                         .setValue(paymentInfo.getPaidBefore()+paymentInfo.getPaidNow());
 
 

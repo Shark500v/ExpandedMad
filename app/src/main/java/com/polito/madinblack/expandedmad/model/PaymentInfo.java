@@ -15,17 +15,18 @@ public class PaymentInfo {
     private Double toPaid;
 
 
-
+    public PaymentInfo(){}
 
 
     public PaymentInfo(PaymentFirebase paymentFirebase, Double paidNow){
-        this.userFirebaseId = paymentFirebase.getUserFirebaseId();
-        this.userPhoneNumber = paymentFirebase.getUserPhoneNumber();
-        this.paidNow = paidNow;
-        this.balance = paymentFirebase.getBalance();
-        this.paidBefore = paymentFirebase.getPaid();
-        this.userNameDisplayed = paymentFirebase.getUserNameDisplayed();
-        this.toPaid = paymentFirebase.getToPaid();
+        this.userFirebaseId     = paymentFirebase.getUserFirebaseId();
+        this.userPhoneNumber    = paymentFirebase.getUserPhoneNumber();
+        this.paidNow            = paidNow;
+        this.balance            = paymentFirebase.getBalance();
+        this.paidBefore         = paymentFirebase.getPaid();
+        this.userNameDisplayed  = paymentFirebase.getUserNameDisplayed();
+        this.toPaid             = paymentFirebase.getToPaid();
+        this.id                 = paymentFirebase.getId();
 
     }
 
