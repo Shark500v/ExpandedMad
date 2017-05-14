@@ -174,7 +174,6 @@
         </activity>
         <activity
             android:name=".UserPage"
-            android:label="User Info"
             android:parentActivityName=".groupManaging.GroupListActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation|screenSize">
