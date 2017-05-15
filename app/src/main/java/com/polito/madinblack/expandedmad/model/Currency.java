@@ -7,10 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * Created by Ale on 27/04/2017.
- */
-
 public class Currency {
 
     private static final double [][] association = new double[4][4];
@@ -30,8 +26,6 @@ public class Currency {
         association[2][1] = 0.00804;
         association[2][3] = 0.00683;
     }
-
-
 
     private static final Map<String, Integer> currencySymbolInt = new HashMap<String, Integer>() {{
         put("USD", 0);
