@@ -24,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -125,6 +126,15 @@ public class ExpenseFillData extends AppCompatActivity {
         //show current date
         showDate(new Date());
 
+        Spinner spinner = (Spinner) findViewById(R.id.currency);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.currencySymbol, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+
         EditText inputAmount = (EditText)findViewById(R.id.input_amount);
         inputAmount.addTextChangedListener(new TextWatcher() {
             @Override
@@ -167,6 +177,11 @@ public class ExpenseFillData extends AppCompatActivity {
             }
 
 
+            Spinner currency_spinner = (Spinner) findViewById(R.id.tag_spinner);
+            String currencySymbol = currency_spinner.getSelectedItem().toString();
+            String[] names=getResources().getStringArray(R.array.currency);
+            String currency = names[currency_spinner.getSelectedItemPosition()];
+
             Spinner tag_spinner = (Spinner) findViewById(R.id.tag_spinner);
             String tag = tag_spinner.getSelectedItem().toString();
 
@@ -204,8 +219,8 @@ public class ExpenseFillData extends AppCompatActivity {
                     ma.getUserSurname(),
                     amount,
                     roundedAmount,
-                    "Euro",
-                    "€",
+                    currency,
+                    currencySymbol,
                     groupID,
                     year,
                     month,

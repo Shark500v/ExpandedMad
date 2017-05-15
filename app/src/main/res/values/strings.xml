@@ -17,6 +17,13 @@
         <item name="euro">Euro</item>
         <item name="pounds">Pounds</item>
         <item name="US_Dollars">US Dollars</item>
+        <item name="yen">Yen</item>
+    </string-array>
+    <string-array name="currencySymbol">
+        <item name="euro">€</item>
+        <item name="pounds">£</item>
+        <item name="US_Dollars">$</item>
+        <item name="yen">¥</item>
     </string-array>
     <string-array name="tags">
         <item name="water_bill">Water_Bill</item>

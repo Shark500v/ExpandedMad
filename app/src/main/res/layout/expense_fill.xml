@@ -50,7 +50,7 @@
                     android:padding="16dp"
                     android:src="@drawable/ic_camera"
                     android:scaleType="centerCrop"
-                    android:background="@drawable/color2"
+                    android:background="@drawable/color"
                     android:onClick="uploadPhoto"
                     app:civ_border_color="#EEEEEE"/>
 
@@ -89,14 +89,12 @@
                 </android.support.design.widget.TextInputLayout>
 
 
-                <TextView
+                <Spinner
                     android:id="@+id/currency"
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
-                    android:textAppearance="?attr/textAppearanceListItem"
                     android:layout_gravity="bottom"
-                    android:layout_marginBottom="5dp"
-                    android:text="EUR"/>
+                    android:layout_marginBottom="5dp" />
 
             </LinearLayout>
 
