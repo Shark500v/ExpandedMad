@@ -34,10 +34,10 @@ public class Currency {
 
 
     private static final Map<String, Integer> currencySymbolInt = new HashMap<String, Integer>() {{
-        put("$", 0);
-        put("€", 1);
-        put("¥", 3);
-        put("£", 2);
+        put("USD", 0);
+        put("EUR", 1);
+        put("GBP", 3);
+        put("JPY", 2);
     }};
 
     private static final Map<String, String> currencyISOCodeSymbol = new HashMap<String, String>() {{
