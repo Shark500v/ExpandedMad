@@ -227,7 +227,6 @@ public class PaymentDetailActivity extends BaseActivity {
 
 
 
-
         }else if(id == R.id.fill_all_paid){
 
 
