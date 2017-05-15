@@ -40,13 +40,13 @@ public class Currency {
         put("£", 2);
     }};
 
-    private static final Map<String, String> currencyNameSymbol = new HashMap<String, String>() {{
+    private static final Map<String, String> currencyISOCodeSymbol = new HashMap<String, String>() {{
         put("USD", "$");
         put("EUR", "€");
         put("GBP",  "£");
         put("JPY",  "¥");
     }};
-    private static final Map<String, String> currencySymbolName = new HashMap<String, String>() {{
+    private static final Map<String, String> currencySymbolISOCode = new HashMap<String, String>() {{
         put("$", "USD");
         put("€", "EUR");
         put("£",  "GBP");
@@ -67,21 +67,21 @@ public class Currency {
     }
 
     public static String getSymbol(String name){
-        return currencyNameSymbol.get(name);
+        return currencyISOCodeSymbol.get(name);
 
     }
 
     public static String getName(String symbol){
-        return currencySymbolName.get(symbol);
+        return currencySymbolISOCode.get(symbol);
 
     }
 
     public static Set<String> getCurrencyNames(){
-        return currencyNameSymbol.keySet();
+        return currencyISOCodeSymbol.keySet();
     }
 
     public static Set<String> getCurrencySymbols(){
-        return currencySymbolName.keySet();
+        return currencySymbolISOCode.keySet();
     }
 
 

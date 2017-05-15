@@ -225,7 +225,6 @@ public class PaymentDetailActivity extends BaseActivity {
 
             hideProgressDialog();
 
-            Toast.makeText(getApplicationContext(), getString(R.string.payment_update), Toast.LENGTH_SHORT);
 
 
         }else if(id == R.id.fill_all_paid){
