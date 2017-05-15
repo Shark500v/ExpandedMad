@@ -14,9 +14,16 @@
     <string name="bill">Scontrino</string>
     <string name="statistics">Statistiche</string>
     <string-array name="currency">
-        <item name="euro">Euro</item>
-        <item name="pounds">Sterline</item>
-        <item name="US_Dollars">Dollari USA</item>
+        <item name="euro">EUR</item>
+        <item name="pounds">GBP</item>
+        <item name="US_Dollars">USD</item>
+        <item name="yen">JPY</item>
+    </string-array>
+    <string-array name="currencySymbol">
+        <item name="euro">€</item>
+        <item name="pounds">£</item>
+        <item name="US_Dollars">$</item>
+        <item name="yen">¥</item>
     </string-array>
     <string-array name="tags">
         <item name="water_bill">Bolletta_Acqua</item>

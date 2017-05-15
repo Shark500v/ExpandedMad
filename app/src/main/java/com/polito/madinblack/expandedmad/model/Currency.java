@@ -7,10 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * Created by Ale on 27/04/2017.
- */
-
 public class Currency {
 
     private static final double [][] association = new double[4][4];
@@ -31,8 +27,6 @@ public class Currency {
         association[2][3] = 0.00683;
     }
 
-
-
     private static final Map<String, Integer> currencySymbolInt = new HashMap<String, Integer>() {{
         put("USD", 0);
         put("EUR", 1);
@@ -40,17 +34,17 @@ public class Currency {
         put("JPY", 2);
     }};
 
-    private static final Map<String, String> currencyISOCodeSymbol = new HashMap<String, String>() {{
+    public static final Map<String, String> currencyISOCodeSymbol = new HashMap<String, String>() {{
         put("USD", "$");
+        put("GBP", "£");
+        put("JPY", "¥");
         put("EUR", "€");
-        put("GBP",  "£");
-        put("JPY",  "¥");
     }};
-    private static final Map<String, String> currencySymbolISOCode = new HashMap<String, String>() {{
+    public static final Map<String, String> currencySymbolISOCode = new HashMap<String, String>() {{
         put("$", "USD");
+        put("£", "GBP");
+        put("¥", "JPY");
         put("€", "EUR");
-        put("£",  "GBP");
-        put("¥",  "JPY");
     }};
 
 
