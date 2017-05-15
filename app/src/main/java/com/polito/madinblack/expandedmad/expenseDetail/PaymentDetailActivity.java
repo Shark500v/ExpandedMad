@@ -225,7 +225,7 @@ public class PaymentDetailActivity extends BaseActivity {
 
             hideProgressDialog();
 
-
+            /*insert intent to go back*/
 
         }else if(id == R.id.fill_all_paid){
 
