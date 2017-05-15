@@ -1,4 +1,4 @@
-package com.polito.madinblack.expandedmad;
+package com.polito.madinblack.expandedmad.expenseDetail;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,7 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 
-import com.polito.madinblack.expandedmad.utility.TabView;
+import com.polito.madinblack.expandedmad.R;
+import com.polito.madinblack.expandedmad.tabViewGroup.TabView;
 
 //questa classe viene richiamata dopo che clicco su di un gruppo
 public class ExpenseDetailActivity extends AppCompatActivity {

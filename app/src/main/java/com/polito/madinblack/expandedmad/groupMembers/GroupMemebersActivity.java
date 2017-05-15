@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.UserForGroup;
-import com.polito.madinblack.expandedmad.utility.TabView;
+import com.polito.madinblack.expandedmad.tabViewGroup.TabView;
 
 public class GroupMemebersActivity extends AppCompatActivity {
 

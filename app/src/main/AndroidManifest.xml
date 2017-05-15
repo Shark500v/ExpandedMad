@@ -30,7 +30,7 @@
         </activity>
 
         <activity
-            android:name=".utility.TabView"
+            android:name=".tabViewGroup.TabView"
             android:label="Tab View"
             android:parentActivityName=".groupManaging.GroupListActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -41,29 +41,29 @@
         <activity
             android:name=".groupManaging.GroupDetailActivity"
             android:label="Group Details"
-            android:parentActivityName=".utility.TabView"
+            android:parentActivityName=".tabViewGroup.TabView"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.polito.madinblack.expandedmad.utility.TabView" />
+                android:value="com.polito.madinblack.expandedmad.tabViewGroup.TabView" />
         </activity>
         <activity
-            android:name=".ExpenseDetailActivity"
+            android:name=".expenseDetail.ExpenseDetailActivity"
             android:label="Expense Details"
-            android:parentActivityName=".utility.TabView"
+            android:parentActivityName=".tabViewGroup.TabView"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.polito.madinblack.expandedmad.utility.TabView" />
+                android:value="com.polito.madinblack.expandedmad.tabViewGroup.TabView" />
         </activity>
         <activity
             android:name=".groupMembers.GroupMemebersActivity"
             android:label="Group Details"
-            android:parentActivityName=".utility.TabView"
+            android:parentActivityName=".tabViewGroup.TabView"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.polito.madinblack.expandedmad.utility.TabView" />
+                android:value="com.polito.madinblack.expandedmad.tabViewGroup.TabView" />
         </activity>
         <activity
             android:name=".groupMembers.UserExpenses"
@@ -84,13 +84,13 @@
                 android:value="com.polito.madinblack.expandedmad.groupMembers.UserExpenses" />
         </activity>
         <activity
-            android:name=".ExpenseFillData"
+            android:name=".newExpense.ExpenseFillData"
             android:label="Add New Expense"
-            android:parentActivityName=".utility.TabView"
+            android:parentActivityName=".tabViewGroup.TabView"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.polito.madinblack.expandedmad.utility.TabView" />
+                android:value="com.polito.madinblack.expandedmad.tabViewGroup.TabView" />
         </activity>
         <activity
             android:name=".login.GoogleSignInActivity"
@@ -156,21 +156,21 @@
         <activity
             android:name=".groupManaging.GroupHistory"
             android:label="@string/title_activity_group_history"
-            android:parentActivityName=".utility.TabView"
+            android:parentActivityName=".tabViewGroup.TabView"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.polito.madinblack.expandedmad.utility.TabView" />
+                android:value="com.polito.madinblack.expandedmad.tabViewGroup.TabView" />
         </activity>
 
         <activity
-            android:name=".PaymentDetailActivity"
+            android:name=".expenseDetail.PaymentDetailActivity"
             android:label="@string/payments_detail"
-            android:parentActivityName=".ExpenseDetailActivity"
+            android:parentActivityName=".expenseDetail.ExpenseDetailActivity"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.polito.madinblack.expandedmad.ExpenseDetailActivity" />
+                android:value="com.polito.madinblack.expandedmad.expenseDetail.ExpenseDetailActivity" />
         </activity>
         <activity
             android:name=".UserPage"

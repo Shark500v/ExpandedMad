@@ -1,4 +1,4 @@
-package com.polito.madinblack.expandedmad.utility;
+package com.polito.madinblack.expandedmad.tabViewGroup;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,8 +20,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
-import com.polito.madinblack.expandedmad.ExpenseDetailActivity;
-import com.polito.madinblack.expandedmad.ExpenseDetailFragment;
+import com.polito.madinblack.expandedmad.expenseDetail.ExpenseDetailActivity;
+import com.polito.madinblack.expandedmad.expenseDetail.ExpenseDetailFragment;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.ExpenseForUser;
 import com.polito.madinblack.expandedmad.model.MyApplication;

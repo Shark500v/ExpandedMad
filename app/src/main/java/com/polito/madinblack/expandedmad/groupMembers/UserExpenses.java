@@ -15,7 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import com.polito.madinblack.expandedmad.ExpenseDetailActivity;
+import com.polito.madinblack.expandedmad.expenseDetail.ExpenseDetailActivity;
 import com.polito.madinblack.expandedmad.R;
 import java.util.List;
 import com.polito.madinblack.expandedmad.dummy.Expense;

@@ -1,17 +1,14 @@
-package com.polito.madinblack.expandedmad.utility;
+package com.polito.madinblack.expandedmad.tabViewGroup;
 
 import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
@@ -25,24 +22,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.view.ViewParent;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.polito.madinblack.expandedmad.newExpense.ExpenseFillData;
 import com.polito.madinblack.expandedmad.ExpenseFillData;
 import com.polito.madinblack.expandedmad.SelectContactToAdd;
 import com.polito.madinblack.expandedmad.chat.ChatRecyclerViewAdapter;
-import com.polito.madinblack.expandedmad.groupManaging.GroupDetailActivity;
-import com.polito.madinblack.expandedmad.groupManaging.GroupDetailFragment;
 import com.polito.madinblack.expandedmad.groupManaging.GroupHistory;
 import com.polito.madinblack.expandedmad.groupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.groupMembers.GroupMemebersActivity;
 import com.polito.madinblack.expandedmad.model.Expense;
-import com.polito.madinblack.expandedmad.model.GroupForUser;
 import com.polito.madinblack.expandedmad.model.Message;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.newGroup.SelectContact;

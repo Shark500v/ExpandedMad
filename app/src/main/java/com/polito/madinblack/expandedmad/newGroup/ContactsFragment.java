@@ -43,7 +43,7 @@ public class ContactsFragment extends Fragment {
     ArrayList<SelectUser> selectUsers = new ArrayList<>();;
     List<SelectUser> groupMembers;
     // Cursor to load contacts list
-    Cursor phones, email;
+    Cursor phones;
 
     SearchView search;
 
@@ -127,10 +127,7 @@ public class ContactsFragment extends Fragment {
                     String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NORMALIZED_NUMBER));
                     if((id.compareTo(id_prev) != 0) && (phoneNumber != null)){     //elimina i contatti che possiedono più di un numero memorizzato, privileggiando solo il primo e mostrando solo quello
                         String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-                        //email = resolver.query(ContactsContract.CommonDataKinds.Email.CONTENT_URI, null, ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ", new String[] {id} , null);
-                        //email.moveToNext();
                         String EmailAddr = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA2));
-                        //email.close();
                         //retrieving and setting the contact image
                         String image_thumb = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI));
                         try {
@@ -144,10 +141,12 @@ public class ContactsFragment extends Fragment {
                         }   //il retrieve delle foto contatto è corretto, non ci sono errori, verificato tramite debbug
 
                         SelectUser selectUser = new SelectUser();
-                        try {
-                            selectUser.setThumb(bit_thumb);
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        if (image_thumb != null) {
+                            try {
+                                selectUser.setThumb(bit_thumb);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
                         selectUser.setName(name);
                         selectUser.setPhone(phoneNumber);

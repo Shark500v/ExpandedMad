@@ -14,9 +14,16 @@
     <string name="bill">Bill</string>
     <string name="statistics">Statistics</string>
     <string-array name="currency">
-        <item name="euro">Euro</item>
-        <item name="pounds">Pounds</item>
-        <item name="US_Dollars">US Dollars</item>
+        <item name="euro">EUR</item>
+        <item name="pounds">GBP</item>
+        <item name="US_Dollars">USD</item>
+        <item name="yen">JPY</item>
+    </string-array>
+    <string-array name="currencySymbol">
+        <item name="euro">€</item>
+        <item name="pounds">£</item>
+        <item name="US_Dollars">$</item>
+        <item name="yen">¥</item>
     </string-array>
     <string-array name="tags">
         <item name="water_bill">Water_Bill</item>
@@ -177,5 +184,6 @@
     <string name="all_years">General</string>
     <string name="member">member</string>
     <string name="user_info">My profile</string>
+    <string name="payment_update">Payments update</string>
     <string name="add_members">Add members</string>
 </resources>

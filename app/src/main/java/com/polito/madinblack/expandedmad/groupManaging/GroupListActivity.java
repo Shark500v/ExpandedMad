@@ -45,7 +45,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.StatisticsGraphs;
-import com.polito.madinblack.expandedmad.utility.TabView;
+import com.polito.madinblack.expandedmad.tabViewGroup.TabView;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.*;
 import com.polito.madinblack.expandedmad.newGroup.SelectContact;

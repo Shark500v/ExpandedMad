@@ -2,6 +2,7 @@ package com.polito.madinblack.expandedmad.newGroup;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,24 +43,21 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
         holder.title.setText(data.getName());
         holder.check.setChecked(data.getCheckedBox());
         holder.phone.setText(data.getPhone());
-        //holder.email.setText(data.getEmail());
 
-        /*
         // Set image if exists
         try {
             if (data.getThumb() != null) {
                 holder.imageView.setImageBitmap(data.getThumb());
             } else {
-                holder.imageView.setImageResource(R.drawable.icon_utente);
+                holder.imageView.setImageResource(R.drawable.contact_circle);
             }
         } catch (OutOfMemoryError e) {
             // Add default picture
-            holder.imageView.setImageDrawable(this._c.getDrawable(R.drawable.icon_utente));
+            holder.imageView.setImageDrawable(this._c.getDrawable(R.drawable.contact_circle));
             e.printStackTrace();
         }
         Log.e("Image Thumb", "--------------" + data.getThumb());
-        */
-        holder.imageView.setImageDrawable(this._c.getDrawable(R.drawable.icon_utente));
+
         // Set check box listener android
         holder.check.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,7 +84,7 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         CircleImageView imageView;
-        TextView title, phone, email;
+        TextView title, phone;
         CheckBox check;
 
         public ViewHolder(View view) {
@@ -96,7 +94,6 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
             check = (CheckBox) view.findViewById(R.id.check);
             phone = (TextView) view.findViewById(R.id.no);
             imageView = (CircleImageView) view.findViewById(R.id.pic);
-            email = (TextView) view.findViewById(R.id.email);
         }
     }
 

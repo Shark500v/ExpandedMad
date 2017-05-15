@@ -1,4 +1,4 @@
-package com.polito.madinblack.expandedmad.utility;
+package com.polito.madinblack.expandedmad.tabViewGroup;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -16,13 +16,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.Balance;
-import com.polito.madinblack.expandedmad.model.GroupForUser;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.security.AccessController.getContext;
 
 //used to fill the my balance tab
 public class RecyclerViewAdapterUsers extends RecyclerView.Adapter<RecyclerViewAdapterUsers.ViewHolder>{
