@@ -50,6 +50,17 @@
         <item name="2020">2020</item>
     </string-array>
 
+    <string-array name="countries_prefix">
+        <item name="australia">Australia +61</item>
+        <item name="austria">Austria +43</item>
+        <item name="france">Francia +33</item>
+        <item name="germany">Germania +49</item>
+        <item name="italy">Italia +39</item>
+        <item name="UK">UK +44</item>
+        <item name="USA">USA +1</item>
+    </string-array>
+
+
     <string name="who">Chi paga?</string>
     <string name="how">Quanto paga?</string>
     <string name="partition">Divisione</string>
@@ -171,4 +182,5 @@
     <string name="all_years">Generale</string>
     <string name="member">partecipante</string>
     <string name="user_info">Il mio profilo</string>
+    <string name="payment_update">Pagamenti aggiornati</string>
 </resources>
