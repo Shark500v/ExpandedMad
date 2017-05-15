@@ -181,6 +181,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.groupManaging.GroupListActivity" />
         </activity>
+
+        <activity
+            android:name=".SelectContactToAdd"
+            android:parentActivityName=".utility.TabView"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.polito.madinblack.expandedmad.utility.TabView" />
+        </activity>
     </application>
 
 </manifest>

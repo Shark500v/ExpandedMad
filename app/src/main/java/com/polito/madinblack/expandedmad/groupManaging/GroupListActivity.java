@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -19,8 +20,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.model.stream.StreamFileLoader;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,6 +37,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.polito.madinblack.expandedmad.FirebaseImageLoader;
 import com.polito.madinblack.expandedmad.UserPage;
 import com.polito.madinblack.expandedmad.login.Logout;
 import com.google.firebase.storage.FileDownloadTask;
@@ -59,11 +66,15 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
 
     private TextView tv1, tv2;
 
+    private CircleImageView userImage;
+
     private DatabaseReference mUserGroupsReference;
     private DatabaseReference mDatabaseRootReference;
     private StorageReference mStorage;
+    private StorageReference mUserStorage;
     private SimpleItemRecyclerViewAdapter mAdapter;
     private static Map<String,String> groupImages = new HashMap<String,String>();
+    private File userPicture;
     Bitmap bitmap;
 
     @Override
@@ -77,7 +88,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
 
         mUserGroupsReference   = mDatabaseRootReference.child("users/"+ma.getUserPhoneNumber()+"/"+ma.getFirebaseId()+"/groups");
         mStorage = FirebaseStorage.getInstance().getReference();
-
+        mUserStorage = FirebaseStorage.getInstance().getReference().child("users").child(ma.getFirebaseId()).child("userProfilePicture.jpg");
 
         //toolbar settings
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -95,8 +106,12 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
 
         //setto nome e cognome nella nav bar
         View header = navigationView.getHeaderView(0);
+        userImage = (CircleImageView) header.findViewById(R.id.imageView);
         tv1 = (TextView) header.findViewById(R.id.textView2);
         tv2 = (TextView) header.findViewById(R.id.textView3);
+
+        Glide.with(getApplicationContext()).using(new FirebaseImageLoader()).load(mUserStorage).error(R.drawable.businessman).into(userImage);
+
         tv1.setText(ma.getUserName() + " " + ma.getUserSurname());
         tv2.setText(ma.getUserPhoneNumber());
     }
@@ -288,32 +303,6 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             mChildEventListener = childEventListener;
         }
 
-
-
-        //metodo per fare il download dallo storage delle immagini dei gruppi
-        //da togliere
-        public Bitmap downlaoadGroupImage(String groupCode){
-            StorageReference groupRef = mStorage.child("groups").child(groupCode).child("groupPicture").child("groupPicture.jpg");
-            try {
-                final File localFile = File.createTempFile("image", "tmp");
-                groupRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                        bitmap = BitmapFactory.decodeFile(localFile.getPath());
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-
-                    }
-                });
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return bitmap;
-        }
-
-
         @Override
         public GroupListActivity.SimpleItemRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.group_list_content, parent, false);
@@ -321,11 +310,11 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         }
 
         @Override
-        public void onBindViewHolder(final SimpleItemRecyclerViewAdapter.ViewHolder holder, int position) {
+        public void onBindViewHolder(final SimpleItemRecyclerViewAdapter.ViewHolder holder, final int position) {
             holder.mItem = mValues.get(position);   //mValues.get(position) rappresenta un singolo elemento della nostra lista di gruppi
-            if(mValues.get(position).getSize() > 1) {
+            if (mValues.get(position).getSize() > 1) {
                 holder.mNumView.setText(Long.toString(mValues.get(position).getSize()) + " " + getString(R.string.members));
-            }else{
+            } else {
                 holder.mNumView.setText(Long.toString(mValues.get(position).getSize()) + " " + getString(R.string.member));
             }
             //holder.mImage.setImageBitmap(downlaoadGroupImage(mValues.get(position).getId()));
@@ -361,34 +350,15 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                 }
             });
 
-            if(groupImages != null && groupImages.get(mValues.get(position).getId()) != null) {
-                String filePath = groupImages.get(mValues.get(position).getId());
-                Bitmap bitmap = BitmapFactory.decodeFile(filePath);
-                holder.mImage.setImageBitmap(bitmap);
-                //Toast.makeText(getApplicationContext(), "creato dal file tmp", Toast.LENGTH_LONG).show();;
-            }else{
-            StorageReference groupRef = mStorage.child("groups").child(mValues.get(position).getId()).child("groupPicture").child("groupPicture.jpg");
-            try {
-                final File localFile = File.createTempFile("image", "tmp");
-                final String groupCode = mValues.get(position).getId();
-                groupRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                        bitmap = BitmapFactory.decodeFile(localFile.getPath());
-                        holder.mImage.setImageBitmap(bitmap);
-                        groupImages.put(groupCode, localFile.getPath());
+            final StorageReference groupRef = mStorage.child("groups").child(mValues.get(position).getId()).child("groupPicture").child("groupPicture.jpg");
+            groupRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    Glide.with(getApplicationContext()).load(uri).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(holder.mImage);
+                }
+            });
 
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
 
-                    }
-                });
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
         }
 
         @Override
