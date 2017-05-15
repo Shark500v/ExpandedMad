@@ -5,17 +5,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.polito.madinblack.expandedmad.R;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class GroupMembersRecyclerViewAdapter extends RecyclerView.Adapter<GroupMembersRecyclerViewAdapter.ViewHolder>{
     public List<SelectUser> _data;
     Context _c;
-    //RoundImage roundedImage;
 
     public GroupMembersRecyclerViewAdapter(List<SelectUser> selectUsers, Context context) {
         _data = selectUsers;
@@ -36,17 +36,16 @@ public class GroupMembersRecyclerViewAdapter extends RecyclerView.Adapter<GroupM
         holder.phone.setText(data.getPhone());
 
         // Set image if exists
-        //da sostituire quando implementiamo le immagini che funzionano
         try {
 
             if (data.getThumb() != null) {
                 holder.imageView.setImageBitmap(data.getThumb());
             } else {
-                holder.imageView.setImageResource(R.drawable.icon_utente);
+                holder.imageView.setImageResource(R.drawable.contact_circle);
             }
         } catch (OutOfMemoryError e) {
             // Add default picture
-            holder.imageView.setImageDrawable(this._c.getDrawable(R.drawable.icon_utente));
+            holder.imageView.setImageDrawable(this._c.getDrawable(R.drawable.contact_circle));
             e.printStackTrace();
         }
     }
@@ -58,7 +57,7 @@ public class GroupMembersRecyclerViewAdapter extends RecyclerView.Adapter<GroupM
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        ImageView imageView;
+        CircleImageView imageView;
         TextView title, phone;
 
         public ViewHolder(View view) {
@@ -66,7 +65,7 @@ public class GroupMembersRecyclerViewAdapter extends RecyclerView.Adapter<GroupM
             mView = view;
             title = (TextView) view.findViewById(R.id.name);
             phone = (TextView) view.findViewById(R.id.no);
-            imageView = (ImageView) view.findViewById(R.id.pic);
+            imageView = (CircleImageView) view.findViewById(R.id.pic);
         }
     }
 }

@@ -69,7 +69,6 @@ public class SelectUserAdapter extends BaseAdapter {
         v.check = (CheckBox) view.findViewById(R.id.check);
         v.phone = (TextView) view.findViewById(R.id.no);
         v.imageView = (ImageView) view.findViewById(R.id.pic);
-        v.email = (TextView) view.findViewById(R.id.email);
 
         final SelectUser data = (SelectUser) _data.get(i);
         v.title.setText(data.getName());
@@ -142,7 +141,7 @@ public class SelectUserAdapter extends BaseAdapter {
 
     static class ViewHolder {
         ImageView imageView;
-        TextView title, phone, email;
+        TextView title, phone;
         CheckBox check;
     }
 }

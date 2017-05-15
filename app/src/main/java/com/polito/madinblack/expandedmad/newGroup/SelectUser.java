@@ -12,14 +12,22 @@ public class SelectUser implements Serializable{
     String name;
 
     public Bitmap getThumb() {
-        return thumb;
+        //return thumb;
+        if (byteImg != null){
+            return BitmapFactory.decodeByteArray(byteImg, 0, byteImg.length);
+        }
+        return null;
     }
 
     public void setThumb(Bitmap img) throws IOException {
-        thumb = img;
+        ByteArrayOutputStream blob = new ByteArrayOutputStream();
+        img.compress(Bitmap.CompressFormat.PNG, 100, blob);
+        byteImg = blob.toByteArray();
+        //thumb = img;
     }
 
-    Bitmap thumb;
+    //Bitmap thumb;
+    byte[] byteImg = null;
 
     public String getPhone() {
         return phone;
@@ -64,49 +72,4 @@ public class SelectUser implements Serializable{
     public String getFirebaseId() { return firebaseId;  }
 
     public void setFirebaseId(String firebaseId) {  this.firebaseId = firebaseId;   }
-}
-
-class BitmapDataObject implements Serializable {
-
-    public Bitmap currentImage;
-
-    public BitmapDataObject(Bitmap bitmap) {
-        currentImage = bitmap;
-    }
-
-    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
-
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        currentImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
-
-        byte[] byteArray = stream.toByteArray();
-
-        out.writeInt(byteArray.length);
-        out.write(byteArray);
-
-        currentImage = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-
-    }
-
-    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
-
-        int bufferLength = in.readInt();
-
-        byte[] byteArray = new byte[bufferLength];
-
-        int pos = 0;
-        do {
-            int read = in.read(byteArray, pos, bufferLength - pos);
-
-            if (read != -1) {
-                pos += read;
-            } else {
-                break;
-            }
-
-        } while (pos < bufferLength);
-
-        currentImage = BitmapFactory.decodeByteArray(byteArray, 0, bufferLength);
-
-    }
 }
