@@ -66,17 +66,17 @@ public class Currency {
 
     }
 
-    public static String getSymbol(String name){
-        return currencyISOCodeSymbol.get(name);
+    public static String getSymbol(String ISOcode){
+        return currencyISOCodeSymbol.get(ISOcode);
 
     }
 
-    public static String getName(String symbol){
+    public static String getISOCode(String symbol){
         return currencySymbolISOCode.get(symbol);
 
     }
 
-    public static Set<String> getCurrencyNames(){
+    public static Set<String> getCurrencyISOcode(){
         return currencyISOCodeSymbol.keySet();
     }
 
