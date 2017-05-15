@@ -1,4 +1,4 @@
-package com.polito.madinblack.expandedmad;
+package com.polito.madinblack.expandedmad.expenseDetail;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -14,20 +15,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
+import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.login.BaseActivity;
 import com.polito.madinblack.expandedmad.model.Balance;
 import com.polito.madinblack.expandedmad.model.HistoryInfo;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.PaymentFirebase;
 import com.polito.madinblack.expandedmad.model.PaymentInfo;
-import com.polito.madinblack.expandedmad.utility.PaymentRecyclerAdapter;
 
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class PaymentDetailActivity extends BaseActivity {
 
@@ -121,6 +119,7 @@ public class PaymentDetailActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+
         if (id == R.id.confirm_payment && changedPayments.size()>1) {
 
             showProgressDialog();
@@ -227,7 +226,12 @@ public class PaymentDetailActivity extends BaseActivity {
             hideProgressDialog();
 
 
+
         }else if(id == R.id.fill_all_paid){
+
+
+
+
 
         }else if(id == 16908332){
             Intent intent3 = new Intent(this, ExpenseDetailFragment.class);

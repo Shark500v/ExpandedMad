@@ -13,7 +13,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         app:layoutManager="LinearLayoutManager"
-        tools:context="com.polito.madinblack.expandedmad.utility.TabView"
+        tools:context="com.polito.madinblack.expandedmad.tabViewGroup.TabView"
         tools:listitem="@layout/expense_list_content" />
 
 </RelativeLayout>

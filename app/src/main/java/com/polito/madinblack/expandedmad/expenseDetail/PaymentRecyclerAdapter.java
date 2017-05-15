@@ -1,4 +1,4 @@
-package com.polito.madinblack.expandedmad.utility;
+package com.polito.madinblack.expandedmad.expenseDetail;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -9,21 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.polito.madinblack.expandedmad.R;
-import com.polito.madinblack.expandedmad.chat.ChatRecyclerViewAdapter;
-import com.polito.madinblack.expandedmad.model.Balance;
 import com.polito.madinblack.expandedmad.model.CostUtil;
-import com.polito.madinblack.expandedmad.model.Message;
 import com.polito.madinblack.expandedmad.model.MyApplication;
-import com.polito.madinblack.expandedmad.model.Payment;
 import com.polito.madinblack.expandedmad.model.PaymentFirebase;
 import com.polito.madinblack.expandedmad.model.PaymentInfo;
 

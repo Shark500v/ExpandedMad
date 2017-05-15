@@ -12,7 +12,7 @@ import android.view.MenuItem;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.polito.madinblack.expandedmad.R;
-import com.polito.madinblack.expandedmad.utility.RecyclerViewAdapterUsers;
+import com.polito.madinblack.expandedmad.tabViewGroup.RecyclerViewAdapterUsers;
 
 
 
