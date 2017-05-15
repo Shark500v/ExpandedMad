@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -118,6 +119,7 @@ public class PaymentDetailActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+
         if (id == R.id.confirm_payment && changedPayments.size()>1) {
 
             showProgressDialog();
@@ -223,8 +225,14 @@ public class PaymentDetailActivity extends BaseActivity {
 
             hideProgressDialog();
 
+            Toast.makeText(getApplicationContext(), getString(R.string.payment_update), Toast.LENGTH_SHORT);
+
 
         }else if(id == R.id.fill_all_paid){
+
+
+
+
 
         }else if(id == 16908332){
             Intent intent3 = new Intent(this, ExpenseDetailFragment.class);

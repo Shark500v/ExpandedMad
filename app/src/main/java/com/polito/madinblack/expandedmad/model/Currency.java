@@ -1,6 +1,11 @@
 package com.polito.madinblack.expandedmad.model;
 
 
+import android.app.Activity;
+import android.content.Context;
+
+import com.bumptech.glide.load.engine.Resource;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,12 +15,45 @@ import java.util.Map;
 
 public class Currency {
 
-    public static final Map<String, String> currency = new HashMap<String, String>() {{
+    double [][] association = new double[4][4];
+
+    public static final Map<String, Integer> currencySymbolInt = new HashMap<String, Integer>() {{
+        put("€", 0);
+        put("$", 1);
+        put("¥", 2);
+        put("£", 3);
+    }};
+
+    public static final Map<String, String> currencyNameSymbol = new HashMap<String, String>() {{
         put("Euro", "€");
         put("Dollar", "$");
         put("Yen",  "¥");
         put("Pound",  "£");
     }};
+    public static final Map<String, String> currencyNameSymbol = new HashMap<String, String>() {{
+        put("Euro", "€");
+        put("Dollar", "$");
+        put("Yen",  "¥");
+        put("Pound",  "£");
+    }};
+
+
+
+    public static final Map<String, String> currencyNameSymbol = new HashMap<String, String>() {{
+        put("Euro", "€");
+        put("Dollar", "$");
+        put("Yen",  "¥");
+        put("Pound",  "£");
+    }};
+
+
+    public static final Map<String, String> currencyNameValue = new HashMap<String, String>() {{
+        put("Euro", "€");
+        put("Dollar", "$");
+        put("Yen",  "¥");
+        put("Pound",  "£");
+    }};
+
 
 
     public Currency(){

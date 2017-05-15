@@ -164,4 +164,5 @@
     <string name="all_years">Generale</string>
     <string name="member">partecipante</string>
     <string name="user_info">Il mio profilo</string>
+    <string name="payment_update">Pagamenti aggiornati</string>
 </resources>
