@@ -177,7 +177,7 @@ public class ExpenseFillData extends AppCompatActivity {
             }
 
 
-            Spinner currency_spinner = (Spinner) findViewById(R.id.tag_spinner);
+            Spinner currency_spinner = (Spinner) findViewById(R.id.currency);
             String currencySymbol = currency_spinner.getSelectedItem().toString();
             String[] names=getResources().getStringArray(R.array.currency);
             String currency = names[currency_spinner.getSelectedItemPosition()];
