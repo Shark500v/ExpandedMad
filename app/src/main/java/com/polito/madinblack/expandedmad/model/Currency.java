@@ -34,13 +34,13 @@ public class Currency {
         put("JPY", 2);
     }};
 
-    public static final Map<String, String> currencyISOCodeSymbol = new HashMap<String, String>() {{
+    private static final Map<String, String> currencyISOCodeSymbol = new HashMap<String, String>() {{
         put("USD", "$");
         put("GBP", "£");
         put("JPY", "¥");
         put("EUR", "€");
     }};
-    public static final Map<String, String> currencySymbolISOCode = new HashMap<String, String>() {{
+    private static final Map<String, String> currencySymbolISOCode = new HashMap<String, String>() {{
         put("$", "USD");
         put("£", "GBP");
         put("¥", "JPY");
