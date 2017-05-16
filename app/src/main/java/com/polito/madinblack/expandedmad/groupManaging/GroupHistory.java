@@ -25,6 +25,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.polito.madinblack.expandedmad.R;
+import com.polito.madinblack.expandedmad.model.Currency;
 import com.polito.madinblack.expandedmad.model.HistoryInfo;
 import com.polito.madinblack.expandedmad.tabViewGroup.TabView;
 import java.util.ArrayList;
@@ -237,10 +238,10 @@ public class GroupHistory extends AppCompatActivity {
             long l = hi.getContent();
             switch ((int)l){
                 case 0:
-                    return getString(R.string.history_expense)+ " "+String.format("%.2f",hi.getCost()) +" "+hi.getCurrecnySymbol();
+                    return getString(R.string.history_expense)+ " "+String.format("%.2f",hi.getCost()) +" "+ Currency.toString(hi.getCurrencyISO());
                 case 1:
                     return getString(R.string.history_payment_part1)+ " "+ hi.getPaidTo()+ " "
-                            +getString(R.string.history_payment_part2)+String.format("%.2f",hi.getCost()) +" "+hi.getCurrecnySymbol();
+                            +getString(R.string.history_payment_part2)+String.format("%.2f",hi.getCost()) +" "+Currency.toString(hi.getCurrencyISO());
                 case 2:
                     return getString(R.string.history_new_memeber);
                 default:

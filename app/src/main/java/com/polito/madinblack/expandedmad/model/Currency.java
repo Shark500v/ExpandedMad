@@ -78,6 +78,12 @@ public class Currency {
         return currencySymbolISOCode.keySet();
     }
 
+    public static String toString(String currencyISO){
+
+        return getSymbol(currencyISO) + " (" + currencyISO + ")";
+
+    }
+
 
 
 

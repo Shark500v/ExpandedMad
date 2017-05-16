@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.Balance;
+import com.polito.madinblack.expandedmad.model.Currency;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 
 import java.util.ArrayList;
@@ -143,13 +144,13 @@ public class RecyclerViewAdapterUsers extends RecyclerView.Adapter<RecyclerViewA
             holder.mIdView.setText(mValues.get(position).getUserName() + " " +mValues.get(position).getUserSurname());               //qui visualizzo nome e cognome
         //qui invece quanto deve o meno
         if (mValues.get(position).getBalance()>0){
-            holder.mContentView.setText(String.format("+%.2f", mValues.get(position).getBalance()) + " " + mValues.get(position).getCurrencySymbol());
+            holder.mContentView.setText(String.format("+%.2f", mValues.get(position).getBalance()) + " " + Currency.getSymbol(mValues.get(position).getCurrencyISO()));
             holder.mContentView.setTextColor(Color.parseColor("#00c200"));
         }else if(mValues.get(position).getBalance()<0){
-            holder.mContentView.setText(String.format("%.2f", mValues.get(position).getBalance()) + " " + mValues.get(position).getCurrencySymbol());
+            holder.mContentView.setText(String.format("%.2f", mValues.get(position).getBalance()) + " " + Currency.getSymbol(mValues.get(position).getCurrencyISO()));
             holder.mContentView.setTextColor(Color.parseColor("#ff0000"));
         }else{
-            holder.mContentView.setText(String.format("%.2f", mValues.get(position).getBalance()) + " " + mValues.get(position).getCurrencySymbol());
+            holder.mContentView.setText(String.format("%.2f", mValues.get(position).getBalance()) + " " + Currency.getSymbol(mValues.get(position).getCurrencyISO()));
         }
 
         /*

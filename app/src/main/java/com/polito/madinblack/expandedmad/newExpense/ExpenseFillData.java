@@ -46,6 +46,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.CostUtil;
+import com.polito.madinblack.expandedmad.model.Currency;
 import com.polito.madinblack.expandedmad.model.Expense;
 
 import com.polito.madinblack.expandedmad.model.MyApplication;
@@ -129,7 +130,7 @@ public class ExpenseFillData extends AppCompatActivity {
         Spinner spinner = (Spinner) findViewById(R.id.currency);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.currencySymbol, android.R.layout.simple_spinner_item);
+                R.array.currency, android.R.layout.simple_spinner_item);
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
@@ -176,11 +177,19 @@ public class ExpenseFillData extends AppCompatActivity {
                 return true;
             }
 
-
+            //Wrote by Alessio
+            /*
             Spinner currency_spinner = (Spinner) findViewById(R.id.currency);
             String currencySymbol = currency_spinner.getSelectedItem().toString();
             String[] names=getResources().getStringArray(R.array.currency);
             String currency = names[currency_spinner.getSelectedItemPosition()];
+            */
+
+            Spinner currency_spinner = (Spinner) findViewById(R.id.currency);
+            String currencySymbol = Character.toString(currency_spinner.getSelectedItem().toString().charAt(0));
+            String currencyISO = Currency.getISOCode(currencySymbol);
+
+
 
             Spinner tag_spinner = (Spinner) findViewById(R.id.tag_spinner);
             String tag = tag_spinner.getSelectedItem().toString();
@@ -219,8 +228,7 @@ public class ExpenseFillData extends AppCompatActivity {
                     ma.getUserSurname(),
                     amount,
                     roundedAmount,
-                    currency,
-                    currencySymbol,
+                    currencyISO,
                     groupID,
                     year,
                     month,

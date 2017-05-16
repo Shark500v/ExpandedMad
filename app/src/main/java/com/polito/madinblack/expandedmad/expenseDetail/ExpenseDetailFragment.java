@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.polito.madinblack.expandedmad.R;
+import com.polito.madinblack.expandedmad.model.Currency;
 import com.polito.madinblack.expandedmad.model.Expense;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.PaymentFirebase;
@@ -95,7 +96,7 @@ public class ExpenseDetailFragment extends Fragment {
                                 intent.putExtra(PaymentDetailActivity.ARG_EXPENSE_COST, expense.getCost().toString());
                                 intent.putExtra(PaymentDetailActivity.ARG_USER_NAME, expense.getPaidByName());
                                 intent.putExtra(PaymentDetailActivity.ARG_USER_SURNAME, expense.getPaidBySurname());
-                                intent.putExtra(PaymentDetailActivity.ARG_CURRENCY_SYMBOL, expense.getCurrencySymbol());
+                                intent.putExtra(PaymentDetailActivity.ARG_CURRENCY_ISO, expense.getCurrencyISO());
                                 startActivity(intent);
                             }
                         });
@@ -118,7 +119,7 @@ public class ExpenseDetailFragment extends Fragment {
                         ((TextView) rootView.findViewById(R.id.paid_container)).setText(paymentFirebase.toString());
                     ((TextView) rootView.findViewById(R.id.tag_container)).setText(expense.getTag());
                     ((TextView) rootView.findViewById(R.id.cost_container)).setText(String.format("%.2f",(expense.getCost())));
-                    ((TextView) rootView.findViewById(R.id.currency_container)).setText(expense.getCurrencySymbol());
+                    ((TextView) rootView.findViewById(R.id.currency_container)).setText(Currency.toString(expense.getCurrencyISO()));
 
                     if(expense.getRoundedCost().equals(expense.getCost())){
                         (rootView.findViewById(R.id.roundedCostLayout)).setVisibility(View.GONE);

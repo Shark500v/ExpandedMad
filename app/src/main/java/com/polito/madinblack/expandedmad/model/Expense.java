@@ -29,8 +29,7 @@ public class Expense {
     private String  paidByPhoneNumber;
     private Double  cost;
     private Double  roundedCost;
-    private String  currencyName;
-    private String  currencySymbol;
+    private String  currencyISO;
     //private String state
     private String  groupId;
     private Long    year;
@@ -48,7 +47,7 @@ public class Expense {
 
     }
 
-    public Expense(String id, String name, String tag, String paidByName, String paidBySurname, String paidByFirebaseId, String paidByPhoneNumber, Double cost, Double roundedCost, String currencyName, String currencySymbol, String groupId, Long year, Long month, Long day, String description) {
+    public Expense(String id, String name, String tag, String paidByName, String paidBySurname, String paidByFirebaseId, String paidByPhoneNumber, Double cost, Double roundedCost, String currencyISO, String groupId, Long year, Long month, Long day, String description) {
         this.id = id;
         this.name = name;
         this.tag = tag;
@@ -58,8 +57,7 @@ public class Expense {
         this.paidByPhoneNumber = paidByPhoneNumber;
         this.cost = cost;
         this.roundedCost = roundedCost;
-        this.currencyName = currencyName;
-        this.currencySymbol = currencySymbol;
+        this.currencyISO = currencyISO;
         this.groupId = groupId;
         this.year = year;
         this.month = month;
@@ -68,7 +66,7 @@ public class Expense {
     }
 
 
-    public Expense(String id, String name, String tag, String paidByName, String paidBySurname, String paidByFirebaseId, String paidByPhoneNumber, Double cost, Double roundedCost, String currencyName, String currencySymbol, String groupId, Long year, Long month, Long day, String description, Map<String, PaymentFirebase> payments) {
+    public Expense(String id, String name, String tag, String paidByName, String paidBySurname, String paidByFirebaseId, String paidByPhoneNumber, Double cost, Double roundedCost, String currencyISO, String groupId, Long year, Long month, Long day, String description, Map<String, PaymentFirebase> payments) {
         this.id = id;
         this.name = name;
         this.tag = tag;
@@ -78,8 +76,7 @@ public class Expense {
         this.paidByPhoneNumber = paidByPhoneNumber;
         this.cost = cost;
         this.roundedCost = roundedCost;
-        this.currencyName = currencyName;
-        this.currencySymbol = currencySymbol;
+        this.currencyISO = currencyISO;
         this.groupId = groupId;
         this.year = year;
         this.month = month;
@@ -160,20 +157,12 @@ public class Expense {
         this.roundedCost = roundedCost;
     }
 
-    public String getCurrencyName() {
-        return currencyName;
+    public String getCurrencyISO() {
+        return currencyISO;
     }
 
-    public void setCurrencyName(String currencyName) {
-        this.currencyName = currencyName;
-    }
-
-    public String getCurrencySymbol() {
-        return currencySymbol;
-    }
-
-    public void setCurrencySymbol(String currencySymbol) {
-        this.currencySymbol = currencySymbol;
+    public void setCurrencyISO(String currencyName) {
+        this.currencyISO = currencyName;
     }
 
     public String getGroupId() {
@@ -235,12 +224,12 @@ public class Expense {
 
     public static String writeNewExpense(DatabaseReference mDatabaseRootRefenrence, String name, String tag,
                                          String paidByFirebaseId, String paidByPhoneNumber, String paidByName, String paidBySurname, Double cost, Double roundedCost,
-                                         String currencyName, String currencySymbol, final String groupId, Long year, Long month, Long day, String description, List<Payment> paymentList){
+                                         String currencyISO, final String groupId, Long year, Long month, Long day, String description, List<Payment> paymentList){
 
         DatabaseReference myExpenseRef = mDatabaseRootRefenrence.child("expenses").push();
         final String expenseKey = myExpenseRef.getKey();
 
-        Expense expense = new Expense(expenseKey, name, tag, paidByName, paidBySurname, paidByFirebaseId, paidByPhoneNumber, CostUtil.round(cost, 2), CostUtil.round(roundedCost, 2), currencyName, currencySymbol, groupId, year, month, day, description);
+        Expense expense = new Expense(expenseKey, name, tag, paidByName, paidBySurname, paidByFirebaseId, paidByPhoneNumber, CostUtil.round(cost, 2), CostUtil.round(roundedCost, 2), currencyISO, groupId, year, month, day, description);
         myExpenseRef.setValue(expense);
 
         DatabaseReference myPaymentRef;
@@ -354,7 +343,7 @@ public class Expense {
         mDatabaseRootRefenrence.child("groups/"+groupId+"/expenses/"+expenseKey).setValue(true);
 
         /*update the history*/
-        HistoryInfo historyInfo = new HistoryInfo(paidByName+" "+paidBySurname, 0l, cost, currencySymbol, null);
+        HistoryInfo historyInfo = new HistoryInfo(paidByName+" "+paidBySurname, 0l, cost, currencyISO, null);
         mDatabaseRootRefenrence.child("history/"+groupId).push().setValue(historyInfo);
 
         return expenseKey;

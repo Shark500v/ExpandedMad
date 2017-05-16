@@ -32,7 +32,7 @@ public class PaymentDetailActivity extends BaseActivity {
     public static final String ARG_EXPENSE_ID = "expenseId";
     public static final String ARG_GROUP_ID ="expenseName";
     public static final String ARG_EXPENSE_COST ="expenseCost";
-    public static final String ARG_CURRENCY_SYMBOL ="currencySymbol";
+    public static final String ARG_CURRENCY_ISO ="currencyISO";
     public static final String ARG_USER_NAME ="userName" ;
     public static final String ARG_USER_SURNAME = "userName";
 
@@ -42,7 +42,7 @@ public class PaymentDetailActivity extends BaseActivity {
 
     private String expenseId;
     private String groupId;
-    private String currencySymbol;
+    private String currencyISO;
     private String expenseUserName;
     private String expenseUserSurname;
     private Double expenseCost;
@@ -62,7 +62,7 @@ public class PaymentDetailActivity extends BaseActivity {
         expenseId           = getIntent().getStringExtra(ARG_EXPENSE_ID);
         groupId             = getIntent().getStringExtra(ARG_GROUP_ID);
         expenseCost         = Double.valueOf(getIntent().getStringExtra(ARG_EXPENSE_COST));
-        currencySymbol      = getIntent().getStringExtra(ARG_CURRENCY_SYMBOL);
+        currencyISO      = getIntent().getStringExtra(ARG_CURRENCY_ISO);
         expenseUserName     = getIntent().getStringExtra(ARG_USER_NAME);
         expenseUserSurname  = getIntent().getStringExtra(ARG_USER_SURNAME);
 
@@ -206,7 +206,7 @@ public class PaymentDetailActivity extends BaseActivity {
 
 
                 /*update the history*/
-                HistoryInfo historyInfo = new HistoryInfo(paymentInfo.getUserNameDisplayed(), 1L, expenseCost, currencySymbol, expenseUserName);
+                HistoryInfo historyInfo = new HistoryInfo(paymentInfo.getUserNameDisplayed(), 1L, expenseCost, currencyISO, expenseUserName);
                 mDatabaseRootReference.child("history/"+groupId).push().setValue(historyInfo);
 
 

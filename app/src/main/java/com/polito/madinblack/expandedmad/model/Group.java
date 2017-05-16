@@ -88,7 +88,7 @@ public class Group {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 final UserForGroup newUserForGroup = new UserForGroup(userPhoneNumber, userFirebaseId, userName, userSurname);
-                Balance balance = new Balance(userPhoneNumber, userName, userSurname, 0D, "Euro", "€");
+                Balance balance = new Balance(userPhoneNumber, userName, userSurname, 0D, "EUR");
 
                 for(DataSnapshot userSnapshot : dataSnapshot.getChildren()){
 
