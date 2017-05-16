@@ -255,7 +255,7 @@ public class TabView extends AppCompatActivity {
             recyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
                 @Override
                 public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                    v.scrollBy(0, 1000);
+                    v.scrollBy(0, bottom + 100);
                 }
             });
 

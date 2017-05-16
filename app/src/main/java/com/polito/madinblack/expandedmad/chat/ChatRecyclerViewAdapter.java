@@ -1,5 +1,9 @@
 package com.polito.madinblack.expandedmad.chat;
 
+import android.icu.util.Calendar;
+import android.icu.util.GregorianCalendar;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,16 +37,23 @@ public class ChatRecyclerViewAdapter extends FirebaseRecyclerAdapter<Message,Rec
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void populateViewHolder(RecyclerView.ViewHolder viewHolder, Message model, int position) {
         //da cambiare il controllo, è solo per ricordarmi che se mio mess va a destra
         if(model.getSentById().equals(ma.getUserPhoneNumber())){
             ViewHolderRight holder = (ViewHolderRight)viewHolder;
             holder.mContentView.setText(model.getMessage());
+            //holder.mTime.setText(Integer.toString(model.getDate().getHours()) + ":" + Integer.toString(model.getDate().getMinutes()));
         }
         else{
             ViewHolderLeft holder = (ViewHolderLeft)viewHolder;
             holder.mContentView.setText(model.getMessage());
+            holder.mName.setText(model.getSentByName());
+            if(holder.mContentView.getWidth()<holder.mName.getWidth()){
+                holder.mContentView.setWidth(holder.mName.getWidth());
+            }
+            //holder.mTime.setText(Integer.toString(model.getDate().getHours()) + ":" + Integer.toString(model.getDate().getMinutes()));
             //devo poi settare la foto
         }
     }
@@ -75,12 +86,14 @@ public class ChatRecyclerViewAdapter extends FirebaseRecyclerAdapter<Message,Rec
     public class ViewHolderRight extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mContentView;
+        public final TextView mTime;
         public Message mItem;
 
         public ViewHolderRight(View view) {
             super(view);
             mView = view;
             mContentView = (TextView) view.findViewById(R.id.textView);
+            mTime = (TextView) view.findViewById(R.id.time);
         }
 
         @Override
@@ -94,6 +107,7 @@ public class ChatRecyclerViewAdapter extends FirebaseRecyclerAdapter<Message,Rec
         public final View mView;
         public final ImageView mIdView;
         public final TextView mContentView;
+        public final TextView mName, mTime;
         public Message mItem;
 
         public ViewHolderLeft(View view) {
@@ -101,6 +115,8 @@ public class ChatRecyclerViewAdapter extends FirebaseRecyclerAdapter<Message,Rec
             mView = view;
             mIdView = (ImageView) view.findViewById(R.id.imageUser);
             mContentView = (TextView) view.findViewById(R.id.textView);
+            mName = (TextView) view.findViewById(R.id.name_surname);
+            mTime = (TextView) view.findViewById(R.id.time);
         }
 
         @Override
