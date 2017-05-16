@@ -28,7 +28,7 @@ import android.widget.ImageView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.polito.madinblack.expandedmad.newExpense.ExpenseFillData;
-import com.polito.madinblack.expandedmad.ExpenseFillData;
+import com.polito.madinblack.expandedmad.newExpense.ExpenseFillData;
 import com.polito.madinblack.expandedmad.SelectContactToAdd;
 import com.polito.madinblack.expandedmad.chat.ChatRecyclerViewAdapter;
 import com.polito.madinblack.expandedmad.groupManaging.GroupHistory;

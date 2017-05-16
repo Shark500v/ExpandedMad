@@ -25,7 +25,7 @@ import com.polito.madinblack.expandedmad.model.UserForGroup;
 import com.polito.madinblack.expandedmad.newGroup.ContactsFragment;
 import com.polito.madinblack.expandedmad.newGroup.InviteContact;
 import com.polito.madinblack.expandedmad.newGroup.SelectUser;
-import com.polito.madinblack.expandedmad.utility.TabView;
+import com.polito.madinblack.expandedmad.tabViewGroup.TabView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -123,17 +123,28 @@ public class SelectContactToAdd extends AppCompatActivity {
                             }
 
                             if(counter.decrementAndGet()==0){
-                                if(invite.isEmpty()){
+                                //if(invite.isEmpty()){
                                     //se la lista è vuota non ci sono inviti da fare e posso andare oltre, altrimenti devo procedere ad invitare le persone mancanti prima di aggiungere le persone al gruppo
                                     List<UserForGroup> userForGroupList = new ArrayList<>();
 
                                     for(SelectUser selectUser : groupM){
 
-                                        String [] items = selectUser.getName().split(" ");
-                                        if(items[0]==null)
-                                            items[0]=" ";
-                                        if(items[1]==null)
-                                            items[1]=" ";
+                                        String name = selectUser.getName();
+                                        String[] items = new String[2];
+                                        if(name.contains(" ")){
+                                            items = name.split(" ");
+                                            if(items[0] == null)
+                                                items[0] = " ";
+                                            if(items[1] == null) {
+                                                items[1] = " ";//DA SISTEMARE QUA E 2 RIGHE SOTTO!!!
+                                            }
+                                        }else if(name.length() >= 1){
+                                            items[0] = name;
+                                            items[1] = " ";
+                                        }else{
+                                            items[0] = " ";
+                                            items[1] = " ";
+                                        }
 
                                         UserForGroup userForGroup = new UserForGroup(selectUser.getPhone(), selectUser.getFirebaseId(), items[0], items[1]);
                                         for(int i=0; i<userForGroupList.size(); i++){
@@ -141,22 +152,27 @@ public class SelectContactToAdd extends AppCompatActivity {
                                             userForGroup.connect(userForGroupList.get(i));
 
                                         }
-                                        Group.writeUserToGroup(mDatabaseReference, groupId, groupName, userForGroup.getFirebaseId(), userForGroup.getPhoneNumber(), userForGroup.getName(), userForGroup.getSurname());
+                                        //Group.writeUserToGroup(mDatabaseReference, groupId, groupName, userForGroup.getFirebaseId(), userForGroup.getPhoneNumber(), userForGroup.getName(), userForGroup.getSurname());
                                     }
+                                    if(invite.isEmpty()) {
+                                        Intent intent1 = new Intent(SelectContactToAdd.this, TabView.class);
+                                        intent1.putExtra("groupIndex", groupId);
+                                        intent1.putExtra("groupName", groupName);
+                                        startActivity(intent1);
+                                    }else {
+                                        //}else{
 
-                                    Intent intent1=new Intent(SelectContactToAdd.this, TabView.class);
-                                    intent1.putExtra("groupIndex", groupId);
-                                    intent1.putExtra("groupName", groupName);
-                                    startActivity(intent1);
-                                }else{
-                                    //invito le persone che non sono ancora nel DB
-                                    Bundle arguments = new Bundle();
-                                    arguments.putSerializable("invite", (Serializable) invite);
-                                    arguments.putSerializable("Group Members", (Serializable) groupM);  //lista di utenti già inscritti
-                                    InviteContact fragment = new InviteContact();
-                                    fragment.setArguments(arguments);
-                                    fragment.show(getSupportFragmentManager(), "InviteContacts");
-                                }
+                                        //invito le persone che non sono ancora nel DB
+                                        Bundle arguments = new Bundle();
+                                        arguments.putSerializable("invite", (Serializable) invite);
+                                        arguments.putString("GROUP_ID", groupId);
+                                        arguments.putString("GROUP_NAME", groupName);
+                                        //arguments.putSerializable("Group Members", (Serializable) groupM);  //lista di utenti già inscritti
+                                        InviteContactToAdd fragment = new InviteContactToAdd();
+                                        fragment.setArguments(arguments);
+                                        fragment.show(getSupportFragmentManager(), "InviteContacts");
+                                    }
+                                //}
                             }
                         }
 

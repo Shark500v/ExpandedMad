@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.signature.StringSignature;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -32,6 +33,7 @@ import com.polito.madinblack.expandedmad.newGroup.NewGroup;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Calendar;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -76,7 +78,7 @@ public class UserPage extends AppCompatActivity{
         surname.setText(ma.getUserSurname());
         phoneNumber.setText(ma.getUserPhoneNumber());
 
-        Glide.with(this).using(new FirebaseImageLoader()).load(mUserStorage).diskCacheStrategy(DiskCacheStrategy.ALL).error(R.drawable.businessman).into(userImage);
+        Glide.with(this).using(new FirebaseImageLoader()).load(mUserStorage).signature(new StringSignature(String.valueOf(Calendar.getInstance().getTimeInMillis()))).diskCacheStrategy(DiskCacheStrategy.ALL).error(R.drawable.businessman).into(userImage);
 
         imageClick.setOnClickListener(new View.OnClickListener() {
             @Override

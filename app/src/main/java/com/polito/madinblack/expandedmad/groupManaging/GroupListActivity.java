@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.model.stream.StreamFileLoader;
+import com.bumptech.glide.signature.StringSignature;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -52,6 +53,7 @@ import com.polito.madinblack.expandedmad.newGroup.SelectContact;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -110,7 +112,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         tv1 = (TextView) header.findViewById(R.id.textView2);
         tv2 = (TextView) header.findViewById(R.id.textView3);
 
-        Glide.with(getApplicationContext()).using(new FirebaseImageLoader()).load(mUserStorage).error(R.drawable.businessman).into(userImage);
+        Glide.with(getApplicationContext()).using(new FirebaseImageLoader()).load(mUserStorage).signature(new StringSignature(String.valueOf(Calendar.getInstance().getTimeInMillis()))).error(R.drawable.businessman).into(userImage);
 
         tv1.setText(ma.getUserName() + " " + ma.getUserSurname());
         tv2.setText(ma.getUserPhoneNumber());

@@ -2,18 +2,25 @@ package com.polito.madinblack.expandedmad.tabViewGroup;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.Balance;
 import com.polito.madinblack.expandedmad.model.MyApplication;
@@ -21,11 +28,14 @@ import com.polito.madinblack.expandedmad.model.MyApplication;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 //used to fill the my balance tab
 public class RecyclerViewAdapterUsers extends RecyclerView.Adapter<RecyclerViewAdapterUsers.ViewHolder>{
 
     private List<Balance> mValues = new ArrayList<>();
     private DatabaseReference dataref;
+    private StorageReference mStorageReference;
     private List<String> mValuesIds = new ArrayList<>();
     private Context mContext;
     private ChildEventListener mChildEventListener;
@@ -151,6 +161,13 @@ public class RecyclerViewAdapterUsers extends RecyclerView.Adapter<RecyclerViewA
         }else{
             holder.mContentView.setText(String.format("%.2f", mValues.get(position).getBalance()) + " " + mValues.get(position).getCurrencySymbol());
         }
+        mStorageReference = FirebaseStorage.getInstance().getReference().child("users").child(mValuesIds.get(position)).child("userProfilePicture.jpg");
+        mStorageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Glide.with(mContext).load(uri).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(holder.mImage);
+            }
+        });
 
         /*
         holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -179,6 +196,7 @@ public class RecyclerViewAdapterUsers extends RecyclerView.Adapter<RecyclerViewA
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
+        public final CircleImageView mImage;
         public final TextView mIdView;
         public final TextView mContentView;
         public Balance mItem;
@@ -186,6 +204,7 @@ public class RecyclerViewAdapterUsers extends RecyclerView.Adapter<RecyclerViewA
         public ViewHolder(View view) {
             super(view);
             mView = view;
+            mImage = (CircleImageView)view.findViewById(R.id.user_icon);
             mIdView = (TextView) view.findViewById(R.id.id);
             mContentView = (TextView) view.findViewById(R.id.content);
         }

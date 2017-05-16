@@ -184,11 +184,20 @@
 
         <activity
             android:name=".SelectContactToAdd"
-            android:parentActivityName=".utility.TabView"
+            android:parentActivityName=".tabViewGroup.TabView"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.polito.madinblack.expandedmad.utility.TabView" />
+                android:value="com.polito.madinblack.expandedmad.tabViewGroup.TabView" />
+        </activity>
+
+        <activity
+            android:name=".InviteActivityToAdd"
+            android:parentActivityName=".SelectContactToAdd"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.polito.madinblack.expandedmad.SelectContactToAdd" />
         </activity>
     </application>
 
