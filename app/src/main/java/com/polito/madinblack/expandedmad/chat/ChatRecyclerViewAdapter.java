@@ -42,7 +42,7 @@ public class ChatRecyclerViewAdapter extends FirebaseRecyclerAdapter<Message,Rec
         }
         else{
             ViewHolderLeft holder = (ViewHolderLeft)viewHolder;
-            holder.mContentView.setText(model.getMessage());
+            holder.mContentView.setText(model.getSentByName() + "\n" + model.getMessage());
             //devo poi settare la foto
         }
     }

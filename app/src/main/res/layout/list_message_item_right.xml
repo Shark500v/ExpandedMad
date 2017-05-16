@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:layout_marginBottom="4dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <FrameLayout
@@ -16,7 +15,7 @@
             android:id="@+id/imageView"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="8dp"
             android:layout_weight="1"
             android:layout_gravity="top|right"
             android:src="@drawable/arrow_bg1" />
@@ -25,8 +24,8 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginLeft="40dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="60dp"
             android:layout_weight="6"
             android:layout_gravity="right"
             android:background="@drawable/rounded_corner1"
