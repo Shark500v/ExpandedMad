@@ -22,7 +22,7 @@ public class MyApplication {
     private static Boolean logged = false;
     private static Boolean isPhone = false;
     private static GroupForUser groupForUser;
-
+    private static String currencyISOFavorite = "EUR";
 
 
     /*groupId --> group*/
@@ -136,5 +136,11 @@ public class MyApplication {
         MyApplication.groupForUser = groupForUser;
     }
 
+    public static String getCurrencyISOFavorite() {
+        return currencyISOFavorite;
+    }
 
+    public static void setCurrencyISOFavorite(String currencyISOFavorite) {
+        MyApplication.currencyISOFavorite = currencyISOFavorite;
+    }
 }

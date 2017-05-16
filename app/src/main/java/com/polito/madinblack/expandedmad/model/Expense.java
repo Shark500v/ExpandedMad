@@ -224,7 +224,7 @@ public class Expense {
 
     public static String writeNewExpense(DatabaseReference mDatabaseRootRefenrence, String name, String tag,
                                          String paidByFirebaseId, String paidByPhoneNumber, String paidByName, String paidBySurname, Double cost, Double roundedCost,
-                                         String currencyISO, final String groupId, Long year, Long month, Long day, String description, List<Payment> paymentList){
+                                         final String currencyISO, final String groupId, Long year, Long month, Long day, String description, List<Payment> paymentList){
 
         DatabaseReference myExpenseRef = mDatabaseRootRefenrence.child("expenses").push();
         final String expenseKey = myExpenseRef.getKey();
@@ -290,8 +290,9 @@ public class Expense {
                         if (currentData.getValue() != null) {
                             Balance balance = currentData.getValue(Balance.class);
                             for(MutableData currentDataChild : currentData.getChildren()){
-                                if(currentDataChild.getKey().equals("balance"))
-                                    currentDataChild.setValue(balance.getBalance() - toUpdate.get(balance.getUserPhoneNumber()+expenseKey));
+                                if(currentDataChild.getKey().equals("balance")) {
+                                    currentDataChild.setValue(balance.getBalance() - Currency.convertCurrency(toUpdate.get(balance.getUserPhoneNumber() + expenseKey), balance.getCurrencyISO(), currencyISO));
+                                }
                             }
 
                         }
@@ -319,7 +320,7 @@ public class Expense {
                                 Balance balance = currentData.getValue(Balance.class);
                                 for(MutableData currentDataChild : currentData.getChildren()){
                                     if(currentDataChild.getKey().equals("balance"))
-                                        currentDataChild.setValue(balance.getBalance() + toUpdate.get(balance.getUserPhoneNumber()+expenseKey));
+                                        currentDataChild.setValue(balance.getBalance() + Currency.convertCurrency(toUpdate.get(balance.getUserPhoneNumber() + expenseKey), balance.getCurrencyISO(), currencyISO));
                                 }
 
                             }

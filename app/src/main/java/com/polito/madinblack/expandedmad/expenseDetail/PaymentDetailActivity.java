@@ -62,7 +62,7 @@ public class PaymentDetailActivity extends BaseActivity {
         expenseId           = getIntent().getStringExtra(ARG_EXPENSE_ID);
         groupId             = getIntent().getStringExtra(ARG_GROUP_ID);
         expenseCost         = Double.valueOf(getIntent().getStringExtra(ARG_EXPENSE_COST));
-        currencyISO      = getIntent().getStringExtra(ARG_CURRENCY_ISO);
+        currencyISO         = getIntent().getStringExtra(ARG_CURRENCY_ISO);
         expenseUserName     = getIntent().getStringExtra(ARG_USER_NAME);
         expenseUserSurname  = getIntent().getStringExtra(ARG_USER_SURNAME);
 
