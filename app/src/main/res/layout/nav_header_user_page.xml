@@ -13,12 +13,11 @@
     android:onClick="userInfo"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageView"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        app:srcCompat="@drawable/businessman"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true"/>
 
     <TextView
         android:id="@+id/textView2"

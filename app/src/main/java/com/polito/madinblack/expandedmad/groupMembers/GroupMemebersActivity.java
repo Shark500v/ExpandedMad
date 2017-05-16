@@ -2,6 +2,7 @@ package com.polito.madinblack.expandedmad.groupMembers;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -14,17 +15,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.polito.madinblack.expandedmad.R;
 import java.util.ArrayList;
 import java.util.List;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.UserForGroup;
 import com.polito.madinblack.expandedmad.tabViewGroup.TabView;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class GroupMemebersActivity extends AppCompatActivity {
 
@@ -37,6 +46,7 @@ public class GroupMemebersActivity extends AppCompatActivity {
 
     private DatabaseReference mUserGroupsReference;
     private DatabaseReference mDatabase;
+    private StorageReference mStorageReference;
     private SimpleItemRecyclerViewAdapter mAdapter;
 
     @Override
@@ -215,6 +225,13 @@ public class GroupMemebersActivity extends AppCompatActivity {
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
             final UserForGroup us = holder.mItem;
+            mStorageReference = FirebaseStorage.getInstance().getReference().child("users").child(mValues.get(position).getFirebaseId()).child("userProfilePicture.jpg");
+            mStorageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    Glide.with(mContext).load(uri).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(holder.mImage);
+                }
+            });
             holder.mIdView.setText(mValues.get(position).getName() + " " + mValues.get(position).getSurname());
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -250,6 +267,7 @@ public class GroupMemebersActivity extends AppCompatActivity {
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
+            public final CircleImageView mImage;
             public final TextView mIdView;
             public final TextView mContentView;
             public UserForGroup mItem;
@@ -257,6 +275,7 @@ public class GroupMemebersActivity extends AppCompatActivity {
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
+                mImage = (CircleImageView) view.findViewById(R.id.user_icon);
                 mIdView = (TextView) view.findViewById(R.id.id);
                 mContentView = (TextView) view.findViewById(R.id.content);
             }

@@ -183,4 +183,5 @@
     <string name="member">partecipante</string>
     <string name="user_info">Il mio profilo</string>
     <string name="payment_update">Pagamenti aggiornati</string>
+    <string name="add_members">Aggiungi partecipanti</string>
 </resources>
