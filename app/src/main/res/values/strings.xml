@@ -179,4 +179,5 @@
     <string name="member">member</string>
     <string name="user_info">My profile</string>
     <string name="payment_update">Payments update</string>
+    <string name="add_members">Add members</string>
 </resources>

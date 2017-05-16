@@ -28,6 +28,8 @@ import android.widget.ImageView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.polito.madinblack.expandedmad.newExpense.ExpenseFillData;
+import com.polito.madinblack.expandedmad.newExpense.ExpenseFillData;
+import com.polito.madinblack.expandedmad.SelectContactToAdd;
 import com.polito.madinblack.expandedmad.chat.ChatRecyclerViewAdapter;
 import com.polito.madinblack.expandedmad.groupManaging.GroupHistory;
 import com.polito.madinblack.expandedmad.groupManaging.GroupListActivity;
@@ -36,6 +38,7 @@ import com.polito.madinblack.expandedmad.groupMembers.GroupMemebersActivity;
 import com.polito.madinblack.expandedmad.model.Expense;
 import com.polito.madinblack.expandedmad.model.Message;
 import com.polito.madinblack.expandedmad.model.MyApplication;
+import com.polito.madinblack.expandedmad.newGroup.SelectContact;
 
 import java.util.List;
 
@@ -184,6 +187,12 @@ public class TabView extends AppCompatActivity {
                 intent3.putExtra("GROUP_ID", groupIndex);
                 startActivity(intent3);
                 return true;
+
+            case R.id.add_members:
+                Intent intent4 = new Intent(this, SelectContactToAdd.class);
+                intent4.putExtra("GROUP_ID", groupIndex);
+                intent4.putExtra("GROUP_NAME", groupName);
+                startActivity(intent4);
 
             default:
                 // If we got here, the user's action was not recognized.

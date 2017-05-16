@@ -19,4 +19,9 @@
         android:title="@string/group_members_to_group"
         app:showAsAction="never"/>
 
+    <item
+        android:id="@+id/add_members"
+        android:title="@string/add_members"
+        app:showAsAction="never"/>
+
 </menu>

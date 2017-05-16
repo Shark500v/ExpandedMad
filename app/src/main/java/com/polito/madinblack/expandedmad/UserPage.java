@@ -19,6 +19,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.signature.StringSignature;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -31,10 +33,12 @@ import com.polito.madinblack.expandedmad.newGroup.NewGroup;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Calendar;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserPage extends AppCompatActivity{
+    private StorageReference mUserStorage;
     private CircleImageView userImage;
     private CircleImageView imageClick;
     private MyApplication ma;
@@ -63,6 +67,7 @@ public class UserPage extends AppCompatActivity{
         }
 
         ma = MyApplication.getInstance();
+        mUserStorage = FirebaseStorage.getInstance().getReference().child("users").child(ma.getFirebaseId()).child("userProfilePicture.jpg");
         userImage = (CircleImageView)findViewById(R.id.user_picture);
         imageClick = (CircleImageView)findViewById(R.id.set_user_image);
 
@@ -72,6 +77,8 @@ public class UserPage extends AppCompatActivity{
         name.setText(ma.getUserName());
         surname.setText(ma.getUserSurname());
         phoneNumber.setText(ma.getUserPhoneNumber());
+
+        Glide.with(this).using(new FirebaseImageLoader()).load(mUserStorage).signature(new StringSignature(String.valueOf(Calendar.getInstance().getTimeInMillis()))).diskCacheStrategy(DiskCacheStrategy.ALL).error(R.drawable.businessman).into(userImage);
 
         imageClick.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,8 +121,16 @@ public class UserPage extends AppCompatActivity{
         if(resultCode == RESULT_OK && data != null) {
             if (requestCode == RESULT_LOAD_IMAGE) {
                 uri = data.getData();
-                Glide.with(getApplicationContext()).load(uri).into(userImage);
-                uploadProfilePicture();
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+                    imageData = bytes.toByteArray();
+                    userImage.setImageBitmap(bitmap);
+                    uploadProfilePicture(); //da decidere se caricare sullo storage qua o dando conferma
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
             else if (requestCode == RESULT_REQUEST_CAMERA) {
                 bitmap = (Bitmap) data.getExtras().get("data");
@@ -123,20 +138,21 @@ public class UserPage extends AppCompatActivity{
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
                 imageData = bytes.toByteArray();
                 userImage.setImageBitmap(bitmap);
+                uploadProfilePicture();  //da decidere se caricare sullo storage qua o dando conferma
             }
         }
     }
 
     @SuppressWarnings("VisibleForTests")
     public void uploadProfilePicture() {
-        if(uri != null) {
+        if(imageData != null) {
             final ProgressDialog progressDialog = new ProgressDialog(this);
             progressDialog.setTitle(getString(R.string.uploading));
             progressDialog.show();
 
-            final StorageReference filePathUsers = FirebaseStorage.getInstance().getReference().child("users").child(ma.getFirebaseId()).child("userProfilePicture").child("userProfilePicture.jpg");
+            final StorageReference filePathUsers = FirebaseStorage.getInstance().getReference().child("users").child(ma.getFirebaseId()).child("userProfilePicture.jpg");
 
-            filePathUsers.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            filePathUsers.putBytes(imageData).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     //if the upload is successfull
