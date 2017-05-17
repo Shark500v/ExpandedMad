@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:layout_marginBottom="4dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <FrameLayout
@@ -11,41 +10,52 @@
         android:layout_height="wrap_content"
         android:layout_gravity="left">
 
-
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginTop="4dp"
-            android:layout_weight="1"
+            android:layout_marginTop="8dp"
             android:layout_gravity="top|right"
             android:src="@drawable/arrow_bg1" />
 
-        <TextView
-            android:id="@+id/textView"
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginLeft="40dp"
-            android:layout_weight="6"
-            android:layout_gravity="right"
-            android:background="@drawable/rounded_corner1"
-            android:padding="16dp"
-            android:text="Android charting application xml ui design tutorial with example. Android charting application xml ui design tutorial with example. Android charting application xml ui design tutorial with example. Android charting application xml ui design tutorial with example."
-            android:layout_marginRight="10dp"
-            android:textColor="#000" />
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="60dp">
 
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/rounded_cornerup2"
+                android:paddingTop="16dp"
+                android:paddingRight="16dp"
+                android:paddingLeft="16dp"
+                android:paddingBottom="4dp"
+                android:text="Androidd kgu chsmig cfmksh cms gg fdhl sm hgsdi tutorial with example."
+                android:layout_marginRight="10dp"
+                android:textColor="#000" />
 
-        <ImageView
-            android:id="@+id/imageUser"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="0dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="3"
-            android:layout_gravity="top|right"
-            android:visibility="gone"
-            android:src="@drawable/user_pacific" />
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_cornerbot"
+                android:layout_alignParentRight="true"
+                android:paddingBottom="16dp"
+                android:paddingRight="16dp"
+                android:paddingLeft="16dp"
+                android:text="hh:mm"
+                android:layout_marginRight="10dp"
+                android:textAlignment="textEnd"
+                android:textColor="#949494"
+                android:layout_below="@id/textView"
+                android:layout_alignLeft="@+id/textView"/>
+
+        </RelativeLayout>
+
     </FrameLayout>
 
 
