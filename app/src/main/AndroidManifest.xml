@@ -183,7 +183,7 @@
         </activity>
 
         <activity
-            android:name=".SelectContactToAdd"
+            android:name=".addUserToGroup.SelectContactToAdd"
             android:parentActivityName=".tabViewGroup.TabView"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -192,12 +192,12 @@
         </activity>
 
         <activity
-            android:name=".InviteActivityToAdd"
-            android:parentActivityName=".SelectContactToAdd"
+            android:name=".addUserToGroup.InviteActivityToAdd"
+            android:parentActivityName=".tabViewGroup.TabView"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.polito.madinblack.expandedmad.SelectContactToAdd" />
+                android:value="com.polito.madinblack.expandedmad.tabViewGroup.TabView" />
         </activity>
     </application>
 

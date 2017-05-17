@@ -186,4 +186,7 @@
     <string name="user_info">My profile</string>
     <string name="payment_update">Payments update</string>
     <string name="add_members">Add members</string>
+    <string name="already_in">Already in the group</string>
+    <string name="dialog_single_invite_to_add_request">should be invited to join the Application in order to be added to group</string>
+    <string name="dialog_multiple_invite_to_add_request">should be invited to join the Application in order to be added to group</string>
 </resources>
