@@ -1,4 +1,4 @@
-package com.polito.madinblack.expandedmad;
+package com.polito.madinblack.expandedmad.addUserToGroup;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -18,7 +18,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.polito.madinblack.expandedmad.groupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.newGroup.InviteRecyclerViewAdapter;
@@ -33,6 +32,7 @@ public class InviteActivityToAdd extends AppCompatActivity {
 
     private List<SelectUser> invite;
     private MyApplication ma;
+    private Intent intent;
     private Intent intent1;
     private String groupId;
     private String groupName;
@@ -53,8 +53,8 @@ public class InviteActivityToAdd extends AppCompatActivity {
 
         ma = MyApplication.getInstance();
         invite = (List<SelectUser>) getIntent().getSerializableExtra("INVITE_LIST");
-        groupId = getIntent().getStringExtra("GROUP_ID");
-        groupName = getIntent().getStringExtra("GROUP_NAME");
+        groupId = getIntent().getStringExtra("groupIndex");
+        groupName = getIntent().getStringExtra("groupName");
 
         //in questo punto il codice prende la lista principale e la mostra come recyclerview
         RecyclerView recyclerView = (RecyclerView)findViewById(R.id.invite_list);
@@ -96,16 +96,13 @@ public class InviteActivityToAdd extends AppCompatActivity {
                     Snackbar.make(mv, getString(R.string.compile_all_fields), Snackbar.LENGTH_LONG).setAction("Action", null).show();
                     return true;
                 }
-
-            case R.id.home:
-                //in questo caso il gruppo è gia stato creato, con l'activity presente posso invitare i nuovi membri che ho selezionato, per il resto posso tornare indietro
-                //alla pagina dei gruppi.
-                intent1 = new Intent(this, TabView.class);
-                intent1.putExtra("GROUP_ID", groupId);
-                intent1.putExtra("GROUP_NAME", groupName);
-                intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                navigateUpTo(intent1);    //definisco il parente verso cui devo tornare indietro
+            case android.R.id.home: {
+                Intent intent = new Intent(this, TabView.class);
+                intent.putExtra("groupIndex", groupId);
+                intent.putExtra("groupName", groupName);
+                navigateUpTo(intent);
                 return true;
+            }
 
             default:
                 // If we got here, the user's action was not recognized.
@@ -117,7 +114,11 @@ public class InviteActivityToAdd extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        navigateUpTo(new Intent(this, GroupListActivity.class));
+        intent = new Intent(InviteActivityToAdd.this, TabView.class);
+        intent.putExtra("groupIndex", groupId);
+        intent.putExtra("groupName", groupName);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        navigateUpTo(intent);
     }
 
     private void sendEmail(){
