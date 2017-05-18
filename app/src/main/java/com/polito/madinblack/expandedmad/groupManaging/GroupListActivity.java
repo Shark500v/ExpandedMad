@@ -75,6 +75,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
     private StorageReference mStorage;
     private StorageReference mUserStorage;
     private SimpleItemRecyclerViewAdapter mAdapter;
+    private NavigationView navigationView;
     private static Map<String,String> groupImages = new HashMap<String,String>();
     private File userPicture;
     Bitmap bitmap;
@@ -102,7 +103,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         drawer.addDrawerListener(toggle);  //setDrawerListener(toggle) --> addDrawerListener(toggle)
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         //fine codice per Drawer
 
@@ -149,6 +150,15 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        int size = navigationView.getMenu().size();
+        for (int i = 0; i < size; i++) {
+            navigationView.getMenu().getItem(i).setChecked(false);
         }
     }
 
