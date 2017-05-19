@@ -9,10 +9,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,6 +39,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.polito.madinblack.expandedmad.FirebaseImageLoader;
 import com.polito.madinblack.expandedmad.UserPage;
@@ -71,10 +74,12 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
     private CircleImageView userImage;
 
     private DatabaseReference mUserGroupsReference;
+    private Query mQueryUserGroupsReference;
     private DatabaseReference mDatabaseRootReference;
     private StorageReference mStorage;
     private StorageReference mUserStorage;
     private SimpleItemRecyclerViewAdapter mAdapter;
+    private NavigationView navigationView;
     private static Map<String,String> groupImages = new HashMap<String,String>();
     private File userPicture;
     Bitmap bitmap;
@@ -89,6 +94,8 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         mDatabaseRootReference = FirebaseDatabase.getInstance().getReference();
 
         mUserGroupsReference   = mDatabaseRootReference.child("users/"+ma.getUserPhoneNumber()+"/"+ma.getFirebaseId()+"/groups");
+        mQueryUserGroupsReference = mUserGroupsReference.orderByChild("timestamp");
+
         mStorage = FirebaseStorage.getInstance().getReference();
         mUserStorage = FirebaseStorage.getInstance().getReference().child("users").child(ma.getFirebaseId()).child("userProfilePicture.jpg");
 
@@ -102,7 +109,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         drawer.addDrawerListener(toggle);  //setDrawerListener(toggle) --> addDrawerListener(toggle)
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         //fine codice per Drawer
 
@@ -130,8 +137,8 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         View recyclerView = findViewById(R.id.group_list);
         assert recyclerView != null;
 
-        if(mUserGroupsReference!=null) {
-            mAdapter = new SimpleItemRecyclerViewAdapter(this, mUserGroupsReference);
+        if(mQueryUserGroupsReference!=null) {
+            mAdapter = new SimpleItemRecyclerViewAdapter(this, mQueryUserGroupsReference);
             ((RecyclerView) recyclerView).setAdapter(mAdapter);
         }
     }
@@ -154,6 +161,15 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        int size = navigationView.getMenu().size();
+        for (int i = 0; i < size; i++) {
+            navigationView.getMenu().getItem(i).setChecked(false);
         }
     }
 
@@ -194,8 +210,8 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_onlysearch, menu);
 
-        /*MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);*/
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
 
         // Configure the search info and add any event listeners...
 
@@ -206,91 +222,31 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
     public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private Context mContext;
-        private DatabaseReference mDatabaseReference;
-        private ChildEventListener mChildEventListener;
+        private Query mQueryReference;
+        private ValueEventListener mEventListener;
 
-        private List<String> mValuesIds = new ArrayList<>();
         private List<GroupForUser> mValues = new ArrayList<>();
+        private List<GroupForUser> duplicato = new ArrayList<>();
 
 
-        public SimpleItemRecyclerViewAdapter(final Context context, DatabaseReference ref) {
+        public SimpleItemRecyclerViewAdapter(final Context context, Query ref) {
             mContext = context;
-            mDatabaseReference = ref;
+            mQueryReference = ref;
 
             // Create child event listener
             // [START child_event_listener_recycler]
-            ChildEventListener childEventListener = new ChildEventListener() {
+            ValueEventListener eventListener = new ValueEventListener() {
                 @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-                    Log.d(TAG, "onChildAdded:" + dataSnapshot.getKey());
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    mValues.clear();
+                    for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
 
-                    // A new comment has been added, add it to the displayed list
-                    GroupForUser groupForUser = dataSnapshot.getValue(GroupForUser.class);
+                        mValues.add(postSnapshot.getValue(GroupForUser.class));
 
-                    // [START_EXCLUDE]
-                    // Update RecyclerView
-                    mValuesIds.add(dataSnapshot.getKey());
-                    mValues.add(groupForUser);
-                    notifyItemInserted(mValues.size() - 1);
-                    // [END_EXCLUDE]
-                }
-
-                @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
-                    Log.d(TAG, "onChildChanged:" + dataSnapshot.getKey());
-
-                    // A comment has changed, use the key to determine if we are displaying this
-                    // comment and if so displayed the changed comment.
-                    GroupForUser newGroupForUser = dataSnapshot.getValue(GroupForUser.class);
-                    String groupKey = dataSnapshot.getKey();
-
-                    // [START_EXCLUDE]
-                    int groupIndex = mValuesIds.indexOf(groupKey);
-                    if (groupIndex > -1) {
-                        // Replace with the new data
-                        mValues.set(groupIndex, newGroupForUser);
-
-                        // Update the RecyclerView
-                        notifyItemChanged(groupIndex);
-                    } else {
-                        Log.w(TAG, "onChildChanged:unknown_child:" + groupKey);
                     }
-                    // [END_EXCLUDE]
-                }
+                    notifyDataSetChanged();
 
-                @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
-                    Log.d(TAG, "onChildRemoved:" + dataSnapshot.getKey());
 
-                    // A comment has changed, use the key to determine if we are displaying this
-                    // comment and if so remove it.
-                    String groupKey = dataSnapshot.getKey();
-
-                    // [START_EXCLUDE]
-                    int groupIndex = mValuesIds.indexOf(groupKey);
-                    if (groupIndex > -1) {
-                        // Remove data from the list
-                        mValuesIds.remove(groupIndex);
-                        mValues.remove(groupIndex);
-
-                        // Update the RecyclerView
-                        notifyItemRemoved(groupIndex);
-                    } else {
-                        Log.w(TAG, "onChildRemoved:unknown_child:" + groupKey);
-                    }
-                    // [END_EXCLUDE]
-                }
-
-                @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
-                    Log.d(TAG, "onChildMoved:" + dataSnapshot.getKey());
-
-                    // A comment has changed position, use the key to determine if we are
-                    // displaying this comment and if so move it.
-                    //Group movedGroup = dataSnapshot.getValue(Group.class);
-                    //String groupKey = dataSnapshot.getKey();
-
-                    // ...
                 }
 
                 @Override
@@ -303,11 +259,12 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                     }
                     }
             };
-            ref.addChildEventListener(childEventListener);
+            if(ref!=null)
+                ref.addValueEventListener(eventListener);
             // [END child_event_listener_recycler]
 
             // Store reference to listener so it can be removed on app stop
-            mChildEventListener = childEventListener;
+            mEventListener = eventListener;
         }
 
         @Override
@@ -364,8 +321,6 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                     Glide.with(getApplicationContext()).load(uri).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(holder.mImage);
                 }
             });
-
-
         }
 
         @Override
@@ -375,9 +330,8 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
 
 
         public void cleanupListener() {
-            if (mChildEventListener != null) {
-                mDatabaseReference.removeEventListener(mChildEventListener);
-            }
+            if (mEventListener != null)
+                mQueryReference.removeEventListener(mEventListener);
         }
 
         //questa è una classe di supporto che viene usata per creare la vista a schermo, non ho ben capito come funziona

@@ -222,7 +222,7 @@ public class Expense {
     }
 
 
-    public static String writeNewExpense(DatabaseReference mDatabaseRootRefenrence, String name, String tag,
+    public static String writeNewExpense(final DatabaseReference mDatabaseRootRefenrence, String name, String tag,
                                          String paidByFirebaseId, String paidByPhoneNumber, String paidByName, String paidBySurname, Double cost, Double roundedCost,
                                          final Currency.CurrencyISO currencyISO, final String groupId, Long year, Long month, Long day, String description, List<Payment> paymentList){
 
@@ -256,7 +256,9 @@ public class Expense {
             myPaymentRef.setValue(paymentFirebase);
 
             ExpenseForUser expenseForUser = new ExpenseForUser(expense, payment.getBalance());
+            expenseForUser.setTimestamp();
             mDatabaseRootRefenrence.child("users/"+payment.getUserPhoneNumber()+"/"+payment.getUserFirebaseId()+"/groups/"+groupId+"/expenses/"+expenseKey).setValue(expenseForUser);
+            mDatabaseRootRefenrence.child("users/"+payment.getUserPhoneNumber()+"/"+payment.getUserFirebaseId()+"/groups/"+groupId+"/timestamp").setValue(expenseForUser.getTimestamp());
 
             if(!(payment.getUserFirebaseId().equals(paidByFirebaseId))) {
 
@@ -279,6 +281,7 @@ public class Expense {
                                            boolean committed, DataSnapshot currentData) {
                         //This method will be called once with the results of the transaction.
                         //Update remove the user from the group
+
                     }
                 });
 
@@ -374,4 +377,6 @@ public class Expense {
     public void setUrlImage(String urlImage) {
         this.urlImage = urlImage;
     }
+
+
 }

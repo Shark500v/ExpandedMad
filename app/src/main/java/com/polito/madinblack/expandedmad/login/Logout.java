@@ -17,6 +17,7 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
 import com.polito.madinblack.expandedmad.R;
+import com.polito.madinblack.expandedmad.groupManaging.GroupListActivity;
 
 
 public class Logout extends DialogFragment implements
@@ -53,7 +54,6 @@ public class Logout extends DialogFragment implements
                 // User clicked OK button
                 //manager here the logout
 
-
                     // Firebase sign out
                     mAuth.signOut();
 
@@ -62,14 +62,11 @@ public class Logout extends DialogFragment implements
                             new ResultCallback<Status>() {
                                 @Override
                                 public void onResult(@NonNull Status status) {
-                                    Intent intent = new Intent(getActivity(), CheckLogIn.class);
+                                    Intent intent = new Intent(getContext(), CheckLogIn.class);
                                     startActivity(intent);
                                     getActivity().finish();
-
                                 }
                             });
-
-
             }
         });
         builder.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {

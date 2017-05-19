@@ -5,6 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryLight"
+        android:id="@+id/search_frag">
+
+        <SearchView
+            android:id="@+id/searchview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right" />
+
+    </FrameLayout>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/list"
         android:layout_width="match_parent"
@@ -13,6 +27,7 @@
         android:layout_marginRight="16dp"
         android:scrollbars="vertical"
         app:layoutManager="LinearLayoutManager"
-        tools:listitem="@layout/contacts_list_item" />
+        tools:listitem="@layout/contacts_list_item"
+        android:layout_below="@id/search_frag"/>
 
 </RelativeLayout>

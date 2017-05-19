@@ -63,7 +63,7 @@ public class Group {
         myGroupRef.setValue(group);
 
         GroupForUser groupForUser = new GroupForUser(group);
-
+        groupForUser.setTimestamp();
         for(UserForGroup userForGroup : usersForGroup) {
             mDatabaseRootReference.child("users/"+userForGroup.getPhoneNumber()+"/"+userForGroup.getFirebaseId()+"/groups/"+groupKey).setValue(groupForUser);
         }
