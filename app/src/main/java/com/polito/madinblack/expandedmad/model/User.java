@@ -14,7 +14,7 @@ public class User {
     private String phoneNumber;
     private String id;
     private String email;
-    Bitmap thumb;
+    private String urlImage;
 
     /*all groups for user*/
     private Map<String, Boolean> groups = new HashMap<>();
@@ -70,13 +70,11 @@ public class User {
         return this.getName() + " " + this.getSurname();
     }
 
-    /*
-    public Bitmap getThumb() {
-        return thumb;
-    }*/
-
-    public void setThumb(Bitmap thumb) {
-        this.thumb = thumb;
+    public String getUrlImage() {
+        return urlImage;
     }
 
+    public void setUrlImage(String urlImage) {
+        this.urlImage = urlImage;
+    }
 }

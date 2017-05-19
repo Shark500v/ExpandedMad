@@ -78,7 +78,12 @@ public class UserPage extends AppCompatActivity{
         surname.setText(ma.getUserSurname());
         phoneNumber.setText(ma.getUserPhoneNumber());
 
-        Glide.with(this).using(new FirebaseImageLoader()).load(mUserStorage).signature(new StringSignature(String.valueOf(Calendar.getInstance().getTimeInMillis()))).diskCacheStrategy(DiskCacheStrategy.ALL).error(R.drawable.businessman).into(userImage);
+        mUserStorage.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Glide.with(getApplicationContext()).load(uri).diskCacheStrategy(DiskCacheStrategy.SOURCE).error(R.drawable.businessman).into(userImage);
+            }
+        });
 
         imageClick.setOnClickListener(new View.OnClickListener() {
             @Override

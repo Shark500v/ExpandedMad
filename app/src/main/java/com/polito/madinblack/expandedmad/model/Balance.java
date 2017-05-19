@@ -8,21 +8,20 @@ public class Balance {
     private String userName;
     private String userSurname;
     private Double balance;
-    private String currencyName;
-    private String currencySymbol;
+    private Currency.CurrencyISO currencyISO;
+    private String parentUserPhoneNumber;
 
     public Balance(){
 
 
     }
 
-    public Balance(String userPhoneNumber, String userName, String userSurname, Double balance, String currencyName, String currencySymbol) {
+    public Balance(String userPhoneNumber, String userName, String userSurname, Double balance, Currency.CurrencyISO currencyISO) {
         this.userPhoneNumber = userPhoneNumber;
         this.userName = userName;
         this.userSurname = userSurname;
         this.balance = CostUtil.round(balance, 2);
-        this.currencyName = currencyName;
-        this.currencySymbol = currencySymbol;
+        this.currencyISO = currencyISO;
     }
 
     public String getUserPhoneNumber() { return userPhoneNumber; }
@@ -51,19 +50,24 @@ public class Balance {
         this.balance = CostUtil.round(balance, 2);
     }
 
-    public String getCurrencyName() {
-        return currencyName;
+
+    public void setUserPhoneNumber(String userPhoneNumber) {
+        this.userPhoneNumber = userPhoneNumber;
     }
 
-    public void setCurrencyName(String currencyName) {
-        this.currencyName = currencyName;
+    public Currency.CurrencyISO getCurrencyISO() {
+        return currencyISO;
     }
 
-    public String getCurrencySymbol() {
-        return currencySymbol;
+    public void setCurrencyISO(Currency.CurrencyISO currencyISO) {
+        this.currencyISO = currencyISO;
     }
 
-    public void setCurrencySymbol(String currencySymbol) {
-        this.currencySymbol = currencySymbol;
+    public String getParentUserPhoneNumber() {
+        return parentUserPhoneNumber;
+    }
+
+    public void setParentUserPhoneNumber(String parentUserPhoneNumber) {
+        this.parentUserPhoneNumber = parentUserPhoneNumber;
     }
 }

@@ -12,16 +12,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.polito.madinblack.expandedmad.R;
+import com.polito.madinblack.expandedmad.model.Currency;
 import com.polito.madinblack.expandedmad.model.Expense;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.PaymentFirebase;
 import com.polito.madinblack.expandedmad.tabViewGroup.RecyclerViewAdapter;
+
+import java.util.Locale;
+
+import static android.app.Activity.RESULT_OK;
 
 
 /**
@@ -31,6 +41,7 @@ import com.polito.madinblack.expandedmad.tabViewGroup.RecyclerViewAdapter;
 public class ExpenseDetailFragment extends Fragment {
     public static final String ARG_EXPENSE_NAME = "expenseName";
     public static final String ARG_EXPENSE_ID = "expenseId";
+    private static final int CONTACT_REQUEST = 2;
 
     RecyclerViewAdapter adapter;
     RecyclerView recyclerView;
@@ -95,8 +106,8 @@ public class ExpenseDetailFragment extends Fragment {
                                 intent.putExtra(PaymentDetailActivity.ARG_EXPENSE_COST, expense.getCost().toString());
                                 intent.putExtra(PaymentDetailActivity.ARG_USER_NAME, expense.getPaidByName());
                                 intent.putExtra(PaymentDetailActivity.ARG_USER_SURNAME, expense.getPaidBySurname());
-                                intent.putExtra(PaymentDetailActivity.ARG_CURRENCY_SYMBOL, expense.getCurrencySymbol());
-                                startActivity(intent);
+                                intent.putExtra(PaymentDetailActivity.ARG_CURRENCY_ISO, expense.getCurrencyISO().name());
+                                startActivityForResult(intent, CONTACT_REQUEST);
                             }
                         });
 
@@ -117,15 +128,15 @@ public class ExpenseDetailFragment extends Fragment {
                     if(paymentFirebase!=null)
                         ((TextView) rootView.findViewById(R.id.paid_container)).setText(paymentFirebase.toString());
                     ((TextView) rootView.findViewById(R.id.tag_container)).setText(expense.getTag());
-                    ((TextView) rootView.findViewById(R.id.cost_container)).setText(String.format("%.2f",(expense.getCost())));
-                    ((TextView) rootView.findViewById(R.id.currency_container)).setText(expense.getCurrencySymbol());
+                    ((TextView) rootView.findViewById(R.id.cost_container)).setText(String.format(Locale.getDefault(), "%.2f",(expense.getCost())));
+                    ((TextView) rootView.findViewById(R.id.currency_container)).setText(Currency.toString(expense.getCurrencyISO()));
 
                     if(expense.getRoundedCost().equals(expense.getCost())){
                         (rootView.findViewById(R.id.roundedCostLayout)).setVisibility(View.GONE);
                     }
                     else {
                         (rootView.findViewById(R.id.roundedCostLayout)).setVisibility(View.VISIBLE);
-                        ((TextView) rootView.findViewById(R.id.roundedCost)).setText(String.format("%.2f",(expense.getRoundedCost())));
+                        ((TextView) rootView.findViewById(R.id.roundedCost)).setText(String.format(Locale.getDefault(), "%.2f",(expense.getRoundedCost())));
                         //((LinearLayout) rootView.findViewById(R.id.currencyLayout)).setLayou
                     }
 
@@ -138,14 +149,14 @@ public class ExpenseDetailFragment extends Fragment {
                     Double balance = expense.paymentFromUser(ma.getFirebaseId()).getBalance();
 
                     if(balance > 0){
-                        ((TextView) rootView.findViewById(R.id.balance_container)).setText(String.format("+%.2f",(balance)));
+                        ((TextView) rootView.findViewById(R.id.balance_container)).setText(String.format(Locale.getDefault(), "+%.2f",(balance)));
                         ((TextView) rootView.findViewById(R.id.balance_container)).setTextColor(Color.parseColor("#00c200"));
                     }else if(balance < 0){
-                        ((TextView) rootView.findViewById(R.id.balance_container)).setText(String.format("%.2f",(balance)));
+                        ((TextView) rootView.findViewById(R.id.balance_container)).setText(String.format(Locale.getDefault(), "%.2f",(balance)));
                         ((TextView) rootView.findViewById(R.id.balance_container)).setTextColor(Color.parseColor("#ff0000"));
                     }
                     else{
-                        ((TextView) rootView.findViewById(R.id.balance_container)).setText(String.format("%.2f",(balance)));
+                        ((TextView) rootView.findViewById(R.id.balance_container)).setText(String.format(Locale.getDefault(), "%.2f",(balance)));
                     }
 
 
@@ -186,5 +197,22 @@ public class ExpenseDetailFragment extends Fragment {
         super.onStop();
         if(mValueEventListener!=null)
             mDatabaseExpenseReference.removeEventListener(mValueEventListener);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == CONTACT_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                Toast.makeText(getContext(), getString(R.string.payment_updated),
+                        Toast.LENGTH_SHORT).show();
+            } else if(resultCode != 0){
+                Toast.makeText(getContext(), getString(R.string.operation_failed),
+                        Toast.LENGTH_SHORT).show();
+            }
+
+        }
     }
 }

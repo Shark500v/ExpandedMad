@@ -227,7 +227,8 @@
             android:layout_height="wrap_content"
             android:text="@string/date"
             android:textSize="20sp"
-            android:layout_margin="16dp"/>
+            android:layout_margin="16dp"
+            />
 
         <TextView
             android:id="@+id/date_container"
@@ -236,7 +237,9 @@
             android:layout_margin="16dp"
             android:text="@string/date_format"
             android:textAlignment="textEnd"
-            android:textSize="18sp"/>
+            android:textSize="18sp"
+            android:textStyle="bold"
+            />
     </LinearLayout>
 
 

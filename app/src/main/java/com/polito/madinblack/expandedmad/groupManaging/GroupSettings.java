@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -82,7 +83,12 @@ public class GroupSettings extends AppCompatActivity {
         editGroupName = (TextView) findViewById(R.id.edit_group_name);
         editGroupName.setText(groupName);
 
-        Glide.with(this).using(new FirebaseImageLoader()).load(mStorageGroup).error(R.drawable.teamwork).into(groupImage);
+        mStorageGroup.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Glide.with(getApplicationContext()).load(uri).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(groupImage);
+            }
+        });
 
         editGroupName.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -330,7 +330,7 @@ public class NewGroup extends AppCompatActivity {
     }
 
     @SuppressWarnings("VisibleForTests")
-    public String uploadGroupPhoto() {
+    public void uploadGroupPhoto() {
         if(imageData != null) {
             final ProgressDialog progressDialog = new ProgressDialog(this);
             progressDialog.setTitle(getString(R.string.uploading));
@@ -344,8 +344,6 @@ public class NewGroup extends AppCompatActivity {
                     //if the upload is successfull
                     //hiding the progress dialog
                     progressDialog.dismiss();
-                    url = taskSnapshot.getDownloadUrl().toString();
-                    mDatabaseReferenceRoot.child("groups").child(groupCode).child("url").setValue(url);
 
                     //StorageMetadata metadata = new StorageMetadata.Builder().setCustomMetadata("Group", groupCode).build(); //da cambiare, solo per prova
                     //filePathGroups.updateMetadata(metadata);
@@ -378,7 +376,6 @@ public class NewGroup extends AppCompatActivity {
                         }
                     });
         }
-        return url;
     }
 
 

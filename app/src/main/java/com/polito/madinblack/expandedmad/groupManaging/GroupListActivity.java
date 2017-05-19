@@ -112,7 +112,12 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         tv1 = (TextView) header.findViewById(R.id.textView2);
         tv2 = (TextView) header.findViewById(R.id.textView3);
 
-        Glide.with(getApplicationContext()).using(new FirebaseImageLoader()).load(mUserStorage).signature(new StringSignature(String.valueOf(Calendar.getInstance().getTimeInMillis()))).error(R.drawable.businessman).into(userImage);
+        mUserStorage.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Glide.with(getApplicationContext()).load(uri).diskCacheStrategy(DiskCacheStrategy.SOURCE).error(R.drawable.teamwork).into(userImage);
+            }
+        });
 
         tv1.setText(ma.getUserName() + " " + ma.getUserSurname());
         tv2.setText(ma.getUserPhoneNumber());

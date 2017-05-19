@@ -63,10 +63,11 @@
         />
 
     <TextView
+        android:id="@+id/payment_currency_symbol"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginRight="@dimen/text_margin"
         android:textAppearance="?attr/textAppearanceListItem"
-        android:text="EUR"/>
+        android:text="€"/>
 </LinearLayout>

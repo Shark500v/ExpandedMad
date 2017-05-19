@@ -24,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -46,6 +47,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.CostUtil;
+import com.polito.madinblack.expandedmad.model.Currency;
 import com.polito.madinblack.expandedmad.model.Expense;
 
 import com.polito.madinblack.expandedmad.model.MyApplication;
@@ -84,6 +86,7 @@ public class ExpenseFillData extends AppCompatActivity {
     byte[] bytesArr;
     Bitmap bitmap;
     String expenseId;
+    private Spinner spinner;
 
     private static int RESULT_LOAD_IMAGE = 1;
     private static int RESULT_REQUEST_CAMERA = 0;
@@ -103,12 +106,12 @@ public class ExpenseFillData extends AppCompatActivity {
         }
 
         //prepare instance variable
-        inputLayoutName = (TextInputLayout) findViewById(R.id.input_layout_title);
-        inputLayoutAmount = (TextInputLayout) findViewById(R.id.input_layout_amount);
-        inputName = (EditText) findViewById(R.id.input_title);
-        inputAmount = (EditText) findViewById(R.id.input_amount);
+        inputLayoutName     = (TextInputLayout) findViewById(R.id.input_layout_title);
+        inputLayoutAmount   = (TextInputLayout) findViewById(R.id.input_layout_amount);
+        inputName           = (EditText) findViewById(R.id.input_title);
+        inputAmount         = (EditText) findViewById(R.id.input_amount);
 
-       // inputAmount.setFilters(new InputFilter[] { new DecimalDigitsInputFilter(2)});
+       //inputAmount.setFilters(new InputFilter[] { new DecimalDigitsInputFilter(2)});
 
         ma = MyApplication.getInstance();   //retrive del DB
 
@@ -126,14 +129,17 @@ public class ExpenseFillData extends AppCompatActivity {
         //show current date
         showDate(new Date());
 
-        Spinner spinner = (Spinner) findViewById(R.id.currency);
+        spinner = (Spinner) findViewById(R.id.currency);
         // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.currencySymbol, android.R.layout.simple_spinner_item);
+        ArrayAdapter<String> adapter = new ArrayAdapter<> (this,
+                android.R.layout.simple_spinner_item, Currency.getCurrencyValues());
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
+
+
+
 
         EditText inputAmount = (EditText)findViewById(R.id.input_amount);
         inputAmount.addTextChangedListener(new TextWatcher() {
@@ -160,6 +166,7 @@ public class ExpenseFillData extends AppCompatActivity {
         assert recyclerView != null;
         setupRecyclerView(recyclerView);
 
+
     }
 
     @Override
@@ -176,11 +183,19 @@ public class ExpenseFillData extends AppCompatActivity {
                 return true;
             }
 
-
+            //Wrote by Alessio
+            /*
             Spinner currency_spinner = (Spinner) findViewById(R.id.currency);
             String currencySymbol = currency_spinner.getSelectedItem().toString();
             String[] names=getResources().getStringArray(R.array.currency);
             String currency = names[currency_spinner.getSelectedItemPosition()];
+            */
+
+            Spinner currency_spinner = (Spinner) findViewById(R.id.currency);
+            String currencySymbol = Character.toString(currency_spinner.getSelectedItem().toString().charAt(0));
+            Currency.CurrencyISO currencyISO = Currency.CurrencyISO.valueOf(currency_spinner.getSelectedItem().toString());
+
+
 
             Spinner tag_spinner = (Spinner) findViewById(R.id.tag_spinner);
             String tag = tag_spinner.getSelectedItem().toString();
@@ -219,8 +234,7 @@ public class ExpenseFillData extends AppCompatActivity {
                     ma.getUserSurname(),
                     amount,
                     roundedAmount,
-                    currency,
-                    currencySymbol,
+                    currencyISO,
                     groupID,
                     year,
                     month,
@@ -602,7 +616,7 @@ public class ExpenseFillData extends AppCompatActivity {
 
                         List<Payment> payment = new ArrayList<>();
                         for(int i=0;i<users.size();i++){
-                            payment.add(new Payment(users.get(i).getFirebaseId(), users.get(i).getPhoneNumber(), users.get(i).getName(), null, 0D, 0D));
+                            payment.add(new Payment(users.get(i).getFirebaseId(), users.get(i).getPhoneNumber(), users.get(i).getName(), users.get(i).getSurname(), null, 0D, 0D));
                         }
                         recyclerView.setAdapter(new ExpenseFillData.SimpleItemRecyclerViewAdapter(payment));
                     }
@@ -624,6 +638,8 @@ public class ExpenseFillData extends AppCompatActivity {
 
             mValues = payments;
 
+
+
         }
 
         @Override
@@ -632,13 +648,15 @@ public class ExpenseFillData extends AppCompatActivity {
             return new ExpenseFillData.SimpleItemRecyclerViewAdapter.ViewHolder(view);
         }
 
+
+
         @Override
         public void onBindViewHolder(final ExpenseFillData.SimpleItemRecyclerViewAdapter.ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
             if(holder.mItem.getUserPhoneNumber().equals(ma.getUserPhoneNumber()))
                 holder.mIdView.setText(getString(R.string.you));
             else
-                holder.mIdView.setText( holder.mItem.getUserName());
+                holder.mIdView.setText( holder.mItem.getUserFullName());
             onBind = true;
             holder.partition.setText( new DecimalFormat("#0.00").format( holder.mItem.getToPaid()));
             onBind = false;
@@ -646,6 +664,19 @@ public class ExpenseFillData extends AppCompatActivity {
             holder.minus.setEnabled( holder.mItem.isWeightEnabled());
             holder.plus.setEnabled( holder.mItem.isWeightEnabled());
             holder.partition.setEnabled( holder.mItem.isWeightEnabled() );
+            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    holder.paymentSymbol.setText(Currency.getSymbol(Currency.CurrencyISO.valueOf((String) parent.getItemAtPosition(position))));
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+
+
 
             /*holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -669,6 +700,8 @@ public class ExpenseFillData extends AppCompatActivity {
             public final EditText partition;
             public final Button plus;
             public final Button minus;
+            public final TextView paymentSymbol;
+
             public Payment mItem;
 
             public ViewHolder(View view) {
@@ -679,6 +712,9 @@ public class ExpenseFillData extends AppCompatActivity {
                 partition = (EditText) view.findViewById(R.id.personal_amount);
                 plus = (Button) view.findViewById(R.id.increase);
                 minus = (Button) view.findViewById(R.id.decrease);
+                paymentSymbol = (TextView) view.findViewById(R.id.payment_currency_symbol);
+
+
 
                 /*to Modify*/
                 //partition.setFilters(new InputFilter[] { new DecimalDigitsInputFilter(2)});
