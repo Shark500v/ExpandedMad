@@ -64,10 +64,10 @@ public class Currency {
 
 
 
-    public static double convertCurrency(Double quantity, Currency.CurrencyISO currency1, Currency.CurrencyISO currency2){
+    public static double convertCurrency(Double quantity, Currency.CurrencyISO currencySource, Currency.CurrencyISO currencyDest){
 
-        if(currencySymbolInt.containsKey(currency1) && currencySymbolInt.containsKey(currency2)){
-            double resultToRound = quantity * association[currencySymbolInt.get(currency1)][currencySymbolInt.get(currency2)];
+        if(currencySymbolInt.containsKey(currencySource) && currencySymbolInt.containsKey(currencyDest)){
+            double resultToRound = quantity * association[currencySymbolInt.get(currencySource)][currencySymbolInt.get(currencyDest)];
             return new BigDecimal(resultToRound).setScale(2, RoundingMode.HALF_UP).doubleValue();
         }
         else
