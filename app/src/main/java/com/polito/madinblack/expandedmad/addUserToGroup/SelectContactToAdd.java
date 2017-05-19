@@ -1,4 +1,4 @@
-package com.polito.madinblack.expandedmad;
+package com.polito.madinblack.expandedmad.addUserToGroup;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,13 +17,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.polito.madinblack.expandedmad.groupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.Group;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.UserForGroup;
-import com.polito.madinblack.expandedmad.newGroup.ContactsFragment;
-import com.polito.madinblack.expandedmad.newGroup.InviteContact;
 import com.polito.madinblack.expandedmad.newGroup.SelectUser;
 import com.polito.madinblack.expandedmad.tabViewGroup.TabView;
 
@@ -36,12 +33,15 @@ public class SelectContactToAdd extends AppCompatActivity {
 
     private List<SelectUser> groupM = new ArrayList<>();
     private List<SelectUser> invite = new ArrayList<>();    //used to invite new membres to join the app
+    private List<String> usersInGroup = new ArrayList<>();
     private DatabaseReference mDatabaseReference;
+    private DatabaseReference mDatabaseReferenceUserInGroup;
+    private ValueEventListener mValueEventListener;
     private MyApplication ma;
     private String groupId;
     private String groupName;
     private AtomicInteger counter;
-    private ContactsFragment fragment;                              //used to show the contact list
+    private ContactsToAddFragment fragment;                              //used to show the contact list
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,17 +62,52 @@ public class SelectContactToAdd extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if(extras != null){
-            groupId = extras.getString("GROUP_ID");
-            groupName = extras.getString("GROUP_NAME");
+            groupId = extras.getString("groupIndex");
+            groupName = extras.getString("groupName");
         }
 
-        //preparo il fragment che dovrà mostrare a schermo i contatti di cui ho fatto il retrieve dalla rubbrica
-        Bundle arguments = new Bundle();
-        arguments.putSerializable("LIST", (Serializable) groupM);
-        fragment = new ContactsFragment();
-        fragment.setArguments(arguments);
-        //lancio il fragment
-        getSupportFragmentManager().beginTransaction().add(R.id.frameLayout, fragment).commit();
+        mDatabaseReferenceUserInGroup = FirebaseDatabase.getInstance().getReference().child("groups").child(groupId).child("users");
+        mValueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot userInGroupSnapshot : dataSnapshot.getChildren()){
+                    UserForGroup userForGroup = userInGroupSnapshot.getValue(UserForGroup.class);
+                    String userPhoneNumber = userForGroup.getPhoneNumber();
+                    usersInGroup.add(userPhoneNumber);
+                }
+
+                //preparo il fragment che dovrà mostrare a schermo i contatti di cui ho fatto il retrieve dalla rubbrica
+                Bundle arguments = new Bundle();
+                arguments.putSerializable("LIST", (Serializable) groupM);
+                arguments.putSerializable("USERS_LIST", (Serializable) usersInGroup);
+                arguments.putString("groupIndex", groupId);
+                fragment = new ContactsToAddFragment();
+                fragment.setArguments(arguments);
+                //lancio il fragment
+                getSupportFragmentManager().beginTransaction().add(R.id.frameLayout, fragment).commit();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(mValueEventListener != null){
+            mDatabaseReferenceUserInGroup.addValueEventListener(mValueEventListener);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(mValueEventListener != null){
+            mDatabaseReferenceUserInGroup.removeEventListener(mValueEventListener);
+        }
     }
 
     @Override
@@ -84,8 +119,9 @@ public class SelectContactToAdd extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            Intent intent = new Intent(this, GroupListActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            Intent intent = new Intent(this, TabView.class);
+            intent.putExtra("groupIndex", groupId);
+            intent.putExtra("groupName", groupName);
             navigateUpTo(intent);
             return true;
         }else if(id == R.id.confirm_group){
@@ -136,7 +172,7 @@ public class SelectContactToAdd extends AppCompatActivity {
                                             if(items[0] == null)
                                                 items[0] = " ";
                                             if(items[1] == null) {
-                                                items[1] = " ";//DA SISTEMARE QUA E 2 RIGHE SOTTO!!!
+                                                items[1] = " ";
                                             }
                                         }else if(name.length() >= 1){
                                             items[0] = name;
@@ -145,15 +181,20 @@ public class SelectContactToAdd extends AppCompatActivity {
                                             items[0] = " ";
                                             items[1] = " ";
                                         }
+                                        if(selectUser.getFirebaseId() != null){
+                                            UserForGroup userForGroup = new UserForGroup(selectUser.getPhone(), selectUser.getFirebaseId(), items[0], items[1]);
+                                            for(int i=0; i<userForGroupList.size(); i++){
+                                                userForGroupList.get(i).connect(userForGroup);
+                                                userForGroup.connect(userForGroupList.get(i));
 
-                                        UserForGroup userForGroup = new UserForGroup(selectUser.getPhone(), selectUser.getFirebaseId(), items[0], items[1]);
-                                        for(int i=0; i<userForGroupList.size(); i++){
-                                            userForGroupList.get(i).connect(userForGroup);
-                                            userForGroup.connect(userForGroupList.get(i));
-
+                                            }
+                                            userForGroupList.add(userForGroup);
                                         }
-                                        //Group.writeUserToGroup(mDatabaseReference, groupId, groupName, userForGroup.getFirebaseId(), userForGroup.getPhoneNumber(), userForGroup.getName(), userForGroup.getSurname());
                                     }
+                                    for(int i = 0; i < userForGroupList.size(); i++){
+                                        Group.writeUserToGroup(mDatabaseReference, groupId, groupName, userForGroupList.get(i).getFirebaseId(), userForGroupList.get(i).getPhoneNumber(), userForGroupList.get(i).getName(), userForGroupList.get(i).getSurname());
+                                    }
+
                                     if(invite.isEmpty()) {
                                         Intent intent1 = new Intent(SelectContactToAdd.this, TabView.class);
                                         intent1.putExtra("groupIndex", groupId);
@@ -165,8 +206,8 @@ public class SelectContactToAdd extends AppCompatActivity {
                                         //invito le persone che non sono ancora nel DB
                                         Bundle arguments = new Bundle();
                                         arguments.putSerializable("invite", (Serializable) invite);
-                                        arguments.putString("GROUP_ID", groupId);
-                                        arguments.putString("GROUP_NAME", groupName);
+                                        arguments.putString("groupIndex", groupId);
+                                        arguments.putString("groupName", groupName);
                                         //arguments.putSerializable("Group Members", (Serializable) groupM);  //lista di utenti già inscritti
                                         InviteContactToAdd fragment = new InviteContactToAdd();
                                         fragment.setArguments(arguments);

@@ -178,6 +178,10 @@
     <string name="user_info">Il mio profilo</string>
     <string name="payment_update">Pagamenti aggiornati</string>
     <string name="add_members">Aggiungi partecipanti</string>
+    <string name="already_in">Già presente nel gruppo</string>
+    <string name="dialog_single_invite_to_add_request">deve essere invitato/a ad usare l\'applicazione per essere aggiunto/a al gruppo</string>
+    <string name="dialog_multiple_invite_to_add_request">devono essere invitati ad usare l\'applicazione per essere aggiunti al gruppo</string>
+
     <string name="payment_updated">Pagamenti aggiornati</string>
     <string name="operation_failed">Operazione fallita</string>
 </resources>
