@@ -17,6 +17,7 @@ public class Group {
     private String  name;
     private String  id;
     private Long    size;
+    private String url;
 
 
 
@@ -41,6 +42,7 @@ public class Group {
     public Group(String name){
         this.name        = name;
         this.size        = 0L;
+        this.url         = "";
 
 
     }
@@ -67,6 +69,7 @@ public class Group {
         String groupKey = myGroupRef.getKey();
 
         group.setId(groupKey);
+        group.setUrl("");
 
         myGroupRef.setValue(group);
 
@@ -231,11 +234,11 @@ public class Group {
 
     public void   setSize(Long size) { this.size = size; }
 
+    public String getUrl() { return url; }
 
+    public void setUrl(String url) { this.url = url; }
 
-
-
-/*
+    /*
     public List<Expense> getExpenses() {
         return new ArrayList<>(expenses.values());
     }

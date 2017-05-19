@@ -44,7 +44,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -65,6 +67,7 @@ public class NewGroup extends AppCompatActivity {
     private Uri uri;
     private byte[] imageData;
     private boolean visible = false; //boolean per visualizzazione a schermo intero
+    private String url = "";
 
     private RecyclerView recyclerView;
     private GroupMembersRecyclerViewAdapter adapter;
@@ -292,6 +295,8 @@ public class NewGroup extends AppCompatActivity {
                 uploadGroupPhoto();
             }
 
+
+
             //ho eliminato il check per testare se il gruppo fosse null, ho sistemato il codice a monte, quindi non dovrebbe dare più nessun problema,
             //se l'errore persiste avvisate Fra
             if(invite.isEmpty()){
@@ -325,7 +330,7 @@ public class NewGroup extends AppCompatActivity {
     }
 
     @SuppressWarnings("VisibleForTests")
-    public void uploadGroupPhoto() {
+    public String uploadGroupPhoto() {
         if(imageData != null) {
             final ProgressDialog progressDialog = new ProgressDialog(this);
             progressDialog.setTitle(getString(R.string.uploading));
@@ -339,6 +344,8 @@ public class NewGroup extends AppCompatActivity {
                     //if the upload is successfull
                     //hiding the progress dialog
                     progressDialog.dismiss();
+                    url = taskSnapshot.getDownloadUrl().toString();
+                    mDatabaseReferenceRoot.child("groups").child(groupCode).child("url").setValue(url);
 
                     //StorageMetadata metadata = new StorageMetadata.Builder().setCustomMetadata("Group", groupCode).build(); //da cambiare, solo per prova
                     //filePathGroups.updateMetadata(metadata);
@@ -371,6 +378,7 @@ public class NewGroup extends AppCompatActivity {
                         }
                     });
         }
+        return url;
     }
 
 
