@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.polito.madinblack.expandedmad.R;
+import com.polito.madinblack.expandedmad.groupManaging.GroupSettings;
 import com.polito.madinblack.expandedmad.model.Group;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.UserForGroup;
@@ -119,9 +120,8 @@ public class SelectContactToAdd extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            Intent intent = new Intent(this, TabView.class);
-            intent.putExtra("groupIndex", groupId);
-            intent.putExtra("groupName", groupName);
+            Intent intent = new Intent(this, GroupSettings.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             navigateUpTo(intent);
             return true;
         }else if(id == R.id.confirm_group){

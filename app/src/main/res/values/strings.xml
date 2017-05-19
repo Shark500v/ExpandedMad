@@ -189,4 +189,6 @@
     <string name="already_in">Already in the group</string>
     <string name="dialog_single_invite_to_add_request">should be invited to join the Application in order to be added to group</string>
     <string name="dialog_multiple_invite_to_add_request">should be invited to join the Application in order to be added to group</string>
+    <string name="group_info">Group info</string>
+    <string name="modify_group_name">Modify group name</string>
 </resources>

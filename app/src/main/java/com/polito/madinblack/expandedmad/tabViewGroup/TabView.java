@@ -27,6 +27,8 @@ import android.widget.ImageView;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.polito.madinblack.expandedmad.groupManaging.GroupDetailActivity;
+import com.polito.madinblack.expandedmad.groupManaging.GroupSettings;
 import com.polito.madinblack.expandedmad.newExpense.ExpenseFillData;
 import com.polito.madinblack.expandedmad.addUserToGroup.SelectContactToAdd;
 import com.polito.madinblack.expandedmad.chat.ChatRecyclerViewAdapter;
@@ -162,10 +164,12 @@ public class TabView extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            /*case R.id.action_settings:
-                Intent intent = new Intent(this, GroupDetailActivity.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
+            case R.id.action_settings:
+                Intent intent = new Intent(this, GroupSettings.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
+                intent.putExtra("groupName", groupName);
+                intent.putExtra("groupIndex", groupIndex);
                 startActivity(intent);
-                return true;*/
+                return true;
 
             case R.id.home:
                 navigateUpTo(new Intent(this, GroupListActivity.class));    //definisco il parente verso cui devo tornare indietro
@@ -186,11 +190,11 @@ public class TabView extends AppCompatActivity {
                 startActivity(intent3);
                 return true;
 
-            case R.id.add_members:
+            /*case R.id.add_members:
                 Intent intent4 = new Intent(this, SelectContactToAdd.class);
                 intent4.putExtra("groupIndex", groupIndex);
                 intent4.putExtra("groupName", groupName);
-                startActivity(intent4);
+                startActivity(intent4);*/
 
             default:
                 // If we got here, the user's action was not recognized.

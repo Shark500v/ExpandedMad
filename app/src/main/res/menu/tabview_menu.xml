@@ -2,12 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!--setting button-->
-    <!--<item
+    <item
         android:id="@+id/action_settings"
         android:icon="@drawable/settings"
         android:title="@string/group_settings"
-        app:showAsAction="never"/>-->
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/action_history"
@@ -19,9 +18,9 @@
         android:title="@string/group_members_to_group"
         app:showAsAction="never"/>
 
-    <item
+    <!--<item
         android:id="@+id/add_members"
         android:title="@string/add_members"
-        app:showAsAction="never"/>
+        app:showAsAction="never"/>-->
 
 </menu>

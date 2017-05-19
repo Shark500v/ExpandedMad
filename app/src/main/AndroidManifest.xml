@@ -184,11 +184,11 @@
 
         <activity
             android:name=".addUserToGroup.SelectContactToAdd"
-            android:parentActivityName=".tabViewGroup.TabView"
+            android:parentActivityName=".groupManaging.GroupSettings"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.polito.madinblack.expandedmad.tabViewGroup.TabView" />
+                android:value="com.polito.madinblack.expandedmad.groupManaging.GroupSettings" />
         </activity>
 
         <activity
@@ -198,6 +198,24 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.tabViewGroup.TabView" />
+        </activity>
+
+        <activity
+            android:name=".groupManaging.GroupSettings"
+            android:parentActivityName=".tabViewGroup.TabView"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.polito.madinblack.expandedmad.tabViewGroup.TabView" />
+        </activity>
+
+        <activity
+            android:name=".groupManaging.EditGroupName"
+            android:parentActivityName=".groupManaging.GroupSettings"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.polito.madinblack.expandedmad.groupManaging.GroupSettings" />
         </activity>
     </application>
 
