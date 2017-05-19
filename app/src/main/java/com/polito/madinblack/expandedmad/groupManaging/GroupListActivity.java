@@ -9,10 +9,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -77,6 +79,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
     private StorageReference mStorage;
     private StorageReference mUserStorage;
     private SimpleItemRecyclerViewAdapter mAdapter;
+    private NavigationView navigationView;
     private static Map<String,String> groupImages = new HashMap<String,String>();
     private File userPicture;
     Bitmap bitmap;
@@ -106,7 +109,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         drawer.addDrawerListener(toggle);  //setDrawerListener(toggle) --> addDrawerListener(toggle)
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         //fine codice per Drawer
 
@@ -156,6 +159,15 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        int size = navigationView.getMenu().size();
+        for (int i = 0; i < size; i++) {
+            navigationView.getMenu().getItem(i).setChecked(false);
+        }
+    }
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -193,8 +205,8 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_onlysearch, menu);
 
-        /*MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);*/
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
 
         // Configure the search info and add any event listeners...
 
@@ -209,6 +221,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         private ValueEventListener mEventListener;
 
         private List<GroupForUser> mValues = new ArrayList<>();
+        private List<GroupForUser> duplicato = new ArrayList<>();
 
 
         public SimpleItemRecyclerViewAdapter(final Context context, Query ref) {
@@ -303,8 +316,6 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                     Glide.with(getApplicationContext()).load(uri).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(holder.mImage);
                 }
             });
-
-
         }
 
         @Override
