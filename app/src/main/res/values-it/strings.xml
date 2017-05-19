@@ -178,4 +178,6 @@
     <string name="user_info">Il mio profilo</string>
     <string name="payment_update">Pagamenti aggiornati</string>
     <string name="add_members">Aggiungi partecipanti</string>
+    <string name="payment_updated">Pagamenti aggiornati</string>
+    <string name="operation_failed">Operazione fallita</string>
 </resources>

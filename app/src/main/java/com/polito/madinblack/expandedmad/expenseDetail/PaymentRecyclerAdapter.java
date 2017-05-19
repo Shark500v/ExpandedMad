@@ -8,17 +8,22 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.Query;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.CostUtil;
+import com.polito.madinblack.expandedmad.model.Currency;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.PaymentFirebase;
 import com.polito.madinblack.expandedmad.model.PaymentInfo;
 
+import java.util.Locale;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -38,18 +43,23 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
     private MyApplication ma;
     private Map<String, PaymentInfo> changedPayment;
     private Context contex;
+    private Currency.CurrencyISO expenseCurrencyISO;
+
+
     public PaymentRecyclerAdapter(Class<PaymentFirebase> modelClass, int modelLayout, Class<RecyclerView.ViewHolder> viewHolderClass, Context contex, Query ref,
-                                  Map<String, PaymentInfo> changedPayment) {
+                                  Map<String, PaymentInfo> changedPayment, Currency.CurrencyISO expenseCurrencyISO) {
         super(modelClass, modelLayout, viewHolderClass, ref);
         ma =  MyApplication.getInstance();
         this.changedPayment = changedPayment;
         this.contex = contex;
+        this.expenseCurrencyISO = expenseCurrencyISO;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
-            return new PaymentRecyclerAdapter.ViewHolder(view);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
+        View viewItem = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_spinner_item, parent, false);
+        return new PaymentRecyclerAdapter.ViewHolder(view, viewItem, expenseCurrencyISO);
 
     }
 
@@ -57,10 +67,26 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
     protected void populateViewHolder(RecyclerView.ViewHolder viewHolder, PaymentFirebase model, int position) {
         final PaymentFirebase paymentFirebase = model;
         final ViewHolder holder = (PaymentRecyclerAdapter.ViewHolder) viewHolder;
+
         if(!model.getUserFirebaseId().equals(ma.getFirebaseId())){
-            holder.mUserView.setText(model.getUserNameDisplayed());
-            holder.mPaid.setText("");
-            holder.mToPaid.setText(String.format("%.2f",model.getDebit()));
+
+            holder.mCurrency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    String item = (String) parent.getItemAtPosition(position);
+                    holder.mToPaid.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(paymentFirebase.getDebit(), Currency.getISOCode(item), expenseCurrencyISO)));
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+
+
+            holder.mUserView.setText(model.getUserFullName());
+
+
             if(model.getDebit()==0){
                 holder.mPaid.setEnabled(false);
             }
@@ -68,7 +94,7 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
             holder.mFillPaid.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    holder.mPaid.setText(String.format("%.2f",paymentFirebase.getDebit()));
+                    holder.mPaid.setText( holder.mToPaid.getText().toString());
                 }
             });
 
@@ -79,10 +105,10 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
                     String editString = CostUtil.replaceDecimalComma(s.toString());
                     if(s.length() != 0 && CostUtil.isParsableAsDouble(editString) && Double.valueOf(editString)!=0){
                         if(Double.valueOf(editString)>Double.valueOf(CostUtil.replaceDecimalComma(holder.mToPaid.getText().toString()))){
-                            holder.mPaid.setText(String.format("%.2f",paymentFirebase.getDebit()));
+                            holder.mPaid.setText(holder.mToPaid.getText().toString());
                         }else{
                             PaymentInfo paymentInfo
-                                    = new PaymentInfo(paymentFirebase, Double.valueOf(CostUtil.replaceDecimalComma(holder.mPaid.getText().toString())));
+                                    = new PaymentInfo(paymentFirebase, Currency.convertCurrency(Double.valueOf(CostUtil.replaceDecimalComma(holder.mPaid.getText().toString())), expenseCurrencyISO, Currency.getISOCode(holder.mCurrency.getSelectedItem().toString())));
                             changedPayment.put(paymentFirebase.getUserPhoneNumber(), paymentInfo);
                         }
 
@@ -107,13 +133,16 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
             paymentInfo.setId(paymentFirebase.getId());
             changedPayment.put(paymentFirebase.getUserPhoneNumber(), paymentInfo);
             holder.mUserView.setText(contex.getString(R.string.you));
-            holder.mToPaid.setText(String.format("%.2f",model.getToPaid()));
-            holder.mPaid.setText(String.format("%.2f",model.getPaid()));
+            holder.mToPaid.setText(String.format(Locale.getDefault(), "%.2f",model.getToPaid()));
+            holder.mPaid.setText(String.format(Locale.getDefault(), "%.2f",model.getPaid()));
             if(model.getPaid()!=0){
                 holder.mPaid.setTextColor(Color.parseColor("#00c200"));
             }
             holder.mPaid.setEnabled(false);
             holder.mFillPaid.setVisibility(View.INVISIBLE);
+            holder.mCurrency.setEnabled(false);
+
+
 
         }
     }
@@ -125,15 +154,22 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
         public final EditText mPaid;
         public final TextView mToPaid;
         public final CircleImageView mFillPaid;
+        public final Spinner mCurrency;
         public final View mView;
 
-        public ViewHolder(View view) {
+
+        public ViewHolder(View view, View viewParent, Currency.CurrencyISO expenseCurrencyISO) {
             super(view);
             mUserView = (TextView) view.findViewById(R.id.user_name);
             mPaid = (EditText) view.findViewById(R.id.paid);
             mToPaid = (TextView) view.findViewById(R.id.to_paid);
             mFillPaid = (CircleImageView) view.findViewById(R.id.fill_paid);
+            mCurrency = (Spinner) view.findViewById(R.id.currency);
             mView = view;
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(viewParent.getContext(), android.R.layout.simple_spinner_item, Currency.getCurrencySymbols(expenseCurrencyISO));
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            mCurrency.setAdapter(adapter);
+
         }
 
         @Override

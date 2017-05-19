@@ -30,6 +30,7 @@ import com.polito.madinblack.expandedmad.model.HistoryInfo;
 import com.polito.madinblack.expandedmad.tabViewGroup.TabView;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class GroupHistory extends AppCompatActivity {
 
@@ -238,10 +239,10 @@ public class GroupHistory extends AppCompatActivity {
             long l = hi.getContent();
             switch ((int)l){
                 case 0:
-                    return getString(R.string.history_expense)+ " "+String.format("%.2f",hi.getCost()) +" "+ Currency.toString(hi.getCurrencyISO());
+                    return getString(R.string.history_expense)+ " "+String.format(Locale.getDefault(), "%.2f",hi.getCost()) +" "+ Currency.toString(hi.getCurrencyISO());
                 case 1:
                     return getString(R.string.history_payment_part1)+ " "+ hi.getPaidTo()+ " "
-                            +getString(R.string.history_payment_part2)+String.format("%.2f",hi.getCost()) +" "+Currency.toString(hi.getCurrencyISO());
+                            +getString(R.string.history_payment_part2)+String.format(Locale.getDefault(), "%.2f",hi.getCost()) +" "+Currency.toString(hi.getCurrencyISO());
                 case 2:
                     return getString(R.string.history_new_memeber);
                 default:

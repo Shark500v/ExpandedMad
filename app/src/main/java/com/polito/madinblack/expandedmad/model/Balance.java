@@ -8,14 +8,15 @@ public class Balance {
     private String userName;
     private String userSurname;
     private Double balance;
-    private String currencyISO;
+    private Currency.CurrencyISO currencyISO;
+    private String parentUserPhoneNumber;
 
     public Balance(){
 
 
     }
 
-    public Balance(String userPhoneNumber, String userName, String userSurname, Double balance, String currencyISO) {
+    public Balance(String userPhoneNumber, String userName, String userSurname, Double balance, Currency.CurrencyISO currencyISO) {
         this.userPhoneNumber = userPhoneNumber;
         this.userName = userName;
         this.userSurname = userSurname;
@@ -54,11 +55,19 @@ public class Balance {
         this.userPhoneNumber = userPhoneNumber;
     }
 
-    public String getCurrencyISO() {
+    public Currency.CurrencyISO getCurrencyISO() {
         return currencyISO;
     }
 
-    public void setCurrencyISO(String currencyISO) {
+    public void setCurrencyISO(Currency.CurrencyISO currencyISO) {
         this.currencyISO = currencyISO;
+    }
+
+    public String getParentUserPhoneNumber() {
+        return parentUserPhoneNumber;
+    }
+
+    public void setParentUserPhoneNumber(String parentUserPhoneNumber) {
+        this.parentUserPhoneNumber = parentUserPhoneNumber;
     }
 }

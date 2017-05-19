@@ -17,22 +17,14 @@ public class Group {
     private String  name;
     private String  id;
     private Long    size;
+    private String  urlImage;
 
-
-
-    /*
-    private Double totPersonalCredit;
-    private Double totPersonalDebit;
-    */
     //image attribute will be combination of url and group id
 
 
     private Map<String, UserForGroup> users = new LinkedHashMap<>();
 
     private Map<String, Boolean> expenses = new LinkedHashMap<>();
-
-    //map containing how money myself have to paid/received by users. + = received - = give 0 nothing
-    //private Map<String, Float> myCreditsDebits = new HashMap<>();
 
     public Group(){
 
@@ -174,45 +166,6 @@ public class Group {
 
 
 
-    /*be carrefour: for now do this operation only after add all initial expenses*/
-   // public void addExpense(Expense e){
-        //expenses.put(e.getId(), e);
-
-    //}
-
-
-/*
-    public List<User> getUsersCreditsDebits (){
-
-        List<User> usersCD = new ArrayList<User>();
-
-        Iterator<String> it = myCreditsDebits.keySet().iterator();
-
-        while(it.hasNext()) {
-            //User u = users.get(it.next());
-            //usersCD.add(u);
-        }
-
-        return usersCD;
-    }
-
-    public Map<String, Float> getMyCreditsDebits() {
-        return myCreditsDebits;
-    }
-*/
-
-    /*
-    public Double getTotCredit() {
-        return totPersonalCredit;
-    }
-
-    public Double getTotDebit() {
-        return totPersonalDebit;
-    }
-*/
-
-   // public User getUser(String id) { return users.get(id);}
-
     public String getName(){ return name; }
 
     public String getId(){
@@ -221,7 +174,7 @@ public class Group {
 
     public Long   getSize(){ return size; }
 
-
+    public String getUrlImage() { return urlImage; }
 
     public Map<String, UserForGroup> getUsers() { return users; }
 
@@ -231,35 +184,5 @@ public class Group {
 
     public void   setSize(Long size) { this.size = size; }
 
-
-
-
-
-/*
-    public List<Expense> getExpenses() {
-        return new ArrayList<>(expenses.values());
-    }
-*/
-/*
-    public String getDetails(){
-        return "Insert here the Details of the Group.";
-    }
-*/
-    /*
-    public Expense getSingleExpense(Long id) {
-        return expenses.get(id);
-    }
-    */
-    /*
-    public void uplMyCreditDebit(User user, Float debitCredit){
-        if(!(myCreditsDebits.containsKey(user.getId()))){
-            myCreditsDebits.put(user.getId(), debitCredit);
-        }else{
-            Float previous = myCreditsDebits.get(user.getId());
-            myCreditsDebits.put(user.getId(), previous+debitCredit);
-        }
-
-    }
-*/
-
+    public void   setUrlImage(String urlImage) {  this.urlImage = urlImage; }
 }

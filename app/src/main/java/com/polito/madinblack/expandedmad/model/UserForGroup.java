@@ -72,6 +72,7 @@ public class UserForGroup {
         for(UserForGroup userForGroup : usersForGroup){
             if(!userForGroup.getFirebaseId().equals(this.getFirebaseId())){
                 Balance balance = new Balance(userForGroup.getPhoneNumber(), userForGroup.getName(), userForGroup.getSurname(), 0D, MyApplication.getCurrencyISOFavorite());
+                balance.setParentUserPhoneNumber(this.phoneNumber);
                 balances.put(userForGroup.getFirebaseId(), balance);
 
             }
@@ -82,6 +83,7 @@ public class UserForGroup {
     //add new user to balance with 0
     public void connect(UserForGroup userForGroup){
         Balance balance = new Balance(userForGroup.getPhoneNumber(), userForGroup.getName(), userForGroup.getSurname(), 0D, MyApplication.getCurrencyISOFavorite());
+        balance.setParentUserPhoneNumber(this.phoneNumber);
         if(!balances.containsKey(userForGroup.getFirebaseId()))
             balances.put(userForGroup.getFirebaseId(), balance);
     }

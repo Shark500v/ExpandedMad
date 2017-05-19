@@ -14,7 +14,7 @@ public class HistoryInfo {
     private String name;
     private Long content;
     private Double cost;
-    private String currencyISO;
+    private Currency.CurrencyISO currencyISO;
     private String paidTo;
     private Date date;
 
@@ -22,7 +22,7 @@ public class HistoryInfo {
 
     }
 
-    public HistoryInfo(String name, Long content, Double cost, String currencyISO, String paidTo){
+    public HistoryInfo(String name, Long content, Double cost, Currency.CurrencyISO currencyISO, String paidTo){
         this.name = name;
         this.content = content;
         this.cost = cost;
@@ -55,11 +55,11 @@ public class HistoryInfo {
         this.cost = cost;
     }
 
-    public String getCurrencyISO() {
+    public Currency.CurrencyISO getCurrencyISO() {
         return currencyISO;
     }
 
-    public void setCurrencyISO(String currencyISO) {
+    public void setCurrencyISO(Currency.CurrencyISO currencyISO) {
         this.currencyISO = currencyISO;
     }
 

@@ -14,14 +14,17 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.login.BaseActivity;
 import com.polito.madinblack.expandedmad.model.Balance;
+import com.polito.madinblack.expandedmad.model.Currency;
 import com.polito.madinblack.expandedmad.model.HistoryInfo;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.PaymentFirebase;
 import com.polito.madinblack.expandedmad.model.PaymentInfo;
+import com.polito.madinblack.expandedmad.tabViewGroup.TabView;
 
 
 import java.util.HashMap;
@@ -38,11 +41,12 @@ public class PaymentDetailActivity extends BaseActivity {
 
     private DatabaseReference mDatabaseRootReference;
     private DatabaseReference mDatabasePaymentsReference;
+    private Query mDatabaseQuerySorted;
     private RecyclerView recyclerView;
 
     private String expenseId;
     private String groupId;
-    private String currencyISO;
+    private Currency.CurrencyISO currencyISO;
     private String expenseUserName;
     private String expenseUserSurname;
     private Double expenseCost;
@@ -62,13 +66,13 @@ public class PaymentDetailActivity extends BaseActivity {
         expenseId           = getIntent().getStringExtra(ARG_EXPENSE_ID);
         groupId             = getIntent().getStringExtra(ARG_GROUP_ID);
         expenseCost         = Double.valueOf(getIntent().getStringExtra(ARG_EXPENSE_COST));
-        currencyISO         = getIntent().getStringExtra(ARG_CURRENCY_ISO);
+        currencyISO         = Currency.CurrencyISO.valueOf(getIntent().getStringExtra(ARG_CURRENCY_ISO));
         expenseUserName     = getIntent().getStringExtra(ARG_USER_NAME);
         expenseUserSurname  = getIntent().getStringExtra(ARG_USER_SURNAME);
 
         mDatabaseRootReference = FirebaseDatabase.getInstance().getReference();
         mDatabasePaymentsReference = mDatabaseRootReference.child("expenses/"+expenseId+"/payments");
-
+        mDatabaseQuerySorted = mDatabasePaymentsReference.orderByChild("sortingField");
 
 
         //toolbar settings
@@ -90,8 +94,9 @@ public class PaymentDetailActivity extends BaseActivity {
                 R.layout.list_item,
                 RecyclerView.ViewHolder.class,
                 getApplicationContext(),
-                mDatabasePaymentsReference,
-                changedPayments
+                mDatabaseQuerySorted,
+                changedPayments,
+                currencyISO
         );
         recyclerView.setAdapter(mAdapter);
     }
@@ -147,7 +152,7 @@ public class PaymentDetailActivity extends BaseActivity {
                                     Balance balance = currentData.getValue(Balance.class);
                                     for(MutableData currentDataChild : currentData.getChildren()){
                                         if(currentDataChild.getKey().equals("balance"))
-                                            currentDataChild.setValue(balance.getBalance() + paymentToUpdate.get(balance.getUserPhoneNumber()).getPaidNow());
+                                            currentDataChild.setValue(balance.getBalance() + Currency.convertCurrency(paymentToUpdate.get(balance.getUserPhoneNumber()).getPaidNow(), balance.getCurrencyISO(), currencyISO));
                                     }
                                 }
                                 return Transaction.success(currentData);
@@ -175,7 +180,7 @@ public class PaymentDetailActivity extends BaseActivity {
                                     Balance balance = currentData.getValue(Balance.class);
                                     for(MutableData currentDataChild : currentData.getChildren()){
                                         if(currentDataChild.getKey().equals("balance"))
-                                            currentDataChild.setValue(balance.getBalance() - paymentToUpdate.get(balance.getUserPhoneNumber()).getPaidNow());
+                                            currentDataChild.setValue(balance.getBalance() - Currency.convertCurrency(paymentToUpdate.get(balance.getUserPhoneNumber()).getPaidNow(), balance.getCurrencyISO(), currencyISO));
                                     }
 
                                 }
@@ -226,6 +231,9 @@ public class PaymentDetailActivity extends BaseActivity {
             hideProgressDialog();
 
             /*insert intent to go back*/
+            Intent intent = new Intent(this, ExpenseDetailFragment.class);
+            setResult(RESULT_OK, intent);
+            finish();
 
         }else if(id == R.id.fill_all_paid){
 

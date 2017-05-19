@@ -28,6 +28,7 @@ import com.polito.madinblack.expandedmad.model.MyApplication;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -154,13 +155,13 @@ public class RecyclerViewAdapterUsers extends RecyclerView.Adapter<RecyclerViewA
             holder.mIdView.setText(mValues.get(position).getUserName() + " " +mValues.get(position).getUserSurname());               //qui visualizzo nome e cognome
         //qui invece quanto deve o meno
         if (mValues.get(position).getBalance()>0){
-            holder.mContentView.setText(String.format("+%.2f", mValues.get(position).getBalance()) + " " + Currency.getSymbol(mValues.get(position).getCurrencyISO()));
+            holder.mContentView.setText(String.format(Locale.getDefault(), "+%.2f", Currency.convertCurrency(mValues.get(position).getBalance(), MyApplication.getCurrencyISOFavorite(), mValues.get(position).getCurrencyISO())) + " " + Currency.getSymbol(MyApplication.getCurrencyISOFavorite()));
             holder.mContentView.setTextColor(Color.parseColor("#00c200"));
         }else if(mValues.get(position).getBalance()<0){
-            holder.mContentView.setText(String.format("%.2f", mValues.get(position).getBalance()) + " " + Currency.getSymbol(mValues.get(position).getCurrencyISO()));
+            holder.mContentView.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(mValues.get(position).getBalance(), MyApplication.getCurrencyISOFavorite(), mValues.get(position).getCurrencyISO())) + " " + Currency.getSymbol(MyApplication.getCurrencyISOFavorite()));
             holder.mContentView.setTextColor(Color.parseColor("#ff0000"));
         }else{
-            holder.mContentView.setText(String.format("%.2f", mValues.get(position).getBalance()) + " " + Currency.getSymbol(mValues.get(position).getCurrencyISO()));
+            holder.mContentView.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(mValues.get(position).getBalance(), MyApplication.getCurrencyISOFavorite(), mValues.get(position).getCurrencyISO())) + " " + Currency.getSymbol(MyApplication.getCurrencyISOFavorite()));
         }
         mStorageReference = FirebaseStorage.getInstance().getReference().child("users").child(mValuesIds.get(position)).child("userProfilePicture.jpg");
         mStorageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {

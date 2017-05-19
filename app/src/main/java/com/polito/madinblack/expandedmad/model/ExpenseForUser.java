@@ -10,7 +10,7 @@ public class ExpenseForUser {
     private String id;
     private Double myBalance;
     private Double cost;
-    private String currencyISO;
+    private Currency.CurrencyISO currencyISO;
     private String groupId;
     private Long day;
     private Long month;
@@ -115,11 +115,11 @@ public class ExpenseForUser {
         this.cost = cost;
     }
 
-    public String getCurrencyISO() {
+    public Currency.CurrencyISO getCurrencyISO() {
         return currencyISO;
     }
 
-    public void setCurrencyISO(String currencyISO) {
+    public void setCurrencyISO(Currency.CurrencyISO currencyISO) {
         this.currencyISO = currencyISO;
     }
 
