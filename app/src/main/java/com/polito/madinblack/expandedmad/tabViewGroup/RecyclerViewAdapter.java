@@ -91,14 +91,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.mItem = mValues.get(position);   //mValues.get(position) rappresenta un singolo elemento della nostra lista di spese
         holder.mIdView.setText(mValues.get(position).getName());
         if(mValues.get(position).getMyBalance()>0) {
-            holder.mContentView.setText(String.format(Locale.getDefault(), "+%.2f", Currency.convertCurrency(mValues.get(position).getMyBalance(), MyApplication.getCurrencyISOFavorite(), mValues.get(position).getCurrencyISO())) + " " + Currency.getSymbol(MyApplication.getCurrencyISOFavorite()));
+            holder.mContentView.setText(String.format(Locale.getDefault(), "+%.2f", Currency.convertCurrency(mValues.get(position).getMyBalance(), mValues.get(position).getCurrencyISO(), MyApplication.getCurrencyISOFavorite())) + " " + Currency.getSymbol(MyApplication.getCurrencyISOFavorite()));
             holder.mContentView.setTextColor(Color.parseColor("#00c200"));
         }else if(mValues.get(position).getMyBalance()<0) {
-            holder.mContentView.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(mValues.get(position).getMyBalance(), MyApplication.getCurrencyISOFavorite(), mValues.get(position).getCurrencyISO())) + " " + Currency.getSymbol(MyApplication.getCurrencyISOFavorite()));
+            holder.mContentView.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(mValues.get(position).getMyBalance(),  mValues.get(position).getCurrencyISO(), MyApplication.getCurrencyISOFavorite())) + " " + Currency.getSymbol(MyApplication.getCurrencyISOFavorite()));
             holder.mContentView.setTextColor(Color.parseColor("#ff0000"));
         }
         else{
-            holder.mContentView.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(mValues.get(position).getMyBalance(), MyApplication.getCurrencyISOFavorite(), mValues.get(position).getCurrencyISO())) + " " + Currency.getSymbol(MyApplication.getCurrencyISOFavorite()));
+            holder.mContentView.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(mValues.get(position).getMyBalance(),  mValues.get(position).getCurrencyISO(), MyApplication.getCurrencyISOFavorite())) + " " + Currency.getSymbol(MyApplication.getCurrencyISOFavorite()));
         }
 
         final SpannableStringBuilder str;
