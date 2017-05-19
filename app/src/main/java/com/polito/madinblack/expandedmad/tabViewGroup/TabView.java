@@ -25,8 +25,13 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.Transaction;
 import com.polito.madinblack.expandedmad.newExpense.ExpenseFillData;
 import com.polito.madinblack.expandedmad.addUserToGroup.SelectContactToAdd;
 import com.polito.madinblack.expandedmad.chat.ChatRecyclerViewAdapter;
@@ -54,7 +59,9 @@ public class TabView extends AppCompatActivity {
     private static List<Expense> eItem;    //usato per la lista di spese da mostrare in una delle tre schede a schermo
 
     private static DatabaseReference mDatabaseBalancesReference;
+    private static Query             mDatabaseBalancesQuery;
     private static DatabaseReference mDatabaseExpenseListReference;
+    private static Query             mDatabaseExpenseListQuery;
 
     private MyBalanceFragment balanceFrag = MyBalanceFragment.newInstance();
 
@@ -75,7 +82,10 @@ public class TabView extends AppCompatActivity {
         groupName  = getIntent().getExtras().getString("groupName");
 
         mDatabaseBalancesReference = FirebaseDatabase.getInstance().getReference().child("groups/"+groupIndex+"/users/"+ma.getFirebaseId()+"/balances");
+        mDatabaseBalancesQuery = mDatabaseBalancesReference.orderByChild("fullName");
         mDatabaseExpenseListReference = FirebaseDatabase.getInstance().getReference().child("users/"+ma.getUserPhoneNumber()+"/"+ma.getFirebaseId()+"/groups/"+groupIndex+"/expenses");
+        mDatabaseExpenseListQuery = mDatabaseExpenseListReference.orderByChild("timestamp");
+
 
         //toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -294,6 +304,26 @@ public class TabView extends AppCompatActivity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+            //upload newExpense
+            DatabaseReference mDatabaseNewExpenseReference = FirebaseDatabase.getInstance().getReference().child("users/" + ma.getUserPhoneNumber() + "/" + ma.getFirebaseId() + "/groups/" + groupIndex + "/newExpenses");
+
+            mDatabaseNewExpenseReference.runTransaction(new Transaction.Handler() {
+
+                @Override
+                public Transaction.Result doTransaction(MutableData currentData) {
+                    if((Long) currentData.getValue()!=0)
+                        currentData.setValue(0L);
+
+                    return Transaction.success(currentData);
+                }
+
+                @Override
+                public void onComplete(DatabaseError databaseError,
+                                       boolean committed, DataSnapshot currentData) {
+                    //This method will be called once with the results of the transaction.
+                    //Update remove the user from the group
+                }
+            });
 
         }
 
@@ -308,7 +338,7 @@ public class TabView extends AppCompatActivity {
         @Override
         public void onStart(){
             super.onStart();
-            adapter = new RecyclerViewAdapter(getContext(), mDatabaseExpenseListReference, groupIndex);
+            adapter = new RecyclerViewAdapter(getContext(), mDatabaseExpenseListQuery);
             recyclerView = (RecyclerView) rootView.findViewById(R.id.expense_list2);
 
             final FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
@@ -377,7 +407,7 @@ public class TabView extends AppCompatActivity {
         public void onStart(){
             super.onStart();
 
-            adapter = new RecyclerViewAdapterUsers(getContext(), mDatabaseBalancesReference);
+            adapter = new RecyclerViewAdapterUsers(getContext(), mDatabaseBalancesQuery);
             recyclerView = (RecyclerView) rootView.findViewById(R.id.item_list);
             recyclerView.setAdapter(adapter);
             recyclerView.setItemAnimator(new DefaultItemAnimator());

@@ -24,7 +24,7 @@ public class PaymentInfo {
         this.paidNow            = paidNow;
         this.balance            = paymentFirebase.getBalance();
         this.paidBefore         = paymentFirebase.getPaid();
-        this.userNameDisplayed  = paymentFirebase.getUserNameDisplayed();
+        this.userNameDisplayed  = paymentFirebase.getUserFullName();
         this.toPaid             = paymentFirebase.getToPaid();
         this.id                 = paymentFirebase.getId();
 

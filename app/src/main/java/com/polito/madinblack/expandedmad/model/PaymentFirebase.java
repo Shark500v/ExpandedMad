@@ -1,12 +1,15 @@
 package com.polito.madinblack.expandedmad.model;
 
+import java.util.Locale;
+
 public class PaymentFirebase {
     private String id;
     private String userFirebaseId;
     private String userPhoneNumber;
-    private String userNameDisplayed;
+    private String userFullName;
     private Double paid;
     private Double toPaid;
+    private String sortingField;
 
     //costruttore per il database
     public PaymentFirebase(){
@@ -14,11 +17,11 @@ public class PaymentFirebase {
     }
 
     public PaymentFirebase(Payment payment){
-        this.userPhoneNumber = payment.getUserPhoneNumber();
-        this.userFirebaseId  = payment.getUserFirebaseId();
-        this.paid            = CostUtil.round(payment.getPaid(), 2);
-        this.toPaid          = CostUtil.round(payment.getToPaid(), 2);
-        this.userNameDisplayed = payment.getUserName();
+        this.userPhoneNumber    = payment.getUserPhoneNumber();
+        this.userFirebaseId     = payment.getUserFirebaseId();
+        this.paid               = CostUtil.round(payment.getPaid(), 2);
+        this.toPaid             = CostUtil.round(payment.getToPaid(), 2);
+        this.userFullName       = payment.getUserFullName();
 
     }
 
@@ -38,12 +41,12 @@ public class PaymentFirebase {
         this.userPhoneNumber = userPhoneNumber;
     }
 
-    public String getUserNameDisplayed() {
-        return userNameDisplayed;
+    public String getUserFullName() {
+        return userFullName;
     }
 
-    public void setUserNameDisplayed(String userNameDisplayed) {
-        this.userNameDisplayed = userNameDisplayed;
+    public void setUserFullName(String userFullName) {
+        this.userFullName = userFullName;
     }
 
 
@@ -93,12 +96,17 @@ public class PaymentFirebase {
         return CostUtil.roundDown((paid-toPaid), 2);
     }
 
+    public String getSortingField() {
+        return sortingField;
+    }
 
-
+    public void setSortingField(String sortingField) {
+        this.sortingField = sortingField;
+    }
 
     @Override
     public String toString() {
 
-        return String.format("%.2f",(paid))+"/"+String.format("%.2f",(toPaid));
+        return String.format(Locale.getDefault(), "%.2f",(paid))+"/"+String.format(Locale.getDefault(), "%.2f",(toPaid));
     }
 }

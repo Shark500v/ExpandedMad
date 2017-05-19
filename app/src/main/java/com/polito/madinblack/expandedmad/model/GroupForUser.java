@@ -12,6 +12,7 @@ public class GroupForUser {
     private String  id;
     private Long    size;
     private Long    newExpenses;
+    private Long    timestamp;
 
     public GroupForUser(){
 
@@ -51,10 +52,13 @@ public class GroupForUser {
 
     public void   setNewExpenses(Long newExpenses) { this.newExpenses = newExpenses; }
 
+    public Long getTimestamp() {
+        return timestamp;
+    }
 
-
-
-
+    public void setTimestamp() {
+        this.timestamp = -1*System.currentTimeMillis();
+    }
 
 
 }

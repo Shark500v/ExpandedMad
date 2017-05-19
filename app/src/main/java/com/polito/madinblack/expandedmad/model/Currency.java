@@ -1,13 +1,24 @@
 package com.polito.madinblack.expandedmad.model;
 
 
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
+
 
 public class Currency {
+
+    public enum CurrencyISO{EUR, USD, GBP, JPY};
+
+
+    //Just to remember how to convert
+    /*
+    String name = CurrencyISO.USD.name();
+    CurrencyISO mode = Currency.valueOf(name);
+    */
 
     private static final double [][] association = new double[4][4];
 
@@ -22,37 +33,41 @@ public class Currency {
         association[1][0] = 1.09789;
         association[1][2] = 0.84971;
         association[1][3] = 124.450;
-        association[2][0] = 0.00882;
-        association[2][1] = 0.00804;
-        association[2][3] = 0.00683;
+        association[2][0] = 1.29207;
+        association[2][1] = 1.17687;
+        association[2][3] = 146.462;
+        association[3][0] = 0.00882;
+        association[3][1] = 0.00804;
+        association[3][2] = 0.00683;
     }
 
-    private static final Map<String, Integer> currencySymbolInt = new HashMap<String, Integer>() {{
-        put("USD", 0);
-        put("EUR", 1);
-        put("GBP", 3);
-        put("JPY", 2);
+    private static final Map<CurrencyISO, Integer> currencySymbolInt = new HashMap<CurrencyISO, Integer>() {{
+        put(CurrencyISO.USD, 0);
+        put(CurrencyISO.EUR, 1);
+        put(CurrencyISO.GBP, 2);
+        put(CurrencyISO.JPY, 3);
+
     }};
 
-    private static final Map<String, String> currencyISOCodeSymbol = new HashMap<String, String>() {{
-        put("USD", "$");
-        put("GBP", "£");
-        put("JPY", "¥");
-        put("EUR", "€");
+    private static final Map<CurrencyISO, String> currencyISOCodeSymbol = new HashMap<CurrencyISO, String>() {{
+        put(CurrencyISO.USD, "$");
+        put(CurrencyISO.EUR, "€");
+        put(CurrencyISO.GBP, "£");
+        put(CurrencyISO.JPY, "¥");
     }};
-    private static final Map<String, String> currencySymbolISOCode = new HashMap<String, String>() {{
-        put("$", "USD");
-        put("£", "GBP");
-        put("¥", "JPY");
-        put("€", "EUR");
+    private static final Map<String, CurrencyISO> currencySymbolISOCode = new HashMap<String, CurrencyISO>() {{
+        put("$", CurrencyISO.USD);
+        put("€", CurrencyISO.EUR);
+        put("£", CurrencyISO.GBP);
+        put("¥", CurrencyISO.JPY);
     }};
 
 
 
-    public static double convertCurrency(Double quantity, String currency1, String currency2){
+    public static double convertCurrency(Double quantity, Currency.CurrencyISO currency1, Currency.CurrencyISO currency2){
 
         if(currencySymbolInt.containsKey(currency1) && currencySymbolInt.containsKey(currency2)){
-            double resultToRound = quantity * association[currencySymbolInt.get(currency1)][currencySymbolInt.get(currency1)];
+            double resultToRound = quantity * association[currencySymbolInt.get(currency1)][currencySymbolInt.get(currency2)];
             return new BigDecimal(resultToRound).setScale(2, RoundingMode.HALF_UP).doubleValue();
         }
         else
@@ -60,24 +75,50 @@ public class Currency {
 
     }
 
-    public static String getSymbol(String ISOcode){
+    public static String getSymbol(CurrencyISO ISOcode){
         return currencyISOCodeSymbol.get(ISOcode);
 
     }
 
-    public static String getISOCode(String symbol){
+    public static CurrencyISO getISOCode(String symbol){
         return currencySymbolISOCode.get(symbol);
 
     }
 
-    public static Set<String> getCurrencyISOcode(){
-        return currencyISOCodeSymbol.keySet();
+
+
+    public static String toString(CurrencyISO currencyISO){
+
+        return getSymbol(currencyISO) + " (" + currencyISO.name() + ")";
+
     }
 
-    public static Set<String> getCurrencySymbols(){
-        return currencySymbolISOCode.keySet();
+    public static String[] getCurrencyValues() {
+        return Arrays.toString(CurrencyISO.values()).replaceAll("^.|.$", "").split(", ");
     }
 
+    public static String[] getCurrencySymbols() {
+        String [] symbols = new String[currencyISOCodeSymbol.size()];
+        int i = 0;
+        for(CurrencyISO currencyISO : CurrencyISO.values()){
+            symbols[i] = currencyISOCodeSymbol.get(currencyISO);
+            i++;
+        }
+        return symbols;
+    }
+
+    public static String[] getCurrencySymbols(CurrencyISO currencyISOPreferred) {
+        String [] symbols = new String[currencyISOCodeSymbol.size()];
+        symbols[0] = currencyISOCodeSymbol.get(currencyISOPreferred);
+        int i = 1;
+        for(CurrencyISO currencyISO : CurrencyISO.values()){
+            if(currencyISO.equals(currencyISOPreferred))
+                continue;
+            symbols[i] = currencyISOCodeSymbol.get(currencyISO);
+            i++;
+        }
+        return symbols;
+    }
 
 
 

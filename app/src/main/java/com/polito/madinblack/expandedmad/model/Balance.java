@@ -5,42 +5,32 @@ package com.polito.madinblack.expandedmad.model;
 public class Balance {
 
     private String userPhoneNumber;
-    private String userName;
-    private String userSurname;
+    private String fullName;
     private Double balance;
-    private String currencyName;
-    private String currencySymbol;
+    private Currency.CurrencyISO currencyISO;
+    private String parentUserPhoneNumber;
+
 
     public Balance(){
 
 
     }
 
-    public Balance(String userPhoneNumber, String userName, String userSurname, Double balance, String currencyName, String currencySymbol) {
+    public Balance(String userPhoneNumber, String userName, String userSurname, Double balance, Currency.CurrencyISO currencyISO) {
         this.userPhoneNumber = userPhoneNumber;
-        this.userName = userName;
-        this.userSurname = userSurname;
+        this.fullName = userName + " " + userSurname;
         this.balance = CostUtil.round(balance, 2);
-        this.currencyName = currencyName;
-        this.currencySymbol = currencySymbol;
+        this.currencyISO = currencyISO;
     }
 
     public String getUserPhoneNumber() { return userPhoneNumber; }
 
-    public String getUserName() {
-        return userName;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getUserSurname() {
-        return userSurname;
-    }
-
-    public void setUserSurname(String userSurname) {
-        this.userSurname = userSurname;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public Double getBalance() {
@@ -51,19 +41,24 @@ public class Balance {
         this.balance = CostUtil.round(balance, 2);
     }
 
-    public String getCurrencyName() {
-        return currencyName;
+
+    public void setUserPhoneNumber(String userPhoneNumber) {
+        this.userPhoneNumber = userPhoneNumber;
     }
 
-    public void setCurrencyName(String currencyName) {
-        this.currencyName = currencyName;
+    public Currency.CurrencyISO getCurrencyISO() {
+        return currencyISO;
     }
 
-    public String getCurrencySymbol() {
-        return currencySymbol;
+    public void setCurrencyISO(Currency.CurrencyISO currencyISO) {
+        this.currencyISO = currencyISO;
     }
 
-    public void setCurrencySymbol(String currencySymbol) {
-        this.currencySymbol = currencySymbol;
+    public String getParentUserPhoneNumber() {
+        return parentUserPhoneNumber;
+    }
+
+    public void setParentUserPhoneNumber(String parentUserPhoneNumber) {
+        this.parentUserPhoneNumber = parentUserPhoneNumber;
     }
 }

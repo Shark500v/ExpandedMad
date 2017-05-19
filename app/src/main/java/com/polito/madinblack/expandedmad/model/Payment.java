@@ -1,12 +1,13 @@
 package com.polito.madinblack.expandedmad.model;
 
 
+import java.util.Locale;
 
 public class Payment {
 
     private String userFirebaseId;
     private String userPhoneNumber;
-    private String userName;
+    private String userFullName;
     private String expenseId;
     private Double paid;
     private Double toPaid;
@@ -14,10 +15,10 @@ public class Payment {
     private boolean isWeightEnabled;
     private boolean isModified;
 
-    public Payment(String userFirebaseId, String userPhoneNumber, String userName, String expenseId, Double paid, Double toPaid){
+    public Payment(String userFirebaseId, String userPhoneNumber, String userName, String userSurname, String expenseId, Double paid, Double toPaid){
         this.userFirebaseId     = userFirebaseId;
         this.userPhoneNumber    = userPhoneNumber;
-        this.userName           = userName;
+        this.userFullName       = userName + " " + userSurname;
         this.expenseId          = expenseId;
         this.paid               = CostUtil.round(paid, 2);;
         this.toPaid             = CostUtil.round(toPaid, 2);
@@ -43,12 +44,12 @@ public class Payment {
         this.userPhoneNumber = userPhoneNumber;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUserFullName() {
+        return userFullName;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUserFullName(String userFullName) {
+        this.userFullName = userFullName;
     }
 
 
@@ -131,10 +132,11 @@ public class Payment {
     }
 
 
+
     @Override
     public String toString() {
 
-        return String.format("%.2f",(paid))+"/"+String.format("%.2f",(toPaid));
+        return String.format(Locale.getDefault(), "%.2f",(paid))+"/"+String.format(Locale.getDefault(), "%.2f",(toPaid));
     }
 
 

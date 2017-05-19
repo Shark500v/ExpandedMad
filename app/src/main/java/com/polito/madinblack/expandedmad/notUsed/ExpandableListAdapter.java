@@ -72,7 +72,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
         TextView userChild = (TextView) convertView
                 .findViewById(R.id.user_name);
-        userChild.setText(childPayment.getUserNameDisplayed());
+        userChild.setText(childPayment.getUserFullName());
 
         final EditText userPaid = (EditText) convertView
                 .findViewById(R.id.paid);

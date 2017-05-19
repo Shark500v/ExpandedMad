@@ -10,12 +10,12 @@ public class ExpenseForUser {
     private String id;
     private Double myBalance;
     private Double cost;
-    private String currencyName;
-    private String currencySymbol;
+    private Currency.CurrencyISO currencyISO;
     private String groupId;
     private Long day;
     private Long month;
     private Long year;
+    private Long timestamp;
 
 
     public ExpenseForUser(){
@@ -29,8 +29,7 @@ public class ExpenseForUser {
         this.paidBySurname      = expense.getPaidBySurname();
         this.paidByFirebaseId   = expense.getPaidByFirebaseId();
         this.paidByPhoneNumber  = expense.getPaidByPhoneNumber();
-        this.currencyName       = expense.getCurrencyName();
-        this.currencySymbol     = expense.getCurrencySymbol();
+        this.currencyISO        = expense.getCurrencyISO();
         this.id                 = expense.getId();
         this.groupId            = expense.getGroupId();
         this.day                = expense.getDay();
@@ -117,23 +116,12 @@ public class ExpenseForUser {
         this.cost = cost;
     }
 
-    public String getCurrencyName() {
-        return currencyName;
+    public Currency.CurrencyISO getCurrencyISO() {
+        return currencyISO;
     }
 
-    public void setCurrencyName(String currencyName) {
-        this.currencyName = currencyName;
-    }
-
-
-
-
-    public String getCurrencySymbol() {
-        return currencySymbol;
-    }
-
-    public void setCurrencySymbol(String currencySymbol) {
-        this.currencySymbol = currencySymbol;
+    public void setCurrencyISO(Currency.CurrencyISO currencyISO) {
+        this.currencyISO = currencyISO;
     }
 
     public String getGroupId() {
@@ -166,5 +154,17 @@ public class ExpenseForUser {
 
     public void setYear(Long year) {
         this.year = year;
+    }
+
+    public Long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp() {
+        this.timestamp = -1*System.currentTimeMillis();
+    }
+
+    public void setTimestamp(Long timestamp) {
+        this.timestamp = timestamp;
     }
 }

@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="fill_parent"
-android:layout_height="72dp"
-    android:id="@+id/item_row"
-    >
+    android:layout_width="fill_parent"
+    android:layout_height="72dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_row">
 
 
     <TextView
         android:id="@+id/user_name"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:textSize="18sp"
+        android:textSize="15sp"
         android:text = "User name"
         android:gravity="center_vertical"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
         android:layout_alignParentStart="true"
         android:textAppearance="?attr/textAppearanceListItem"
         />
@@ -21,13 +22,13 @@ android:layout_height="72dp"
 
     <EditText
         android:id="@+id/paid"
-        android:layout_width="70dp"
-        android:layout_height="match_parent"
-        android:textSize="18sp"
-        android:layout_marginEnd="10dp"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
         android:hint="@string/zero"
         android:textAlignment="center"
         android:inputType="numberDecimal"
+        android:layout_centerVertical="true"
         android:digits="0123456789.,"
         android:layout_toStartOf="@+id/slash"
         android:textAppearance="?attr/textAppearanceListItem"
@@ -37,9 +38,8 @@ android:layout_height="72dp"
         android:id="@+id/slash"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:textSize="18sp"
+        android:textSize="15sp"
         android:text = "/"
-        android:layout_marginEnd="10dp"
         android:gravity="center"
         android:layout_toStartOf="@+id/to_paid"
         android:textAppearance="?attr/textAppearanceListItem"
@@ -50,24 +50,39 @@ android:layout_height="72dp"
         android:id="@+id/to_paid"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:textSize="18sp"
+        android:textSize="15sp"
         android:text = "55"
-        android:layout_marginEnd="10dp"
+        android:layout_marginEnd="5dp"
         android:gravity="center"
-        android:layout_toStartOf="@+id/fill_paid"
+        android:layout_toStartOf="@+id/currency"
         android:textAppearance="?attr/textAppearanceListItem"
 
     />
 
+    <Spinner
+        android:id="@+id/currency"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:textSize="15sp"
+        android:text = "€"
+        android:layout_toStartOf="@+id/fill_paid"
+        android:textAppearance="?attr/textAppearanceListItem"
+
+        />
+
+
+
+
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/fill_paid"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_centerVertical="true"
         android:src="@drawable/cash2"
         android:scaleType="centerCrop"
         android:background="@drawable/color3"
-        android:layout_margin="10dp"
+        android:layout_margin="5dp"
         android:layout_alignParentEnd="true"
 
         />
