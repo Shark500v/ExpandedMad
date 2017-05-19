@@ -15,6 +15,7 @@ public class ExpenseForUser {
     private Long day;
     private Long month;
     private Long year;
+    private Long timestamp;
 
 
     public ExpenseForUser(){
@@ -153,5 +154,17 @@ public class ExpenseForUser {
 
     public void setYear(Long year) {
         this.year = year;
+    }
+
+    public Long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp() {
+        this.timestamp = -1*System.currentTimeMillis();
+    }
+
+    public void setTimestamp(Long timestamp) {
+        this.timestamp = timestamp;
     }
 }

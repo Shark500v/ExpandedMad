@@ -19,7 +19,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
+import com.google.firebase.database.ValueEventListener;
 import com.polito.madinblack.expandedmad.expenseDetail.ExpenseDetailActivity;
 import com.polito.madinblack.expandedmad.expenseDetail.ExpenseDetailFragment;
 import com.polito.madinblack.expandedmad.R;
@@ -34,124 +36,35 @@ import java.util.Locale;
 //questa classe la usa per fare il managing della lista che deve mostrare
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
-    private String index = "hello";
     private List<ExpenseForUser> mValues = new ArrayList<>();
-    private DatabaseReference dataref;
-    private List<String> mValuesIds = new ArrayList<>();
+    private Query dataref;
     private Context mContext;
-    private ChildEventListener mChildEventListener;
+    private ValueEventListener mEventListener;
     private MyApplication ma;
-    private DatabaseReference mDatabaseNewExpenseReference;
-    private Context context;
-    private String strin;
+
+
+
 
     private static final String TAG = "MyBalanceActivity";
 
-    public RecyclerViewAdapter(Context ct, DatabaseReference dr, String index) {
-        this.index = index;
+    public RecyclerViewAdapter(Context ct, Query dr) {
         dataref = dr;
         mContext = ct;
         ma = MyApplication.getInstance();
 
         // Create child event listener
         // [START child_event_listener_recycler]
-        ChildEventListener childEventListener = new ChildEventListener() {
+        ValueEventListener eventListener = new ValueEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-                Log.d(TAG, "onChildAdded:" + dataSnapshot.getKey());
-
-                // A new expense has been added, add it to the displayed list
-                ExpenseForUser expense = dataSnapshot.getValue(ExpenseForUser.class);
-
-                //upload newExpense
-                mDatabaseNewExpenseReference = FirebaseDatabase.getInstance().getReference().child("users/"+ma.getUserPhoneNumber()+"/"+ma.getFirebaseId()+"/groups/"+expense.getGroupId()+"/newExpenses");
-
-                mDatabaseNewExpenseReference.runTransaction(new Transaction.Handler() {
-
-                    @Override
-                    public Transaction.Result doTransaction(MutableData currentData) {
-                        if((Long) currentData.getValue()!=0)
-                            currentData.setValue(0L);
-
-                        return Transaction.success(currentData);
-                    }
-
-                    @Override
-                    public void onComplete(DatabaseError databaseError,
-                                           boolean committed, DataSnapshot currentData) {
-                        //This method will be called once with the results of the transaction.
-                        //Update remove the user from the group
-                    }
-                });
-
-                // [START_EXCLUDE]
-                // Update RecyclerView
-                mValuesIds.add(dataSnapshot.getKey());
-                mValues.add(expense);
-                notifyItemInserted(mValues.size() - 1);
-                // [END_EXCLUDE]
-
-            }
-
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
-                Log.d(TAG, "onChildChanged:" + dataSnapshot.getKey());
-
-                // An expense has changed, use the key to determine if we are displaying this
-                // comment and if so displayed the changed comment.
-                ExpenseForUser expense = dataSnapshot.getValue(ExpenseForUser.class);
-                String expenseKey = dataSnapshot.getKey();
-
-                // [START_EXCLUDE]
-                int expenseIndex = mValuesIds.indexOf(expenseKey);
-                if (expenseIndex > -1) {
-                    // Replace with the new data
-                    mValues.set(expenseIndex, expense);
-
-                    // Update the RecyclerView
-                    notifyItemChanged(expenseIndex);
-
-                } else {
-                    Log.w(TAG, "onChildChanged:unknown_child:" + expenseKey);
+            public void onDataChange(DataSnapshot dataSnapshot)  {
+                mValues.clear();
+                for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
+                    mValues.add(postSnapshot.getValue(ExpenseForUser.class));
                 }
-                // [END_EXCLUDE]
+                notifyDataSetChanged();
             }
 
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                Log.d(TAG, "onChildRemoved:" + dataSnapshot.getKey());
 
-                // A comment has changed, use the key to determine if we are displaying this
-                // comment and if so remove it.
-                String expenseKey = dataSnapshot.getKey();
-
-                // [START_EXCLUDE]
-                int expenseIndex = mValuesIds.indexOf(expenseKey);
-                if (expenseIndex > -1) {
-                    // Remove data from the list
-                    mValuesIds.remove(expenseKey);
-                    mValues.remove(expenseIndex);
-
-                    // Update the RecyclerView
-                    notifyItemRemoved(expenseIndex);
-                } else {
-                    Log.w(TAG, "onChildRemoved:unknown_child:" + expenseKey);
-                }
-                // [END_EXCLUDE]
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
-                Log.d(TAG, "onChildMoved:" + dataSnapshot.getKey());
-
-                // A comment has changed position, use the key to determine if we are
-                // displaying this comment and if so move it.
-                //Group movedGroup = dataSnapshot.getValue(Group.class);
-                //String groupKey = dataSnapshot.getKey();
-
-                // ...
-            }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -160,11 +73,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                         Toast.LENGTH_SHORT).show();
             }
         };
-        dataref.addChildEventListener(childEventListener);
+        dataref.addValueEventListener(eventListener);
         // [END child_event_listener_recycler]
 
         // Store reference to listener so it can be removed on app stop
-        mChildEventListener = childEventListener;
+        mEventListener = eventListener;
     }
 
     @Override
@@ -224,8 +137,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }   //ritorna il numero di elementi nella lista
 
     public void cleanupListener() {
-        if (mChildEventListener != null) {
-            dataref.removeEventListener(mChildEventListener);
+        if (mEventListener != null) {
+            dataref.removeEventListener(mEventListener);
         }
     }
 

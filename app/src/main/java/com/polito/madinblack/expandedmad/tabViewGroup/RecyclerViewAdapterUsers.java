@@ -19,6 +19,8 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.polito.madinblack.expandedmad.R;
@@ -36,94 +38,35 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class RecyclerViewAdapterUsers extends RecyclerView.Adapter<RecyclerViewAdapterUsers.ViewHolder>{
 
     private List<Balance> mValues = new ArrayList<>();
-    private DatabaseReference dataref;
-    private StorageReference mStorageReference;
     private List<String> mValuesIds = new ArrayList<>();
+    private Query dataref;
+    private StorageReference mStorageReference;
     private Context mContext;
-    private ChildEventListener mChildEventListener;
+    private ValueEventListener mEventListener;
 
     private static final String TAG = "MyBalanceActivity";
 
-    public RecyclerViewAdapterUsers(Context ct, DatabaseReference dr) {
+    public RecyclerViewAdapterUsers(Context ct, Query dr) {
 
         dataref = dr;
         mContext = ct;
 
         // Create child event listener
         // [START child_event_listener_recycler]
-        ChildEventListener childEventListener = new ChildEventListener() {
+        ValueEventListener eventListener = new ValueEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-                Log.d(TAG, "onChildAdded:" + dataSnapshot.getKey());
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mValues.clear();
+                mValuesIds.clear();
+                for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
 
-                // A new comment has been added, add it to the displayed list
-                Balance balance = dataSnapshot.getValue(Balance.class);
-
-                // [START_EXCLUDE]
-                // Update RecyclerView
-                mValuesIds.add(dataSnapshot.getKey());
-                mValues.add(balance);
-                notifyItemInserted(mValues.size() - 1);
-                // [END_EXCLUDE]
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
-                Log.d(TAG, "onChildChanged:" + dataSnapshot.getKey());
-
-                // A comment has changed, use the key to determine if we are displaying this
-                // comment and if so displayed the changed comment.
-                Balance balance = dataSnapshot.getValue(Balance.class);
-                String balanceKey = dataSnapshot.getKey();
-
-                // [START_EXCLUDE]
-                int balanceIndex = mValuesIds.indexOf(balanceKey);
-                if (balanceIndex > -1) {
-                    // Replace with the new data
-                    mValues.set(balanceIndex, balance);
-
-                    // Update the RecyclerView
-                    notifyItemChanged(balanceIndex);
-                } else {
-                    Log.w(TAG, "onChildChanged:unknown_child:" + balanceKey);
+                    mValues.add(postSnapshot.getValue(Balance.class));
+                    mValuesIds.add(dataSnapshot.getKey());
                 }
-                // [END_EXCLUDE]
+                notifyDataSetChanged();
+
             }
 
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                Log.d(TAG, "onChildRemoved:" + dataSnapshot.getKey());
-
-                // A comment has changed, use the key to determine if we are displaying this
-                // comment and if so remove it.
-                String balanceKey = dataSnapshot.getKey();
-
-                // [START_EXCLUDE]
-                int balanceIndex = mValuesIds.indexOf(balanceKey);
-                if (balanceIndex > -1) {
-                    // Remove data from the list
-                    mValuesIds.remove(balanceKey);
-                    mValues.remove(balanceIndex);
-
-                    // Update the RecyclerView
-                    notifyItemRemoved(balanceIndex);
-                } else {
-                    Log.w(TAG, "onChildRemoved:unknown_child:" + balanceKey);
-                }
-                // [END_EXCLUDE]
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
-                Log.d(TAG, "onChildMoved:" + dataSnapshot.getKey());
-
-                // A comment has changed position, use the key to determine if we are
-                // displaying this comment and if so move it.
-                //Group movedGroup = dataSnapshot.getValue(Group.class);
-                //String groupKey = dataSnapshot.getKey();
-
-                // ...
-            }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -132,11 +75,11 @@ public class RecyclerViewAdapterUsers extends RecyclerView.Adapter<RecyclerViewA
                         Toast.LENGTH_SHORT).show();
             }
         };
-        dr.addChildEventListener(childEventListener);
+        dr.addValueEventListener(eventListener);
         // [END child_event_listener_recycler]
 
         // Store reference to listener so it can be removed on app stop
-        mChildEventListener = childEventListener;
+        mEventListener = eventListener;
     }
 
     @Override
@@ -152,7 +95,7 @@ public class RecyclerViewAdapterUsers extends RecyclerView.Adapter<RecyclerViewA
         if(holder.mItem.getUserPhoneNumber().equals(ma.getUserPhoneNumber()))
             holder.mIdView.setText(mContext.getString(R.string.you));
         else
-            holder.mIdView.setText(mValues.get(position).getUserName() + " " +mValues.get(position).getUserSurname());               //qui visualizzo nome e cognome
+            holder.mIdView.setText(mValues.get(position).getFullName());               //qui visualizzo nome e cognome
         //qui invece quanto deve o meno
         if (mValues.get(position).getBalance()>0){
             holder.mContentView.setText(String.format(Locale.getDefault(), "+%.2f", Currency.convertCurrency(mValues.get(position).getBalance(), MyApplication.getCurrencyISOFavorite(), mValues.get(position).getCurrencyISO())) + " " + Currency.getSymbol(MyApplication.getCurrencyISOFavorite()));
@@ -191,8 +134,8 @@ public class RecyclerViewAdapterUsers extends RecyclerView.Adapter<RecyclerViewA
     }
 
     public void cleanupListener() {
-        if (mChildEventListener != null) {
-            dataref.removeEventListener(mChildEventListener);
+        if (mEventListener != null) {
+            dataref.removeEventListener(mEventListener);
         }
     }
 
