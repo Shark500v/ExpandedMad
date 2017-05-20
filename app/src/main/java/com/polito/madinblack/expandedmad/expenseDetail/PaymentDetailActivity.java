@@ -152,7 +152,7 @@ public class PaymentDetailActivity extends BaseActivity {
                                     Balance balance = currentData.getValue(Balance.class);
                                     for(MutableData currentDataChild : currentData.getChildren()){
                                         if(currentDataChild.getKey().equals("balance"))
-                                            currentDataChild.setValue(balance.getBalance() + Currency.convertCurrency(paymentToUpdate.get(balance.getUserPhoneNumber()).getPaidNow(), balance.getCurrencyISO(), currencyISO));
+                                            currentDataChild.setValue(balance.getBalance() + Currency.convertCurrency(paymentToUpdate.get(balance.getUserPhoneNumber()).getPaidNow(), currencyISO, balance.getCurrencyISO()));
                                     }
                                 }
                                 return Transaction.success(currentData);
@@ -180,7 +180,7 @@ public class PaymentDetailActivity extends BaseActivity {
                                     Balance balance = currentData.getValue(Balance.class);
                                     for(MutableData currentDataChild : currentData.getChildren()){
                                         if(currentDataChild.getKey().equals("balance"))
-                                            currentDataChild.setValue(balance.getBalance() - Currency.convertCurrency(paymentToUpdate.get(balance.getUserPhoneNumber()).getPaidNow(), balance.getCurrencyISO(), currencyISO));
+                                            currentDataChild.setValue(balance.getBalance() - Currency.convertCurrency(paymentToUpdate.get(balance.getUserPhoneNumber()).getPaidNow(), currencyISO, balance.getCurrencyISO()));
                                     }
 
                                 }
