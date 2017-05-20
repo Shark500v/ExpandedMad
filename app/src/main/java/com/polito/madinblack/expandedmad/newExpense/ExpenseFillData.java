@@ -79,6 +79,7 @@ public class ExpenseFillData extends AppCompatActivity {
     private EditText inputName, inputAmount;
     private TextInputLayout inputLayoutName, inputLayoutAmount;
     private Double amount;
+    private String currency;
     private Double roundedAmount = 0d;
     private String expenseName;
     private boolean onBind;
@@ -138,6 +139,19 @@ public class ExpenseFillData extends AppCompatActivity {
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
 
+        //add listener to spinner
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                currency= Currency.getSymbol(Currency.CurrencyISO.valueOf((String) parent.getItemAtPosition(position)));
+                recyclerView.getAdapter().notifyDataSetChanged();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
 
 
@@ -667,28 +681,9 @@ public class ExpenseFillData extends AppCompatActivity {
             holder.mNumber.setText( String.valueOf(holder.mItem.getWeight()) );
             holder.minus.setEnabled( holder.mItem.isWeightEnabled());
             holder.plus.setEnabled( holder.mItem.isWeightEnabled());
-            holder.partition.setEnabled( holder.mItem.isWeightEnabled() );
-            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    holder.paymentSymbol.setText(Currency.getSymbol(Currency.CurrencyISO.valueOf((String) parent.getItemAtPosition(position))));
-                }
+            holder.partition.setEnabled( holder.mItem.isWeightEnabled());
+            holder.paymentSymbol.setText(currency);
 
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            });
-
-
-
-            /*holder.mView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    holder.mIdView.setText("5");
-                }
-            });*/
         }
 
         @Override
