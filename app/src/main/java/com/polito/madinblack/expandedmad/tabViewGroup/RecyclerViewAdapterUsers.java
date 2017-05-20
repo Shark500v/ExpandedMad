@@ -19,6 +19,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -41,6 +42,7 @@ public class RecyclerViewAdapterUsers extends RecyclerView.Adapter<RecyclerViewA
     private List<String> mValuesIds = new ArrayList<>();
     private Query dataref;
     private StorageReference mStorageReference;
+    private DatabaseReference mDatabaseForUserUrl;
     private Context mContext;
     private ValueEventListener mEventListener;
 
@@ -106,13 +108,30 @@ public class RecyclerViewAdapterUsers extends RecyclerView.Adapter<RecyclerViewA
         }else{
             holder.mContentView.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(mValues.get(position).getBalance(), mValues.get(position).getCurrencyISO(), MyApplication.getCurrencyISOFavorite())) + " " + Currency.getSymbol(MyApplication.getCurrencyISOFavorite()));
         }
-        mStorageReference = FirebaseStorage.getInstance().getReference().child("users").child(mValuesIds.get(position)).child("userProfilePicture.jpg");
+
+        mDatabaseForUserUrl = FirebaseDatabase.getInstance().getReference().child("users").child(holder.mItem.getUserPhoneNumber()).child(mValuesIds.get(position)).child("urlImage");
+        mDatabaseForUserUrl.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String url = dataSnapshot.getValue(String.class);
+                if(url != null) {
+                    Glide.with(mContext).load(url).into(holder.mImage);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        /*mStorageReference = FirebaseStorage.getInstance().getReference().child("users").child(mValuesIds.get(position)).child("userProfilePicture.jpg");
         mStorageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
                 Glide.with(mContext).load(uri).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(holder.mImage);
             }
-        });
+        });*/
 
         /*
         holder.mView.setOnClickListener(new View.OnClickListener() {

@@ -78,10 +78,13 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
     private DatabaseReference mDatabaseRootReference;
     private StorageReference mStorage;
     private StorageReference mUserStorage;
+    private DatabaseReference mDatabaseForGroupUrl;
+    private DatabaseReference mDatabaseForUserUrl;
     private SimpleItemRecyclerViewAdapter mAdapter;
     private NavigationView navigationView;
-    private static Map<String,String> groupImages = new HashMap<String,String>();
+    private static Map<String,String> images = new HashMap<String,String>();
     private File userPicture;
+    private String url;
     Bitmap bitmap;
 
     @Override
@@ -92,6 +95,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         ma = MyApplication.getInstance();   //retrive del DB
 
         mDatabaseRootReference = FirebaseDatabase.getInstance().getReference();
+        mDatabaseForUserUrl = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber()).child(ma.getFirebaseId()).child("urlImage");
 
         mUserGroupsReference   = mDatabaseRootReference.child("users/"+ma.getUserPhoneNumber()+"/"+ma.getFirebaseId()+"/groups");
         mQueryUserGroupsReference = mUserGroupsReference.orderByChild("timestamp");
@@ -119,12 +123,28 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         tv1 = (TextView) header.findViewById(R.id.textView2);
         tv2 = (TextView) header.findViewById(R.id.textView3);
 
-        mUserStorage.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+        mDatabaseForUserUrl.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String url = dataSnapshot.getValue(String.class);
+                if(url != null) {
+                    Glide.with(getApplicationContext()).load(url).into(userImage);
+                    images.put(ma.getFirebaseId(), url);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Glide.with(getApplicationContext()).load(images.get(images.get(ma.getFirebaseId()))).into(userImage);
+            }
+        });
+
+        /*mUserStorage.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
                 Glide.with(getApplicationContext()).load(uri).diskCacheStrategy(DiskCacheStrategy.SOURCE).error(R.drawable.teamwork).into(userImage);
             }
-        });
+        });*/
 
         tv1.setText(ma.getUserName() + " " + ma.getUserSurname());
         tv2.setText(ma.getUserPhoneNumber());
@@ -203,6 +223,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
 
     public void userInfo(View view){
         Intent intent = new Intent(GroupListActivity.this, UserPage.class);
+        intent.putExtra("userImage", images.get(ma.getFirebaseId()));
         startActivity(intent);
     }
 
@@ -303,6 +324,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                             Intent intent = new Intent(context, TabView.class); //qui setto la nuova attività da mostrare a schermo dopo che clicco
                             intent.putExtra("groupIndex", holder.mItem.getId());    //passo alla nuova activity l'ide del gruppo chè l'utente ha selezionto
                             intent.putExtra("groupName", holder.mItem.getName());
+                            intent.putExtra("groupImage", images.get(mValues.get(position).getId()));
                             context.startActivity(intent);
                         }
 
@@ -314,13 +336,44 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                 }
             });
 
-            final StorageReference groupRef = mStorage.child("groups").child(mValues.get(position).getId()).child("groupPicture").child("groupPicture.jpg");
+            mDatabaseForGroupUrl = FirebaseDatabase.getInstance().getReference().child("groups").child(mValues.get(position).getId()).child("urlImage");
+            mDatabaseForGroupUrl.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    String url = dataSnapshot.getValue(String.class);
+                    if(url != null) {
+                        Glide.with(getApplicationContext()).load(url).into(holder.mImage);
+                        images.put(mValues.get(position).getId(), url);
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Glide.with(getApplicationContext()).load(images.get(mValues.get(position).getId())).into(holder.mImage);
+                }
+            });
+
+            /*final StorageReference groupRef = mStorage.child("groups").child(mValues.get(position).getId()).child("groupPicture").child("groupPicture.jpg");
+            mDatabaseForUrl = FirebaseDatabase.getInstance().getReference().child("groups").child(mValues.get(position).getId()).child("urlImage");
+
             groupRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
                 public void onSuccess(Uri uri) {
-                    Glide.with(getApplicationContext()).load(uri).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(holder.mImage);
+                    url = uri.toString();
+                    Glide.with(getApplicationContext()).load(url).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(holder.mImage);
                 }
-            });
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    if(groupImages.containsKey(mValues.get(position).getId())){
+                        url = groupImages.get(mValues.get(position).getId());
+                    }
+                }
+            });*/
+
+            /*if(!groupImages.containsValue(uri.toString())) {
+                groupImages.put(mValues.get(position).getId(), uri.toString());
+            }*/
         }
 
         @Override

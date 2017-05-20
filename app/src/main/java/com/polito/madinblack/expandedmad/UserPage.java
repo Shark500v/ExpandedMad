@@ -23,6 +23,11 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.signature.StringSignature;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnPausedListener;
 import com.google.firebase.storage.OnProgressListener;
@@ -39,12 +44,14 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserPage extends AppCompatActivity{
     private StorageReference mUserStorage;
+    private DatabaseReference mDatabaseForUrl;
     private CircleImageView userImage;
     private CircleImageView imageClick;
     private MyApplication ma;
     private TextView name;
     private TextView surname;
     private TextView phoneNumber;
+    private String url;
     private Uri uri;
     private Bitmap bitmap;
     private byte[] imageData;
@@ -66,8 +73,14 @@ public class UserPage extends AppCompatActivity{
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            url = extras.getString("userImage");
+        }
+
         ma = MyApplication.getInstance();
         mUserStorage = FirebaseStorage.getInstance().getReference().child("users").child(ma.getFirebaseId()).child("userProfilePicture.jpg");
+        mDatabaseForUrl = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber()).child(ma.getFirebaseId()).child("urlImage");
         userImage = (CircleImageView)findViewById(R.id.user_picture);
         imageClick = (CircleImageView)findViewById(R.id.set_user_image);
 
@@ -78,12 +91,27 @@ public class UserPage extends AppCompatActivity{
         surname.setText(ma.getUserSurname());
         phoneNumber.setText(ma.getUserPhoneNumber());
 
-        mUserStorage.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+        mDatabaseForUrl.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                url = dataSnapshot.getValue(String.class);
+                if(url != null) {
+                    Glide.with(getApplicationContext()).load(url).into(userImage);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Glide.with(getApplicationContext()).load(url).into(userImage);
+            }
+        });
+
+        /*mUserStorage.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
                 Glide.with(getApplicationContext()).load(uri).diskCacheStrategy(DiskCacheStrategy.SOURCE).error(R.drawable.businessman).into(userImage);
             }
-        });
+        });*/
 
         imageClick.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,6 +191,8 @@ public class UserPage extends AppCompatActivity{
                     //if the upload is successfull
                     //hiding the progress dialog
                     progressDialog.dismiss();
+
+                    mDatabaseForUrl.setValue(taskSnapshot.getDownloadUrl().toString());
 
                     //StorageMetadata metadata = new StorageMetadata.Builder().setCustomMetadata("Group", groupCode).build(); //da cambiare, solo per prova
                     //filePathGroups.updateMetadata(metadata);
