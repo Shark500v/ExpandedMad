@@ -76,7 +76,7 @@ public class ExpenseFillData extends AppCompatActivity {
     private List<Payment> mValues;
     private DatabaseReference databaseReference;
     private StorageReference mStorage;
-    private EditText inputName, inputAmount;
+    private EditText inputName, inputAmount, inputRoundedAmount, inputRoundedCurrency;
     private TextInputLayout inputLayoutName, inputLayoutAmount;
     private Double amount;
     private String currency;
@@ -107,10 +107,12 @@ public class ExpenseFillData extends AppCompatActivity {
         }
 
         //prepare instance variable
-        inputLayoutName     = (TextInputLayout) findViewById(R.id.input_layout_title);
-        inputLayoutAmount   = (TextInputLayout) findViewById(R.id.input_layout_amount);
-        inputName           = (EditText) findViewById(R.id.input_title);
-        inputAmount         = (EditText) findViewById(R.id.input_amount);
+        inputLayoutName         = (TextInputLayout) findViewById(R.id.input_layout_title);
+        inputLayoutAmount       = (TextInputLayout) findViewById(R.id.input_layout_amount);
+        inputName               = (EditText) findViewById(R.id.input_title);
+        inputAmount             = (EditText) findViewById(R.id.input_amount);
+        inputRoundedAmount      = (EditText) findViewById(R.id.input_rounded_cost);
+        inputRoundedCurrency    = (EditText) findViewById(R.id.input_rounded_cost_currency);
 
        //inputAmount.setFilters(new InputFilter[] { new DecimalDigitsInputFilter(2)});
 
@@ -139,21 +141,7 @@ public class ExpenseFillData extends AppCompatActivity {
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
 
-        //add listener to spinner
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                currency= Currency.getSymbol(Currency.CurrencyISO.valueOf((String) parent.getItemAtPosition(position)));
-                recyclerView.getAdapter().notifyDataSetChanged();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-
+        inputRoundedCurrency.setText(MyApplication.getCurrencyISOFavorite().toString());
 
         EditText inputAmount = (EditText)findViewById(R.id.input_amount);
         inputAmount.addTextChangedListener(new TextWatcher() {
@@ -179,6 +167,20 @@ public class ExpenseFillData extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.users_list);
         assert recyclerView != null;
         setupRecyclerView(recyclerView);
+
+        //add listener to spinner
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                currency= Currency.getSymbol(Currency.CurrencyISO.valueOf((String) parent.getItemAtPosition(position)));
+                recyclerView.getAdapter().notifyDataSetChanged();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
 
     }
@@ -526,7 +528,16 @@ public class ExpenseFillData extends AppCompatActivity {
 
     }
 
-    public void changeAllCurrency(){
+    public double checkDivsionAndGetNet(int totalWeight, double netAmount){
+        int intAmount = (int)(netAmount*100);
+
+        int difference = intAmount % totalWeight;
+        if(difference != 0){
+            roundedAmount = (amount * 100 + difference)/100;
+            inputRoundedAmount.setText(new DecimalFormat("#0.00").format( roundedAmount));
+            return (netAmount * 100 + difference)/100;
+        }
+        return netAmount;
 
     }
 
@@ -541,6 +552,8 @@ public class ExpenseFillData extends AppCompatActivity {
             else
                 totalWeigth += pay.getWeight();
         }
+
+        netAmount = checkDivsionAndGetNet(totalWeigth, netAmount);
 
         for(int i=0;i<mValues.size();i++){
             Payment currentPayment = mValues.get(i);
@@ -576,6 +589,8 @@ public class ExpenseFillData extends AppCompatActivity {
             else
                 totalWeigth += pay.getWeight();
         }
+
+        netAmount = checkDivsionAndGetNet(totalWeigth, netAmount);
 
         for(int i=0;i<mValues.size();i++){
             Payment currentPayment = mValues.get(i);
