@@ -512,6 +512,10 @@ public class ExpenseFillData extends AppCompatActivity {
 
     }
 
+    public void changeAllCurrency(){
+
+    }
+
     private void modifyPayment() {
         int totalWeigth = 0;
         double netAmount = amount;
