@@ -17,6 +17,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,11 +25,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -78,11 +81,14 @@ public class ExpenseFillData extends AppCompatActivity {
     private StorageReference mStorage;
     private EditText inputName, inputAmount, inputRoundedAmount, inputRoundedCurrency;
     private TextInputLayout inputLayoutName, inputLayoutAmount;
+    private LinearLayout layoutRounded;
     private Double amount;
-    private String currency;
+    private String currencySymbol;
+    private String currencyISO;
     private Double roundedAmount = 0d;
     private String expenseName;
     private boolean onBind;
+    private boolean isRounded;
     Uri selectedImage;
     byte[] bytesArr;
     Bitmap bitmap;
@@ -109,10 +115,12 @@ public class ExpenseFillData extends AppCompatActivity {
         //prepare instance variable
         inputLayoutName         = (TextInputLayout) findViewById(R.id.input_layout_title);
         inputLayoutAmount       = (TextInputLayout) findViewById(R.id.input_layout_amount);
+        layoutRounded           = (LinearLayout) findViewById(R.id.layout_rounded);
         inputName               = (EditText) findViewById(R.id.input_title);
         inputAmount             = (EditText) findViewById(R.id.input_amount);
         inputRoundedAmount      = (EditText) findViewById(R.id.input_rounded_cost);
         inputRoundedCurrency    = (EditText) findViewById(R.id.input_rounded_cost_currency);
+
 
        //inputAmount.setFilters(new InputFilter[] { new DecimalDigitsInputFilter(2)});
 
@@ -143,7 +151,7 @@ public class ExpenseFillData extends AppCompatActivity {
 
         inputRoundedCurrency.setText(MyApplication.getCurrencyISOFavorite().toString());
 
-        EditText inputAmount = (EditText)findViewById(R.id.input_amount);
+        inputAmount = (EditText)findViewById(R.id.input_amount);
         inputAmount.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -157,7 +165,15 @@ public class ExpenseFillData extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                modifyProportion(CostUtil.replaceDecimalComma(s.toString()));
+                String str = CostUtil.replaceDecimalComma(s.toString());
+                if(str == null){
+                    inputLayoutAmount.setError(getString(R.string.err_msg_correct_amount));
+                    requestFocus(inputAmount);
+                    modifyProportion("");
+                }else{
+                    inputLayoutAmount.setErrorEnabled(false);
+                    modifyProportion(str);
+                }
             }
         });
 
@@ -172,8 +188,14 @@ public class ExpenseFillData extends AppCompatActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                currency= Currency.getSymbol(Currency.CurrencyISO.valueOf((String) parent.getItemAtPosition(position)));
-                recyclerView.getAdapter().notifyDataSetChanged();
+                currencySymbol= Currency.getSymbol(Currency.CurrencyISO.valueOf((String) parent.getItemAtPosition(position)));
+                currencyISO = Currency.CurrencyISO.valueOf((String) parent.getItemAtPosition(position)).toString();
+                if(isRounded){
+                    inputRoundedCurrency.setText(currencyISO);
+                    inputRoundedCurrency.startAnimation(AnimationUtils.loadAnimation(ExpenseFillData.this, android.R.anim.fade_in));
+                }
+                if(recyclerView.getAdapter() != null)
+                    recyclerView.getAdapter().notifyDataSetChanged();
             }
 
             @Override
@@ -294,15 +316,6 @@ public class ExpenseFillData extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    //aggiunge una spesa al gruppo nel database associandogli una chiave univoca
-    public void writeNewExpense(Expense expense){
-        databaseReference = FirebaseDatabase.getInstance().getReference("Groups");
-        String expenseId = databaseReference.push().getKey();
-        databaseReference.child(groupID).child(expenseId).setValue(expense);
-
-        //bisogna aggiungere la spesa anche sotto users
     }
 
     @Override
@@ -480,7 +493,8 @@ public class ExpenseFillData extends AppCompatActivity {
     }
 
     private boolean validateAmount() {
-        String amountS = CostUtil.replaceDecimalComma(inputAmount.getText().toString().trim());
+        String amountS = inputAmount.getText().toString().trim();
+        CostUtil.replaceDecimalComma(amountS);
         if (amountS.isEmpty()) {
             inputLayoutAmount.setError(getString(R.string.err_msg_amount));
             requestFocus(inputAmount);
@@ -512,7 +526,7 @@ public class ExpenseFillData extends AppCompatActivity {
             amount = 0d;
             enableWeight = false;
         }else{
-            amount = Double.parseDouble(CostUtil.replaceDecimalComma(inputAmount.getText().toString()));
+            amount = checkDivsionAndGetNet(mValues.size(), Double.parseDouble(CostUtil.replaceDecimalComma(inputAmount.getText().toString())));
             enableWeight = true;
         }
 
@@ -528,15 +542,65 @@ public class ExpenseFillData extends AppCompatActivity {
 
     }
 
+    public void showReoundedCost(){
+        if(isRounded){
+            inputRoundedAmount.setText(new DecimalFormat("#0.00").format( roundedAmount));
+        }else{
+            //show with animation
+            inputRoundedCurrency.setText(currencyISO);
+            inputRoundedAmount.setText(new DecimalFormat("#0.00").format( roundedAmount));
+            layoutRounded.setVisibility(View.VISIBLE);
+            layoutRounded.startAnimation(AnimationUtils.loadAnimation(ExpenseFillData.this, android.R.anim.fade_in));
+
+            isRounded = true;
+        }
+    }
+
     public double checkDivsionAndGetNet(int totalWeight, double netAmount){
         int intAmount = (int)(netAmount*100);
 
-        int difference = intAmount % totalWeight;
-        if(difference != 0){
-            roundedAmount = (amount * 100 + difference)/100;
-            inputRoundedAmount.setText(new DecimalFormat("#0.00").format( roundedAmount));
-            return (netAmount * 100 + difference)/100;
+        /*String str = amount.toString();
+        if(str.indexOf('.') !=-1){
+            int diff = str.length() - str.indexOf('.');
+            if(diff>3){
+                int difference = intAmount % totalWeight;
+                if(difference != 0){
+                    roundedAmount = (Double.parseDouble(str.substring(0, str.length()-1)) * 100 + difference)/100;
+                    showReoundedCost();
+                    str = ((Double)netAmount).toString();
+                    if(str.indexOf('.') !=-1){
+                        diff = str.length() - str.indexOf('.');
+                        if(diff>3){
+                            netAmount = Double.parseDouble(str.substring(0, str.length()-1));
+                        }
+                    }
+                    return (netAmount * 100 + difference)/100;
+                }
+                //roundedAmount = Double.parseDouble(str.substring(0, str.length()-1));
+                showReoundedCost();
+                str = ((Double)netAmount).toString();
+                if(str.indexOf('.') !=-1){
+                    diff = str.length() - str.indexOf('.');
+                    if(diff>3){
+                        return Double.parseDouble(str.substring(0, str.length()-1));
+                    }
+                }
+                return netAmount;
+            }else{*/
+                int difference = intAmount % totalWeight;
+                if(difference != 0){
+                    roundedAmount = (amount * 100 + difference)/100;
+                    showReoundedCost();
+                    return (netAmount * 100 + difference)/100;
+                }
+           /* }
+        }*/
+        if(isRounded){
+            //hide with animation
+            layoutRounded.startAnimation(AnimationUtils.loadAnimation(ExpenseFillData.this, android.R.anim.fade_out));
+            layoutRounded.setVisibility(View.GONE);
         }
+        isRounded = false;
         return netAmount;
 
     }
@@ -576,6 +640,8 @@ public class ExpenseFillData extends AppCompatActivity {
             amount = 0d;
             enableWeight = false;
         }else{
+            if(value.charAt(0) == '.')
+                value = "0"+value;
             amount = Double.parseDouble(value);
             enableWeight = true;
         }
@@ -697,7 +763,7 @@ public class ExpenseFillData extends AppCompatActivity {
             holder.minus.setEnabled( holder.mItem.isWeightEnabled());
             holder.plus.setEnabled( holder.mItem.isWeightEnabled());
             holder.partition.setEnabled( holder.mItem.isWeightEnabled());
-            holder.paymentSymbol.setText(currency);
+            holder.paymentSymbol.setText(currencySymbol);
 
         }
 
@@ -747,7 +813,20 @@ public class ExpenseFillData extends AppCompatActivity {
                     public void afterTextChanged(Editable s) {
 
                         if(!onBind){
-                            Double value = CostUtil.replaceDecimalComma(s.toString()).equals("")?0:Double.parseDouble(CostUtil.replaceDecimalComma(s.toString()));
+                            String str = s.toString();
+                            Double value;
+                            if(str.equals(""))
+                                value = 0d;
+                            else{
+                                str = CostUtil.replaceDecimalComma(s.toString());
+                                if(str == null){
+                                    partition.setError(getString(R.string.err_msg_correct_amount));
+                                    requestFocus(partition);
+                                    value = 0d;
+                                }
+                                else
+                                    value = Double.parseDouble(str);
+                            }
                             mItem.setToPaid(value);
                             mItem.setModified(true);
                             mNumber.setText("-");
