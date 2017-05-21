@@ -95,8 +95,8 @@ public class ExpenseDetailFragment extends Fragment {
 
                     if(expense.getPaidByFirebaseId().equals(ma.getFirebaseId())) {
                         ImageButton imageButtonGo;
-                        (rootView.findViewById(R.id.head_title)).setVisibility(View.VISIBLE);
-                        (imageButtonGo = (ImageButton)rootView.findViewById(R.id.go_button)).setVisibility(View.VISIBLE);
+                        ((TextView)rootView.findViewById(R.id.head_title)).setText(getString(R.string.list_payment));
+                        (imageButtonGo = (ImageButton)rootView.findViewById(R.id.go_button)).setImageResource(R.drawable.payment3);
                         imageButtonGo.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -113,8 +113,22 @@ public class ExpenseDetailFragment extends Fragment {
 
 
                     }else {
-                        (rootView.findViewById(R.id.head_title)).setVisibility(View.GONE);
-                        (rootView.findViewById(R.id.go_button)).setVisibility(View.GONE);
+                        ImageButton imageButtonGo;
+                        ((TextView)rootView.findViewById(R.id.head_title)).setText(getString(R.string.list_payment));
+                        (imageButtonGo = (ImageButton)rootView.findViewById(R.id.go_button)).setImageResource(R.drawable.stop_or_prohibition_sign);
+                        imageButtonGo.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(getContext(), ContestExpenseActivity.class);
+                                intent.putExtra(PaymentDetailActivity.ARG_EXPENSE_ID, expense.getId());
+                                intent.putExtra(PaymentDetailActivity.ARG_GROUP_ID, expense.getGroupId());
+                                intent.putExtra(PaymentDetailActivity.ARG_EXPENSE_COST, expense.getCost().toString());
+                                intent.putExtra(PaymentDetailActivity.ARG_USER_NAME, expense.getPaidByName());
+                                intent.putExtra(PaymentDetailActivity.ARG_USER_SURNAME, expense.getPaidBySurname());
+                                intent.putExtra(PaymentDetailActivity.ARG_CURRENCY_ISO, expense.getCurrencyISO().name());
+                                startActivityForResult(intent, CONTACT_REQUEST);
+                            }
+                        });
                     }
 
                     if(expense.getDescription()!=null && !(expense.getDescription().isEmpty()))

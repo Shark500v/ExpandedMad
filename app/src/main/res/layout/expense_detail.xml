@@ -18,8 +18,6 @@
             android:layout_margin="16dp"
             android:text="@string/list_payment"
             android:textSize="20sp"
-            android:visibility="gone"
-            tools:visibility="visible"
             android:layout_weight="1"
             />
 
@@ -32,8 +30,7 @@
             android:gravity="end"
             android:layout_margin="16dp"
             android:contentDescription="@string/go_to_list_of_payments"
-            android:visibility="gone"
-            tools:visibility="visible"
+
             />
     </LinearLayout>
 
