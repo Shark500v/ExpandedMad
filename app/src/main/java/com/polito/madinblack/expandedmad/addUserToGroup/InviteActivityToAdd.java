@@ -83,7 +83,6 @@ public class InviteActivityToAdd extends AppCompatActivity {
                     intent1 = new Intent(InviteActivityToAdd.this, TabView.class);
                     intent1.putExtra("groupIndex", groupId);
                     intent1.putExtra("groupName", groupName);
-                    intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     sendEmail();
 
                     return true;
@@ -117,7 +116,6 @@ public class InviteActivityToAdd extends AppCompatActivity {
         intent = new Intent(InviteActivityToAdd.this, TabView.class);
         intent.putExtra("groupIndex", groupId);
         intent.putExtra("groupName", groupName);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         navigateUpTo(intent);
     }
 

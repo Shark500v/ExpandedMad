@@ -1,4 +1,4 @@
-package com.polito.madinblack.expandedmad;
+package com.polito.madinblack.expandedmad.groupManaging;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -13,13 +13,15 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.signature.StringSignature;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -27,25 +29,28 @@ import com.google.firebase.storage.OnPausedListener;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.polito.madinblack.expandedmad.model.MyApplication;
+import com.polito.madinblack.expandedmad.FirebaseImageLoader;
+import com.polito.madinblack.expandedmad.R;
+import com.polito.madinblack.expandedmad.UserPage;
+import com.polito.madinblack.expandedmad.addUserToGroup.SelectContactToAdd;
+import com.polito.madinblack.expandedmad.tabViewGroup.TabView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Calendar;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class UserPage extends AppCompatActivity{
-    private StorageReference mUserStorage;
-    private CircleImageView userImage;
-    private CircleImageView imageClick;
-    private MyApplication ma;
-    private TextView name;
-    private TextView surname;
-    private TextView phoneNumber;
+public class GroupSettings extends AppCompatActivity {
+    private CircleImageView groupImage;
+    private CircleImageView editGroupImage;
+    private StorageReference mStorageGroup;
+    private TextView editGroupName;
+    private String groupName;
+    private String groupId;
     private Uri uri;
     private Bitmap bitmap;
     private byte[] imageData;
+
 
     //a constant to track the file chooser intent
     private static int RESULT_LOAD_IMAGE = 1;
@@ -54,9 +59,10 @@ public class UserPage extends AppCompatActivity{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_info);
+        setContentView(R.layout.activity_group_settings);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(getString(R.string.group_info));
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();
@@ -64,26 +70,37 @@ public class UserPage extends AppCompatActivity{
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        ma = MyApplication.getInstance();
-        mUserStorage = FirebaseStorage.getInstance().getReference().child("users").child(ma.getFirebaseId()).child("userProfilePicture.jpg");
-        userImage = (CircleImageView)findViewById(R.id.user_picture);
-        imageClick = (CircleImageView)findViewById(R.id.set_user_image);
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            groupName = extras.getString("groupName");
+            groupId = extras.getString("groupIndex");
+        }
 
-        name = (TextView)findViewById(R.id.name);
-        surname = (TextView)findViewById(R.id.surname);
-        phoneNumber = (TextView)findViewById(R.id.phone_number);
-        name.setText(ma.getUserName());
-        surname.setText(ma.getUserSurname());
-        phoneNumber.setText(ma.getUserPhoneNumber());
+        mStorageGroup = FirebaseStorage.getInstance().getReference().child("groups").child(groupId).child("groupPicture").child("groupPicture.jpg");
 
-        mUserStorage.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+        groupImage = (CircleImageView) findViewById(R.id.group_picture);
+        editGroupImage = (CircleImageView) findViewById(R.id.set_group_image);
+        editGroupName = (TextView) findViewById(R.id.edit_group_name);
+        editGroupName.setText(groupName);
+
+        mStorageGroup.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                Glide.with(getApplicationContext()).load(uri).diskCacheStrategy(DiskCacheStrategy.SOURCE).error(R.drawable.businessman).into(userImage);
+                Glide.with(getApplicationContext()).load(uri).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(groupImage);
             }
         });
 
-        imageClick.setOnClickListener(new View.OnClickListener() {
+        editGroupName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(GroupSettings.this, EditGroupName.class);
+                intent.putExtra("groupName", groupName);
+                intent.putExtra("groupIndex", groupId);
+                startActivity(intent);
+            }
+        });
+
+        editGroupImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectImage();
@@ -91,8 +108,33 @@ public class UserPage extends AppCompatActivity{
         });
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_add_member, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            Intent intent = new Intent(this, TabView.class);
+            intent.putExtra("groupName", groupName);
+            intent.putExtra("groupIndex", groupId);
+            navigateUpTo(intent);
+            return true;
+        }else if(id == R.id.add_members){
+            Intent intent4 = new Intent(this, SelectContactToAdd.class);
+            intent4.putExtra("groupIndex", groupId);
+            intent4.putExtra("groupName", groupName);
+            startActivity(intent4);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void selectImage() {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(UserPage.this);
+        AlertDialog.Builder dialog = new AlertDialog.Builder(GroupSettings.this);
         dialog.setTitle(getString(R.string.add_photo));
 
         final CharSequence[] items = { getString(R.string.photo), getString(R.string.gallery), getString(R.string.cancel)};
@@ -129,8 +171,8 @@ public class UserPage extends AppCompatActivity{
                     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
                     imageData = bytes.toByteArray();
-                    userImage.setImageBitmap(bitmap);
-                    uploadProfilePicture(); //da decidere se caricare sullo storage qua o dando conferma
+                    groupImage.setImageBitmap(bitmap);
+                    uploadGroupPicture(); //da decidere se caricare sullo storage qua o dando conferma
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -140,22 +182,22 @@ public class UserPage extends AppCompatActivity{
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
                 imageData = bytes.toByteArray();
-                userImage.setImageBitmap(bitmap);
-                uploadProfilePicture();  //da decidere se caricare sullo storage qua o dando conferma
+                groupImage.setImageBitmap(bitmap);
+                uploadGroupPicture();  //da decidere se caricare sullo storage qua o dando conferma
             }
         }
     }
 
     @SuppressWarnings("VisibleForTests")
-    public void uploadProfilePicture() {
+    public void uploadGroupPicture() {
         if(imageData != null) {
             final ProgressDialog progressDialog = new ProgressDialog(this);
             progressDialog.setTitle(getString(R.string.uploading));
             progressDialog.show();
 
-            final StorageReference filePathUsers = FirebaseStorage.getInstance().getReference().child("users").child(ma.getFirebaseId()).child("userProfilePicture.jpg");
+            final StorageReference filePathGroups = FirebaseStorage.getInstance().getReference().child("groups").child(groupId).child("groupPicture").child("groupPicture.jpg");
 
-            filePathUsers.putBytes(imageData).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            filePathGroups.putBytes(imageData).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     //if the upload is successfull
@@ -166,6 +208,7 @@ public class UserPage extends AppCompatActivity{
                     //filePathGroups.updateMetadata(metadata);
                     //and displaying a success toast
                     Toast.makeText(getApplicationContext(), getString(R.string.file_uploaded), Toast.LENGTH_LONG).show();
+
                 }
             })
                     .addOnFailureListener(new OnFailureListener() {
@@ -194,5 +237,5 @@ public class UserPage extends AppCompatActivity{
                     });
         }
     }
-
 }
+

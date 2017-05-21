@@ -44,7 +44,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -65,6 +67,7 @@ public class NewGroup extends AppCompatActivity {
     private Uri uri;
     private byte[] imageData;
     private boolean visible = false; //boolean per visualizzazione a schermo intero
+    private String url = "";
 
     private RecyclerView recyclerView;
     private GroupMembersRecyclerViewAdapter adapter;
@@ -291,6 +294,8 @@ public class NewGroup extends AppCompatActivity {
             if(groupCode != null) {
                 uploadGroupPhoto();
             }
+
+
 
             //ho eliminato il check per testare se il gruppo fosse null, ho sistemato il codice a monte, quindi non dovrebbe dare più nessun problema,
             //se l'errore persiste avvisate Fra
