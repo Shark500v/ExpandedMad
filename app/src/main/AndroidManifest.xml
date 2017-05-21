@@ -19,6 +19,7 @@
         android:roundIcon="@mipmap/ic_wallet"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".groupManaging.GroupListActivity"
             android:label="@string/app_name"
@@ -38,6 +39,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.groupManaging.GroupListActivity" />
         </activity>
+
         <activity
             android:name=".groupManaging.GroupDetailActivity"
             android:label="Group Details"
@@ -47,6 +49,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.tabViewGroup.TabView" />
         </activity>
+
         <activity
             android:name=".expenseDetail.ExpenseDetailActivity"
             android:label="Expense Details"
@@ -56,6 +59,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.tabViewGroup.TabView" />
         </activity>
+
         <activity
             android:name=".groupMembers.GroupMemebersActivity"
             android:label="Group Details"
@@ -65,6 +69,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.tabViewGroup.TabView" />
         </activity>
+
         <activity
             android:name=".groupMembers.UserExpenses"
             android:label="Group User Details"
@@ -74,6 +79,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.groupMembers.GroupMemebersActivity" />
         </activity>
+
         <activity
             android:name=".groupMembers.UserDebts"
             android:label="User Details"
@@ -83,6 +89,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.groupMembers.UserExpenses" />
         </activity>
+
         <activity
             android:name=".newExpense.ExpenseFillData"
             android:label="Add New Expense"
@@ -92,9 +99,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.tabViewGroup.TabView" />
         </activity>
+
         <activity
             android:name=".login.GoogleSignInActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".login.CheckLogIn"
             android:theme="@style/AppTheme.NoActionBar">
@@ -104,6 +112,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".newGroup.NewGroup"
             android:label="New Group"
@@ -113,6 +122,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.newGroup.SelectContact" />
         </activity>
+
         <activity
             android:name=".newGroup.SelectContact"
             android:label="Select Contact"
@@ -131,6 +141,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.groupManaging.GroupListActivity" />
         </activity>
+
         <activity
             android:name=".StatisticsGraphs"
             android:label="Statistics"
@@ -141,9 +152,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.groupManaging.GroupListActivity" />
         </activity>
+
         <activity
             android:name=".login.CheckTelephone"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
+
         <activity
             android:name=".login.TelephoneInsertion"
             android:label="Insert account details"
@@ -153,6 +166,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.login.GoogleSignInActivity" />
         </activity>
+
         <activity
             android:name=".groupManaging.GroupHistory"
             android:label="@string/title_activity_group_history"
@@ -172,6 +186,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.expenseDetail.ExpenseDetailActivity" />
         </activity>
+
         <activity
             android:name=".UserPage"
             android:parentActivityName=".groupManaging.GroupListActivity"
@@ -217,6 +232,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.groupManaging.GroupSettings" />
         </activity>
+
+        <activity
+            android:name=".Settings.SettingsActivity"
+            android:parentActivityName=".groupManaging.GroupListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.polito.madinblack.expandedmad.groupManaging.GroupListActivity" />
+        </activity>
+
     </application>
 
 </manifest>

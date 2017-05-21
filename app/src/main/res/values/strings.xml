@@ -188,4 +188,5 @@
     <string name="operation_failed">Operation failed</string>
     <string name="group_info">Group info</string>
     <string name="modify_group_name">Modify group name</string>
+    <string name="settings_title">Settings and Preferences</string>
 </resources>

@@ -22,7 +22,7 @@ public class MyApplication {
     private static Boolean logged = false;
     private static Boolean isPhone = false;
     private static GroupForUser groupForUser;
-    private static Currency.CurrencyISO currencyISOFavorite = Currency.CurrencyISO.USD;
+    private static Currency.CurrencyISO currencyISOFavorite = Currency.CurrencyISO.EUR;
 
 
     /*groupId --> group*/
