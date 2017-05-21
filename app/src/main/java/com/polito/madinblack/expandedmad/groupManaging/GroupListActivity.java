@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -42,6 +43,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.polito.madinblack.expandedmad.FirebaseImageLoader;
+import com.polito.madinblack.expandedmad.Settings.SettingsActivity;
 import com.polito.madinblack.expandedmad.UserPage;
 import com.polito.madinblack.expandedmad.login.Logout;
 import com.google.firebase.storage.FileDownloadTask;
@@ -59,6 +61,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -190,8 +193,8 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             startActivity(intent);
 
         } else if (id == R.id.nav_settings){
-            //lanciare l'activity relativa
-
+            Intent intent = new Intent(GroupListActivity.this, SettingsActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_logout) {
             Logout fragment = new Logout();
             fragment.show(getSupportFragmentManager(), "LogoutFragment");
