@@ -108,7 +108,7 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
                             holder.mPaid.setText(holder.mToPaid.getText().toString());
                         }else{
                             PaymentInfo paymentInfo
-                                    = new PaymentInfo(paymentFirebase, Currency.convertCurrency(Double.valueOf(CostUtil.replaceDecimalComma(holder.mPaid.getText().toString())), expenseCurrencyISO, Currency.getISOCode(holder.mCurrency.getSelectedItem().toString())));
+                                    = new PaymentInfo(paymentFirebase, Currency.convertCurrency(Double.valueOf(CostUtil.replaceDecimalComma(holder.mPaid.getText().toString())), Currency.getISOCode(holder.mCurrency.getSelectedItem().toString()), expenseCurrencyISO));
                             changedPayment.put(paymentFirebase.getUserPhoneNumber(), paymentInfo);
                         }
 

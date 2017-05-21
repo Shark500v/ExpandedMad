@@ -297,7 +297,7 @@ public class Expense {
                             Balance balance = currentData.getValue(Balance.class);
                             for(MutableData currentDataChild : currentData.getChildren()){
                                 if(currentDataChild.getKey().equals("balance")) {
-                                    currentDataChild.setValue(balance.getBalance() - Currency.convertCurrency(toUpdate.get(balance.getParentUserPhoneNumber() + expenseKey), balance.getCurrencyISO(), currencyISO));
+                                    currentDataChild.setValue(balance.getBalance() - Currency.convertCurrency(toUpdate.get(balance.getParentUserPhoneNumber() + expenseKey), currencyISO, balance.getCurrencyISO()));
                                 }
                             }
 
@@ -326,7 +326,7 @@ public class Expense {
                                 Balance balance = currentData.getValue(Balance.class);
                                 for(MutableData currentDataChild : currentData.getChildren()){
                                     if(currentDataChild.getKey().equals("balance"))
-                                        currentDataChild.setValue(balance.getBalance() + Currency.convertCurrency(toUpdate.get(balance.getUserPhoneNumber() + expenseKey), balance.getCurrencyISO(), currencyISO));
+                                        currentDataChild.setValue(balance.getBalance() + Currency.convertCurrency(toUpdate.get(balance.getUserPhoneNumber() + expenseKey), currencyISO, balance.getCurrencyISO()));
                                 }
 
                             }

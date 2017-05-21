@@ -97,6 +97,19 @@ public class Currency {
         return Arrays.toString(CurrencyISO.values()).replaceAll("^.|.$", "").split(", ");
     }
 
+    public static String[] getCurrencyValues(CurrencyISO currencyISOPreferred) {
+        CurrencyISO [] currencyISOs = new CurrencyISO[currencySymbolInt.size()];
+        currencyISOs[0] = currencyISOPreferred;
+        int i = 1;
+        for(CurrencyISO currencyISO : CurrencyISO.values()){
+            if(currencyISO.equals(currencyISOPreferred))
+                continue;
+            currencyISOs[i] = currencyISO;
+            i++;
+        }
+        return Arrays.toString(currencyISOs).replaceAll("^.|.$", "").split(", ");
+    }
+
     public static String[] getCurrencySymbols() {
         String [] symbols = new String[currencyISOCodeSymbol.size()];
         int i = 0;
