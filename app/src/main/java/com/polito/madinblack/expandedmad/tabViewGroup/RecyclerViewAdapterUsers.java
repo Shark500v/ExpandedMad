@@ -116,9 +116,7 @@ public class RecyclerViewAdapterUsers extends RecyclerView.Adapter<RecyclerViewA
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String url = dataSnapshot.getValue(String.class);
-                if(url != null) {
-                    Glide.with(mContext).load(url).into(holder.mImage);
-                }
+                Glide.with(mContext).load(url).diskCacheStrategy(DiskCacheStrategy.SOURCE).error(R.drawable.icon_utente).into(holder.mImage);
             }
 
             @Override

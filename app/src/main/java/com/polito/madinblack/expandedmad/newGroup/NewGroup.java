@@ -28,6 +28,9 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
@@ -356,7 +359,9 @@ public class NewGroup extends AppCompatActivity {
                     url = taskSnapshot.getDownloadUrl().toString();
                     mDatabaseForUrl = FirebaseDatabase.getInstance().getReference().child("groups").child(groupCode).child("urlImage");
                     mDatabaseForUrl.setValue(url);
-                    ma.putImageurl(groupCode, url);
+
+                    Glide.with(getApplicationContext()).load(url).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(groupImage);
+                    //ma.putImageurl(groupCode, url);
 
                     //StorageMetadata metadata = new StorageMetadata.Builder().setCustomMetadata("Group", groupCode).build(); //da cambiare, solo per prova
                     //filePathGroups.updateMetadata(metadata);

@@ -98,11 +98,8 @@ public class GroupSettings extends AppCompatActivity {
         mDatabaseForUrl.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                url = dataSnapshot.getValue(String.class);
-                if(url != null) {
-                    Glide.with(getApplicationContext()).load(url).into(groupImage);
-                    ma.putImageurl(groupId, url);
-                }
+                String url = dataSnapshot.getValue(String.class);
+                Glide.with(getApplicationContext()).load(url).diskCacheStrategy(DiskCacheStrategy.SOURCE).error(R.drawable.teamwork).into(groupImage);
             }
 
             @Override
@@ -198,7 +195,6 @@ public class GroupSettings extends AppCompatActivity {
                     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
                     imageData = bytes.toByteArray();
-                    groupImage.setImageBitmap(bitmap);
                     uploadGroupPicture(); //da decidere se caricare sullo storage qua o dando conferma
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -209,7 +205,6 @@ public class GroupSettings extends AppCompatActivity {
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
                 imageData = bytes.toByteArray();
-                groupImage.setImageBitmap(bitmap);
                 uploadGroupPicture();  //da decidere se caricare sullo storage qua o dando conferma
             }
         }
@@ -235,6 +230,7 @@ public class GroupSettings extends AppCompatActivity {
                     mDatabaseForUrl = FirebaseDatabase.getInstance().getReference().child("groups").child(groupId).child("urlImage");
                     mDatabaseForUrl.setValue(url);
 
+                    Glide.with(getApplicationContext()).load(url).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(groupImage);
 
 
                     //StorageMetadata metadata = new StorageMetadata.Builder().setCustomMetadata("Group", groupCode).build(); //da cambiare, solo per prova

@@ -118,10 +118,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String url = dataSnapshot.getValue(String.class);
-                if(url != null) {
-                    Glide.with(getApplicationContext()).load(url).into(userImage);
-                    ma.putImageurl(ma.getFirebaseId(), url);
-                }
+                Glide.with(getApplicationContext()).load(url).diskCacheStrategy(DiskCacheStrategy.SOURCE).error(R.drawable.businessman).into(userImage);
             }
 
             @Override
@@ -330,10 +327,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     String url = dataSnapshot.getValue(String.class);
-                    ma.putImageurl(mValues.get(position).getId(), url);
-                    if(!ma.getImageUrl(mValues.get(position).getId()).isEmpty()) {
-                        Glide.with(getApplicationContext()).load(ma.getImageUrl(mValues.get(position).getId())).error(R.drawable.teamwork).into(holder.mImage);
-                    }
+                    Glide.with(getApplicationContext()).load(url).diskCacheStrategy(DiskCacheStrategy.SOURCE).error(R.drawable.teamwork).into(holder.mImage);
                 }
 
                 @Override

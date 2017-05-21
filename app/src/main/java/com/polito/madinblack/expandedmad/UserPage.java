@@ -89,11 +89,8 @@ public class UserPage extends AppCompatActivity{
         mDatabaseForUrl.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                url = dataSnapshot.getValue(String.class);
-                if(url != null) {
-                    Glide.with(getApplicationContext()).load(url).into(userImage);
-                    ma.putImageurl(ma.getFirebaseId(), url);
-                }
+                String url = dataSnapshot.getValue(String.class);
+                Glide.with(getApplicationContext()).load(url).diskCacheStrategy(DiskCacheStrategy.SOURCE).error(R.drawable.businessman).into(userImage);
             }
 
             @Override
@@ -154,7 +151,6 @@ public class UserPage extends AppCompatActivity{
                     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
                     imageData = bytes.toByteArray();
-                    userImage.setImageBitmap(bitmap);
                     uploadProfilePicture(); //da decidere se caricare sullo storage qua o dando conferma
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -165,7 +161,6 @@ public class UserPage extends AppCompatActivity{
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
                 imageData = bytes.toByteArray();
-                userImage.setImageBitmap(bitmap);
                 uploadProfilePicture();  //da decidere se caricare sullo storage qua o dando conferma
             }
         }
@@ -189,7 +184,9 @@ public class UserPage extends AppCompatActivity{
 
                     String url = taskSnapshot.getDownloadUrl().toString();
                     mDatabaseForUrl.setValue(url);
-                    ma.putImageurl(ma.getFirebaseId(), url);
+
+                    Glide.with(getApplicationContext()).load(url).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(userImage);
+                    //ma.putImageurl(ma.getFirebaseId(), url);
 
                     //StorageMetadata metadata = new StorageMetadata.Builder().setCustomMetadata("Group", groupCode).build(); //da cambiare, solo per prova
                     //filePathGroups.updateMetadata(metadata);
