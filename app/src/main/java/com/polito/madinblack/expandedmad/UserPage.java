@@ -73,11 +73,6 @@ public class UserPage extends AppCompatActivity{
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            url = extras.getString("userImage");
-        }
-
         ma = MyApplication.getInstance();
         mUserStorage = FirebaseStorage.getInstance().getReference().child("users").child(ma.getFirebaseId()).child("userProfilePicture.jpg");
         mDatabaseForUrl = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber()).child(ma.getFirebaseId()).child("urlImage");
@@ -97,12 +92,12 @@ public class UserPage extends AppCompatActivity{
                 url = dataSnapshot.getValue(String.class);
                 if(url != null) {
                     Glide.with(getApplicationContext()).load(url).into(userImage);
+                    ma.putImageurl(ma.getFirebaseId(), url);
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Glide.with(getApplicationContext()).load(url).into(userImage);
             }
         });
 
@@ -192,7 +187,9 @@ public class UserPage extends AppCompatActivity{
                     //hiding the progress dialog
                     progressDialog.dismiss();
 
-                    mDatabaseForUrl.setValue(taskSnapshot.getDownloadUrl().toString());
+                    String url = taskSnapshot.getDownloadUrl().toString();
+                    mDatabaseForUrl.setValue(url);
+                    ma.putImageurl(ma.getFirebaseId(), url);
 
                     //StorageMetadata metadata = new StorageMetadata.Builder().setCustomMetadata("Group", groupCode).build(); //da cambiare, solo per prova
                     //filePathGroups.updateMetadata(metadata);

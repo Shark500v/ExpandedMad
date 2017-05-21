@@ -40,6 +40,7 @@ public class RecyclerViewAdapterUsers extends RecyclerView.Adapter<RecyclerViewA
 
     private List<Balance> mValues = new ArrayList<>();
     private List<String> mValuesIds = new ArrayList<>();
+    private List<String> mUsersIds = new ArrayList<>();
     private Query dataref;
     private StorageReference mStorageReference;
     private DatabaseReference mDatabaseForUserUrl;
@@ -64,6 +65,7 @@ public class RecyclerViewAdapterUsers extends RecyclerView.Adapter<RecyclerViewA
 
                     mValues.add(postSnapshot.getValue(Balance.class));
                     mValuesIds.add(dataSnapshot.getKey());
+                    mUsersIds.add(postSnapshot.getKey());
                 }
                 notifyDataSetChanged();
 
@@ -109,7 +111,7 @@ public class RecyclerViewAdapterUsers extends RecyclerView.Adapter<RecyclerViewA
             holder.mContentView.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(mValues.get(position).getBalance(), mValues.get(position).getCurrencyISO(), MyApplication.getCurrencyISOFavorite())) + " " + Currency.getSymbol(MyApplication.getCurrencyISOFavorite()));
         }
 
-        mDatabaseForUserUrl = FirebaseDatabase.getInstance().getReference().child("users").child(holder.mItem.getUserPhoneNumber()).child(mValuesIds.get(position)).child("urlImage");
+        mDatabaseForUserUrl = FirebaseDatabase.getInstance().getReference().child("users").child(holder.mItem.getUserPhoneNumber()).child(mUsersIds.get(position)).child("urlImage");
         mDatabaseForUserUrl.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -125,11 +127,11 @@ public class RecyclerViewAdapterUsers extends RecyclerView.Adapter<RecyclerViewA
             }
         });
 
-        /*mStorageReference = FirebaseStorage.getInstance().getReference().child("users").child(mValuesIds.get(position)).child("userProfilePicture.jpg");
+        /*mStorageReference = FirebaseStorage.getInstance().getReference().child("users").child(mUsersIds.get(position)).child("userProfilePicture.jpg");
         mStorageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                Glide.with(mContext).load(uri).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(holder.mImage);
+                Glide.with(mContext).load(uri).into(holder.mImage);
             }
         });*/
 

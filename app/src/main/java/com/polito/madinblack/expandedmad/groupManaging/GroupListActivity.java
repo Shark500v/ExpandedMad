@@ -76,16 +76,10 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
     private DatabaseReference mUserGroupsReference;
     private Query mQueryUserGroupsReference;
     private DatabaseReference mDatabaseRootReference;
-    private StorageReference mStorage;
-    private StorageReference mUserStorage;
     private DatabaseReference mDatabaseForGroupUrl;
     private DatabaseReference mDatabaseForUserUrl;
     private SimpleItemRecyclerViewAdapter mAdapter;
     private NavigationView navigationView;
-    private static Map<String,String> images = new HashMap<String,String>();
-    private File userPicture;
-    private String url;
-    Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,9 +93,6 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
 
         mUserGroupsReference   = mDatabaseRootReference.child("users/"+ma.getUserPhoneNumber()+"/"+ma.getFirebaseId()+"/groups");
         mQueryUserGroupsReference = mUserGroupsReference.orderByChild("timestamp");
-
-        mStorage = FirebaseStorage.getInstance().getReference();
-        mUserStorage = FirebaseStorage.getInstance().getReference().child("users").child(ma.getFirebaseId()).child("userProfilePicture.jpg");
 
         //toolbar settings
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -129,13 +120,13 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                 String url = dataSnapshot.getValue(String.class);
                 if(url != null) {
                     Glide.with(getApplicationContext()).load(url).into(userImage);
-                    images.put(ma.getFirebaseId(), url);
+                    ma.putImageurl(ma.getFirebaseId(), url);
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Glide.with(getApplicationContext()).load(images.get(images.get(ma.getFirebaseId()))).into(userImage);
+
             }
         });
 
@@ -223,7 +214,6 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
 
     public void userInfo(View view){
         Intent intent = new Intent(GroupListActivity.this, UserPage.class);
-        intent.putExtra("userImage", images.get(ma.getFirebaseId()));
         startActivity(intent);
     }
 
@@ -324,7 +314,6 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                             Intent intent = new Intent(context, TabView.class); //qui setto la nuova attività da mostrare a schermo dopo che clicco
                             intent.putExtra("groupIndex", holder.mItem.getId());    //passo alla nuova activity l'ide del gruppo chè l'utente ha selezionto
                             intent.putExtra("groupName", holder.mItem.getName());
-                            intent.putExtra("groupImage", images.get(mValues.get(position).getId()));
                             context.startActivity(intent);
                         }
 
@@ -341,15 +330,14 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     String url = dataSnapshot.getValue(String.class);
-                    if(url != null) {
-                        Glide.with(getApplicationContext()).load(url).into(holder.mImage);
-                        images.put(mValues.get(position).getId(), url);
+                    ma.putImageurl(mValues.get(position).getId(), url);
+                    if(!ma.getImageUrl(mValues.get(position).getId()).isEmpty()) {
+                        Glide.with(getApplicationContext()).load(ma.getImageUrl(mValues.get(position).getId())).error(R.drawable.teamwork).into(holder.mImage);
                     }
                 }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    Glide.with(getApplicationContext()).load(images.get(mValues.get(position).getId())).into(holder.mImage);
                 }
             });
 

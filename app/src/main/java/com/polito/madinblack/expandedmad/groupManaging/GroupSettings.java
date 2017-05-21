@@ -38,6 +38,7 @@ import com.polito.madinblack.expandedmad.FirebaseImageLoader;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.UserPage;
 import com.polito.madinblack.expandedmad.addUserToGroup.SelectContactToAdd;
+import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.tabViewGroup.TabView;
 
 import java.io.ByteArrayOutputStream;
@@ -57,6 +58,7 @@ public class GroupSettings extends AppCompatActivity {
     private Uri uri;
     private Bitmap bitmap;
     private byte[] imageData;
+    private MyApplication ma;
 
 
     //a constant to track the file chooser intent
@@ -81,8 +83,9 @@ public class GroupSettings extends AppCompatActivity {
         if (extras != null) {
             groupName = extras.getString("groupName");
             groupId = extras.getString("groupIndex");
-            url = extras.getString("groupImage");
         }
+
+        ma = MyApplication.getInstance();
 
         mDatabaseForUrl = FirebaseDatabase.getInstance().getReference().child("groups").child(groupId).child("urlImage");
         mStorageGroup = FirebaseStorage.getInstance().getReference().child("groups").child(groupId).child("groupPicture").child("groupPicture.jpg");
@@ -98,12 +101,12 @@ public class GroupSettings extends AppCompatActivity {
                 url = dataSnapshot.getValue(String.class);
                 if(url != null) {
                     Glide.with(getApplicationContext()).load(url).into(groupImage);
+                    ma.putImageurl(groupId, url);
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Glide.with(getApplicationContext()).load(url).into(groupImage);
             }
         });
 
@@ -228,8 +231,11 @@ public class GroupSettings extends AppCompatActivity {
                     //hiding the progress dialog
                     progressDialog.dismiss();
 
+                    String url = taskSnapshot.getDownloadUrl().toString();
                     mDatabaseForUrl = FirebaseDatabase.getInstance().getReference().child("groups").child(groupId).child("urlImage");
-                    mDatabaseForUrl.setValue(taskSnapshot.getDownloadUrl().toString());
+                    mDatabaseForUrl.setValue(url);
+
+
 
                     //StorageMetadata metadata = new StorageMetadata.Builder().setCustomMetadata("Group", groupCode).build(); //da cambiare, solo per prova
                     //filePathGroups.updateMetadata(metadata);

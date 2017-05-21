@@ -83,7 +83,6 @@ public class TabView extends AppCompatActivity {
         ma = MyApplication.getInstance();   //retrive del DB
         groupIndex = getIntent().getExtras().getString("groupIndex");
         groupName  = getIntent().getExtras().getString("groupName");
-        groupImage = getIntent().getExtras().getString("groupImage");
 
         mDatabaseBalancesReference = FirebaseDatabase.getInstance().getReference().child("groups/"+groupIndex+"/users/"+ma.getFirebaseId()+"/balances");
         mDatabaseBalancesQuery = mDatabaseBalancesReference.orderByChild("fullName");
@@ -180,7 +179,6 @@ public class TabView extends AppCompatActivity {
                 Intent intent = new Intent(this, GroupSettings.class);   //qui setto la nuova attività da mostrare a schermo dopo che clicco
                 intent.putExtra("groupName", groupName);
                 intent.putExtra("groupIndex", groupIndex);
-                intent.putExtra("groupImage", groupImage);
                 startActivity(intent);
                 return true;
 

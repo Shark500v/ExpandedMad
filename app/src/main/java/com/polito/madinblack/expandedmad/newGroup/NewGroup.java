@@ -353,8 +353,10 @@ public class NewGroup extends AppCompatActivity {
                     //hiding the progress dialog
                     progressDialog.dismiss();
 
+                    url = taskSnapshot.getDownloadUrl().toString();
                     mDatabaseForUrl = FirebaseDatabase.getInstance().getReference().child("groups").child(groupCode).child("urlImage");
-                    mDatabaseForUrl.setValue(taskSnapshot.getDownloadUrl().toString());
+                    mDatabaseForUrl.setValue(url);
+                    ma.putImageurl(groupCode, url);
 
                     //StorageMetadata metadata = new StorageMetadata.Builder().setCustomMetadata("Group", groupCode).build(); //da cambiare, solo per prova
                     //filePathGroups.updateMetadata(metadata);
