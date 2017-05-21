@@ -71,7 +71,7 @@ public class CostUtil {
         try {
             Double.valueOf(s);
             return true;
-        } catch (NumberFormatException numberFormatException) {
+        } catch (Exception exception) {
             return false;
         }
     }
