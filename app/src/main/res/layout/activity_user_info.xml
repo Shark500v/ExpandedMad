@@ -21,6 +21,7 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -31,9 +32,8 @@
             android:layout_height="100dp"
             android:layout_gravity="start"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:src="@drawable/businessman"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin" />
+            android:layout_centerHorizontal="true"/>
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/set_user_image"
@@ -47,34 +47,38 @@
 
         <TextView
             android:id="@+id/name"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="@string/name"
-            android:textSize="20dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_toEndOf="@+id/user_picture"/>
+            android:textSize="22dp"
+            android:textStyle="bold"
+            android:layout_marginTop="32dp"
+            android:layout_marginLeft="16dp"
+            android:layout_below="@id/user_picture" />
 
         <TextView
             android:id="@+id/surname"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="@string/surname"
-            android:textSize="20dp"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="8dp"
-            android:layout_toEndOf="@+id/user_picture"
-            android:layout_below="@+id/name"/>
+            android:textSize="22dp"
+            android:textStyle="bold"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="16dp"
+            android:layout_alignBaseline="@id/name"
+            android:layout_toRightOf="@id/name"/>
 
         <TextView
             android:id="@+id/phone_number"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="Phone number"
             android:textSize="16dp"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="16dp"
             android:layout_marginTop="8dp"
-            android:layout_toEndOf="@+id/user_picture"
-            android:layout_below="@+id/surname"/>
+            android:layout_below="@id/name"/>
+
     </RelativeLayout>
+
 </LinearLayout>

@@ -184,9 +184,10 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             Intent intent = new Intent(GroupListActivity.this, StatisticsGraphs.class);
             startActivity(intent);
 
-        } /*else if (id == R.id.nav_settings){
+        } else if (id == R.id.nav_settings){
+            //lanciare l'activity relativa
 
-        }*/ else if (id == R.id.nav_logout) {
+        } else if (id == R.id.nav_logout) {
             Logout fragment = new Logout();
             fragment.show(getSupportFragmentManager(), "LogoutFragment");
         }

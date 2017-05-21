@@ -94,7 +94,7 @@
         </activity>
         <activity
             android:name=".login.GoogleSignInActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".login.CheckLogIn"
             android:theme="@style/AppTheme.NoActionBar">

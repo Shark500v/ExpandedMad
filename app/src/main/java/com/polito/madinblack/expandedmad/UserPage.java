@@ -14,7 +14,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,7 +28,6 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.polito.madinblack.expandedmad.model.MyApplication;
-import com.polito.madinblack.expandedmad.newGroup.NewGroup;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
