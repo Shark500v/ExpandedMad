@@ -255,8 +255,11 @@ public class ExpenseFillData extends AppCompatActivity {
             TextView description = (TextView) findViewById(R.id.input_description);
             String descriptionS = description.getText().toString();
 
-            for(Payment payment : mValues){
-                roundedAmount += payment.getToPaid();
+            if(roundedAmount == 0){
+                roundedAmount = amount;
+                /*for(Payment payment : mValues){
+                    roundedAmount += payment.getToPaid();
+                }*/
             }
 
             /*added to set Paid value*/
@@ -314,8 +317,7 @@ public class ExpenseFillData extends AppCompatActivity {
             //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             //startActivity(intent);
             setResult(RESULT_OK, intent);
-            startActivity(intent);
-            //finish();
+            finish();
             return true;
         }else if(id == 16908332){
             Intent intent3 = new Intent(this, TabView.class);
@@ -608,6 +610,7 @@ public class ExpenseFillData extends AppCompatActivity {
             }else{*/
                 int difference = intAmount % totalWeight;
                 if(difference != 0){
+                    difference = totalWeight - difference;
                     roundedAmount = (amount * 100 + difference)/100;
                     showReoundedCost();
                     return (netAmount * 100 + difference)/100;
