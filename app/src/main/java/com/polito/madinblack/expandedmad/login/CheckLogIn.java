@@ -9,6 +9,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.polito.madinblack.expandedmad.R;
+import com.polito.madinblack.expandedmad.model.Currency;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 
 /**
@@ -58,6 +59,7 @@ public class CheckLogIn extends BaseActivity {
         * currency, ho assegnato gli stessi numeri alle valute, quindi basta che trasformi la stringa in numero e recupero il valore di currency che ti interessa*/
         if (curValue.compareTo("error")!=0){
             //inserisci quì il codice
+            MyApplication.setCurrencyISOFavorite(Currency.getCurrencyISO(Integer.valueOf(curValue)));
         }
     }
 
