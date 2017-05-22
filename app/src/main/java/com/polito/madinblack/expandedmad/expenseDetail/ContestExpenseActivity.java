@@ -30,14 +30,14 @@ import com.polito.madinblack.expandedmad.tabViewGroup.TabView;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PaymentDetailActivity extends BaseActivity {
+public class ContestExpenseActivity extends BaseActivity {
 
     public static final String ARG_EXPENSE_ID = "expenseId";
     public static final String ARG_GROUP_ID ="expenseName";
     public static final String ARG_EXPENSE_COST ="expenseCost";
     public static final String ARG_CURRENCY_ISO ="currencyISO";
     public static final String ARG_USER_NAME ="userName" ;
-    public static final String ARG_USER_SURNAME = "userSurname";
+    public static final String ARG_USER_SURNAME = "userName";
 
     private DatabaseReference mDatabaseRootReference;
     private DatabaseReference mDatabasePaymentsReference;
@@ -164,7 +164,7 @@ public class PaymentDetailActivity extends BaseActivity {
                                 //This method will be called once with the results of the transaction.
                                 //Update remove the user from the group
 
-                            
+
                             }
                         });
 
@@ -211,8 +211,7 @@ public class PaymentDetailActivity extends BaseActivity {
 
 
                 /*update the history*/
-                HistoryInfo historyInfo = new HistoryInfo(paymentInfo.getUserNameDisplayed(), 1L, paymentInfo.getPaidNow(),
-                                currencyISO, expenseUserName + " " + expenseUserSurname);
+                HistoryInfo historyInfo = new HistoryInfo(paymentInfo.getUserNameDisplayed(), 1L, expenseCost, currencyISO, expenseUserName);
                 mDatabaseRootReference.child("history/"+groupId).push().setValue(historyInfo);
 
 

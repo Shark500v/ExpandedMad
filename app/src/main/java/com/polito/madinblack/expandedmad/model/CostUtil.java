@@ -71,13 +71,34 @@ public class CostUtil {
         try {
             Double.valueOf(s);
             return true;
-        } catch (NumberFormatException numberFormatException) {
+        } catch (Exception exception) {
             return false;
         }
     }
 
     public static String replaceDecimalComma(String string){
-        return string.replace(',', '.');
+        int counter = 0;
+        int i;
+        for( i=0; i<string.length(); i++ ) {
+            if( string.charAt(i) == '.' || string.charAt(i) == ',') {
+                if(counter < 1)
+                    counter++;
+                else{
+                    counter++;
+                    break;
+                }
+            }
+        }
+        string = string.substring(0, i);
+        string = string.replace(',', '.');
+        if(string.indexOf('.') !=-1) {
+            int diff = string.length() - string.indexOf('.');
+            if (diff > 3) {
+                string = string.substring(0, string.length() - 1);
+                counter++; //so it return false
+            }
+        }
+        return counter < 2 ? string : null;
     }
 
 

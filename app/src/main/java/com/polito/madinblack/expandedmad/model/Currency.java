@@ -49,6 +49,14 @@ public class Currency {
 
     }};
 
+    private static final Map<Integer, CurrencyISO> currencyIntCurrencyISO = new HashMap<Integer, CurrencyISO>() {{
+        put(0, CurrencyISO.USD);
+        put(1, CurrencyISO.EUR);
+        put(2, CurrencyISO.GBP);
+        put(3, CurrencyISO.JPY);
+
+    }};
+
     private static final Map<CurrencyISO, String> currencyISOCodeSymbol = new HashMap<CurrencyISO, String>() {{
         put(CurrencyISO.USD, "$");
         put(CurrencyISO.EUR, "€");
@@ -85,6 +93,10 @@ public class Currency {
 
     }
 
+    public static CurrencyISO getCurrencyISO(Integer currencyISOInt){
+        return currencyIntCurrencyISO.get(currencyISOInt);
+
+    }
 
 
     public static String toString(CurrencyISO currencyISO){

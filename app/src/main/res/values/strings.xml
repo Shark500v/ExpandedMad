@@ -55,6 +55,7 @@
     <string name="hint_description">Description</string>
     <string name="err_msg_title">Enter the expense name</string>
     <string name="err_msg_amount">Enter the amount</string>
+    <string name="err_msg_correct_amount">Enter a correct amount</string>
     <string name="hint_phonenumber">Enter your phone number</string>
     <string name="hint_password">Enter your password</string>
     <string name="hint_password_confirm">Confirm your password</string>
@@ -132,6 +133,7 @@
     <string name="paid_topay">Paid/toPay</string>
     <string name="type">Type</string>
     <string name="currency">Currency</string>
+    <string name="currencyISO">CurrencyISO</string>
     <string name="date_format">dd/mm/yyyy</string>
     <string name="date">Date</string>
     <string name="paid_by">Paid by</string>
@@ -188,4 +190,11 @@
     <string name="group_info">Group info</string>
     <string name="modify_group_name">Modify group name</string>
     <string name="settings_title">Settings and Preferences</string>
+    <string name="to_pay">To Pay</string>
+    <string name="paid">Paid</string>
+    <string name="new_to_pay">New cost to Pay</string>
+    <string name="new_paid">New cost Paid</string>
+    <string name="expense_cost">Expense Cost</string>
+    <string name="old_paid_topay">To Pay assign</string>
+    <string name="motivation">Motivation</string>
 </resources>
