@@ -242,8 +242,9 @@
         </activity>
 
         <activity
-            android:name=".settings.SettingsActivity"
+            android:name=".Settings.SettingsActivity"
             android:parentActivityName=".groupManaging.GroupListActivity"
+            android:configChanges="locale|orientation"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

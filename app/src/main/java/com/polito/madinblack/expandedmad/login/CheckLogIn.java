@@ -2,8 +2,11 @@ package com.polito.madinblack.expandedmad.login;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -54,8 +57,7 @@ public class CheckLogIn extends BaseActivity {
         //recupero le impostazioni dell'utente
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String curValue = preferences.getString("pref_key_currency", "error");
-        /*Dentro curValue ci sarà il valore da assegnare alla variabile in MyApplication, il valore è un numero che vè da 0 a 3, come hai fatto tu nella classe
-        * currency, ho assegnato gli stessi numeri alle valute, quindi basta che trasformi la stringa in numero e recupero il valore di currency che ti interessa*/
+
         if (curValue.compareTo("error")!=0){
             //inserisci quì il codice
             MyApplication.setCurrencyISOFavorite(Currency.getCurrencyISO(Integer.valueOf(curValue)));
@@ -79,7 +81,23 @@ public class CheckLogIn extends BaseActivity {
             }else {
                 pref.edit().putString("pref_key_language", "2").apply();
             }
+        } else {
+            //in questo caso avrà sicuramente il valore 1 o 2, quindi devo settare la lingua corretta
+            if (LangValue.compareTo("1") == 0){
+                setLocale("it");
+            }else {
+                setLocale("en");
+            }
         }
+    }
+
+    public void setLocale(String lang) {
+        Locale myLocale = new Locale(lang);
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.locale = myLocale;
+        res.updateConfiguration(conf, dm);
     }
 
     @Override

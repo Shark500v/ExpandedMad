@@ -1,4 +1,4 @@
-package com.polito.madinblack.expandedmad.settings;
+package com.polito.madinblack.expandedmad.Settings;
 
 import android.content.Intent;
 import android.os.Bundle;
