@@ -91,6 +91,7 @@
     <string name="err_msg_title">Inserisci il nome della spesa</string>
     <string name="err_msg_telephone">Numero di telefono non valido</string>
     <string name="err_msg_invitation">Codice di invito non valido</string>
+    <string name="err_msg_correct_amount">Inserisci un prezzo corretto</string>
     <string name="err_msg_amount">Inserisci il prezzo</string>
     <string name="disconnect">Disconnetti</string>
     <string name="confirm">Conferma</string>

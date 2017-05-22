@@ -1,11 +1,14 @@
 package com.polito.madinblack.expandedmad.login;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
+import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 
 /**
@@ -33,13 +36,30 @@ public class CheckLogIn extends BaseActivity {
 
         //Local variable of logged user
         ma = MyApplication.getInstance();
+
+        //for the preferences
+        setPreferences();
+
         //Set persistence true to database
         mAuth = FirebaseAuth.getInstance();
-
-
-
     }
 
+    private void setPreferences(){
+        /*
+        String lan;
+        lan = Locale.getDefault().getDisplayLanguage();
+        */
+        PreferenceManager.setDefaultValues(this, R.xml.pref_fragmentsettings, false);
+
+        //recupero le impostazioni dell'utente
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String curValue = preferences.getString("pref_key_currency", "error");
+        /*Dentro curValue ci sarà il valore da assegnare alla variabile in MyApplication, il valore è un numero che vè da 0 a 3, come hai fatto tu nella classe
+        * currency, ho assegnato gli stessi numeri alle valute, quindi basta che trasformi la stringa in numero e recupero il valore di currency che ti interessa*/
+        if (curValue.compareTo("error")!=0){
+            //inserisci quì il codice
+        }
+    }
 
     @Override
     public void onStart() {

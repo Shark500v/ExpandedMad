@@ -21,7 +21,6 @@
     <include
         layout="@layout/type_message_area"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="bottom"/>
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

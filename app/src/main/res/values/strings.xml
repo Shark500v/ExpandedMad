@@ -55,6 +55,7 @@
     <string name="hint_description">Description</string>
     <string name="err_msg_title">Enter the expense name</string>
     <string name="err_msg_amount">Enter the amount</string>
+    <string name="err_msg_correct_amount">Enter a correct amount</string>
     <string name="hint_phonenumber">Enter your phone number</string>
     <string name="hint_password">Enter your password</string>
     <string name="hint_password_confirm">Confirm your password</string>
@@ -187,6 +188,7 @@
     <string name="operation_failed">Operation failed</string>
     <string name="group_info">Group info</string>
     <string name="modify_group_name">Modify group name</string>
+    <string name="settings_title">Settings and Preferences</string>
     <string name="to_pay">To Pay</string>
     <string name="Paid">Paid</string>
     <string name="new_to_pay">How much you should pay?</string>

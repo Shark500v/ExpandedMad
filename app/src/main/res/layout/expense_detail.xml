@@ -21,7 +21,19 @@
             android:textSize="20sp"
             android:layout_weight="1"
             />
-
+        <!--<de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/go_button"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/payment3"
+            android:layout_gravity="center"
+            android:contentDescription="@string/go_to_list_of_payments"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:padding="8dp"
+            android:scaleType="centerCrop"
+            android:background="@drawable/circle"/>-->
         <ImageButton
             android:id="@+id/go_button"
             android:layout_width="wrap_content"

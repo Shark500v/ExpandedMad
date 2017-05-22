@@ -37,7 +37,7 @@ public class PaymentDetailActivity extends BaseActivity {
     public static final String ARG_EXPENSE_COST ="expenseCost";
     public static final String ARG_CURRENCY_ISO ="currencyISO";
     public static final String ARG_USER_NAME ="userName" ;
-    public static final String ARG_USER_SURNAME = "userName";
+    public static final String ARG_USER_SURNAME = "userSurname";
 
     private DatabaseReference mDatabaseRootReference;
     private DatabaseReference mDatabasePaymentsReference;
@@ -211,7 +211,8 @@ public class PaymentDetailActivity extends BaseActivity {
 
 
                 /*update the history*/
-                HistoryInfo historyInfo = new HistoryInfo(paymentInfo.getUserNameDisplayed(), 1L, expenseCost, currencyISO, expenseUserName);
+                HistoryInfo historyInfo = new HistoryInfo(paymentInfo.getUserNameDisplayed(), 1L, paymentInfo.getPaidNow(),
+                                currencyISO, expenseUserName + " " + expenseUserSurname);
                 mDatabaseRootReference.child("history/"+groupId).push().setValue(historyInfo);
 
 
