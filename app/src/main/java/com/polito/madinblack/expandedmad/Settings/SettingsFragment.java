@@ -12,8 +12,11 @@ import android.preference.RingtonePreference;
 import android.text.TextUtils;
 
 import com.polito.madinblack.expandedmad.R;
+import com.polito.madinblack.expandedmad.model.MyApplication;
 
 public class SettingsFragment extends PreferenceFragment {
+
+    private MyApplication ma;
 
     private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
         @Override
@@ -28,6 +31,11 @@ public class SettingsFragment extends PreferenceFragment {
 
                 // Set the summary to reflect the new value.
                 preference.setSummary(index >= 0 ? listPreference.getEntries()[index] : null);
+
+                if(preference.getKey().compareTo("pref_key_currency")==0){
+                    //devo settare la nuova currency come richiesto
+                    //ma.
+                }
 
             } else if (preference instanceof RingtonePreference) {
                 // For ringtone preferences, look up the correct display value
@@ -66,6 +74,8 @@ public class SettingsFragment extends PreferenceFragment {
 
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.pref_fragmentsettings);
+
+        ma = MyApplication.getInstance();
     }
 
     @Override

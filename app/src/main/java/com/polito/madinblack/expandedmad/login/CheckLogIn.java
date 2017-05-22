@@ -11,6 +11,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 
+import java.util.Locale;
+
 /**
  * Created by Ale on 26/04/2017.
  */
@@ -45,10 +47,7 @@ public class CheckLogIn extends BaseActivity {
     }
 
     private void setPreferences(){
-        /*
-        String lan;
-        lan = Locale.getDefault().getDisplayLanguage();
-        */
+
         PreferenceManager.setDefaultValues(this, R.xml.pref_fragmentsettings, false);
 
         //recupero le impostazioni dell'utente
@@ -58,6 +57,26 @@ public class CheckLogIn extends BaseActivity {
         * currency, ho assegnato gli stessi numeri alle valute, quindi basta che trasformi la stringa in numero e recupero il valore di currency che ti interessa*/
         if (curValue.compareTo("error")!=0){
             //inserisci quì il codice
+        }
+
+        languageSettings(preferences);
+    }
+
+    private void languageSettings (SharedPreferences pref){
+
+        String LangValue = pref.getString("pref_key_language", "error");
+
+        if(LangValue.compareTo("0") == 0){
+            //codice eseguito solo al primo avvio
+            String lan;
+            lan = Locale.getDefault().getDisplayLanguage();
+
+            if(lan.compareTo("italiano") == 0){
+                //trattando solo due lingue analizzo il caso italiano, tutti gli altri casi saranno in inglese
+                pref.edit().putString("pref_key_language", "1").apply();    //setto la lingua di default del device come default
+            }else {
+                pref.edit().putString("pref_key_language", "2").apply();
+            }
         }
     }
 
