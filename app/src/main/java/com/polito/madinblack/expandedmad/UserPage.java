@@ -14,6 +14,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +23,11 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.signature.StringSignature;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnPausedListener;
 import com.google.firebase.storage.OnProgressListener;
@@ -37,15 +43,19 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserPage extends AppCompatActivity{
     private StorageReference mUserStorage;
+    private DatabaseReference mDatabaseForUrl;
     private CircleImageView userImage;
     private CircleImageView imageClick;
+    private ImageView fullscreen;
     private MyApplication ma;
     private TextView name;
     private TextView surname;
     private TextView phoneNumber;
+    private String url;
     private Uri uri;
     private Bitmap bitmap;
     private byte[] imageData;
+    private boolean visible = false;
 
     //a constant to track the file chooser intent
     private static int RESULT_LOAD_IMAGE = 1;
@@ -66,8 +76,10 @@ public class UserPage extends AppCompatActivity{
 
         ma = MyApplication.getInstance();
         mUserStorage = FirebaseStorage.getInstance().getReference().child("users").child(ma.getFirebaseId()).child("userProfilePicture.jpg");
+        mDatabaseForUrl = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber()).child(ma.getFirebaseId()).child("urlImage");
         userImage = (CircleImageView)findViewById(R.id.user_picture);
         imageClick = (CircleImageView)findViewById(R.id.set_user_image);
+        fullscreen = (ImageView)findViewById(R.id.user_image_fullscreen);
 
         name = (TextView)findViewById(R.id.name);
         surname = (TextView)findViewById(R.id.surname);
@@ -76,10 +88,43 @@ public class UserPage extends AppCompatActivity{
         surname.setText(ma.getUserSurname());
         phoneNumber.setText(ma.getUserPhoneNumber());
 
-        mUserStorage.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+        mDatabaseForUrl.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                url = dataSnapshot.getValue(String.class);
+                Glide.with(getApplicationContext()).load(url).diskCacheStrategy(DiskCacheStrategy.SOURCE).error(R.drawable.businessman).into(userImage);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
+        /*mUserStorage.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
                 Glide.with(getApplicationContext()).load(uri).diskCacheStrategy(DiskCacheStrategy.SOURCE).error(R.drawable.businessman).into(userImage);
+            }
+        });*/
+
+        userImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!visible) {
+                    Glide.with(getApplicationContext()).load(url).into(fullscreen);
+                    fullscreen.setVisibility(View.VISIBLE);
+                    visible = true;
+                }
+            }
+        });
+
+        fullscreen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(visible){
+                    fullscreen.setVisibility(View.GONE);
+                    visible = false;
+                }
             }
         });
 
@@ -129,7 +174,6 @@ public class UserPage extends AppCompatActivity{
                     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
                     imageData = bytes.toByteArray();
-                    userImage.setImageBitmap(bitmap);
                     uploadProfilePicture(); //da decidere se caricare sullo storage qua o dando conferma
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -140,7 +184,6 @@ public class UserPage extends AppCompatActivity{
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
                 imageData = bytes.toByteArray();
-                userImage.setImageBitmap(bitmap);
                 uploadProfilePicture();  //da decidere se caricare sullo storage qua o dando conferma
             }
         }
@@ -161,6 +204,12 @@ public class UserPage extends AppCompatActivity{
                     //if the upload is successfull
                     //hiding the progress dialog
                     progressDialog.dismiss();
+
+                    url = taskSnapshot.getDownloadUrl().toString();
+                    mDatabaseForUrl.setValue(url);
+
+                    Glide.with(getApplicationContext()).load(url).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(userImage);
+                    //ma.putImageurl(ma.getFirebaseId(), url);
 
                     //StorageMetadata metadata = new StorageMetadata.Builder().setCustomMetadata("Group", groupCode).build(); //da cambiare, solo per prova
                     //filePathGroups.updateMetadata(metadata);

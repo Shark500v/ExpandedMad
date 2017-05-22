@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +25,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnPausedListener;
 import com.google.firebase.storage.OnProgressListener;
@@ -33,6 +39,7 @@ import com.polito.madinblack.expandedmad.FirebaseImageLoader;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.UserPage;
 import com.polito.madinblack.expandedmad.addUserToGroup.SelectContactToAdd;
+import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.tabViewGroup.TabView;
 
 import java.io.ByteArrayOutputStream;
@@ -43,13 +50,18 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class GroupSettings extends AppCompatActivity {
     private CircleImageView groupImage;
     private CircleImageView editGroupImage;
+    private ImageView fullscreen;
     private StorageReference mStorageGroup;
+    private DatabaseReference mDatabaseForUrl;
     private TextView editGroupName;
     private String groupName;
     private String groupId;
+    private String url;
     private Uri uri;
     private Bitmap bitmap;
     private byte[] imageData;
+    private MyApplication ma;
+    private boolean visible = false;
 
 
     //a constant to track the file chooser intent
@@ -76,19 +88,35 @@ public class GroupSettings extends AppCompatActivity {
             groupId = extras.getString("groupIndex");
         }
 
+        ma = MyApplication.getInstance();
+
+        mDatabaseForUrl = FirebaseDatabase.getInstance().getReference().child("groups").child(groupId).child("urlImage");
         mStorageGroup = FirebaseStorage.getInstance().getReference().child("groups").child(groupId).child("groupPicture").child("groupPicture.jpg");
 
         groupImage = (CircleImageView) findViewById(R.id.group_picture);
         editGroupImage = (CircleImageView) findViewById(R.id.set_group_image);
+        fullscreen = (ImageView)findViewById(R.id.group_image_fullscreen);
         editGroupName = (TextView) findViewById(R.id.edit_group_name);
         editGroupName.setText(groupName);
 
-        mStorageGroup.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+        mDatabaseForUrl.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                url = dataSnapshot.getValue(String.class);
+                Glide.with(getApplicationContext()).load(url).diskCacheStrategy(DiskCacheStrategy.SOURCE).error(R.drawable.teamwork).into(groupImage);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
+        /*mStorageGroup.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
                 Glide.with(getApplicationContext()).load(uri).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(groupImage);
             }
-        });
+        });*/
 
         editGroupName.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,6 +132,27 @@ public class GroupSettings extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 selectImage();
+            }
+        });
+
+        groupImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!visible) {
+                    Glide.with(getApplicationContext()).load(url).into(fullscreen);
+                    fullscreen.setVisibility(View.VISIBLE);
+                    visible = true;
+                }
+            }
+        });
+
+        fullscreen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(visible){
+                    fullscreen.setVisibility(View.GONE);
+                    visible = false;
+                }
             }
         });
     }
@@ -171,7 +220,6 @@ public class GroupSettings extends AppCompatActivity {
                     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
                     imageData = bytes.toByteArray();
-                    groupImage.setImageBitmap(bitmap);
                     uploadGroupPicture(); //da decidere se caricare sullo storage qua o dando conferma
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -182,7 +230,6 @@ public class GroupSettings extends AppCompatActivity {
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
                 imageData = bytes.toByteArray();
-                groupImage.setImageBitmap(bitmap);
                 uploadGroupPicture();  //da decidere se caricare sullo storage qua o dando conferma
             }
         }
@@ -203,6 +250,13 @@ public class GroupSettings extends AppCompatActivity {
                     //if the upload is successfull
                     //hiding the progress dialog
                     progressDialog.dismiss();
+
+                    url = taskSnapshot.getDownloadUrl().toString();
+                    mDatabaseForUrl = FirebaseDatabase.getInstance().getReference().child("groups").child(groupId).child("urlImage");
+                    mDatabaseForUrl.setValue(url);
+
+                    Glide.with(getApplicationContext()).load(url).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(groupImage);
+
 
                     //StorageMetadata metadata = new StorageMetadata.Builder().setCustomMetadata("Group", groupCode).build(); //da cambiare, solo per prova
                     //filePathGroups.updateMetadata(metadata);

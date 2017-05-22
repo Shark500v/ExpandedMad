@@ -66,13 +66,10 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
     private DatabaseReference mUserGroupsReference;
     private Query mQueryUserGroupsReference;
     private DatabaseReference mDatabaseRootReference;
-    private StorageReference mStorage;
-    private StorageReference mUserStorage;
+    private DatabaseReference mDatabaseForGroupUrl;
+    private DatabaseReference mDatabaseForUserUrl;
     private SimpleItemRecyclerViewAdapter mAdapter;
     private NavigationView navigationView;
-    private static Map<String,String> groupImages = new HashMap<String,String>();
-    private File userPicture;
-    Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,12 +79,10 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         ma = MyApplication.getInstance();   //retrive del DB
 
         mDatabaseRootReference = FirebaseDatabase.getInstance().getReference();
+        mDatabaseForUserUrl = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber()).child(ma.getFirebaseId()).child("urlImage");
 
         mUserGroupsReference   = mDatabaseRootReference.child("users/"+ma.getUserPhoneNumber()+"/"+ma.getFirebaseId()+"/groups");
         mQueryUserGroupsReference = mUserGroupsReference.orderByChild("timestamp");
-
-        mStorage = FirebaseStorage.getInstance().getReference();
-        mUserStorage = FirebaseStorage.getInstance().getReference().child("users").child(ma.getFirebaseId()).child("userProfilePicture.jpg");
 
         //toolbar settings
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -109,12 +104,25 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         tv1 = (TextView) header.findViewById(R.id.textView2);
         tv2 = (TextView) header.findViewById(R.id.textView3);
 
-        mUserStorage.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+        mDatabaseForUserUrl.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String url = dataSnapshot.getValue(String.class);
+                Glide.with(getApplicationContext()).load(url).diskCacheStrategy(DiskCacheStrategy.SOURCE).error(R.drawable.businessman).into(userImage);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        /*mUserStorage.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
                 Glide.with(getApplicationContext()).load(uri).diskCacheStrategy(DiskCacheStrategy.SOURCE).error(R.drawable.teamwork).into(userImage);
             }
-        });
+        });*/
 
         tv1.setText(ma.getUserName() + " " + ma.getUserSurname());
         tv2.setText(ma.getUserPhoneNumber());
@@ -305,13 +313,40 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                 }
             });
 
-            final StorageReference groupRef = mStorage.child("groups").child(mValues.get(position).getId()).child("groupPicture").child("groupPicture.jpg");
+            mDatabaseForGroupUrl = FirebaseDatabase.getInstance().getReference().child("groups").child(mValues.get(position).getId()).child("urlImage");
+            mDatabaseForGroupUrl.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    String url = dataSnapshot.getValue(String.class);
+                    Glide.with(getApplicationContext()).load(url).diskCacheStrategy(DiskCacheStrategy.SOURCE).error(R.drawable.teamwork).into(holder.mImage);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+
+            /*final StorageReference groupRef = mStorage.child("groups").child(mValues.get(position).getId()).child("groupPicture").child("groupPicture.jpg");
+            mDatabaseForUrl = FirebaseDatabase.getInstance().getReference().child("groups").child(mValues.get(position).getId()).child("urlImage");
+
             groupRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
                 public void onSuccess(Uri uri) {
-                    Glide.with(getApplicationContext()).load(uri).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(holder.mImage);
+                    url = uri.toString();
+                    Glide.with(getApplicationContext()).load(url).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(holder.mImage);
                 }
-            });
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    if(groupImages.containsKey(mValues.get(position).getId())){
+                        url = groupImages.get(mValues.get(position).getId());
+                    }
+                }
+            });*/
+
+            /*if(!groupImages.containsValue(uri.toString())) {
+                groupImages.put(mValues.get(position).getId(), uri.toString());
+            }*/
         }
 
         @Override
