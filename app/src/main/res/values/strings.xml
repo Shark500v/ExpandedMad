@@ -187,4 +187,9 @@
     <string name="operation_failed">Operation failed</string>
     <string name="group_info">Group info</string>
     <string name="modify_group_name">Modify group name</string>
+    <string name="to_pay">To Pay</string>
+    <string name="Paid">Paid</string>
+    <string name="new_to_pay">How much you should pay?</string>
+    <string name="new_paid">How much you have paid yet?</string>
+    <string name="expense_cost">Expense Cost</string>
 </resources>

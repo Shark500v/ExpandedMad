@@ -3,14 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    xmlns:tool="http://schemas.android.com/apk/res-auto"
     android:padding="16dp"
     tools:context="com.polito.madinblack.expandedmad.expenseDetail.ExpenseDetailFragment">
 
     <LinearLayout
         android:id="@+id/title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
         <TextView
             android:id="@+id/head_title"
             android:layout_width="0dp"
@@ -38,7 +39,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/paidBy"
-        android:layout_below="@+id/title">
+        android:layout_below="@+id/title"
+        android:orientation="horizontal"
+        >
         <TextView
             android:id="@+id/paid"
             android:layout_width="wrap_content"
@@ -67,7 +70,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/balanceLayout"
-        android:layout_below="@+id/paidBy">
+        android:layout_below="@+id/paidBy"
+        android:orientation="horizontal"
+        >
         <TextView
             android:id="@+id/balance"
             android:layout_width="wrap_content"
@@ -92,7 +97,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/costLayout"
-        android:layout_below="@+id/balanceLayout">
+        android:layout_below="@+id/balanceLayout"
+        android:orientation="horizontal"
+        >
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -117,7 +124,9 @@
         android:id="@+id/roundedCostLayout"
         android:layout_below="@+id/costLayout"
         android:visibility="gone"
-        tools:visibility="visible">
+        tools:visibility="visible"
+        android:orientation="horizontal"
+        >
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -142,7 +151,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/currencyLayout"
-        android:layout_below="@+id/roundedCostLayout">
+        android:layout_below="@+id/roundedCostLayout"
+        android:orientation="horizontal"
+        >
 
         <TextView
             android:id="@+id/currency"
@@ -167,7 +178,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/paidByLayout"
-        android:layout_below="@+id/currencyLayout">
+        android:layout_below="@+id/currencyLayout"
+        android:orientation="horizontal"
+        >
 
         <TextView
             android:id="@+id/buyer"
@@ -216,7 +229,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/dateLayout"
-        android:layout_below="@+id/tagLayout">
+        android:layout_below="@+id/tagLayout"
+        android:orientation="horizontal"
+        >
 
         <TextView
             android:id="@+id/date"
@@ -244,7 +259,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/descriptionLayout"
-        android:layout_below="@+id/dateLayout">
+        android:layout_below="@+id/dateLayout"
+        android:orientation="horizontal"
+        >
         <TextView
             android:id="@+id/description"
             android:layout_width="wrap_content"
