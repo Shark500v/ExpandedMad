@@ -48,13 +48,15 @@
 
         <TextView
             android:id="@+id/old_paid"
-            android:layout_width="50dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="15"
             android:textStyle="bold"
             android:gravity="center"
-            android:textSize="18sp"/>
+            android:textSize="18sp"
+            android:textAlignment="textEnd"
+            />
     </LinearLayout>
 
     <LinearLayout
@@ -72,13 +74,10 @@
             android:layout_margin="16dp"/>
         <Spinner
             android:id="@+id/currencyISO"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="5dp" />
     </LinearLayout>
-
-
-
 
 
 
@@ -98,7 +97,7 @@
             android:textSize="20sp"/>
 
         <EditText
-            android:id="@+id/balance_container"
+            android:id="@+id/new_topay"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
@@ -115,7 +114,6 @@
         android:layout_below="@+id/new_topay_layout"
         android:orientation="horizontal"
         >
-
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/input_layout_description"
