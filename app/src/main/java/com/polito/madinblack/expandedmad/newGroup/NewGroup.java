@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -18,6 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -26,6 +28,9 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
@@ -55,6 +60,7 @@ public class NewGroup extends AppCompatActivity {
 
     private DatabaseReference mDatabaseReferenceRoot;
     private StorageReference mStorage;
+    private DatabaseReference mDatabaseForUrl;
     private MyApplication ma;
     private List<SelectUser> groupM;
     private List<SelectUser> invite;
@@ -67,7 +73,7 @@ public class NewGroup extends AppCompatActivity {
     private Uri uri;
     private byte[] imageData;
     private boolean visible = false; //boolean per visualizzazione a schermo intero
-    private String url = "";
+    private String url;
 
     private RecyclerView recyclerView;
     private GroupMembersRecyclerViewAdapter adapter;
@@ -98,10 +104,12 @@ public class NewGroup extends AppCompatActivity {
 
         //controllo per rotazione dello schermo che richiama la onCreate
         //serve per non far sparire l'immagine caricata nella ImageView quando ruoto il cell
-        if(savedInstanceState == null){
+        /*if(savedInstanceState == null){
             groupImage.setImageResource(R.drawable.teamwork);
         }else {
-            bitmap = savedInstanceState.getParcelable("bitmap");
+            strBase64 = savedInstanceState.getString("bitmapBase64");
+            byte[] decodedString = Base64.decode(strBase64, Base64.DEFAULT);
+            bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             groupImage.setImageBitmap(bitmap);
             if (savedInstanceState.getBoolean("visible")) {
                 fullScreen.setImageBitmap(bitmap);
@@ -109,14 +117,19 @@ public class NewGroup extends AppCompatActivity {
                 getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
                 visible = true;
             }
-        }
+        }*/
 
         //visualizzo la foto a schermo intero
         groupImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(bitmap != null) {
+                /*if( strBase64 != null) {
                     fullScreen.setImageBitmap(bitmap);
+                    fullScreen.setVisibility(View.VISIBLE);
+                    visible = true;
+                }*/
+                if(!visible) {
+                    Glide.with(getApplicationContext()).load(imageData).error(R.drawable.teamwork).into(fullScreen);
                     fullScreen.setVisibility(View.VISIBLE);
                     visible = true;
                 }
@@ -127,7 +140,11 @@ public class NewGroup extends AppCompatActivity {
         fullScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(visible == true){
+                /*if(visible){
+                    fullScreen.setVisibility(View.GONE);
+                    visible = false;
+                }*/
+                if(visible){
                     fullScreen.setVisibility(View.GONE);
                     visible = false;
                 }
@@ -220,7 +237,10 @@ public class NewGroup extends AppCompatActivity {
                     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
                     imageData = bytes.toByteArray();
-                    groupImage.setImageBitmap(bitmap);
+                    Glide.with(getApplicationContext()).load(imageData).into(groupImage);
+                    /*groupImage.setImageBitmap(bitmap);
+                    strBase64 = Base64.encodeToString(imageData, 0);*/
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -230,7 +250,9 @@ public class NewGroup extends AppCompatActivity {
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
                 imageData = bytes.toByteArray();
-                groupImage.setImageBitmap(bitmap);
+                Glide.with(getApplicationContext()).load(imageData).into(groupImage);
+                /*groupImage.setImageBitmap(bitmap);
+                strBase64 = Base64.encodeToString(imageData, 0);*/
             }
         }
     }
@@ -345,6 +367,13 @@ public class NewGroup extends AppCompatActivity {
                     //hiding the progress dialog
                     progressDialog.dismiss();
 
+                    url = taskSnapshot.getDownloadUrl().toString();
+                    mDatabaseForUrl = FirebaseDatabase.getInstance().getReference().child("groups").child(groupCode).child("urlImage");
+                    mDatabaseForUrl.setValue(url);
+
+                    Glide.with(getApplicationContext()).load(url).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(groupImage);
+                    //ma.putImageurl(groupCode, url);
+
                     //StorageMetadata metadata = new StorageMetadata.Builder().setCustomMetadata("Group", groupCode).build(); //da cambiare, solo per prova
                     //filePathGroups.updateMetadata(metadata);
                     //and displaying a success toast
@@ -380,10 +409,10 @@ public class NewGroup extends AppCompatActivity {
 
 
     //salvo l'immagine per poterla visualizzare dopo la rotazione del cell
-    @Override
+    /*@Override
     public void onSaveInstanceState(Bundle toSave) {
         super.onSaveInstanceState(toSave);
-        toSave.putParcelable("bitmap", bitmap);
+        toSave.putString("bitmapBase64", strBase64);
         toSave.putBoolean("visible", visible);
-    }
+    }*/
 }
