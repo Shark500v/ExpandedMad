@@ -28,6 +28,7 @@ public class ExpenseDetailActivity extends AppCompatActivity {
     private String expenseId;
     private String expenseName;
     private String url;
+    private ValueEventListener valueEventListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +60,8 @@ public class ExpenseDetailActivity extends AppCompatActivity {
         mDatabaseForExpenseUrl = FirebaseDatabase.getInstance().getReference().child("expenses").child(expenseId).child("urlImage");
 
         expenseImage = (CircleImageView)findViewById(R.id.expense_image);
-        mDatabaseForExpenseUrl.addListenerForSingleValueEvent(new ValueEventListener() {
+
+        valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 url = dataSnapshot.getValue(String.class);
@@ -69,7 +71,12 @@ public class ExpenseDetailActivity extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
-        });
+        };
+
+
+
+
+
 
         expenseImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,6 +87,26 @@ public class ExpenseDetailActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+
+    @Override
+    public void onStart(){
+        super.onStart();
+
+        if(mDatabaseForExpenseUrl!=null && valueEventListener!=null)
+            mDatabaseForExpenseUrl.addValueEventListener(valueEventListener);
+
+
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        if(mDatabaseForExpenseUrl!=null && valueEventListener!=null)
+            mDatabaseForExpenseUrl.removeEventListener(valueEventListener);
+
+
     }
 
     @Override

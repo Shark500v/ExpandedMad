@@ -112,7 +112,7 @@ public class RecyclerViewAdapterUsers extends RecyclerView.Adapter<RecyclerViewA
         }
 
         mDatabaseForUserUrl = FirebaseDatabase.getInstance().getReference().child("users").child(holder.mItem.getUserPhoneNumber()).child(mUsersIds.get(position)).child("urlImage");
-        mDatabaseForUserUrl.addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabaseForUserUrl.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String url = dataSnapshot.getValue(String.class);

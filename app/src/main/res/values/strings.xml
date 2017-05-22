@@ -196,5 +196,5 @@
     <string name="new_paid">New cost Paid</string>
     <string name="expense_cost">Expense Cost</string>
     <string name="old_paid_topay">To Pay assign</string>
-    <string name="motivation">Motivation</string>
+    <string name="motivation">Motivation *</string>
 </resources>

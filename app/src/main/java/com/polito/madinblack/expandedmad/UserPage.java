@@ -56,6 +56,7 @@ public class UserPage extends AppCompatActivity{
     private Bitmap bitmap;
     private byte[] imageData;
     private boolean visible = false;
+    private ValueEventListener valueEventListener;
 
     //a constant to track the file chooser intent
     private static int RESULT_LOAD_IMAGE = 1;
@@ -88,17 +89,17 @@ public class UserPage extends AppCompatActivity{
         surname.setText(ma.getUserSurname());
         phoneNumber.setText(ma.getUserPhoneNumber());
 
-        mDatabaseForUrl.addListenerForSingleValueEvent(new ValueEventListener() {
+        valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                url = dataSnapshot.getValue(String.class);
+                String url = dataSnapshot.getValue(String.class);
                 Glide.with(getApplicationContext()).load(url).diskCacheStrategy(DiskCacheStrategy.SOURCE).error(R.drawable.businessman).into(userImage);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
-        });
+        };
 
         /*mUserStorage.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -134,7 +135,29 @@ public class UserPage extends AppCompatActivity{
                 selectImage();
             }
         });
+
+
     }
+
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        if(mDatabaseForUrl!=null && valueEventListener!=null)
+            mDatabaseForUrl.addValueEventListener(valueEventListener);
+
+
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        if(mDatabaseForUrl!=null && valueEventListener!=null)
+            mDatabaseForUrl.removeEventListener(valueEventListener);
+
+
+    }
+
 
     private void selectImage() {
         AlertDialog.Builder dialog = new AlertDialog.Builder(UserPage.this);
@@ -192,9 +215,9 @@ public class UserPage extends AppCompatActivity{
     @SuppressWarnings("VisibleForTests")
     public void uploadProfilePicture() {
         if(imageData != null) {
-            final ProgressDialog progressDialog = new ProgressDialog(this);
-            progressDialog.setTitle(getString(R.string.uploading));
-            progressDialog.show();
+            //final ProgressDialog progressDialog = new ProgressDialog(this);
+            //progressDialog.setTitle(getString(R.string.uploading));
+            //progressDialog.show();
 
             final StorageReference filePathUsers = FirebaseStorage.getInstance().getReference().child("users").child(ma.getFirebaseId()).child("userProfilePicture.jpg");
 
@@ -203,7 +226,7 @@ public class UserPage extends AppCompatActivity{
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     //if the upload is successfull
                     //hiding the progress dialog
-                    progressDialog.dismiss();
+                    //progressDialog.dismiss();
 
                     url = taskSnapshot.getDownloadUrl().toString();
                     mDatabaseForUrl.setValue(url);
@@ -214,7 +237,7 @@ public class UserPage extends AppCompatActivity{
                     //StorageMetadata metadata = new StorageMetadata.Builder().setCustomMetadata("Group", groupCode).build(); //da cambiare, solo per prova
                     //filePathGroups.updateMetadata(metadata);
                     //and displaying a success toast
-                    Toast.makeText(getApplicationContext(), getString(R.string.file_uploaded), Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getApplicationContext(), getString(R.string.file_uploaded), Toast.LENGTH_LONG).show();
                 }
             })
                     .addOnFailureListener(new OnFailureListener() {
@@ -222,26 +245,28 @@ public class UserPage extends AppCompatActivity{
                         public void onFailure(@NonNull Exception exception) {
                             //if the upload is not successfull
                             //hiding the progress dialog
-                            progressDialog.dismiss();
+                            //progressDialog.dismiss();
                             //and displaying error message
-                            Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
+                            //Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     })
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                            //double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
 
-                            progressDialog.setMessage(getString(R.string.uploading) + ": " + ((int)progress) + "%");
+                            //progressDialog.setMessage(getString(R.string.uploading) + ": " + ((int)progress) + "%");
                         }
                     })
                     .addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onPaused(UploadTask.TaskSnapshot taskSnapshot) {
-                            System.out.println(getString(R.string.upload_pause));
+                            //System.out.println(getString(R.string.upload_pause));
                         }
                     });
         }
     }
+
+
 
 }

@@ -62,6 +62,7 @@ public class GroupSettings extends AppCompatActivity {
     private byte[] imageData;
     private MyApplication ma;
     private boolean visible = false;
+    private ValueEventListener valueEventListener;
 
 
     //a constant to track the file chooser intent
@@ -99,7 +100,8 @@ public class GroupSettings extends AppCompatActivity {
         editGroupName = (TextView) findViewById(R.id.edit_group_name);
         editGroupName.setText(groupName);
 
-        mDatabaseForUrl.addListenerForSingleValueEvent(new ValueEventListener() {
+
+        valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 url = dataSnapshot.getValue(String.class);
@@ -109,7 +111,9 @@ public class GroupSettings extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
-        });
+        };
+
+
 
         /*mStorageGroup.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -156,6 +160,26 @@ public class GroupSettings extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+
+        if(mDatabaseForUrl!=null && valueEventListener!=null)
+            mDatabaseForUrl.addValueEventListener(valueEventListener);
+
+
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        if(mDatabaseForUrl!=null && valueEventListener!=null)
+            mDatabaseForUrl.removeEventListener(valueEventListener);
+
+
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -238,9 +262,9 @@ public class GroupSettings extends AppCompatActivity {
     @SuppressWarnings("VisibleForTests")
     public void uploadGroupPicture() {
         if(imageData != null) {
-            final ProgressDialog progressDialog = new ProgressDialog(this);
-            progressDialog.setTitle(getString(R.string.uploading));
-            progressDialog.show();
+            //final ProgressDialog progressDialog = new ProgressDialog(this);
+            //progressDialog.setTitle(getString(R.string.uploading));
+            //progressDialog.show();
 
             final StorageReference filePathGroups = FirebaseStorage.getInstance().getReference().child("groups").child(groupId).child("groupPicture").child("groupPicture.jpg");
 
@@ -249,7 +273,7 @@ public class GroupSettings extends AppCompatActivity {
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     //if the upload is successfull
                     //hiding the progress dialog
-                    progressDialog.dismiss();
+                    //progressDialog.dismiss();
 
                     url = taskSnapshot.getDownloadUrl().toString();
                     mDatabaseForUrl = FirebaseDatabase.getInstance().getReference().child("groups").child(groupId).child("urlImage");
@@ -261,7 +285,7 @@ public class GroupSettings extends AppCompatActivity {
                     //StorageMetadata metadata = new StorageMetadata.Builder().setCustomMetadata("Group", groupCode).build(); //da cambiare, solo per prova
                     //filePathGroups.updateMetadata(metadata);
                     //and displaying a success toast
-                    Toast.makeText(getApplicationContext(), getString(R.string.file_uploaded), Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getApplicationContext(), getString(R.string.file_uploaded), Toast.LENGTH_LONG).show();
 
                 }
             })
@@ -270,23 +294,23 @@ public class GroupSettings extends AppCompatActivity {
                         public void onFailure(@NonNull Exception exception) {
                             //if the upload is not successfull
                             //hiding the progress dialog
-                            progressDialog.dismiss();
+                            //progressDialog.dismiss();
                             //and displaying error message
-                            Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
+                            //Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     })
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                            //double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
 
-                            progressDialog.setMessage(getString(R.string.uploading) + ": " + ((int)progress) + "%");
+                            //progressDialog.setMessage(getString(R.string.uploading) + ": " + ((int)progress) + "%");
                         }
                     })
                     .addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onPaused(UploadTask.TaskSnapshot taskSnapshot) {
-                            System.out.println(getString(R.string.upload_pause));
+                            //System.out.println(getString(R.string.upload_pause));
                         }
                     });
         }

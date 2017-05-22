@@ -195,5 +195,5 @@
     <string name="expense_cost">Expense Cost</string>
     <string name="old_paid_topay">Da Pagare assegnati</string>
     <string name="currencyISO">CurrencyISO</string>
-    <string name="motivation">Motivazione</string>
+    <string name="motivation">Motivo *</string>
 </resources>
