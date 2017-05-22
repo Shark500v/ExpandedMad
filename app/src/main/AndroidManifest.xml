@@ -26,11 +26,13 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_wallet"
         android:supportsRtl="true"
+        android:configChanges="orientation|screenSize|locale"
         android:theme="@style/AppTheme">
 
         <activity
             android:name=".groupManaging.GroupListActivity"
             android:label="@string/app_name"
+            android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar">
         <intent-filter>
             <action android:name="none" />
@@ -42,6 +44,7 @@
             android:name=".tabViewGroup.TabView"
             android:label="Tab View"
             android:parentActivityName=".groupManaging.GroupListActivity"
+            android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -52,6 +55,7 @@
             android:name=".groupManaging.GroupDetailActivity"
             android:label="Group Details"
             android:parentActivityName=".tabViewGroup.TabView"
+            android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -62,6 +66,7 @@
             android:name=".expenseDetail.ExpenseDetailActivity"
             android:label="Expense Details"
             android:parentActivityName=".tabViewGroup.TabView"
+            android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -72,6 +77,7 @@
             android:name=".groupMembers.GroupMemebersActivity"
             android:label="Group Details"
             android:parentActivityName=".tabViewGroup.TabView"
+            android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -82,6 +88,7 @@
             android:name=".groupMembers.UserExpenses"
             android:label="Group User Details"
             android:parentActivityName=".groupMembers.GroupMemebersActivity"
+            android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -92,6 +99,7 @@
             android:name=".groupMembers.UserDebts"
             android:label="User Details"
             android:parentActivityName=".groupMembers.UserExpenses"
+            android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -102,6 +110,7 @@
             android:name=".newExpense.ExpenseFillData"
             android:label="Add New Expense"
             android:parentActivityName=".tabViewGroup.TabView"
+            android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -110,9 +119,12 @@
 
         <activity
             android:name=".login.GoogleSignInActivity"
+            android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar"/>
+
         <activity
             android:name=".login.CheckLogIn"
+            android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -136,15 +148,18 @@
             android:name=".newGroup.SelectContact"
             android:label="Select Contact"
             android:parentActivityName=".groupManaging.GroupListActivity"
+            android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.groupManaging.GroupListActivity" />
         </activity>
+
         <activity
             android:name=".newGroup.InviteActivity"
             android:label="Invite New Contacts"
             android:parentActivityName=".groupManaging.GroupListActivity"
+            android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -164,12 +179,14 @@
 
         <activity
             android:name=".login.CheckTelephone"
+            android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
             android:name=".login.TelephoneInsertion"
             android:label="Insert account details"
             android:parentActivityName=".login.GoogleSignInActivity"
+            android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -180,6 +197,7 @@
             android:name=".groupManaging.GroupHistory"
             android:label="@string/title_activity_group_history"
             android:parentActivityName=".tabViewGroup.TabView"
+            android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -190,6 +208,7 @@
             android:name=".expenseDetail.PaymentDetailActivity"
             android:label="@string/payments_detail"
             android:parentActivityName=".expenseDetail.ExpenseDetailActivity"
+            android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -209,6 +228,7 @@
         <activity
             android:name=".addUserToGroup.SelectContactToAdd"
             android:parentActivityName=".groupManaging.GroupSettings"
+            android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -218,6 +238,7 @@
         <activity
             android:name=".addUserToGroup.InviteActivityToAdd"
             android:parentActivityName=".tabViewGroup.TabView"
+            android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -237,6 +258,7 @@
         <activity
             android:name=".groupManaging.EditGroupName"
             android:parentActivityName=".groupManaging.GroupSettings"
+            android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -246,7 +268,7 @@
         <activity
             android:name=".Settings.SettingsActivity"
             android:parentActivityName=".groupManaging.GroupListActivity"
-            android:configChanges="locale|orientation"
+            android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
