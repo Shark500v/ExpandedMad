@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,6 +50,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class GroupSettings extends AppCompatActivity {
     private CircleImageView groupImage;
     private CircleImageView editGroupImage;
+    private ImageView fullscreen;
     private StorageReference mStorageGroup;
     private DatabaseReference mDatabaseForUrl;
     private TextView editGroupName;
@@ -59,6 +61,7 @@ public class GroupSettings extends AppCompatActivity {
     private Bitmap bitmap;
     private byte[] imageData;
     private MyApplication ma;
+    private boolean visible = false;
 
 
     //a constant to track the file chooser intent
@@ -92,13 +95,14 @@ public class GroupSettings extends AppCompatActivity {
 
         groupImage = (CircleImageView) findViewById(R.id.group_picture);
         editGroupImage = (CircleImageView) findViewById(R.id.set_group_image);
+        fullscreen = (ImageView)findViewById(R.id.group_image_fullscreen);
         editGroupName = (TextView) findViewById(R.id.edit_group_name);
         editGroupName.setText(groupName);
 
         mDatabaseForUrl.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String url = dataSnapshot.getValue(String.class);
+                url = dataSnapshot.getValue(String.class);
                 Glide.with(getApplicationContext()).load(url).diskCacheStrategy(DiskCacheStrategy.SOURCE).error(R.drawable.teamwork).into(groupImage);
             }
 
@@ -128,6 +132,27 @@ public class GroupSettings extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 selectImage();
+            }
+        });
+
+        groupImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!visible) {
+                    Glide.with(getApplicationContext()).load(url).into(fullscreen);
+                    fullscreen.setVisibility(View.VISIBLE);
+                    visible = true;
+                }
+            }
+        });
+
+        fullscreen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(visible){
+                    fullscreen.setVisibility(View.GONE);
+                    visible = false;
+                }
             }
         });
     }
@@ -226,7 +251,7 @@ public class GroupSettings extends AppCompatActivity {
                     //hiding the progress dialog
                     progressDialog.dismiss();
 
-                    String url = taskSnapshot.getDownloadUrl().toString();
+                    url = taskSnapshot.getDownloadUrl().toString();
                     mDatabaseForUrl = FirebaseDatabase.getInstance().getReference().child("groups").child(groupId).child("urlImage");
                     mDatabaseForUrl.setValue(url);
 

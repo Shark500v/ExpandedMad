@@ -31,8 +31,6 @@ public class MyApplication {
     /*list of all users, can be seen as phonebook*/
     private Map<Long, User> users = new LinkedHashMap<>();
 
-    private Map<String, String> imagesUrl = new LinkedHashMap<>();
-
     private DatabaseReference mDatabase;
 
 
@@ -53,14 +51,6 @@ public class MyApplication {
     }
 
     public List<Group> getGroup(){ return new ArrayList<Group>(groups.values()); }
-
-    public void putImageurl (String firebaseId, String imageUrl){
-        imagesUrl.put(firebaseId, imageUrl);
-    }
-
-    public String getImageUrl (String firebaseId){
-        return imagesUrl.get(firebaseId);
-    }
 
     public Group getSingleGroup(Long id) {
         return groups.get(id);

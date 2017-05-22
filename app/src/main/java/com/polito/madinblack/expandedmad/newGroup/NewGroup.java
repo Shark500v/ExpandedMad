@@ -73,8 +73,7 @@ public class NewGroup extends AppCompatActivity {
     private Uri uri;
     private byte[] imageData;
     private boolean visible = false; //boolean per visualizzazione a schermo intero
-    private String url = "";
-    private String strBase64;
+    private String url;
 
     private RecyclerView recyclerView;
     private GroupMembersRecyclerViewAdapter adapter;
@@ -105,7 +104,7 @@ public class NewGroup extends AppCompatActivity {
 
         //controllo per rotazione dello schermo che richiama la onCreate
         //serve per non far sparire l'immagine caricata nella ImageView quando ruoto il cell
-        if(savedInstanceState == null){
+        /*if(savedInstanceState == null){
             groupImage.setImageResource(R.drawable.teamwork);
         }else {
             strBase64 = savedInstanceState.getString("bitmapBase64");
@@ -118,14 +117,19 @@ public class NewGroup extends AppCompatActivity {
                 getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
                 visible = true;
             }
-        }
+        }*/
 
         //visualizzo la foto a schermo intero
         groupImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if( strBase64 != null) {
+                /*if( strBase64 != null) {
                     fullScreen.setImageBitmap(bitmap);
+                    fullScreen.setVisibility(View.VISIBLE);
+                    visible = true;
+                }*/
+                if(!visible) {
+                    Glide.with(getApplicationContext()).load(imageData).error(R.drawable.teamwork).into(fullScreen);
                     fullScreen.setVisibility(View.VISIBLE);
                     visible = true;
                 }
@@ -136,7 +140,11 @@ public class NewGroup extends AppCompatActivity {
         fullScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(visible == true){
+                /*if(visible){
+                    fullScreen.setVisibility(View.GONE);
+                    visible = false;
+                }*/
+                if(visible){
                     fullScreen.setVisibility(View.GONE);
                     visible = false;
                 }
@@ -229,8 +237,10 @@ public class NewGroup extends AppCompatActivity {
                     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
                     imageData = bytes.toByteArray();
-                    groupImage.setImageBitmap(bitmap);
-                    strBase64 = Base64.encodeToString(imageData, 0);
+                    Glide.with(getApplicationContext()).load(imageData).into(groupImage);
+                    /*groupImage.setImageBitmap(bitmap);
+                    strBase64 = Base64.encodeToString(imageData, 0);*/
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -240,8 +250,9 @@ public class NewGroup extends AppCompatActivity {
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
                 imageData = bytes.toByteArray();
-                groupImage.setImageBitmap(bitmap);
-                strBase64 = Base64.encodeToString(imageData, 0);
+                Glide.with(getApplicationContext()).load(imageData).into(groupImage);
+                /*groupImage.setImageBitmap(bitmap);
+                strBase64 = Base64.encodeToString(imageData, 0);*/
             }
         }
     }
@@ -398,10 +409,10 @@ public class NewGroup extends AppCompatActivity {
 
 
     //salvo l'immagine per poterla visualizzare dopo la rotazione del cell
-    @Override
+    /*@Override
     public void onSaveInstanceState(Bundle toSave) {
         super.onSaveInstanceState(toSave);
         toSave.putString("bitmapBase64", strBase64);
         toSave.putBoolean("visible", visible);
-    }
+    }*/
 }

@@ -7,8 +7,9 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context="com.polito.madinblack.expandedmad.newGroup.NewGroup"
-    android:orientation="vertical"
-    android:animateLayoutChanges="true">
+    android:orientation="vertical">
+    <!--android:animateLayoutChanges="true"-->
+
 
     <ImageView
         android:id="@+id/full_screen"
@@ -46,6 +47,7 @@
             android:id="@+id/group_icon"
             android:layout_width="60dp"
             android:layout_height="60dp"
+            android:src="@drawable/teamwork"
             android:layout_marginRight="16dp"/>
 
         <de.hdodenhof.circleimageview.CircleImageView

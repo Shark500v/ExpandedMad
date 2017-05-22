@@ -14,6 +14,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +46,7 @@ public class UserPage extends AppCompatActivity{
     private DatabaseReference mDatabaseForUrl;
     private CircleImageView userImage;
     private CircleImageView imageClick;
+    private ImageView fullscreen;
     private MyApplication ma;
     private TextView name;
     private TextView surname;
@@ -53,6 +55,7 @@ public class UserPage extends AppCompatActivity{
     private Uri uri;
     private Bitmap bitmap;
     private byte[] imageData;
+    private boolean visible = false;
 
     //a constant to track the file chooser intent
     private static int RESULT_LOAD_IMAGE = 1;
@@ -76,6 +79,7 @@ public class UserPage extends AppCompatActivity{
         mDatabaseForUrl = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber()).child(ma.getFirebaseId()).child("urlImage");
         userImage = (CircleImageView)findViewById(R.id.user_picture);
         imageClick = (CircleImageView)findViewById(R.id.set_user_image);
+        fullscreen = (ImageView)findViewById(R.id.user_image_fullscreen);
 
         name = (TextView)findViewById(R.id.name);
         surname = (TextView)findViewById(R.id.surname);
@@ -87,7 +91,7 @@ public class UserPage extends AppCompatActivity{
         mDatabaseForUrl.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String url = dataSnapshot.getValue(String.class);
+                url = dataSnapshot.getValue(String.class);
                 Glide.with(getApplicationContext()).load(url).diskCacheStrategy(DiskCacheStrategy.SOURCE).error(R.drawable.businessman).into(userImage);
             }
 
@@ -102,6 +106,27 @@ public class UserPage extends AppCompatActivity{
                 Glide.with(getApplicationContext()).load(uri).diskCacheStrategy(DiskCacheStrategy.SOURCE).error(R.drawable.businessman).into(userImage);
             }
         });*/
+
+        userImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!visible) {
+                    Glide.with(getApplicationContext()).load(url).into(fullscreen);
+                    fullscreen.setVisibility(View.VISIBLE);
+                    visible = true;
+                }
+            }
+        });
+
+        fullscreen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(visible){
+                    fullscreen.setVisibility(View.GONE);
+                    visible = false;
+                }
+            }
+        });
 
         imageClick.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -180,7 +205,7 @@ public class UserPage extends AppCompatActivity{
                     //hiding the progress dialog
                     progressDialog.dismiss();
 
-                    String url = taskSnapshot.getDownloadUrl().toString();
+                    url = taskSnapshot.getDownloadUrl().toString();
                     mDatabaseForUrl.setValue(url);
 
                     Glide.with(getApplicationContext()).load(url).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(userImage);

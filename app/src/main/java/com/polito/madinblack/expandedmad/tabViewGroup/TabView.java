@@ -114,6 +114,7 @@ public class TabView extends AppCompatActivity {
                 Context c = view.getContext();
                 Intent intent = new Intent(c, ExpenseFillData.class);       //qui setto la nuova attività da mostrare a schermo dopo che clicco
                 intent.putExtra("groupIndex", groupIndex);                  //passo l'indice del gruppo
+                intent.putExtra("groupName", groupName);
                 startActivityForResult(intent, CONTACT_REQUEST);
 
             }
