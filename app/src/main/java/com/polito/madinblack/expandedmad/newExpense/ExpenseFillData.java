@@ -36,6 +36,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -78,6 +80,7 @@ public class ExpenseFillData extends AppCompatActivity {
     private List<UserForGroup> users;
     private List<Payment> mValues;
     private DatabaseReference databaseReference;
+    private DatabaseReference mDatabaseForLoadUrl;
     private StorageReference mStorage;
     private EditText inputName, inputAmount, inputRoundedAmount, inputRoundedCurrency;
     private TextInputLayout inputLayoutName, inputLayoutAmount;
@@ -94,6 +97,8 @@ public class ExpenseFillData extends AppCompatActivity {
     Bitmap bitmap;
     String expenseId;
     private Spinner spinner;
+    private String url;
+    private String groupName;
 
     private static int RESULT_LOAD_IMAGE = 1;
     private static int RESULT_REQUEST_CAMERA = 0;
@@ -132,7 +137,7 @@ public class ExpenseFillData extends AppCompatActivity {
 
         Intent beginner = getIntent();
         groupID = beginner.getStringExtra("groupIndex");   //id del gruppo, che devo considerare
-
+        groupName = beginner.getStringExtra("groupName");
 
         //this remove focus from edit text when activity starts
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -304,10 +309,13 @@ public class ExpenseFillData extends AppCompatActivity {
             }
 
             intent = new Intent(this, TabView.class);
-            intent.putExtra("index", groupID);
+            intent.putExtra("groupIndex", groupID);
+            intent.putExtra("groupName", groupName);
+            //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             //startActivity(intent);
             setResult(RESULT_OK, intent);
-            finish();
+            startActivity(intent);
+            //finish();
             return true;
         }else if(id == 16908332){
             Intent intent3 = new Intent(this, TabView.class);
@@ -355,10 +363,16 @@ public class ExpenseFillData extends AppCompatActivity {
     }
 
     public void photoFromGallery(){
-        Intent i = new Intent(
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), RESULT_LOAD_IMAGE);
+
+
+        /*Intent i = new Intent(
                 Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
-        startActivityForResult(i, RESULT_LOAD_IMAGE);
+        startActivityForResult(i, RESULT_LOAD_IMAGE);*/
     }
 
     private void photoFromCamera()
@@ -440,13 +454,18 @@ public class ExpenseFillData extends AppCompatActivity {
             progressDialog.setTitle("Uploading");
             progressDialog.show();
 
-            StorageReference filePath = mStorage.child("groups").child(groupID).child("expenses").child(expenseId);
+            StorageReference filePath = mStorage.child("groups").child(groupID).child("expenses").child(expenseId + ".jpg");
             filePath.putBytes(bytesArr).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     //if the upload is successfull
                     //hiding the progress dialog
                     progressDialog.dismiss();
+
+                    url = taskSnapshot.getDownloadUrl().toString();
+                    mDatabaseForLoadUrl = FirebaseDatabase.getInstance().getReference().child("expenses").child(expenseId).child("urlImage");
+                    mDatabaseForLoadUrl.setValue(url);
+
                     //and displaying a success toast
                     Toast.makeText(getApplicationContext(), getString((R.string.file_uploaded)), Toast.LENGTH_LONG).show();
                 }

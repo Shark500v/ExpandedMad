@@ -125,7 +125,8 @@
             android:name=".newGroup.NewGroup"
             android:label="New Group"
             android:parentActivityName=".newGroup.SelectContact"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.newGroup.SelectContact" />
@@ -226,7 +227,8 @@
         <activity
             android:name=".groupManaging.GroupSettings"
             android:parentActivityName=".tabViewGroup.TabView"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.tabViewGroup.TabView" />
@@ -248,6 +250,16 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.groupManaging.GroupListActivity" />
+        </activity>
+
+        <activity
+            android:name=".FullScreenImage"
+            android:parentActivityName=".expenseDetail.ExpenseDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.polito.madinblack.expandedmad.expenseDetail.ExpenseDetailActivity" />
         </activity>
 
     </application>
