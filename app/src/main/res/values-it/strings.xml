@@ -190,7 +190,10 @@
 
     <string name="to_pay">Da Pagare</string>
     <string name="Paid">Pagato</string>
-    <string name="new_to_pay">Quanto dovresti pagare?</string>
-    <string name="new_paid">Quanto hai già pagato?</string>
+    <string name="new_to_pay">Nuova cifra da pagare</string>
+    <string name="new_paid">Nuova cifra pagata</string>
     <string name="expense_cost">Expense Cost</string>
+    <string name="old_paid_topay">Da Pagare assegnati</string>
+    <string name="currencyISO">CurrencyISO</string>
+    <string name="motivation">Motivazione</string>
 </resources>
