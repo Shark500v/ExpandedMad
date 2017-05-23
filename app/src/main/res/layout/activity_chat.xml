@@ -7,20 +7,58 @@
     android:orientation="vertical"
     tools:context=".tabViewGroup.TabView">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/message_list"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="8dp"
-        app:layoutManager="LinearLayoutManager"
-        tools:context=".chat.ChatActivity" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <include
-        layout="@layout/type_message_area"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/message_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="8dp"
+            app:stackFromEnd="true"
+            app:layoutManager="LinearLayoutManager"
+            tools:context=".chat.ChatActivity"
+            android:layout_above="@+id/editor"/>
+
+        <RelativeLayout
+            android:id="@+id/editor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryDark"
+            android:layout_alignParentBottom="true">
+
+            <ImageView
+                android:id="@+id/send_button"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="16dp"
+                android:padding="4dp"
+                android:onClick="sendMessage"
+                android:src="@drawable/ic_send" />
+
+            <EditText
+                android:id="@+id/input_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@id/send_button"
+                android:layout_centerVertical="true"
+                android:maxLines="4"
+                android:paddingStart="@dimen/padding"
+                android:paddingEnd="@dimen/padding"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:inputType="textCapSentences|textAutoComplete|textAutoCorrect"
+                android:textColorHint="#CFD8DC"
+                android:textColor="#CFD8DC"
+                android:hint="@string/chat_hint" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
 
 </LinearLayout>
