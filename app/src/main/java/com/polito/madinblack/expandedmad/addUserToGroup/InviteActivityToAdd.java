@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.polito.madinblack.expandedmad.R;
+import com.polito.madinblack.expandedmad.groupManaging.GroupSettings;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.newGroup.InviteRecyclerViewAdapter;
 import com.polito.madinblack.expandedmad.newGroup.SelectUser;
@@ -96,7 +97,7 @@ public class InviteActivityToAdd extends AppCompatActivity {
                     return true;
                 }
             case android.R.id.home: {
-                Intent intent = new Intent(this, TabView.class);
+                Intent intent = new Intent(this, GroupSettings.class);
                 intent.putExtra("groupIndex", groupId);
                 intent.putExtra("groupName", groupName);
                 navigateUpTo(intent);

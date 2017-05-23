@@ -42,6 +42,17 @@ public class UserToAddRecyclerViewAdapter extends RecyclerView.Adapter<UserToAdd
     @Override
     public void onBindViewHolder(final UserToAddRecyclerViewAdapter.ViewHolder holder, final int position) {
         final SelectUser data = _data.get(position);
+
+        if(data.getCheckedBox()) {
+            holder.check.setEnabled(false);
+            holder.already_in.setText(_c.getString(R.string.already_in));
+        }else if (!data.getCheckedBox()){
+            holder.check.setEnabled(true);
+            holder.already_in.setText("");
+            holder.title.setTextColor(ContextCompat.getColor(_c, R.color.primary_text));
+            holder.phone.setTextColor(ContextCompat.getColor(_c, R.color.primary_text));
+        }
+
         holder.title.setText(data.getName());
         holder.check.setChecked(data.getCheckedBox());
         holder.phone.setText(data.getPhone());
@@ -62,14 +73,6 @@ public class UserToAddRecyclerViewAdapter extends RecyclerView.Adapter<UserToAdd
                 }
             }
         });
-
-        if(data.getCheckedBox()) {
-            holder.check.setEnabled(false);
-            holder.already_in.setText(_c.getString(R.string.already_in));
-        }else{
-            holder.title.setTextColor(ContextCompat.getColor(_c, R.color.primary_text));
-            holder.phone.setTextColor(ContextCompat.getColor(_c, R.color.primary_text));
-        }
 
         // Set image if exists
         try {
