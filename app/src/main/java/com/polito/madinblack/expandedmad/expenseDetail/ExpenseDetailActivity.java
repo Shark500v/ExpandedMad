@@ -28,6 +28,7 @@ public class ExpenseDetailActivity extends AppCompatActivity {
     private String expenseId;
     private String expenseName;
     private String url;
+    private ValueEventListener valueEventListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,23 +44,26 @@ public class ExpenseDetailActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        expenseId = getIntent().getStringExtra(ExpenseDetailFragment.ARG_EXPENSE_ID);
+        expenseName = getIntent().getStringExtra(ExpenseDetailFragment.ARG_EXPENSE_NAME);
+
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(ExpenseDetailFragment.ARG_EXPENSE_ID, getIntent().getStringExtra(ExpenseDetailFragment.ARG_EXPENSE_ID));
-            arguments.putString(ExpenseDetailFragment.ARG_EXPENSE_NAME, getIntent().getStringExtra(ExpenseDetailFragment.ARG_EXPENSE_NAME));
+            arguments.putString(ExpenseDetailFragment.ARG_EXPENSE_ID, expenseId);
+            arguments.putString(ExpenseDetailFragment.ARG_EXPENSE_NAME, expenseName);
             ExpenseDetailFragment fragmentExpense;
             fragmentExpense = new ExpenseDetailFragment();
             fragmentExpense.setArguments(arguments);
             getSupportFragmentManager().beginTransaction().add(R.id.expense_detail_container, fragmentExpense).commit();
         }
-        expenseId = getIntent().getStringExtra(ExpenseDetailFragment.ARG_EXPENSE_ID);
-        expenseName = getIntent().getStringExtra(ExpenseDetailFragment.ARG_EXPENSE_NAME);
+
 
         mDatabaseForExpenseUrl = FirebaseDatabase.getInstance().getReference().child("expenses").child(expenseId).child("urlImage");
 
         expenseImage = (CircleImageView)findViewById(R.id.expense_image);
-        mDatabaseForExpenseUrl.addListenerForSingleValueEvent(new ValueEventListener() {
+
+        valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 url = dataSnapshot.getValue(String.class);
@@ -69,7 +73,12 @@ public class ExpenseDetailActivity extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
-        });
+        };
+
+
+
+
+
 
         expenseImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,6 +89,26 @@ public class ExpenseDetailActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+
+    @Override
+    public void onStart(){
+        super.onStart();
+
+        if(mDatabaseForExpenseUrl!=null && valueEventListener!=null)
+            mDatabaseForExpenseUrl.addValueEventListener(valueEventListener);
+
+
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        if(mDatabaseForExpenseUrl!=null && valueEventListener!=null)
+            mDatabaseForExpenseUrl.removeEventListener(valueEventListener);
+
+
     }
 
     @Override

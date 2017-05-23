@@ -24,6 +24,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.polito.madinblack.expandedmad.R;
@@ -45,6 +46,8 @@ public class GroupMemebersActivity extends AppCompatActivity {
     private static final String TAG = "GroupMemebersActivity";
 
     private DatabaseReference mUserGroupsReference;
+    private DatabaseReference mDatabaseForUserUrl;
+    private String url;
     private DatabaseReference mDatabase;
     private StorageReference mStorageReference;
     private SimpleItemRecyclerViewAdapter mAdapter;
@@ -225,14 +228,28 @@ public class GroupMemebersActivity extends AppCompatActivity {
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
             final UserForGroup us = holder.mItem;
-            mStorageReference = FirebaseStorage.getInstance().getReference().child("users").child(mValues.get(position).getFirebaseId()).child("userProfilePicture.jpg");
+            /*mStorageReference = FirebaseStorage.getInstance().getReference().child("users").child(mValues.get(position).getFirebaseId()).child("userProfilePicture.jpg");
             mStorageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
                 public void onSuccess(Uri uri) {
                     Glide.with(mContext).load(uri).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(holder.mImage);
                 }
-            });
+            });*/
             holder.mIdView.setText(mValues.get(position).getName() + " " + mValues.get(position).getSurname());
+
+            mDatabaseForUserUrl = FirebaseDatabase.getInstance().getReference().child("users").child(holder.mItem.getPhoneNumber()).child(holder.mItem.getFirebaseId()).child("urlImage");
+            mDatabaseForUserUrl.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    url = dataSnapshot.getValue(String.class);
+                    Glide.with(getApplicationContext()).load(url).error(R.drawable.icon_utente).into(holder.mImage);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override

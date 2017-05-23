@@ -13,11 +13,10 @@ import java.util.Map;
 
 public class Expense {
 
-    /*
-    public enum State{CONTEST, ACCEPTED}
-    public enum Tag{FOOD, WATER_BILL, GAS_BILL, LIGHT_BILL, FLIGHT, HOTEL, FUEL, DRINK, OTHER}
-    public enum Currency{YEN, EURO, DOLLAR, GBP}
-    */
+
+    public enum State{ONGOING, REJECTED, CONTESTED}
+    //public enum Tag{FOOD, WATER_BILL, GAS_BILL, LIGHT_BILL, FLIGHT, HOTEL, FUEL, DRINK, OTHER}
+
 
     private String  id;
     private String  name;
@@ -29,13 +28,14 @@ public class Expense {
     private Double  cost;
     private Double  roundedCost;
     private Currency.CurrencyISO  currencyISO;
-    //private String state
+    private State   state;
+    private String  paymentRejectedId;
     private String  groupId;
     private Long    year;
     private Long    month;
     private Long    day;
     private String  description;
-    private String urlImage;
+    private String  urlImage;
 
 
     private Map<String, PaymentFirebase> payments = new HashMap<>();
@@ -63,6 +63,7 @@ public class Expense {
         this.month = month;
         this.day = day;
         this.description = description;
+        this.state = State.ONGOING;
     }
 
 
@@ -83,6 +84,7 @@ public class Expense {
         this.day = day;
         this.description = description;
         this.payments = payments;
+        this.state = State.ONGOING;
     }
 
     public String getId() {
@@ -221,6 +223,21 @@ public class Expense {
         return null;
     }
 
+    public State getState() {
+        return state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
+    }
+
+    public String getPaymentRejectedId() {
+        return paymentRejectedId;
+    }
+
+    public void setPaymentRejectedId(String paymentRejectedId) {
+        this.paymentRejectedId = paymentRejectedId;
+    }
 
     public static String writeNewExpense(final DatabaseReference mDatabaseRootRefenrence, String name, String tag,
                                          String paidByFirebaseId, String paidByPhoneNumber, String paidByName, String paidBySurname, Double cost, Double roundedCost,

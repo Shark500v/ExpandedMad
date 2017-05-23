@@ -42,31 +42,20 @@ public class UserToAddRecyclerViewAdapter extends RecyclerView.Adapter<UserToAdd
     @Override
     public void onBindViewHolder(final UserToAddRecyclerViewAdapter.ViewHolder holder, final int position) {
         final SelectUser data = _data.get(position);
-        holder.title.setText(data.getName());
-        holder.check.setChecked(data.getCheckedBox());
-        holder.phone.setText(data.getPhone());
 
         if(data.getCheckedBox()) {
             holder.check.setEnabled(false);
             holder.already_in.setText(_c.getString(R.string.already_in));
-        }else{
+        }else if (!data.getCheckedBox()){
+            holder.check.setEnabled(true);
+            holder.already_in.setText("");
             holder.title.setTextColor(ContextCompat.getColor(_c, R.color.primary_text));
             holder.phone.setTextColor(ContextCompat.getColor(_c, R.color.primary_text));
         }
 
-        // Set image if exists
-        try {
-            if (data.getThumb() != null) {
-                holder.imageView.setImageBitmap(data.getThumb());
-            } else {
-                holder.imageView.setImageResource(R.drawable.contact_circle);
-            }
-        } catch (OutOfMemoryError e) {
-            // Add default picture
-            holder.imageView.setImageDrawable(this._c.getDrawable(R.drawable.contact_circle));
-            e.printStackTrace();
-        }
-        Log.e("Image Thumb", "--------------" + data.getThumb());
+        holder.title.setText(data.getName());
+        holder.check.setChecked(data.getCheckedBox());
+        holder.phone.setText(data.getPhone());
 
         // Set check box listener android
         holder.check.setOnClickListener(new View.OnClickListener() {
@@ -84,6 +73,20 @@ public class UserToAddRecyclerViewAdapter extends RecyclerView.Adapter<UserToAdd
                 }
             }
         });
+
+        // Set image if exists
+        try {
+            if (data.getThumb() != null) {
+                holder.imageView.setImageBitmap(data.getThumb());
+            } else {
+                holder.imageView.setImageResource(R.drawable.contact_circle);
+            }
+        } catch (OutOfMemoryError e) {
+            // Add default picture
+            holder.imageView.setImageDrawable(this._c.getDrawable(R.drawable.contact_circle));
+            e.printStackTrace();
+        }
+        Log.e("Image Thumb", "--------------" + data.getThumb());
     }
 
     @Override

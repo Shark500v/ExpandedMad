@@ -10,18 +10,18 @@ public class Payment {
     private String userFullName;
     private String expenseId;
     private Double paid;
-    private Double toPaid;
+    private Double toPay;
     private int weight;
     private boolean isWeightEnabled;
     private boolean isModified;
 
-    public Payment(String userFirebaseId, String userPhoneNumber, String userName, String userSurname, String expenseId, Double paid, Double toPaid){
+    public Payment(String userFirebaseId, String userPhoneNumber, String userName, String userSurname, String expenseId, Double paid, Double toPay){
         this.userFirebaseId     = userFirebaseId;
         this.userPhoneNumber    = userPhoneNumber;
         this.userFullName       = userName + " " + userSurname;
         this.expenseId          = expenseId;
         this.paid               = CostUtil.round(paid, 2);;
-        this.toPaid             = CostUtil.round(toPaid, 2);
+        this.toPay             = CostUtil.round(toPay, 2);
         this.weight             = 1;
         this.isWeightEnabled    = false;
         this.isModified         = false;
@@ -100,35 +100,35 @@ public class Payment {
         this.paid = CostUtil.round(paid,2);
     }
 
-    public double getToPaid() {
-        return toPaid;
+    public double getToPay() {
+        return toPay;
     }
 
-    public void setToPaid(double toPaid) {
+    public void setToPay(double toPay) {
 
-        this.toPaid = CostUtil.round(toPaid, 2);
+        this.toPay = CostUtil.round(toPay, 2);
     }
 
 
     public Double getDebit(){
 
 
-        if(paid < toPaid)
-            return (toPaid-paid);
+        if(paid < toPay)
+            return (toPay-paid);
         else
             return 0d;
     }
 
     public Double getCredit(){
-        if(paid > toPaid)
-            return (paid-toPaid);
+        if(paid > toPay)
+            return (paid-toPay);
         else
             return 0d;
 
     }
 
     public Double getBalance(){
-        return (paid-toPaid);
+        return (paid-toPay);
     }
 
 
@@ -136,7 +136,7 @@ public class Payment {
     @Override
     public String toString() {
 
-        return String.format(Locale.getDefault(), "%.2f",(paid))+"/"+String.format(Locale.getDefault(), "%.2f",(toPaid));
+        return String.format(Locale.getDefault(), "%.2f",(paid))+"/"+String.format(Locale.getDefault(), "%.2f",(toPay));
     }
 
 

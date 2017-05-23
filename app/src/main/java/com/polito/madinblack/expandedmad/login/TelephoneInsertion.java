@@ -245,6 +245,7 @@ public class TelephoneInsertion extends AppCompatActivity{
                 ma.setUserPhoneNumber(mPhoneNumber);
 
                 User.writeNewUser(mDatabaseRoot, ma.getFirebaseId(), ma.getUserName(),  ma.getUserSurname(), ma.getUserPhoneNumber(), ma.getUserEmail());
+
                 ma.setIsPhone(true);
 
 

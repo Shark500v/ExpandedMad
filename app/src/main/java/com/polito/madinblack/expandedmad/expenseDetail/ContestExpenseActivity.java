@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -16,6 +17,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
+import com.google.firebase.database.ValueEventListener;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.login.BaseActivity;
 import com.polito.madinblack.expandedmad.model.Balance;
@@ -36,30 +38,26 @@ public class ContestExpenseActivity extends BaseActivity {
     public static final String ARG_GROUP_ID ="expenseName";
     public static final String ARG_EXPENSE_COST ="expenseCost";
     public static final String ARG_CURRENCY_ISO ="currencyISO";
-    public static final String ARG_USER_NAME ="userName" ;
-    public static final String ARG_USER_SURNAME = "userName";
 
     private DatabaseReference mDatabaseRootReference;
-    private DatabaseReference mDatabasePaymentsReference;
-    private Query mDatabaseQuerySorted;
-    private RecyclerView recyclerView;
+    private DatabaseReference mDatabasePaymentReference;
+    private Query mDatabaseQueryFilter;
+
 
     private String expenseId;
     private String groupId;
     private Currency.CurrencyISO currencyISO;
-    private String expenseUserName;
-    private String expenseUserSurname;
     private Double expenseCost;
     private MyApplication ma;
-    private PaymentRecyclerAdapter mAdapter;
-    Map<String, PaymentInfo> changedPayments;
-
+    private ValueEventListener valueEventListener;
+    private String paymentId;
+    private PaymentFirebase paymentFirebase;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.payment_detail);
+        setContentView(R.layout.contest_expense);
 
         ma = MyApplication.getInstance();
 
@@ -67,16 +65,16 @@ public class ContestExpenseActivity extends BaseActivity {
         groupId             = getIntent().getStringExtra(ARG_GROUP_ID);
         expenseCost         = Double.valueOf(getIntent().getStringExtra(ARG_EXPENSE_COST));
         currencyISO         = Currency.CurrencyISO.valueOf(getIntent().getStringExtra(ARG_CURRENCY_ISO));
-        expenseUserName     = getIntent().getStringExtra(ARG_USER_NAME);
-        expenseUserSurname  = getIntent().getStringExtra(ARG_USER_SURNAME);
+
 
         mDatabaseRootReference = FirebaseDatabase.getInstance().getReference();
-        mDatabasePaymentsReference = mDatabaseRootReference.child("expenses/"+expenseId+"/payments");
-        mDatabaseQuerySorted = mDatabasePaymentsReference.orderByChild("sortingField");
+        mDatabasePaymentReference = mDatabaseRootReference.child("expenses/"+expenseId+"/payments");
+        mDatabaseQueryFilter = mDatabasePaymentReference.equalTo(ma.getUserPhoneNumber(), "userFirebaseId");
 
 
         //toolbar settings
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(getString(R.string.contention));
         setSupportActionBar(toolbar);
 
         // Show the Up button
@@ -85,20 +83,35 @@ public class ContestExpenseActivity extends BaseActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        recyclerView = (RecyclerView) findViewById(R.id.payment_list);
+        valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    for(DataSnapshot childDataSnapshot : dataSnapshot.getChildren()){
+                        paymentId = childDataSnapshot.getKey();
+                        paymentFirebase = childDataSnapshot.getValue(PaymentFirebase.class);
+                        if(paymentFirebase.getUserFirebaseId().equals(ma.getFirebaseId())) {
+                            ((TextView) findViewById(R.id.expense_cost)).setText(expenseCost.toString());
+                            ((TextView) findViewById(R.id.old_topay)).setText(paymentFirebase.getToPay().toString());
+                        }
 
 
-        changedPayments = new HashMap<>();
-        mAdapter = new PaymentRecyclerAdapter(
-                PaymentFirebase.class,
-                R.layout.list_item,
-                RecyclerView.ViewHolder.class,
-                getApplicationContext(),
-                mDatabaseQuerySorted,
-                changedPayments,
-                currencyISO
-        );
-        recyclerView.setAdapter(mAdapter);
+                    }
+
+
+
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+
+
     }
 
 
@@ -124,121 +137,8 @@ public class ContestExpenseActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
-        if (id == R.id.confirm_payment && changedPayments.size()>1) {
-
-            showProgressDialog();
-
-            Double totPaid = 0D;
-            PaymentInfo paymentInfoUserPaid = changedPayments.remove(ma.getUserPhoneNumber());
-            final Map<String, PaymentInfo> paymentToUpdate = new HashMap<>();
-            paymentToUpdate.putAll(changedPayments);
-            changedPayments.clear();
-
-
-
-            for(String paymentKey : paymentToUpdate.keySet()){
-
-                final PaymentInfo paymentInfo = paymentToUpdate.get(paymentKey);
-                totPaid += paymentInfo.getPaidNow();
-
-                mDatabaseRootReference
-                        .child("groups/"+groupId+"/users/"+paymentInfo.getUserFirebaseId()+"/balances/"+paymentInfoUserPaid.getUserFirebaseId())
-                        .runTransaction(new Transaction.Handler() {
-
-                            @Override
-                            public Transaction.Result doTransaction(MutableData currentData) {
-                                if (currentData.getValue() != null) {
-                                    Balance balance = currentData.getValue(Balance.class);
-                                    for(MutableData currentDataChild : currentData.getChildren()){
-                                        if(currentDataChild.getKey().equals("balance"))
-                                            currentDataChild.setValue(balance.getBalance() + Currency.convertCurrency(paymentToUpdate.get(balance.getUserPhoneNumber()).getPaidNow(), currencyISO, balance.getCurrencyISO()));
-                                    }
-                                }
-                                return Transaction.success(currentData);
-                            }
-
-                            @Override
-                            public void onComplete(DatabaseError databaseError,
-                                                   boolean committed, DataSnapshot currentData) {
-                                //This method will be called once with the results of the transaction.
-                                //Update remove the user from the group
-
-
-                            }
-                        });
-
-
-
-                mDatabaseRootReference
-                        .child("groups/"+groupId+"/users/"+paymentInfoUserPaid.getUserFirebaseId()+"/balances/"+paymentInfo.getUserFirebaseId())
-                        .runTransaction(new Transaction.Handler() {
-
-                            @Override
-                            public Transaction.Result doTransaction(MutableData currentData) {
-                                if (currentData.getValue() != null) {
-                                    Balance balance = currentData.getValue(Balance.class);
-                                    for(MutableData currentDataChild : currentData.getChildren()){
-                                        if(currentDataChild.getKey().equals("balance"))
-                                            currentDataChild.setValue(balance.getBalance() - Currency.convertCurrency(paymentToUpdate.get(balance.getUserPhoneNumber()).getPaidNow(), currencyISO, balance.getCurrencyISO()));
-                                    }
-
-                                }
-                                return Transaction.success(currentData);
-                            }
-
-                            @Override
-                            public void onComplete(DatabaseError databaseError,
-                                                   boolean committed, DataSnapshot currentData) {
-                                //This method will be called once with the results of the transaction.
-                                //Update remove the user from the group
-                                //if secondo thread ferma showDialog
-
-                            }
-                        });
-
-
-                mDatabaseRootReference
-                        .child("users/"+paymentInfo.getUserPhoneNumber()
-                                +"/"+paymentInfo.getUserFirebaseId()+"/groups/"+groupId
-                                +"/expenses/"+expenseId+"/myBalance")
-                        .setValue((paymentInfo.getPaidBefore()+paymentInfo.getPaidNow())-paymentInfo.getToPaid());
-
-
-                mDatabaseRootReference
-                        .child("expenses/"+expenseId+"/payments/"+paymentInfo.getId()+"/paid")
-                        .setValue(paymentInfo.getPaidBefore()+paymentInfo.getPaidNow());
-
-
-                /*update the history*/
-                HistoryInfo historyInfo = new HistoryInfo(paymentInfo.getUserNameDisplayed(), 1L, expenseCost, currencyISO, expenseUserName);
-                mDatabaseRootReference.child("history/"+groupId).push().setValue(historyInfo);
-
-
-            }
-
-            mDatabaseRootReference
-                    .child("users/"+paymentInfoUserPaid.getUserPhoneNumber()
-                            +"/"+paymentInfoUserPaid.getUserFirebaseId()+"/groups/"+groupId
-                            +"/expenses/"+expenseId+"/myBalance")
-                    .setValue(paymentInfoUserPaid.getBalance()-totPaid);
-
-
-            mDatabaseRootReference
-                    .child("expenses/"+expenseId+"/payments/"+paymentInfoUserPaid.getId()+"/paid")
-                    .setValue(paymentInfoUserPaid.getPaidBefore()-totPaid);
-
-            hideProgressDialog();
-
-            /*insert intent to go back*/
-            Intent intent = new Intent(this, ExpenseDetailFragment.class);
-            setResult(RESULT_OK, intent);
-            finish();
-
-        }else if(id == R.id.fill_all_paid){
-
-
-
+/*
+        if (id == R.id.confirm_contention) {
 
 
         }else if(id == 16908332){
@@ -247,7 +147,7 @@ public class ContestExpenseActivity extends BaseActivity {
             navigateUpTo(intent3);
             return true;
         }
-
+*/
         return super.onOptionsItemSelected(item);
     }
 

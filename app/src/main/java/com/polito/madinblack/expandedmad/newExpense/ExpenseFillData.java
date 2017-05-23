@@ -314,7 +314,7 @@ public class ExpenseFillData extends AppCompatActivity {
             intent = new Intent(this, TabView.class);
             intent.putExtra("groupIndex", groupID);
             intent.putExtra("groupName", groupName);
-            //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             //startActivity(intent);
             setResult(RESULT_OK, intent);
             finish();
@@ -452,9 +452,9 @@ public class ExpenseFillData extends AppCompatActivity {
     @SuppressWarnings("VisibleForTests")
     private void uploadFile() {
         if(bytesArr != null) {
-            final ProgressDialog progressDialog = new ProgressDialog(this);
-            progressDialog.setTitle("Uploading");
-            progressDialog.show();
+            //final ProgressDialog progressDialog = new ProgressDialog(this);
+            //progressDialog.setTitle("Uploading");
+            //progressDialog.show();
 
             StorageReference filePath = mStorage.child("groups").child(groupID).child("expenses").child(expenseId + ".jpg");
             filePath.putBytes(bytesArr).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -462,14 +462,14 @@ public class ExpenseFillData extends AppCompatActivity {
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     //if the upload is successfull
                     //hiding the progress dialog
-                    progressDialog.dismiss();
+                    //progressDialog.dismiss();
 
                     url = taskSnapshot.getDownloadUrl().toString();
                     mDatabaseForLoadUrl = FirebaseDatabase.getInstance().getReference().child("expenses").child(expenseId).child("urlImage");
                     mDatabaseForLoadUrl.setValue(url);
 
                     //and displaying a success toast
-                    Toast.makeText(getApplicationContext(), getString((R.string.file_uploaded)), Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getApplicationContext(), getString((R.string.file_uploaded)), Toast.LENGTH_LONG).show();
                 }
             })
                     .addOnFailureListener(new OnFailureListener() {
@@ -477,23 +477,23 @@ public class ExpenseFillData extends AppCompatActivity {
                         public void onFailure(@NonNull Exception exception) {
                             //if the upload is not successfull
                             //hiding the progress dialog
-                            progressDialog.dismiss();
+                            //progressDialog.dismiss();
                             //and displaying error message
-                            Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
+                            //Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     })
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                            //double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
 
-                            progressDialog.setMessage(getString(R.string.uploading) + ": "+ ((int)progress) + "%");
+                            //progressDialog.setMessage(getString(R.string.uploading) + ": "+ ((int)progress) + "%");
                         }
                     })
                     .addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onPaused(UploadTask.TaskSnapshot taskSnapshot) {
-                            System.out.println(getString(R.string.upload_pause));
+                            //System.out.println(getString(R.string.upload_pause));
                         }
                     });
         }
@@ -556,7 +556,7 @@ public class ExpenseFillData extends AppCompatActivity {
             if(currentPayment.isModified())
                 currentPayment.setModified(false);
             currentPayment.setWeight(1);
-            currentPayment.setToPaid(amount / users.size());
+            currentPayment.setToPay(amount / users.size());
             currentPayment.setWeightEnabled(enableWeight);
             recyclerView.getAdapter().notifyItemChanged(i, currentPayment);
         }
@@ -633,7 +633,7 @@ public class ExpenseFillData extends AppCompatActivity {
 
         for(Payment pay:mValues){
             if(pay.isModified()){
-                netAmount -= pay.getToPaid();
+                netAmount -= pay.getToPay();
             }
             else
                 totalWeigth += pay.getWeight();
@@ -644,9 +644,9 @@ public class ExpenseFillData extends AppCompatActivity {
         for(int i=0;i<mValues.size();i++){
             Payment currentPayment = mValues.get(i);
             if(netAmount>0 && !currentPayment.isModified())
-                currentPayment.setToPaid( (netAmount * currentPayment.getWeight())/totalWeigth);
+                currentPayment.setToPay( (netAmount * currentPayment.getWeight())/totalWeigth);
             else if(netAmount <=0 && !currentPayment.isModified())
-                currentPayment.setToPaid(0f);
+                currentPayment.setToPay(0f);
             else //currentPayment.isModified()
                 continue;
             recyclerView.getAdapter().notifyItemChanged(i, currentPayment);
@@ -672,7 +672,7 @@ public class ExpenseFillData extends AppCompatActivity {
 
         for(Payment pay:mValues){
             if(pay.isModified()){
-                netAmount -= pay.getToPaid();
+                netAmount -= pay.getToPay();
             }
             else
                 totalWeigth += pay.getWeight();
@@ -683,9 +683,9 @@ public class ExpenseFillData extends AppCompatActivity {
         for(int i=0;i<mValues.size();i++){
             Payment currentPayment = mValues.get(i);
             if(netAmount>0 && !currentPayment.isModified())
-                currentPayment.setToPaid( (netAmount * currentPayment.getWeight())/totalWeigth);
+                currentPayment.setToPay( (netAmount * currentPayment.getWeight())/totalWeigth);
             else if(netAmount <=0 && !currentPayment.isModified())
-                currentPayment.setToPaid(0f);
+                currentPayment.setToPay(0f);
             else //currentPayment.isModified()
                 continue;
             currentPayment.setWeightEnabled(enableWeight);
@@ -779,7 +779,7 @@ public class ExpenseFillData extends AppCompatActivity {
             else
                 holder.mIdView.setText( holder.mItem.getUserFullName());
             onBind = true;
-            holder.partition.setText( new DecimalFormat("#0.00").format( holder.mItem.getToPaid()));
+            holder.partition.setText( new DecimalFormat("#0.00").format( holder.mItem.getToPay()));
             onBind = false;
             holder.mNumber.setText( String.valueOf(holder.mItem.getWeight()) );
             holder.minus.setEnabled( holder.mItem.isWeightEnabled());
@@ -849,7 +849,7 @@ public class ExpenseFillData extends AppCompatActivity {
                                 else
                                     value = Double.parseDouble(str);
                             }
-                            mItem.setToPaid(value);
+                            mItem.setToPay(value);
                             mItem.setModified(true);
                             mNumber.setText("-");
                             minus.setEnabled(false);

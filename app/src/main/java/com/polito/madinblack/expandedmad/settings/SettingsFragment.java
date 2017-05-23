@@ -1,5 +1,6 @@
 package com.polito.madinblack.expandedmad.settings;
 
+import android.content.Intent;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -12,10 +13,16 @@ import android.preference.RingtonePreference;
 import android.text.TextUtils;
 
 import com.polito.madinblack.expandedmad.R;
+import com.polito.madinblack.expandedmad.login.CheckLogIn;
+import com.polito.madinblack.expandedmad.model.Currency;
+import com.polito.madinblack.expandedmad.model.MyApplication;
+
 
 public class SettingsFragment extends PreferenceFragment {
 
-    private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
+    private boolean flag;
+
+    private Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
             String stringValue = value.toString();
@@ -28,6 +35,18 @@ public class SettingsFragment extends PreferenceFragment {
 
                 // Set the summary to reflect the new value.
                 preference.setSummary(index >= 0 ? listPreference.getEntries()[index] : null);
+
+                if(preference.getKey().compareTo("pref_key_currency")==0){
+                    //devo settare la nuova currency come richiesto
+                    MyApplication.setCurrencyISOFavorite(Currency.getCurrencyISO(Integer.valueOf(stringValue)));
+                } else if(preference.getKey().compareTo("pref_key_language")==0){
+                    //I need to refresh the language
+                    if(flag){
+                        Refresh();
+                    }else {
+                        flag = true;
+                    }
+                }
 
             } else if (preference instanceof RingtonePreference) {
                 // For ringtone preferences, look up the correct display value
@@ -71,6 +90,9 @@ public class SettingsFragment extends PreferenceFragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        flag = false;
+
         bindPreferenceSummaryToValue(findPreference("pref_key_currency"));
         bindPreferenceSummaryToValue(findPreference("pref_key_language"));
         //bindPreferenceSummaryToValue(findPreference("pref_key_notifications_able"));
@@ -83,34 +105,7 @@ public class SettingsFragment extends PreferenceFragment {
         super.onPause();
     }
 
-    /*
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-
-        Preference pref = findPreference(key);
-
-        if (key.equals("pref_key_currency")) {
-            // For list preferences, look up the correct display value in
-            // the preference's 'entries' list.
-            ListPreference listPreference = (ListPreference) pref;
-            int index = listPreference.findIndexOfValue(stringValue);
-
-            // Set the summary to reflect the new value.
-            preference.setSummary(index >= 0 ? listPreference.getEntries()[index] : null);
-        } else if (key.equals("pref_key_language")) {
-            // Set summary to be the user-description for the selected value
-            pref.setSummary(sharedPreferences.getString(key, ""));
-        } else if (key.equals("pref_key_notifications_able")) {
-
-        } else if (key.equals("pref_key_notifications_ringtone")) {
-            // Set summary to be the user-description for the selected value
-            pref.setSummary(sharedPreferences.getString(key, ""));
-        } else if (key.equals("pref_key_notifications_vibrate")) {
-
-        }
-    }*/
-
-    private static void bindPreferenceSummaryToValue(Preference preference) {
+    private void bindPreferenceSummaryToValue(Preference preference) {
         // Set the listener to watch for value changes.
         preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
 
@@ -120,5 +115,10 @@ public class SettingsFragment extends PreferenceFragment {
                 PreferenceManager
                         .getDefaultSharedPreferences(preference.getContext())
                         .getString(preference.getKey(), ""));
+    }
+
+    public void Refresh(){
+        Intent refresh = new Intent(getActivity(), CheckLogIn.class);
+        startActivity(refresh);
     }
 }

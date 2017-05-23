@@ -1,12 +1,12 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
-        android:title="General"
+        android:title="@string/general"
         android:key="pref_key_appgeneral"
         android:icon="@drawable/ic_info_black_24dp">
 
         <ListPreference
-            android:title="Currency"
+            android:title="@string/currency"
             android:key="pref_key_currency"
             android:entries="@array/pref_currency_entries"
             android:entryValues="@array/pref_currency_values"
@@ -15,38 +15,38 @@
             android:positiveButtonText="@null" />
 
         <ListPreference
-            android:title="Language"
+            android:title="@string/language"
             android:key="pref_key_language"
             android:entries="@array/pref_language_entries"
             android:entryValues="@array/pref_language_values"
-            android:defaultValue="2"
+            android:defaultValue="0"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="Notifications"
+        android:title="@string/notifications"
         android:key="pref_key_notifications"
         android:icon="@drawable/ic_notifications_black_24dp">
 
         <SwitchPreference
             android:defaultValue="true"
             android:key="pref_key_notifications_able"
-            android:title="Notifications" />
+            android:title="@string/notifications" />
 
         <RingtonePreference
             android:defaultValue="content://settings/system/notification_sound"
             android:dependency="pref_key_notifications_able"
             android:key="pref_key_notifications_ringtone"
             android:ringtoneType="notification"
-            android:title="Ringtone" />
+            android:title="@string/ringtone" />
 
         <SwitchPreference
             android:defaultValue="true"
             android:dependency="pref_key_notifications_able"
             android:key="pref_key_notifications_vibrate"
-            android:title="Vibrate" />
+            android:title="@string/vibrate" />
 
     </PreferenceCategory>
 
