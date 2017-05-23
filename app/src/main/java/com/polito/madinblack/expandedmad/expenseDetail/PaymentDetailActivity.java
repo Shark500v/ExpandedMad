@@ -202,7 +202,7 @@ public class PaymentDetailActivity extends BaseActivity {
                         .child("users/"+paymentInfo.getUserPhoneNumber()
                                 +"/"+paymentInfo.getUserFirebaseId()+"/groups/"+groupId
                                 +"/expenses/"+expenseId+"/myBalance")
-                        .setValue((paymentInfo.getPaidBefore()+paymentInfo.getPaidNow())-paymentInfo.getToPaid());
+                        .setValue((paymentInfo.getPaidBefore()+paymentInfo.getPaidNow())-paymentInfo.getToPay());
 
 
                 mDatabaseRootReference

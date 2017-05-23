@@ -8,7 +8,7 @@ public class PaymentFirebase {
     private String userPhoneNumber;
     private String userFullName;
     private Double paid;
-    private Double toPaid;
+    private Double toPay;
     private String sortingField;
 
     //costruttore per il database
@@ -20,7 +20,7 @@ public class PaymentFirebase {
         this.userPhoneNumber    = payment.getUserPhoneNumber();
         this.userFirebaseId     = payment.getUserFirebaseId();
         this.paid               = CostUtil.round(payment.getPaid(), 2);
-        this.toPaid             = CostUtil.round(payment.getToPaid(), 2);
+        this.toPay             = CostUtil.round(payment.getToPay(), 2);
         this.userFullName       = payment.getUserFullName();
 
     }
@@ -66,34 +66,34 @@ public class PaymentFirebase {
         this.paid = CostUtil.round(paid,2);
     }
 
-    public Double getToPaid() {
-        return toPaid;
+    public Double getToPay() {
+        return toPay;
     }
 
 
-    public void setToPaid(Double toPaid) {
-        this.toPaid = CostUtil.round(toPaid,2);
+    public void setToPay(Double toPay) {
+        this.toPay = CostUtil.round(toPay,2);
     }
 
     public Double getDebit(){
 
 
-        if(paid < toPaid)
-            return CostUtil.roundDown(toPaid-paid, 2);
+        if(paid < toPay)
+            return CostUtil.roundDown(toPay-paid, 2);
         else
             return 0d;
     }
 
     public Double getCredit(){
-        if(paid > toPaid)
-            return CostUtil.roundDown(paid-toPaid, 2);
+        if(paid > toPay)
+            return CostUtil.roundDown(paid-toPay, 2);
         else
             return 0d;
 
     }
 
     public Double getBalance(){
-        return CostUtil.roundDown((paid-toPaid), 2);
+        return CostUtil.roundDown((paid-toPay), 2);
     }
 
     public String getSortingField() {
@@ -107,6 +107,6 @@ public class PaymentFirebase {
     @Override
     public String toString() {
 
-        return String.format(Locale.getDefault(), "%.2f",(paid))+"/"+String.format(Locale.getDefault(), "%.2f",(toPaid));
+        return String.format(Locale.getDefault(), "%.2f",(paid))+"/"+String.format(Locale.getDefault(), "%.2f",(toPay));
     }
 }

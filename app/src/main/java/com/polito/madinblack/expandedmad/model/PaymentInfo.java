@@ -12,7 +12,7 @@ public class PaymentInfo {
     private Double paidBefore;
     private String id;
     private String userNameDisplayed;
-    private Double toPaid;
+    private Double toPay;
 
 
     public PaymentInfo(){}
@@ -25,7 +25,7 @@ public class PaymentInfo {
         this.balance            = paymentFirebase.getBalance();
         this.paidBefore         = paymentFirebase.getPaid();
         this.userNameDisplayed  = paymentFirebase.getUserFullName();
-        this.toPaid             = paymentFirebase.getToPaid();
+        this.toPay             = paymentFirebase.getToPay();
         this.id                 = paymentFirebase.getId();
 
     }
@@ -88,11 +88,11 @@ public class PaymentInfo {
         this.userNameDisplayed = userNameDisplayed;
     }
 
-    public Double getToPaid() {
-        return toPaid;
+    public Double getToPay() {
+        return toPay;
     }
 
-    public void setToPaid(Double toPaid) {
-        this.toPaid = toPaid;
+    public void setToPay(Double toPay) {
+        this.toPay = toPay;
     }
 }

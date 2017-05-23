@@ -556,7 +556,7 @@ public class ExpenseFillData extends AppCompatActivity {
             if(currentPayment.isModified())
                 currentPayment.setModified(false);
             currentPayment.setWeight(1);
-            currentPayment.setToPaid(amount / users.size());
+            currentPayment.setToPay(amount / users.size());
             currentPayment.setWeightEnabled(enableWeight);
             recyclerView.getAdapter().notifyItemChanged(i, currentPayment);
         }
@@ -633,7 +633,7 @@ public class ExpenseFillData extends AppCompatActivity {
 
         for(Payment pay:mValues){
             if(pay.isModified()){
-                netAmount -= pay.getToPaid();
+                netAmount -= pay.getToPay();
             }
             else
                 totalWeigth += pay.getWeight();
@@ -644,9 +644,9 @@ public class ExpenseFillData extends AppCompatActivity {
         for(int i=0;i<mValues.size();i++){
             Payment currentPayment = mValues.get(i);
             if(netAmount>0 && !currentPayment.isModified())
-                currentPayment.setToPaid( (netAmount * currentPayment.getWeight())/totalWeigth);
+                currentPayment.setToPay( (netAmount * currentPayment.getWeight())/totalWeigth);
             else if(netAmount <=0 && !currentPayment.isModified())
-                currentPayment.setToPaid(0f);
+                currentPayment.setToPay(0f);
             else //currentPayment.isModified()
                 continue;
             recyclerView.getAdapter().notifyItemChanged(i, currentPayment);
@@ -672,7 +672,7 @@ public class ExpenseFillData extends AppCompatActivity {
 
         for(Payment pay:mValues){
             if(pay.isModified()){
-                netAmount -= pay.getToPaid();
+                netAmount -= pay.getToPay();
             }
             else
                 totalWeigth += pay.getWeight();
@@ -683,9 +683,9 @@ public class ExpenseFillData extends AppCompatActivity {
         for(int i=0;i<mValues.size();i++){
             Payment currentPayment = mValues.get(i);
             if(netAmount>0 && !currentPayment.isModified())
-                currentPayment.setToPaid( (netAmount * currentPayment.getWeight())/totalWeigth);
+                currentPayment.setToPay( (netAmount * currentPayment.getWeight())/totalWeigth);
             else if(netAmount <=0 && !currentPayment.isModified())
-                currentPayment.setToPaid(0f);
+                currentPayment.setToPay(0f);
             else //currentPayment.isModified()
                 continue;
             currentPayment.setWeightEnabled(enableWeight);
@@ -779,7 +779,7 @@ public class ExpenseFillData extends AppCompatActivity {
             else
                 holder.mIdView.setText( holder.mItem.getUserFullName());
             onBind = true;
-            holder.partition.setText( new DecimalFormat("#0.00").format( holder.mItem.getToPaid()));
+            holder.partition.setText( new DecimalFormat("#0.00").format( holder.mItem.getToPay()));
             onBind = false;
             holder.mNumber.setText( String.valueOf(holder.mItem.getWeight()) );
             holder.minus.setEnabled( holder.mItem.isWeightEnabled());
@@ -849,7 +849,7 @@ public class ExpenseFillData extends AppCompatActivity {
                                 else
                                     value = Double.parseDouble(str);
                             }
-                            mItem.setToPaid(value);
+                            mItem.setToPay(value);
                             mItem.setModified(true);
                             mNumber.setText("-");
                             minus.setEnabled(false);

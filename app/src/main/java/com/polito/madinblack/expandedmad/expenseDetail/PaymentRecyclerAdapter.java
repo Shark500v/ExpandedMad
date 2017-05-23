@@ -74,7 +74,7 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     String item = (String) parent.getItemAtPosition(position);
-                    holder.mToPaid.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(paymentFirebase.getDebit(), expenseCurrencyISO, Currency.getISOCode(item))));
+                    holder.mToPay.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(paymentFirebase.getDebit(), expenseCurrencyISO, Currency.getISOCode(item))));
                 }
 
                 @Override
@@ -94,7 +94,7 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
             holder.mFillPaid.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    holder.mPaid.setText( holder.mToPaid.getText().toString());
+                    holder.mPaid.setText( holder.mToPay.getText().toString());
                 }
             });
 
@@ -104,8 +104,8 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
 
                     String editString = CostUtil.replaceDecimalComma(s.toString());
                     if(s.length() != 0 && CostUtil.isParsableAsDouble(editString) && Double.valueOf(editString)!=0){
-                        if(Double.valueOf(editString)>Double.valueOf(CostUtil.replaceDecimalComma(holder.mToPaid.getText().toString()))){
-                            holder.mPaid.setText(holder.mToPaid.getText().toString());
+                        if(Double.valueOf(editString)>Double.valueOf(CostUtil.replaceDecimalComma(holder.mToPay.getText().toString()))){
+                            holder.mPaid.setText(holder.mToPay.getText().toString());
                         }else{
                             PaymentInfo paymentInfo
                                     = new PaymentInfo(paymentFirebase, Currency.convertCurrency(Double.valueOf(CostUtil.replaceDecimalComma(holder.mPaid.getText().toString())), Currency.getISOCode(holder.mCurrency.getSelectedItem().toString()), expenseCurrencyISO));
@@ -133,7 +133,7 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
             paymentInfo.setId(paymentFirebase.getId());
             changedPayment.put(paymentFirebase.getUserPhoneNumber(), paymentInfo);
             holder.mUserView.setText(contex.getString(R.string.you));
-            holder.mToPaid.setText(String.format(Locale.getDefault(), "%.2f",model.getToPaid()));
+            holder.mToPay.setText(String.format(Locale.getDefault(), "%.2f",model.getToPay()));
             holder.mPaid.setText(String.format(Locale.getDefault(), "%.2f",model.getPaid()));
             if(model.getPaid()!=0){
                 holder.mPaid.setTextColor(Color.parseColor("#00c200"));
@@ -152,7 +152,7 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public final TextView mUserView;
         public final EditText mPaid;
-        public final TextView mToPaid;
+        public final TextView mToPay;
         public final CircleImageView mFillPaid;
         public final Spinner mCurrency;
         public final View mView;
@@ -162,7 +162,7 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
             super(view);
             mUserView = (TextView) view.findViewById(R.id.user_name);
             mPaid = (EditText) view.findViewById(R.id.paid);
-            mToPaid = (TextView) view.findViewById(R.id.to_paid);
+            mToPay = (TextView) view.findViewById(R.id.to_paid);
             mFillPaid = (CircleImageView) view.findViewById(R.id.fill_paid);
             mCurrency = (Spinner) view.findViewById(R.id.currency);
             mView = view;

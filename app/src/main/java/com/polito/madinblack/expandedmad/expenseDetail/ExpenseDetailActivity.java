@@ -44,18 +44,20 @@ public class ExpenseDetailActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        expenseId = getIntent().getStringExtra(ExpenseDetailFragment.ARG_EXPENSE_ID);
+        expenseName = getIntent().getStringExtra(ExpenseDetailFragment.ARG_EXPENSE_NAME);
+
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(ExpenseDetailFragment.ARG_EXPENSE_ID, getIntent().getStringExtra(ExpenseDetailFragment.ARG_EXPENSE_ID));
-            arguments.putString(ExpenseDetailFragment.ARG_EXPENSE_NAME, getIntent().getStringExtra(ExpenseDetailFragment.ARG_EXPENSE_NAME));
+            arguments.putString(ExpenseDetailFragment.ARG_EXPENSE_ID, expenseId);
+            arguments.putString(ExpenseDetailFragment.ARG_EXPENSE_NAME, expenseName);
             ExpenseDetailFragment fragmentExpense;
             fragmentExpense = new ExpenseDetailFragment();
             fragmentExpense.setArguments(arguments);
             getSupportFragmentManager().beginTransaction().add(R.id.expense_detail_container, fragmentExpense).commit();
         }
-        expenseId = getIntent().getStringExtra(ExpenseDetailFragment.ARG_EXPENSE_ID);
-        expenseName = getIntent().getStringExtra(ExpenseDetailFragment.ARG_EXPENSE_NAME);
+
 
         mDatabaseForExpenseUrl = FirebaseDatabase.getInstance().getReference().child("expenses").child(expenseId).child("urlImage");
 

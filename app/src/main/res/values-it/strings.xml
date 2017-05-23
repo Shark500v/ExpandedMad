@@ -196,4 +196,5 @@
     <string name="old_paid_topay">Da Pagare assegnati</string>
     <string name="currencyISO">CurrencyISO</string>
     <string name="motivation">Motivo *</string>
+    <string name="contention">Genera Contesa</string>
 </resources>
