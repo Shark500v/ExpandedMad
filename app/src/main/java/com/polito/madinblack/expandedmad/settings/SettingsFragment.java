@@ -1,4 +1,4 @@
-package com.polito.madinblack.expandedmad.Settings;
+package com.polito.madinblack.expandedmad.settings;
 
 import android.content.Intent;
 import android.media.Ringtone;

@@ -196,5 +196,12 @@
     <string name="new_paid">New cost Paid</string>
     <string name="expense_cost">Expense Cost</string>
     <string name="old_paid_topay">To Pay assign</string>
-    <string name="motivation">Motivation</string>
+    <string name="Paid">Paid</string>
+    <string name="general">General</string>
+    <string name="language">Language</string>
+    <string name="notifications">Notifications</string>
+    <string name="ringtone">Ringtone</string>
+    <string name="vibrate">Vibrate</string>
+    <string name="motivation">Motivation *</string>
+    <string name="contention">Generate Contention</string>
 </resources>

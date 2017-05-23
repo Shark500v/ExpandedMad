@@ -71,6 +71,7 @@ public class SelectContactToAdd extends AppCompatActivity {
         mValueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                usersInGroup.clear();
                 for(DataSnapshot userInGroupSnapshot : dataSnapshot.getChildren()){
                     UserForGroup userForGroup = userInGroupSnapshot.getValue(UserForGroup.class);
                     String userPhoneNumber = userForGroup.getPhoneNumber();

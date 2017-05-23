@@ -195,5 +195,15 @@
     <string name="expense_cost">Expense Cost</string>
     <string name="old_paid_topay">Da Pagare assegnati</string>
     <string name="currencyISO">CurrencyISO</string>
-    <string name="motivation">Motivazione</string>
+    <string name="err_msg_prefix">Prefisso non valido</string>
+    <string name="err_msg_prefix_number">Inserire il numero senza il prefisso</string>
+    <string name="hint_prefix">prefisso</string>
+    <string name="settings_title">Impostazioni e preferenze</string>
+    <string name="general">Generale</string>
+    <string name="language">Lingua</string>
+    <string name="notifications">Notifiche</string>
+    <string name="ringtone">Suoneria</string>
+    <string name="vibrate">Vibrazione</string>
+    <string name="motivation">Motivo *</string>
+    <string name="contention">Genera Contesa</string>
 </resources>
