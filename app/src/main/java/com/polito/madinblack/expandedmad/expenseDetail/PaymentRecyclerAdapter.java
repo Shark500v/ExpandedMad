@@ -162,7 +162,7 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
             super(view);
             mUserView = (TextView) view.findViewById(R.id.user_name);
             mPaid = (EditText) view.findViewById(R.id.paid);
-            mToPay = (TextView) view.findViewById(R.id.to_paid);
+            mToPay = (TextView) view.findViewById(R.id.to_pay);
             mFillPaid = (CircleImageView) view.findViewById(R.id.fill_paid);
             mCurrency = (Spinner) view.findViewById(R.id.currency);
             mView = view;
