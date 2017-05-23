@@ -219,4 +219,5 @@
     <string name="select_tag">Select tag</string>
     <string name="related_to">related to</string>
 
+    <string name="contention">Generate Contention</string>
 </resources>

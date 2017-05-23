@@ -129,7 +129,7 @@
             android:textSize="18sp"/>
 
         <TextView
-            android:id="@+id/old_paid_currency"
+            android:id="@+id/new_topay_currency"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="€"
@@ -151,7 +151,7 @@
         android:orientation="horizontal"
         >
             <EditText
-                android:id="@+id/input_description"
+                android:id="@+id/input_motivation"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:inputType="textMultiLine"
