@@ -128,11 +128,12 @@ public class TabView extends AppCompatActivity {
     }
 
     //show the toolbar
+    /*
     public void expandToolbar(){
         //setExpanded(boolean expanded, boolean animate)
         AppBarLayout appBarLayout = (AppBarLayout)findViewById(R.id.appbar);
         appBarLayout.setExpanded(true, true);
-    }
+    }*/
 
     
     @Override
@@ -148,13 +149,13 @@ public class TabView extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
 
-                expandToolbar();
+                //expandToolbar();
 
                 if (position == 0) {
                     fab.hide();
                 } else if (position == 1) {
                     fab.show();
-                } else if (position == 2){
+                } else if (position == 2) {
                     fab.hide();
                 }
             }

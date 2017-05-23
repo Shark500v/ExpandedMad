@@ -68,6 +68,7 @@
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:gravity="center_horizontal"
+                    android:inputType="textCapSentences|textAutoComplete|textAutoCorrect"
                     android:hint="@string/hint_title" />
             </android.support.design.widget.TextInputLayout>
 

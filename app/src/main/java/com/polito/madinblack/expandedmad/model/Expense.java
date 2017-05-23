@@ -243,7 +243,7 @@ public class Expense {
                                          String paidByFirebaseId, String paidByPhoneNumber, String paidByName, String paidBySurname, Double cost, Double roundedCost,
                                          final Currency.CurrencyISO currencyISO, final String groupId, Long year, Long month, Long day, String description, List<Payment> paymentList){
 
-        DatabaseReference myExpenseRef = mDatabaseRootRefenrence.child("prova/expenses").push();
+        DatabaseReference myExpenseRef = mDatabaseRootRefenrence.child("expenses").push();
         final String expenseKey = myExpenseRef.getKey();
 
         Expense expense = new Expense(expenseKey, name, tag, paidByName, paidBySurname, paidByFirebaseId, paidByPhoneNumber, CostUtil.round(cost, 2), CostUtil.round(roundedCost, 2), currencyISO, groupId, year, month, day, description);
