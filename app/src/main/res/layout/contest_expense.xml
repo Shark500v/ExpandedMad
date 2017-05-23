@@ -20,22 +20,34 @@
 
         <TextView
             android:id="@+id/expense_cost"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="55"
             android:textStyle="bold"
             android:textSize="18sp"
             android:gravity="end"
             android:layout_margin="16dp"
-            android:textAlignment="textEnd"
             />
+        <TextView
+            android:id="@+id/expense_currency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="€"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:gravity="end"
+            android:layout_margin="16dp"
+            />
+
+
+
     </LinearLayout>
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/old_paid_layout"
+        android:id="@+id/old_topay_layout"
         android:layout_below="@+id/expense_layout"
         android:orientation="horizontal"
         >
@@ -47,21 +59,34 @@
             android:textSize="20sp"/>
 
         <TextView
-            android:id="@+id/old_paid"
-            android:layout_width="50dp"
+            android:id="@+id/old_topay"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="15"
             android:textStyle="bold"
             android:gravity="center"
-            android:textSize="18sp"/>
+            android:textSize="18sp"
+            android:textAlignment="textEnd"
+            />
+        <TextView
+            android:id="@+id/old_topay_currency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="€"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:gravity="end"
+            android:layout_margin="16dp"
+            />
+
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/currency_layout"
-        android:layout_below="@+id/old_paid_layout"
+        android:layout_below="@+id/old_topay_layout"
         android:orientation="horizontal"
         >
         <TextView
@@ -72,13 +97,10 @@
             android:layout_margin="16dp"/>
         <Spinner
             android:id="@+id/currencyISO"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="5dp" />
     </LinearLayout>
-
-
-
 
 
 
@@ -98,13 +120,26 @@
             android:textSize="20sp"/>
 
         <EditText
-            android:id="@+id/balance_container"
+            android:id="@+id/new_topay"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:hint="0.00"
             android:gravity="center"
             android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/old_paid_currency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="€"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:gravity="end"
+            android:layout_margin="16dp"
+            />
+
+
     </LinearLayout>
 
 
@@ -115,13 +150,6 @@
         android:layout_below="@+id/new_topay_layout"
         android:orientation="horizontal"
         >
-
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/input_layout_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
             <EditText
                 android:id="@+id/input_description"
                 android:layout_width="match_parent"
@@ -132,7 +160,7 @@
                 android:paddingLeft="10dp"
                 android:hint="@string/motivation"
                 android:background="@layout/rounded_border_edittext"/>
-        </android.support.design.widget.TextInputLayout>
+
     </LinearLayout>
 
 

@@ -354,9 +354,9 @@ public class NewGroup extends AppCompatActivity {
     @SuppressWarnings("VisibleForTests")
     public void uploadGroupPhoto() {
         if(imageData != null) {
-            final ProgressDialog progressDialog = new ProgressDialog(this);
-            progressDialog.setTitle(getString(R.string.uploading));
-            progressDialog.show();
+           // final ProgressDialog progressDialog = new ProgressDialog(this);
+            //progressDialog.setTitle(getString(R.string.uploading));
+            //progressDialog.show();
 
             final StorageReference filePathGroups = mStorage.child("groups").child(groupCode).child("groupPicture").child("groupPicture.jpg");
 
@@ -365,7 +365,7 @@ public class NewGroup extends AppCompatActivity {
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     //if the upload is successfull
                     //hiding the progress dialog
-                    progressDialog.dismiss();
+                    //progressDialog.dismiss();
 
                     url = taskSnapshot.getDownloadUrl().toString();
                     mDatabaseForUrl = FirebaseDatabase.getInstance().getReference().child("groups").child(groupCode).child("urlImage");
@@ -377,7 +377,7 @@ public class NewGroup extends AppCompatActivity {
                     //StorageMetadata metadata = new StorageMetadata.Builder().setCustomMetadata("Group", groupCode).build(); //da cambiare, solo per prova
                     //filePathGroups.updateMetadata(metadata);
                     //and displaying a success toast
-                    Toast.makeText(getApplicationContext(), getString(R.string.file_uploaded), Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getApplicationContext(), getString(R.string.file_uploaded), Toast.LENGTH_LONG).show();
                 }
             })
                     .addOnFailureListener(new OnFailureListener() {
@@ -385,23 +385,23 @@ public class NewGroup extends AppCompatActivity {
                         public void onFailure(@NonNull Exception exception) {
                             //if the upload is not successfull
                             //hiding the progress dialog
-                            progressDialog.dismiss();
+                           // progressDialog.dismiss();
                             //and displaying error message
-                            Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
+                            //Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     })
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                            //double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
 
-                            progressDialog.setMessage(getString(R.string.uploading) + ": " + ((int)progress) + "%");
+                            //progressDialog.setMessage(getString(R.string.uploading) + ": " + ((int)progress) + "%");
                         }
                     })
                     .addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onPaused(UploadTask.TaskSnapshot taskSnapshot) {
-                            System.out.println(getString(R.string.upload_pause));
+                            //System.out.println(getString(R.string.upload_pause));
                         }
                     });
         }

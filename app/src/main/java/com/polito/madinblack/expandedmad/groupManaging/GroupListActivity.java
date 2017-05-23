@@ -37,7 +37,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.polito.madinblack.expandedmad.R;
-import com.polito.madinblack.expandedmad.settings.SettingsActivity;
+import com.polito.madinblack.expandedmad.settings.*;
 import com.polito.madinblack.expandedmad.StatisticsGraphs;
 import com.polito.madinblack.expandedmad.UserPage;
 import com.polito.madinblack.expandedmad.login.Logout;
@@ -71,6 +71,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
     private DatabaseReference mDatabaseForUserUrl;
     private SimpleItemRecyclerViewAdapter mAdapter;
     private NavigationView navigationView;
+    private ValueEventListener valueEventListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +106,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         tv1 = (TextView) header.findViewById(R.id.textView2);
         tv2 = (TextView) header.findViewById(R.id.textView3);
 
-        mDatabaseForUserUrl.addListenerForSingleValueEvent(new ValueEventListener() {
+        valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String url = dataSnapshot.getValue(String.class);
@@ -116,7 +117,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        };
 
         /*mUserStorage.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -132,6 +133,11 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
     @Override
     public void onStart(){
         super.onStart();
+
+        if(mDatabaseRootReference!=null && valueEventListener!=null)
+            mDatabaseForUserUrl.addValueEventListener(valueEventListener);
+
+
         //in questo punto il codice prende la lista principale e la mostra come recyclerview
         View recyclerView = findViewById(R.id.group_list);
         assert recyclerView != null;
@@ -149,6 +155,9 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         // Clean up comments listener
         if(mAdapter!=null)
             mAdapter.cleanupListener();
+
+        if(mDatabaseRootReference!=null && valueEventListener!=null)
+            mDatabaseRootReference.removeEventListener(valueEventListener);
     }
 
 
@@ -274,7 +283,8 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         }
 
         @Override
-        public void onBindViewHolder(final SimpleItemRecyclerViewAdapter.ViewHolder holder, final int position) {
+        public void onBindViewHolder(final SimpleItemRecyclerViewAdapter.ViewHolder holder, int position) {
+
             holder.mItem = mValues.get(position);   //mValues.get(position) rappresenta un singolo elemento della nostra lista di gruppi
             if (mValues.get(position).getSize() > 1) {
                 holder.mNumView.setText(Long.toString(mValues.get(position).getSize()) + " " + getString(R.string.members));
@@ -315,11 +325,12 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             });
 
             mDatabaseForGroupUrl = FirebaseDatabase.getInstance().getReference().child("groups").child(mValues.get(position).getId()).child("urlImage");
-            mDatabaseForGroupUrl.addListenerForSingleValueEvent(new ValueEventListener() {
+            mDatabaseForGroupUrl.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     String url = dataSnapshot.getValue(String.class);
                     Glide.with(getApplicationContext()).load(url).diskCacheStrategy(DiskCacheStrategy.SOURCE).error(R.drawable.teamwork).into(holder.mImage);
+
                 }
 
                 @Override

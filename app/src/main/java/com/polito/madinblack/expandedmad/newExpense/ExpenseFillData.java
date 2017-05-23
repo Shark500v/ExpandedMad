@@ -314,7 +314,7 @@ public class ExpenseFillData extends AppCompatActivity {
             intent = new Intent(this, TabView.class);
             intent.putExtra("groupIndex", groupID);
             intent.putExtra("groupName", groupName);
-            //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             //startActivity(intent);
             setResult(RESULT_OK, intent);
             finish();
@@ -452,9 +452,9 @@ public class ExpenseFillData extends AppCompatActivity {
     @SuppressWarnings("VisibleForTests")
     private void uploadFile() {
         if(bytesArr != null) {
-            final ProgressDialog progressDialog = new ProgressDialog(this);
-            progressDialog.setTitle("Uploading");
-            progressDialog.show();
+            //final ProgressDialog progressDialog = new ProgressDialog(this);
+            //progressDialog.setTitle("Uploading");
+            //progressDialog.show();
 
             StorageReference filePath = mStorage.child("groups").child(groupID).child("expenses").child(expenseId + ".jpg");
             filePath.putBytes(bytesArr).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -462,14 +462,14 @@ public class ExpenseFillData extends AppCompatActivity {
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     //if the upload is successfull
                     //hiding the progress dialog
-                    progressDialog.dismiss();
+                    //progressDialog.dismiss();
 
                     url = taskSnapshot.getDownloadUrl().toString();
                     mDatabaseForLoadUrl = FirebaseDatabase.getInstance().getReference().child("expenses").child(expenseId).child("urlImage");
                     mDatabaseForLoadUrl.setValue(url);
 
                     //and displaying a success toast
-                    Toast.makeText(getApplicationContext(), getString((R.string.file_uploaded)), Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getApplicationContext(), getString((R.string.file_uploaded)), Toast.LENGTH_LONG).show();
                 }
             })
                     .addOnFailureListener(new OnFailureListener() {
@@ -477,23 +477,23 @@ public class ExpenseFillData extends AppCompatActivity {
                         public void onFailure(@NonNull Exception exception) {
                             //if the upload is not successfull
                             //hiding the progress dialog
-                            progressDialog.dismiss();
+                            //progressDialog.dismiss();
                             //and displaying error message
-                            Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
+                            //Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     })
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                            //double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
 
-                            progressDialog.setMessage(getString(R.string.uploading) + ": "+ ((int)progress) + "%");
+                            //progressDialog.setMessage(getString(R.string.uploading) + ": "+ ((int)progress) + "%");
                         }
                     })
                     .addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onPaused(UploadTask.TaskSnapshot taskSnapshot) {
-                            System.out.println(getString(R.string.upload_pause));
+                            //System.out.println(getString(R.string.upload_pause));
                         }
                     });
         }
