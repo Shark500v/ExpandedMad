@@ -66,6 +66,7 @@
             android:id="@+id/group_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="textCapSentences|textAutoComplete|textAutoCorrect"
             android:layout_toRightOf="@id/group_icon"
             android:layout_centerVertical="true"
             android:hint="@string/group_name"/>
