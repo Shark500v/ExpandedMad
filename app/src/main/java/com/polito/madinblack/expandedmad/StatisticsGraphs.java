@@ -1,6 +1,10 @@
 package com.polito.madinblack.expandedmad;
 
 
+import android.annotation.TargetApi;
+import android.app.Activity;
+import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -25,8 +29,10 @@ import com.polito.madinblack.expandedmad.model.ExpenseForUser;
 import com.polito.madinblack.expandedmad.model.GroupForUser;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 
@@ -52,6 +58,8 @@ public class StatisticsGraphs extends AppCompatActivity {
     private String yearSelected;
     private String tagSelected;
     private String groupId;
+    List<String> tags = new ArrayList<>();
+    List<String> tagsOth = new ArrayList<>();
     //private DatabaseReference mDatabase;
     //private String firebaseId;
     //private String phoneNumber;
@@ -68,6 +76,11 @@ public class StatisticsGraphs extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+        Locale locale = getCurrentLocale();
+
+        tags = Arrays.asList(getResources().getStringArray(R.array.tags));
+        tagsOth = Arrays.asList(getResources().getStringArray(R.array.tagsOtherLanguage));
 
         graph = (GraphView) findViewById(R.id.graph1);
         setGraph(graph);
@@ -227,6 +240,7 @@ public class StatisticsGraphs extends AppCompatActivity {
     public void initGraph(final GraphView graph, String groupId, String year, final String groupName, String tag) {
         final String yearSelected = year;
         final String tagSelected = tag;
+        final int posTagSel = getTagPosition(tagSelected);
         resetMap(groupExpensesByMonth);
         if(!groupName.equals(getString(R.string.all_groups))) {
             mGroupsEventListener = mDatabaseExpenseReference.addValueEventListener(new ValueEventListener() {
@@ -239,12 +253,12 @@ public class StatisticsGraphs extends AppCompatActivity {
                         if(!yearSelected.equals(getString(R.string.all_years))) {
                             if (yearStr.equals(yearSelected)) {              //controllo che appartenga all'anno selezionato
                                 if(tagSelected.equals(getString(R.string.general))) {
-                                    Double expenseCost = expenseForUser.getCost();                                  //prendo il costo della expenseForUser
+                                    Double expenseCost = expenseForUser.getCost();//prendo il costo della expenseForUser
                                     Double month = Double.valueOf(expenseForUser.getMonth());
                                     expenseCost += groupExpensesByMonth.get(month);                                 //gli aggiungo il valore già presente nella mappa ai passi precedenti
                                     groupExpensesByMonth.put(month, expenseCost);    //aggiorno la mappa alla posizione del mese della expense
                                     //Toast.makeText(getApplicationContext(), String.valueOf(groupExpensesByMonth.get(5.0)), Toast.LENGTH_LONG).show();
-                                }else if(tagStr.equals(tagSelected)){
+                                }else if(posTagSel == getTagPosition(tagStr)){
                                     Double expenseCost = expenseForUser.getCost();
                                     Double month = Double.valueOf(expenseForUser.getMonth());
                                     expenseCost += groupExpensesByMonth.get(month);
@@ -256,7 +270,7 @@ public class StatisticsGraphs extends AppCompatActivity {
                             Double month = Double.valueOf(expenseForUser.getMonth());
                             expenseCost += groupExpensesByMonth.get(month);                                 //gli aggiungo il valore già presente nella mappa ai passi precedenti
                             groupExpensesByMonth.put(month, expenseCost);    //aggiorno la mappa alla posizione del mese della expense
-                        }else if (tagStr.equals(tagSelected)){
+                        }else if (posTagSel == getTagPosition(tagStr)){
                             Double expenseCost = expenseForUser.getCost();
                             Double month = Double.valueOf(expenseForUser.getMonth());
                             expenseCost += groupExpensesByMonth.get(month);
@@ -385,6 +399,26 @@ public class StatisticsGraphs extends AppCompatActivity {
     private void resetMap(Map <Double,Double> map){
         for(int i = 1; i <= 12; i++){
             map.put(Double.valueOf(i), 0.0);
+        }
+    }
+
+    public int getTagPosition(String tagSelected){
+        for(int i = 0; i < tags.size(); i++){
+            if(tags.get(i).equals(tagSelected))
+                return i;
+            if(tagsOth.get(i).equals(tagSelected))
+                return i;
+        }
+        return -1;
+    }
+
+    @TargetApi(Build.VERSION_CODES.N)
+    public Locale getCurrentLocale(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+            return getResources().getConfiguration().getLocales().get(0);
+        } else{
+            //noinspection deprecation
+            return getResources().getConfiguration().locale;
         }
     }
 

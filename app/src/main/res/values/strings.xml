@@ -30,6 +30,17 @@
         <item name="hotel">Hotel</item>
         <item name="other">Other</item>
     </string-array>
+    <string-array name="tagsOtherLanguage">
+        <item name="water_bill">Bolletta_Acqua</item>
+        <item name="light_bill">Bolletta_Luce</item>
+        <item name="gas_bill">Bolletta_Gas</item>
+        <item name="flight">Volo_Aereo</item>
+        <item name="fuel">Carburante</item>
+        <item name="drinks">Bevande</item>
+        <item name="food">Alimentari</item>
+        <item name="hotel">Hotel</item>
+        <item name="other">Altro</item>
+    </string-array>
     <string-array name="tagsForGraph">
         <item name="select_tag">Select tag</item>
         <item name="all_tags">General</item>
