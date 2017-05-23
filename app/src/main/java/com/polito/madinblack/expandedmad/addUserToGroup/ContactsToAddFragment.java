@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.polito.madinblack.expandedmad.groupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.R;
+import com.polito.madinblack.expandedmad.groupManaging.GroupSettings;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.newGroup.SelectUser;
 
@@ -103,7 +104,7 @@ public class ContactsToAddFragment extends Fragment {
                 } else {
                     // permission denied
                     // allora torno alla pagina precedente
-                    getActivity().navigateUpTo(new Intent(getContext(), GroupListActivity.class));
+                    getActivity().navigateUpTo(new Intent(getContext(), GroupSettings.class));
                 }
                 return;
             }

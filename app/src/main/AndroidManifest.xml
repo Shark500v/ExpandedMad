@@ -237,12 +237,12 @@
 
         <activity
             android:name=".addUserToGroup.InviteActivityToAdd"
-            android:parentActivityName=".tabViewGroup.TabView"
+            android:parentActivityName=".groupManaging.GroupSettings"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.polito.madinblack.expandedmad.tabViewGroup.TabView" />
+                android:value="com.polito.madinblack.expandedmad.groupManaging.GroupSettings" />
         </activity>
 
         <activity
