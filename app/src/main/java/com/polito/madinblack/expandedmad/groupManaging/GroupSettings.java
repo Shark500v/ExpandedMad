@@ -39,7 +39,6 @@ import com.polito.madinblack.expandedmad.FirebaseImageLoader;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.UserPage;
 import com.polito.madinblack.expandedmad.addUserToGroup.SelectContactToAdd;
-import com.polito.madinblack.expandedmad.addUserToGroup.SelectContactsToAdd2;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.tabViewGroup.TabView;
 
