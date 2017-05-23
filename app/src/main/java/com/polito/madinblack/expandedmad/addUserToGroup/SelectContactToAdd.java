@@ -77,16 +77,6 @@ public class SelectContactToAdd extends AppCompatActivity {
                     String userPhoneNumber = userForGroup.getPhoneNumber();
                     usersInGroup.add(userPhoneNumber);
                 }
-
-                //preparo il fragment che dovrà mostrare a schermo i contatti di cui ho fatto il retrieve dalla rubbrica
-                Bundle arguments = new Bundle();
-                arguments.putSerializable("LIST", (Serializable) groupM);
-                arguments.putSerializable("USERS_LIST", (Serializable) usersInGroup);
-                arguments.putString("groupIndex", groupId);
-                fragment = new ContactsToAddFragment();
-                fragment.setArguments(arguments);
-                //lancio il fragment
-                getSupportFragmentManager().beginTransaction().add(R.id.frameLayout, fragment).commit();
             }
 
             @Override
@@ -94,6 +84,16 @@ public class SelectContactToAdd extends AppCompatActivity {
 
             }
         };
+
+        //preparo il fragment che dovrà mostrare a schermo i contatti di cui ho fatto il retrieve dalla rubbrica
+        Bundle arguments = new Bundle();
+        //arguments.putSerializable("LIST", (Serializable) groupM);
+        arguments.putSerializable("USERS_LIST", (Serializable) usersInGroup);
+        arguments.putString("groupIndex", groupId);
+        fragment = new ContactsToAddFragment();
+        fragment.setArguments(arguments);
+        //lancio il fragment
+        getSupportFragmentManager().beginTransaction().add(R.id.frameLayout, fragment).commit();
     }
 
     @Override

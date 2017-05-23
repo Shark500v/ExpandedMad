@@ -31,7 +31,7 @@
             android:id="@+id/group_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
+            android:textSize="18dp"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:text="@string/group"
@@ -52,7 +52,7 @@
             android:id="@+id/year_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
+            android:textSize="18dp"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:text="@string/year"
@@ -70,6 +70,30 @@
             android:layout_below="@+id/group_spinner"
             android:textAlignment="center"
             android:entries="@array/years">
+        </Spinner>
+
+        <TextView
+            android:id="@+id/tag_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:text="@string/tag"
+            android:layout_below="@id/year_label"
+            />
+
+        <Spinner
+            android:id="@+id/tag_spinner_graph"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_below="@id/year_spinner"
+            android:layout_toEndOf="@id/group_label"
+            android:textAlignment="center"
+            android:entries="@array/tagsForGraph">
         </Spinner>
 
         <!--<Button

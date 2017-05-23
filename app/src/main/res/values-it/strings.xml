@@ -30,6 +30,19 @@
         <item name="hotel">Hotel</item>
         <item name="other">Altro</item>
     </string-array>
+    <string-array name="tagsForGraph">
+        <item name="select_tag">Seleziona tag</item>
+        <item name="all_tags">Generale</item>
+        <item name="water_bill">Bolletta_Acqua</item>
+        <item name="light_bill">Bolletta_Luce</item>
+        <item name="gas_bill">Bolletta_Gas</item>
+        <item name="flight">Volo_Aereo</item>
+        <item name="fuel">Carburante</item>
+        <item name="drinks">Bevande</item>
+        <item name="food">Alimentari</item>
+        <item name="hotel">Hotel</item>
+        <item name="other">Altro</item>
+    </string-array>
     <string-array name="policies">
         <item name="equal">Alla romana</item>
         <item name="exclude">Escludi membro</item>
@@ -205,4 +218,6 @@
     <string name="ringtone">Suoneria</string>
     <string name="vibrate">Vibrazione</string>
     <string name="motivation">Motivo *</string>
+    <string name="select_tag">Seleziona tag</string>
+    <string name="related_to">relativa a</string>
 </resources>

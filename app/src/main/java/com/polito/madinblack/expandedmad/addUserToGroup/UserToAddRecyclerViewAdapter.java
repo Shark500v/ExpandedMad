@@ -46,6 +46,23 @@ public class UserToAddRecyclerViewAdapter extends RecyclerView.Adapter<UserToAdd
         holder.check.setChecked(data.getCheckedBox());
         holder.phone.setText(data.getPhone());
 
+        // Set check box listener android
+        holder.check.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CheckBox checkBox = (CheckBox) view;
+                if (checkBox.isChecked()) {
+                    data.setCheckedBox(true);
+                    //agiungo l'utente alla lista di utenti che devo contattare quando creo il gruppo
+                    groupMem.add(data);
+                } else {
+                    data.setCheckedBox(false);
+                    //elimino l'utente precedentemente aggiunto nel caso l'user cambiasse idea
+                    groupMem.remove(data);
+                }
+            }
+        });
+
         if(data.getCheckedBox()) {
             holder.check.setEnabled(false);
             holder.already_in.setText(_c.getString(R.string.already_in));
@@ -67,23 +84,6 @@ public class UserToAddRecyclerViewAdapter extends RecyclerView.Adapter<UserToAdd
             e.printStackTrace();
         }
         Log.e("Image Thumb", "--------------" + data.getThumb());
-
-        // Set check box listener android
-        holder.check.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                CheckBox checkBox = (CheckBox) view;
-                if (checkBox.isChecked()) {
-                    data.setCheckedBox(true);
-                    //agiungo l'utente alla lista di utenti che devo contattare quando creo il gruppo
-                    groupMem.add(data);
-                } else {
-                    data.setCheckedBox(false);
-                    //elimino l'utente precedentemente aggiunto nel caso l'user cambiasse idea
-                    groupMem.remove(data);
-                }
-            }
-        });
     }
 
     @Override
