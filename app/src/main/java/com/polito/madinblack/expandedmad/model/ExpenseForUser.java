@@ -16,6 +16,7 @@ public class ExpenseForUser {
     private Long month;
     private Long year;
     private Long timestamp;
+    private String tag;
 
 
     public ExpenseForUser(){
@@ -36,6 +37,7 @@ public class ExpenseForUser {
         this.month              = expense.getMonth();
         this.year               = expense.getYear();
         this.cost               = expense.getCost();
+        this.tag                = expense.getTag();
 
     }
 
@@ -166,5 +168,13 @@ public class ExpenseForUser {
 
     public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 }
