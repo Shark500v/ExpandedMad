@@ -7,6 +7,11 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,7 +34,10 @@ import com.polito.madinblack.expandedmad.model.PaymentInfo;
 import com.polito.madinblack.expandedmad.tabViewGroup.TabView;
 
 
+import org.w3c.dom.Text;
+
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class ContestExpenseActivity extends BaseActivity {
@@ -52,6 +60,13 @@ public class ContestExpenseActivity extends BaseActivity {
     private ValueEventListener valueEventListener;
     private String paymentId;
     private PaymentFirebase paymentFirebase;
+    private Spinner mSpinnerCurrency;
+    private TextView mExpenseCurrencySymbol;
+    private TextView mOldToPayCurrencySymbol;
+    private TextView mNewToPayCurrencySymbol;
+    private TextView mExpenseCost;
+    private TextView mOldToPay;
+    private EditText mNewToPay;
 
 
     @Override
@@ -83,6 +98,24 @@ public class ContestExpenseActivity extends BaseActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+
+        mSpinnerCurrency = (Spinner) findViewById(R.id.currencyISO);
+        mExpenseCurrencySymbol = (TextView) findViewById(R.id.expense_currency);
+        mOldToPayCurrencySymbol = (TextView) findViewById(R.id.old_topay_currency);
+        mNewToPayCurrencySymbol = (TextView) findViewById(R.id.new_topay_currency);
+        mExpenseCost = (TextView) findViewById(R.id.expense_cost);
+        mOldToPay = (TextView) findViewById(R.id.old_topay);
+        mNewToPay = (EditText)  findViewById(R.id.new_topay);
+
+        mExpenseCost.setText(expenseCost.toString());
+
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, Currency.getCurrencyValues(currencyISO));
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpinnerCurrency.setAdapter(adapter);
+
+
+
         valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -91,12 +124,31 @@ public class ContestExpenseActivity extends BaseActivity {
                         paymentId = childDataSnapshot.getKey();
                         paymentFirebase = childDataSnapshot.getValue(PaymentFirebase.class);
                         if(paymentFirebase.getUserFirebaseId().equals(ma.getFirebaseId())) {
-                            ((TextView) findViewById(R.id.expense_cost)).setText(expenseCost.toString());
+
                             ((TextView) findViewById(R.id.old_topay)).setText(paymentFirebase.getToPay().toString());
                         }
 
 
                     }
+
+                    mSpinnerCurrency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            String item = (String) parent.getItemAtPosition(position);
+                            mExpenseCurrencySymbol.setText(Currency.getSymbol(Currency.CurrencyISO.valueOf(item)));
+                            mOldToPayCurrencySymbol.setText(Currency.getSymbol(Currency.CurrencyISO.valueOf(item)));
+                            mNewToPayCurrencySymbol.setText(Currency.getSymbol(Currency.CurrencyISO.valueOf(item)));
+                            mExpenseCost.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(expenseCost, currencyISO, Currency.CurrencyISO.valueOf(item))));
+                            if(paymentFirebase!=null)
+                                mNewToPay.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(paymentFirebase.getToPay(), currencyISO, Currency.CurrencyISO.valueOf(item))));
+
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
 
 
 
@@ -118,6 +170,8 @@ public class ContestExpenseActivity extends BaseActivity {
     @Override
     public void onStart(){
         super.onStart();
+        if(mDatabaseQueryFilter!=null && valueEventListener!=null)
+            mDatabaseQueryFilter.addListenerForSingleValueEvent(valueEventListener);
 
     }
 
@@ -130,15 +184,18 @@ public class ContestExpenseActivity extends BaseActivity {
 
     @Override   //questo serve per il confirm e fill all payments
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_payment, menu);
+        getMenuInflater().inflate(R.menu.menu_contest, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-/*
+
+
         if (id == R.id.confirm_contention) {
+
+
 
 
         }else if(id == 16908332){
@@ -147,7 +204,7 @@ public class ContestExpenseActivity extends BaseActivity {
             navigateUpTo(intent3);
             return true;
         }
-*/
+
         return super.onOptionsItemSelected(item);
     }
 
