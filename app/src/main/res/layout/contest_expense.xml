@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:padding="16dp">
 
     <LinearLayout
@@ -22,21 +23,22 @@
             android:id="@+id/expense_cost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="55"
             android:textStyle="bold"
             android:textSize="18sp"
             android:gravity="end"
             android:layout_margin="16dp"
+            tools:text="55"
+
             />
         <TextView
             android:id="@+id/expense_currency"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="€"
             android:textStyle="bold"
             android:textSize="18sp"
             android:gravity="end"
             android:layout_margin="16dp"
+            tools:text="€"
             />
 
 
@@ -55,7 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="@string/old_paid_topay"
+            android:text="@string/to_pay"
             android:textSize="20sp"/>
 
         <TextView
@@ -63,21 +65,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="15"
             android:textStyle="bold"
             android:gravity="center"
             android:textSize="18sp"
             android:textAlignment="textEnd"
+            tools:text="55"
             />
         <TextView
             android:id="@+id/old_topay_currency"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="€"
             android:textStyle="bold"
             android:textSize="18sp"
             android:gravity="end"
             android:layout_margin="16dp"
+            tools:text="€"
             />
 
     </LinearLayout>
@@ -126,17 +128,19 @@
             android:layout_margin="16dp"
             android:hint="0.00"
             android:gravity="center"
+            android:inputType="numberDecimal"
+            android:digits="0123456789.,"
             android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/new_topay_currency"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="€"
             android:textStyle="bold"
             android:textSize="18sp"
             android:gravity="end"
             android:layout_margin="16dp"
+            tools:text="€"
             />
 
 
@@ -150,6 +154,14 @@
         android:layout_below="@+id/new_topay_layout"
         android:orientation="horizontal"
         >
+
+        <!--
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_motivation_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        -->
+
             <EditText
                 android:id="@+id/input_motivation"
                 android:layout_width="match_parent"
@@ -157,9 +169,12 @@
                 android:inputType="textMultiLine"
                 android:gravity="top"
                 android:paddingTop="10dp"
-                android:paddingLeft="10dp"
+                android:paddingStart="10dp"
                 android:hint="@string/motivation"
                 android:background="@layout/rounded_border_edittext"/>
+
+        <!--</android.support.design.widget.TextInputLayout> -->
+
 
     </LinearLayout>
 

@@ -30,6 +30,7 @@ public class AppMain extends Application {
         }
     }
 
+
     public void setLocale(String lang) {
         Locale myLocale = new Locale(lang);
         Resources res = getResources();

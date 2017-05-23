@@ -201,6 +201,16 @@
         </activity>
 
         <activity
+            android:name=".expenseDetail.ContestExpenseActivity"
+            android:label="@string/contention"
+            android:parentActivityName=".expenseDetail.ExpenseDetailActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.polito.madinblack.expandedmad.expenseDetail.ExpenseDetailActivity" />
+        </activity>
+
+        <activity
             android:name=".UserPage"
             android:parentActivityName=".groupManaging.GroupListActivity"
             android:theme="@style/AppTheme.NoActionBar"

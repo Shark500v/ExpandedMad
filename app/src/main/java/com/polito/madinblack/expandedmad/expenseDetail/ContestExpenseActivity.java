@@ -1,13 +1,19 @@
 package com.polito.madinblack.expandedmad.expenseDetail;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Vibrator;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -26,6 +32,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.login.BaseActivity;
 import com.polito.madinblack.expandedmad.model.Balance;
+import com.polito.madinblack.expandedmad.model.CostUtil;
 import com.polito.madinblack.expandedmad.model.Currency;
 import com.polito.madinblack.expandedmad.model.HistoryInfo;
 import com.polito.madinblack.expandedmad.model.MyApplication;
@@ -67,12 +74,14 @@ public class ContestExpenseActivity extends BaseActivity {
     private TextView mExpenseCost;
     private TextView mOldToPay;
     private EditText mNewToPay;
+    private EditText mMotivationEditText;
+    private TextInputLayout mMotivationLayout;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.contest_expense);
+        setContentView(R.layout.contest_layout);
 
         ma = MyApplication.getInstance();
 
@@ -84,7 +93,7 @@ public class ContestExpenseActivity extends BaseActivity {
 
         mDatabaseRootReference = FirebaseDatabase.getInstance().getReference();
         mDatabasePaymentReference = mDatabaseRootReference.child("expenses/"+expenseId+"/payments");
-        mDatabaseQueryFilter = mDatabasePaymentReference.equalTo(ma.getUserPhoneNumber(), "userFirebaseId");
+        //mDatabaseQueryFilter = mDatabasePaymentReference.orderByChild("userFirebaseId").equalTo(ma.getUserPhoneNumber(), "userFirebaseId");
 
 
         //toolbar settings
@@ -106,6 +115,12 @@ public class ContestExpenseActivity extends BaseActivity {
         mExpenseCost = (TextView) findViewById(R.id.expense_cost);
         mOldToPay = (TextView) findViewById(R.id.old_topay);
         mNewToPay = (EditText)  findViewById(R.id.new_topay);
+        mMotivationEditText = (EditText)  findViewById(R.id.input_motivation);
+        //mMotivationLayout = (TextInputLayout) findViewById(R.id.input_motivation_layout);
+
+        mExpenseCurrencySymbol.setText(Currency.getSymbol(currencyISO));
+        mOldToPayCurrencySymbol.setText(Currency.getSymbol(currencyISO));
+        mNewToPayCurrencySymbol.setText(Currency.getSymbol(currencyISO));
 
         mExpenseCost.setText(expenseCost.toString());
 
@@ -125,7 +140,7 @@ public class ContestExpenseActivity extends BaseActivity {
                         paymentFirebase = childDataSnapshot.getValue(PaymentFirebase.class);
                         if(paymentFirebase.getUserFirebaseId().equals(ma.getFirebaseId())) {
 
-                            ((TextView) findViewById(R.id.old_topay)).setText(paymentFirebase.getToPay().toString());
+                            ((TextView) findViewById(R.id.old_topay)).setText(String.format(Locale.getDefault(), "%.2f", paymentFirebase.getToPay()));
                         }
 
 
@@ -140,7 +155,7 @@ public class ContestExpenseActivity extends BaseActivity {
                             mNewToPayCurrencySymbol.setText(Currency.getSymbol(Currency.CurrencyISO.valueOf(item)));
                             mExpenseCost.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(expenseCost, currencyISO, Currency.CurrencyISO.valueOf(item))));
                             if(paymentFirebase!=null)
-                                mNewToPay.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(paymentFirebase.getToPay(), currencyISO, Currency.CurrencyISO.valueOf(item))));
+                                mOldToPay.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(paymentFirebase.getToPay(), currencyISO, Currency.CurrencyISO.valueOf(item))));
 
                         }
 
@@ -162,6 +177,27 @@ public class ContestExpenseActivity extends BaseActivity {
             }
         };
 
+        mNewToPay.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {
+
+                String editString = CostUtil.replaceDecimalComma(s.toString());
+                if(s.length() != 0 && CostUtil.isParsableAsDouble(editString) && Double.valueOf(editString)!=0){
+                    if(Double.valueOf(editString)>Double.valueOf(CostUtil.replaceDecimalComma(mExpenseCost.getText().toString()))){
+                        mNewToPay.setText(mExpenseCost.getText().toString());
+                    }
+                }
+            }
+
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+
+            }
+        });
 
 
     }
@@ -170,8 +206,8 @@ public class ContestExpenseActivity extends BaseActivity {
     @Override
     public void onStart(){
         super.onStart();
-        if(mDatabaseQueryFilter!=null && valueEventListener!=null)
-            mDatabaseQueryFilter.addListenerForSingleValueEvent(valueEventListener);
+        if(mDatabasePaymentReference!=null && valueEventListener!=null)
+            mDatabasePaymentReference.addListenerForSingleValueEvent(valueEventListener);
 
     }
 
@@ -195,6 +231,15 @@ public class ContestExpenseActivity extends BaseActivity {
 
         if (id == R.id.confirm_contention) {
 
+            if(mMotivationEditText.getText().toString().isEmpty()){
+                mMotivationEditText.setError(getString(R.string.err_motivation));
+                requestFocus(mMotivationEditText);
+                Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                // Vibrate for 250 milliseconds
+                vibrator.vibrate(250);
+                return true;
+
+            }
 
 
 
@@ -209,5 +254,10 @@ public class ContestExpenseActivity extends BaseActivity {
     }
 
 
+    private void requestFocus(View view) {
+        if (view.requestFocus()) {
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }
+    }
 
 }
