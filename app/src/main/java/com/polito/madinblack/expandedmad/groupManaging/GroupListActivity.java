@@ -37,7 +37,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.polito.madinblack.expandedmad.R;
-import com.polito.madinblack.expandedmad.Settings.SettingsActivity;
+import com.polito.madinblack.expandedmad.settings.SettingsActivity;
 import com.polito.madinblack.expandedmad.StatisticsGraphs;
 import com.polito.madinblack.expandedmad.UserPage;
 import com.polito.madinblack.expandedmad.login.Logout;
