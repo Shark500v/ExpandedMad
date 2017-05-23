@@ -19,6 +19,7 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.util.Patterns;
 
+import com.google.firebase.database.FirebaseDatabase;
 import com.polito.madinblack.expandedmad.R;
 
 import java.io.IOException;
@@ -206,5 +207,9 @@ public class NotificationUtils {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    public static void saveTokenOnDb(String token, String phone){
+        FirebaseDatabase.getInstance().getReference().child("tokens/"+ phone).setValue(token);
     }
 }
