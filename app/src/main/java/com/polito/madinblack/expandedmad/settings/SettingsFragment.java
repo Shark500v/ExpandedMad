@@ -20,6 +20,8 @@ import com.polito.madinblack.expandedmad.model.MyApplication;
 
 public class SettingsFragment extends PreferenceFragment {
 
+    private boolean flag;
+
     private Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
@@ -39,7 +41,11 @@ public class SettingsFragment extends PreferenceFragment {
                     MyApplication.setCurrencyISOFavorite(Currency.getCurrencyISO(Integer.valueOf(stringValue)));
                 } else if(preference.getKey().compareTo("pref_key_language")==0){
                     //I need to refresh the language
-                    //Refresh();
+                    if(flag){
+                        Refresh();
+                    }else {
+                        flag = true;
+                    }
                 }
 
             } else if (preference instanceof RingtonePreference) {
@@ -84,6 +90,9 @@ public class SettingsFragment extends PreferenceFragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        flag = false;
+
         bindPreferenceSummaryToValue(findPreference("pref_key_currency"));
         bindPreferenceSummaryToValue(findPreference("pref_key_language"));
         //bindPreferenceSummaryToValue(findPreference("pref_key_notifications_able"));
