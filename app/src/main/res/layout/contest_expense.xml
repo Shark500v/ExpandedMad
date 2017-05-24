@@ -6,10 +6,38 @@
     android:padding="16dp">
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/generated_by_layout"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/generated_by"
+            android:textSize="20sp"
+            />
+        <TextView
+            android:id="@+id/generated_by_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:gravity="end"
+            android:layout_margin="16dp"
+            tools:text="Alessandro Nicoletta"
+
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/expense_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_below="@+id/generated_by_layout"
         >
         <TextView
             android:layout_width="wrap_content"
@@ -99,9 +127,11 @@
             android:layout_margin="16dp"/>
         <Spinner
             android:id="@+id/currencyISO"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="5dp" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:layout_gravity="center"
+            />
     </LinearLayout>
 
 
@@ -165,7 +195,7 @@
             <EditText
                 android:id="@+id/input_motivation"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="150dp"
                 android:inputType="textMultiLine"
                 android:gravity="top"
                 android:paddingTop="10dp"
@@ -174,6 +204,31 @@
                 android:background="@layout/rounded_border_edittext"/>
 
         <!--</android.support.design.widget.TextInputLayout> -->
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/confirm_delete_button_layout"
+        android:layout_below="@+id/motivation_layout"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        tools:visibility="visible"
+        >
+
+
+
+        <Button
+            android:id="@+id/confirm_delete_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="10dp"
+            android:layout_gravity="center"
+            tools:text = "Confirm Contention"
+            />
 
 
     </LinearLayout>

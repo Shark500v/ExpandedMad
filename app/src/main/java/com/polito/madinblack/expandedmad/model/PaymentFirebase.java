@@ -10,6 +10,8 @@ public class PaymentFirebase {
     private Double paid;
     private Double toPay;
     private String sortingField;
+    private Double newToPay;
+    private String motivation;
 
     //costruttore per il database
     public PaymentFirebase(){
@@ -102,6 +104,22 @@ public class PaymentFirebase {
 
     public void setSortingField(String sortingField) {
         this.sortingField = sortingField;
+    }
+
+    public Double getNewToPay() {
+        return newToPay;
+    }
+
+    public void setNewToPay(Double newToPay) {
+        this.newToPay = newToPay;
+    }
+
+    public String getMotivation() {
+        return motivation;
+    }
+
+    public void setMotivation(String motivation) {
+        this.motivation = motivation;
     }
 
     @Override
