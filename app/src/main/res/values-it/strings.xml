@@ -32,7 +32,7 @@
     </string-array>
     <string-array name="tagsForGraph">
         <item name="select_tag">Seleziona tag</item>
-        <item name="all_tags">Generale</item>
+        <item name="all_tags">Tutti i tag</item>
         <item name="water_bill">Bolletta_Acqua</item>
         <item name="light_bill">Bolletta_Luce</item>
         <item name="gas_bill">Bolletta_Gas</item>
@@ -221,4 +221,6 @@
     <string name="select_tag">Seleziona tag</string>
     <string name="related_to">relativa a</string>
     <string name="contention">Genera Contesa</string>
+    <string name="all_tags">Tutti i tag</string>
+    <string name="no_expense_found">Nessuna spesa trovata</string>
 </resources>

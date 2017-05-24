@@ -61,6 +61,7 @@ public class StatisticsGraphs extends AppCompatActivity {
     private String tagSelected;
     private String groupId;
     private Currency.CurrencyISO myCurrency;
+    private String myCurrencySymbol;
     List<String> tagsEn = new ArrayList<>();
     List<String> tagsIt = new ArrayList<>();
 
@@ -78,6 +79,7 @@ public class StatisticsGraphs extends AppCompatActivity {
         }
 
         myCurrency = MyApplication.getCurrencyISOFavorite();
+        myCurrencySymbol = Currency.getSymbol(myCurrency);
 
         tagsEn = getEnglishArrayString(R.array.tags);
         tagsIt = getItalianArrayString(R.array.tags);
@@ -233,7 +235,7 @@ public class StatisticsGraphs extends AppCompatActivity {
         graph.getViewport().setYAxisBoundsManual(true);
 
         graph.getGridLabelRenderer().setHorizontalAxisTitle(getString(R.string.months)); //da il titolo all'asse delle x
-        graph.getGridLabelRenderer().setVerticalAxisTitle(getString(R.string.expenses_in) + " " + myCurrency.toString());
+        graph.getGridLabelRenderer().setVerticalAxisTitle(getString(R.string.expenses_in) + " " + myCurrency.toString() + " (" + myCurrencySymbol + ")");
     }
 
     //metodo per inizializzare i dati del grafico
@@ -252,29 +254,16 @@ public class StatisticsGraphs extends AppCompatActivity {
                         String tagStr = expenseForUser.getTag();
                         if(!yearSelected.equals(getString(R.string.all_years))) {
                             if (yearStr.equals(yearSelected)) {              //controllo che appartenga all'anno selezionato
-                                if(tagSelected.equals(getString(R.string.general))) {
-                                    Double expenseCost = expenseForUser.getCost();//prendo il costo della expenseForUser
-                                    Double month = Double.valueOf(expenseForUser.getMonth());
-                                    expenseCost += groupExpensesByMonth.get(month);                                 //gli aggiungo il valore già presente nella mappa ai passi precedenti
-                                    groupExpensesByMonth.put(month, expenseCost);    //aggiorno la mappa alla posizione del mese della expense
-                                    //Toast.makeText(getApplicationContext(), String.valueOf(groupExpensesByMonth.get(5.0)), Toast.LENGTH_LONG).show();
+                                if(tagSelected.equals(getString(R.string.all_tags))) {
+                                    computeExpense(expenseForUser);
                                 }else if(posTagSel == getTagPosition(tagStr)){
-                                    Double expenseCost = expenseForUser.getCost();
-                                    Double month = Double.valueOf(expenseForUser.getMonth());
-                                    expenseCost += groupExpensesByMonth.get(month);
-                                    groupExpensesByMonth.put(month, expenseCost);
+                                    computeExpense(expenseForUser);
                                 }
                             }
-                        }else if(tagSelected.equals(getString(R.string.general))){
-                            Double expenseCost = expenseForUser.getCost();                                  //prendo il costo della expenseForUser
-                            Double month = Double.valueOf(expenseForUser.getMonth());
-                            expenseCost += groupExpensesByMonth.get(month);                                 //gli aggiungo il valore già presente nella mappa ai passi precedenti
-                            groupExpensesByMonth.put(month, expenseCost);    //aggiorno la mappa alla posizione del mese della expense
+                        }else if(tagSelected.equals(getString(R.string.all_tags))){
+                            computeExpense(expenseForUser);
                         }else if (posTagSel == getTagPosition(tagStr)){
-                            Double expenseCost = expenseForUser.getCost();
-                            Double month = Double.valueOf(expenseForUser.getMonth());
-                            expenseCost += groupExpensesByMonth.get(month);
-                            groupExpensesByMonth.put(month, expenseCost);
+                            computeExpense(expenseForUser);
                         }
                     }
                     printGraph(graph, groupName);
@@ -298,28 +287,16 @@ public class StatisticsGraphs extends AppCompatActivity {
                             //Toast.makeText(getApplicationContext(), expenseForUser.getName(), Toast.LENGTH_LONG).show();
                             if(!yearSelected.equals(getString(R.string.all_years))) {
                                 if (yearStr.equals(yearSelected)) {
-                                    if(tagSelected.equals(getString(R.string.general))) {
-                                        Double expenseCost = expenseForUser.getCost();
-                                        Double month = Double.valueOf(expenseForUser.getMonth());
-                                        expenseCost += groupExpensesByMonth.get(month);
-                                        groupExpensesByMonth.put(month, expenseCost);
+                                    if(tagSelected.equals(getString(R.string.all_tags))) {
+                                        computeExpense(expenseForUser);
                                     }else if(posTagSel == getTagPosition(tagStr)){
-                                        Double expenseCost = expenseForUser.getCost();
-                                        Double month = Double.valueOf(expenseForUser.getMonth());
-                                        expenseCost += groupExpensesByMonth.get(month);
-                                        groupExpensesByMonth.put(month, expenseCost);
+                                        computeExpense(expenseForUser);
                                     }
                                 }
-                            }else if(tagSelected.equals(getString(R.string.general))){
-                                Double expenseCost = expenseForUser.getCost();                                  //prendo il costo della expenseForUser
-                                Double month = Double.valueOf(expenseForUser.getMonth());
-                                expenseCost += groupExpensesByMonth.get(month);                                 //gli aggiungo il valore già presente nella mappa ai passi precedenti
-                                groupExpensesByMonth.put(month, expenseCost);    //aggiorno la mappa alla posizione del mese della expense
+                            }else if(tagSelected.equals(getString(R.string.all_tags))){
+                                computeExpense(expenseForUser);
                             }else if (posTagSel == getTagPosition(tagStr)){
-                                Double expenseCost = expenseForUser.getCost();
-                                Double month = Double.valueOf(expenseForUser.getMonth());
-                                expenseCost += groupExpensesByMonth.get(month);
-                                groupExpensesByMonth.put(month, expenseCost);
+                                computeExpense(expenseForUser);
                             }
                         }
                     }
@@ -375,17 +352,38 @@ public class StatisticsGraphs extends AppCompatActivity {
         series.setDrawValuesOnTop(true);
         series.setValuesOnTopColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
         //series.setTitle(groupName + "-" + yearSelected);                     //etichetta della serie di dati
-        if(max == 0.0) {
+        /*if(max == 0.0) {
             if(!groupName.equals(getString(R.string.all_groups))) {
                 if(yearSelected.equals(getString(R.string.general))){
-                    Toast.makeText(getApplicationContext(), getString(R.string.no_expenses) + " " + groupName + " " + getString(R.string.related_to) + " " + tagSelected, Toast.LENGTH_LONG).show();
+                    if(tagSelected.equals(getString(R.string.all_tags))){
+                        Toast.makeText(getApplicationContext(), getString(R.string.no_expenses) + " " + groupName, Toast.LENGTH_LONG).show();
+                    }else {
+                        Toast.makeText(getApplicationContext(), getString(R.string.no_expenses) + " " + groupName + " " + getString(R.string.related_to) + " " + tagSelected, Toast.LENGTH_LONG).show();
+                    }
                 }else {
-                    Toast.makeText(getApplicationContext(), getString(R.string.no_expenses) + " " + groupName + " " + getString(R.string.related_to) + " " + tagSelected + " " + getString(R.string.in) + " " + yearSelected, Toast.LENGTH_LONG).show();
+                    if(tagSelected.equals(getString(R.string.all_tags))) {
+                        Toast.makeText(getApplicationContext(), getString(R.string.no_expenses) + " " + groupName + " " + getString(R.string.in) + " " + yearSelected, Toast.LENGTH_LONG).show();
+                    }else{
+                        Toast.makeText(getApplicationContext(), getString(R.string.no_expenses) + " " + groupName + " " + getString(R.string.related_to) + " " + tagSelected + " " + getString(R.string.in) + " " + yearSelected, Toast.LENGTH_LONG).show();
+                    }
                 }
             }else{
-                Toast.makeText(getApplicationContext(), getString(R.string.no_expenses_in) + " " + yearSelected + " " + getString(R.string.related_to) + " " + tagSelected, Toast.LENGTH_LONG).show();
+                if(yearSelected.equals(getString(R.string.general))){
+                    if(tagSelected.equals(getString(R.string.all_tags))){
+                        Toast.makeText(getApplicationContext(), getString(R.string.no_expense_found), Toast.LENGTH_LONG).show();
+                    }else{
+                        Toast.makeText(getApplicationContext(), getString(R.string.no_expense_found) + " " + getString(R.string.related_to) + " " + tagSelected, Toast.LENGTH_LONG).show();
+                    }
+
+                }else{
+                    if(tagSelected.equals(getString(R.string.all_tags))) {
+                        Toast.makeText(getApplicationContext(), getString(R.string.no_expenses_in) + " " + yearSelected, Toast.LENGTH_LONG).show();
+                    }else{
+                        Toast.makeText(getApplicationContext(), getString(R.string.no_expenses_in) + " " + yearSelected + " " + getString(R.string.related_to) + " " + tagSelected, Toast.LENGTH_LONG).show();
+                    }
+                }
             }
-        }
+        }*/
         graph.addSeries(series); //aggiunge la serie di dati al grafico
         if(max>5) {
             graph.getViewport().setMaxY(max + max / 4);
@@ -440,6 +438,17 @@ public class StatisticsGraphs extends AppCompatActivity {
         return configuration;
     }
 
+    public void computeExpense(ExpenseForUser expenseForUser) {
+        Double expenseCost = expenseForUser.getCost();
+        Currency.CurrencyISO expenseCurrency = expenseForUser.getCurrencyISO();
+        if (!expenseCurrency.equals(myCurrency)) {
+            expenseCost = Double.valueOf(Currency.convertCurrency(expenseCost, expenseCurrency, myCurrency));
+        }
+        Double month = Double.valueOf(expenseForUser.getMonth());
+        expenseCost += groupExpensesByMonth.get(month);
+        groupExpensesByMonth.put(month, expenseCost);
+    }
+
     @Override
     public void onStart(){
         super.onStart();
@@ -456,6 +465,12 @@ public class StatisticsGraphs extends AppCompatActivity {
             mDatabaseExpenseReference.removeEventListener(mGroupsEventListener);
         if(mExpensesEventListener!=null)
             mDatabaseAllExpenseReference.removeEventListener(mExpensesEventListener);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }
 
