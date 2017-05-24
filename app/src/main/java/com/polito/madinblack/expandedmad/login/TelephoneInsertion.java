@@ -2,12 +2,15 @@ package com.polito.madinblack.expandedmad.login;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -28,6 +31,7 @@ import com.polito.madinblack.expandedmad.model.CostUtil;
 import com.polito.madinblack.expandedmad.model.Group;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.User;
+import com.polito.madinblack.expandedmad.notification.Config;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -40,7 +44,7 @@ import java.util.Map;
 public class TelephoneInsertion extends AppCompatActivity{
 
 
-    private static final String TAG = "TelephoneInsertionActivity";
+    private static final String TAG = "TelephoneInsertion";
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -244,7 +248,10 @@ public class TelephoneInsertion extends AppCompatActivity{
                 mPhoneNumber = mPrefix + mPhoneNumber;
                 ma.setUserPhoneNumber(mPhoneNumber);
 
-                User.writeNewUser(mDatabaseRoot, ma.getFirebaseId(), ma.getUserName(),  ma.getUserSurname(), ma.getUserPhoneNumber(), ma.getUserEmail());
+                //added for user token, useful for notification
+                String token = getUserToken();
+
+                User.writeNewUser(mDatabaseRoot, ma.getFirebaseId(), ma.getUserName(),  ma.getUserSurname(), ma.getUserPhoneNumber(), ma.getUserEmail(), token);
 
                 ma.setIsPhone(true);
 
@@ -290,6 +297,19 @@ public class TelephoneInsertion extends AppCompatActivity{
 
     }
 
+    private String getUserToken() {
+        SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
+        String regId = pref.getString("regId", null);
+
+        Log.e(TAG, "Firebase reg id: " + regId);
+
+        //da spostare quando si fa login
+        //saveTokenOnDb(regId);
+        if (!TextUtils.isEmpty(regId))
+            return regId;
+        else
+            return null;
+    }
 
 
     private void requestFocus(View view) {
