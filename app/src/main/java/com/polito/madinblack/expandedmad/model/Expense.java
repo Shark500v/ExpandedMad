@@ -14,7 +14,7 @@ import java.util.Map;
 public class Expense {
 
 
-    public enum State{ONGOING, REJECTED, CONTESTED}
+    public enum State{ONGOING, REJECTED, CONTESTED, TRANSFER}
     //public enum Tag{FOOD, WATER_BILL, GAS_BILL, LIGHT_BILL, FLIGHT, HOTEL, FUEL, DRINK, OTHER}
 
 

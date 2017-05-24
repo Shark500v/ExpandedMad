@@ -16,7 +16,9 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +36,7 @@ import com.polito.madinblack.expandedmad.login.BaseActivity;
 import com.polito.madinblack.expandedmad.model.Balance;
 import com.polito.madinblack.expandedmad.model.CostUtil;
 import com.polito.madinblack.expandedmad.model.Currency;
+import com.polito.madinblack.expandedmad.model.Expense;
 import com.polito.madinblack.expandedmad.model.HistoryInfo;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.PaymentFirebase;
@@ -53,6 +56,9 @@ public class ContestExpenseActivity extends BaseActivity {
     public static final String ARG_GROUP_ID ="expenseName";
     public static final String ARG_EXPENSE_COST ="expenseCost";
     public static final String ARG_CURRENCY_ISO ="currencyISO";
+    public static final String ARG_EXPENSE_STATE = "expenseState";
+    public static final String ARG_PAYMENT_CONTEST_ID = "paymentContestId";
+    public static final String ARG_EXPENSE_USER_FIREBASEID = "expenseFirebaseId";
 
     private DatabaseReference mDatabaseRootReference;
     private DatabaseReference mDatabasePaymentReference;
@@ -65,7 +71,6 @@ public class ContestExpenseActivity extends BaseActivity {
     private Double expenseCost;
     private MyApplication ma;
     private ValueEventListener valueEventListener;
-    private String paymentId;
     private PaymentFirebase paymentFirebase;
     private Spinner mSpinnerCurrency;
     private TextView mExpenseCurrencySymbol;
@@ -73,10 +78,12 @@ public class ContestExpenseActivity extends BaseActivity {
     private TextView mNewToPayCurrencySymbol;
     private TextView mExpenseCost;
     private TextView mOldToPay;
+    private TextView mGeneratedByTextView;
     private EditText mNewToPay;
     private EditText mMotivationEditText;
     private TextInputLayout mMotivationLayout;
-
+    private Expense.State expenseState;
+    private String expenseUserFirebaseId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,20 +92,28 @@ public class ContestExpenseActivity extends BaseActivity {
 
         ma = MyApplication.getInstance();
 
-        expenseId           = getIntent().getStringExtra(ARG_EXPENSE_ID);
-        groupId             = getIntent().getStringExtra(ARG_GROUP_ID);
-        expenseCost         = Double.valueOf(getIntent().getStringExtra(ARG_EXPENSE_COST));
-        currencyISO         = Currency.CurrencyISO.valueOf(getIntent().getStringExtra(ARG_CURRENCY_ISO));
-
+        expenseId             = getIntent().getStringExtra(ARG_EXPENSE_ID);
+        groupId               = getIntent().getStringExtra(ARG_GROUP_ID);
+        expenseCost           = Double.valueOf(getIntent().getStringExtra(ARG_EXPENSE_COST));
+        currencyISO           = Currency.CurrencyISO.valueOf(getIntent().getStringExtra(ARG_CURRENCY_ISO));
+        expenseState          = Expense.State.valueOf(getIntent().getStringExtra(ARG_EXPENSE_STATE));
+        expenseUserFirebaseId = getIntent().getStringExtra(ARG_EXPENSE_USER_FIREBASEID);
 
         mDatabaseRootReference = FirebaseDatabase.getInstance().getReference();
-        mDatabasePaymentReference = mDatabaseRootReference.child("expenses/"+expenseId+"/payments");
-        //mDatabaseQueryFilter = mDatabasePaymentReference.orderByChild("userFirebaseId").equalTo(ma.getUserPhoneNumber(), "userFirebaseId");
-
+        if(expenseState == Expense.State.ONGOING) {
+            mDatabasePaymentReference = mDatabaseRootReference.child("expenses/" + expenseId + "/payments");
+            //mDatabaseQueryFilter = mDatabasePaymentReference.orderByChild("userFirebaseId").equalTo(ma.getUserPhoneNumber(), "userFirebaseId");
+        }else {
+            String mPaymentContestId = getIntent().getStringExtra(ARG_PAYMENT_CONTEST_ID);
+            mDatabasePaymentReference = mDatabaseRootReference.child("expenses/" + expenseId + "/payments/"+mPaymentContestId);
+        }
 
         //toolbar settings
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(getString(R.string.contention));
+        if(expenseState == Expense.State.ONGOING)
+            toolbar.setTitle(getString(R.string.contention));
+        else
+            toolbar.setTitle(getString(R.string.contention_information));
         setSupportActionBar(toolbar);
 
         // Show the Up button
@@ -117,12 +132,17 @@ public class ContestExpenseActivity extends BaseActivity {
         mNewToPay = (EditText)  findViewById(R.id.new_topay);
         mMotivationEditText = (EditText)  findViewById(R.id.input_motivation);
         //mMotivationLayout = (TextInputLayout) findViewById(R.id.input_motivation_layout);
+        mGeneratedByTextView = (TextView) findViewById(R.id.generated_by_name);
+
 
         mExpenseCurrencySymbol.setText(Currency.getSymbol(currencyISO));
         mOldToPayCurrencySymbol.setText(Currency.getSymbol(currencyISO));
         mNewToPayCurrencySymbol.setText(Currency.getSymbol(currencyISO));
-
         mExpenseCost.setText(expenseCost.toString());
+        if(expenseState == Expense.State.ONGOING){
+            mGeneratedByTextView.setText(getString(R.string.you));
+        }
+
 
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, Currency.getCurrencyValues(currencyISO));
@@ -130,62 +150,130 @@ public class ContestExpenseActivity extends BaseActivity {
         mSpinnerCurrency.setAdapter(adapter);
 
 
+        if(expenseState == Expense.State.ONGOING) {
+            valueEventListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
+                            paymentFirebase = childDataSnapshot.getValue(PaymentFirebase.class);
+                            if (paymentFirebase.getUserFirebaseId().equals(ma.getFirebaseId())) {
 
-        valueEventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    for(DataSnapshot childDataSnapshot : dataSnapshot.getChildren()){
-                        paymentId = childDataSnapshot.getKey();
-                        paymentFirebase = childDataSnapshot.getValue(PaymentFirebase.class);
-                        if(paymentFirebase.getUserFirebaseId().equals(ma.getFirebaseId())) {
+                                mOldToPay.setText(String.format(Locale.getDefault(), "%.2f", paymentFirebase.getToPay()));
+                            }
 
-                            ((TextView) findViewById(R.id.old_topay)).setText(String.format(Locale.getDefault(), "%.2f", paymentFirebase.getToPay()));
+
+                        }
+
+                        mSpinnerCurrency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                String item = (String) parent.getItemAtPosition(position);
+                                mExpenseCurrencySymbol.setText(Currency.getSymbol(Currency.CurrencyISO.valueOf(item)));
+                                mOldToPayCurrencySymbol.setText(Currency.getSymbol(Currency.CurrencyISO.valueOf(item)));
+                                mNewToPayCurrencySymbol.setText(Currency.getSymbol(Currency.CurrencyISO.valueOf(item)));
+                                mExpenseCost.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(expenseCost, currencyISO, Currency.CurrencyISO.valueOf(item))));
+                                if (paymentFirebase != null && paymentFirebase.getUserFirebaseId().equals(ma.getFirebaseId()))
+                                    mOldToPay.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(paymentFirebase.getToPay(), currencyISO, Currency.CurrencyISO.valueOf(item))));
+
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+
+                            }
+                        });
+
+
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            };
+
+        }else{
+
+            valueEventListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                            paymentFirebase = dataSnapshot.getValue(PaymentFirebase.class);
+                            if (paymentFirebase.getUserFirebaseId().equals(ma.getFirebaseId())) {
+                                mGeneratedByTextView.setText(getString(R.string.you));
+
+                            }
+                            else{
+                                mGeneratedByTextView.setText(paymentFirebase.getUserFullName());
+                            }
+                        mOldToPay.setText(String.format(Locale.getDefault(), "%.2f", paymentFirebase.getToPay()));
+                        mNewToPay.setText(String.format(Locale.getDefault(), "%.2f", paymentFirebase.getNewToPay()));
+                        mNewToPay.setEnabled(false);
+                        mMotivationEditText.setText(paymentFirebase.getMotivation());
+                        mMotivationEditText.setEnabled(false);
+
+
+                        mSpinnerCurrency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                String item = (String) parent.getItemAtPosition(position);
+                                mExpenseCurrencySymbol.setText(Currency.getSymbol(Currency.CurrencyISO.valueOf(item)));
+                                mOldToPayCurrencySymbol.setText(Currency.getSymbol(Currency.CurrencyISO.valueOf(item)));
+                                mNewToPayCurrencySymbol.setText(Currency.getSymbol(Currency.CurrencyISO.valueOf(item)));
+                                mExpenseCost.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(expenseCost, currencyISO, Currency.CurrencyISO.valueOf(item))));
+                                if (paymentFirebase != null)
+                                    mOldToPay.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(paymentFirebase.getToPay(), currencyISO, Currency.CurrencyISO.valueOf(item))));
+
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+
+                            }
+                        });
+
+                        if(expenseState== Expense.State.CONTESTED && paymentFirebase.getUserFirebaseId().equals(ma.getFirebaseId())){
+                            (findViewById(R.id.confirm_delete_button_layout)).setVisibility(View.VISIBLE);
+                            ((Button)findViewById(R.id.confirm_delete_button)).setText(getString(R.string.delete_contention));
+                        }else if(expenseState== Expense.State.CONTESTED && ma.getFirebaseId().equals(expenseUserFirebaseId)){
+                            (findViewById(R.id.confirm_delete_button_layout)).setVisibility(View.VISIBLE);
+                            ((Button)findViewById(R.id.confirm_delete_button)).setText(getString(R.string.confirm_contention));
                         }
 
 
                     }
+                }
 
-                    mSpinnerCurrency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                        @Override
-                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                            String item = (String) parent.getItemAtPosition(position);
-                            mExpenseCurrencySymbol.setText(Currency.getSymbol(Currency.CurrencyISO.valueOf(item)));
-                            mOldToPayCurrencySymbol.setText(Currency.getSymbol(Currency.CurrencyISO.valueOf(item)));
-                            mNewToPayCurrencySymbol.setText(Currency.getSymbol(Currency.CurrencyISO.valueOf(item)));
-                            mExpenseCost.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(expenseCost, currencyISO, Currency.CurrencyISO.valueOf(item))));
-                            if(paymentFirebase!=null)
-                                mOldToPay.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(paymentFirebase.getToPay(), currencyISO, Currency.CurrencyISO.valueOf(item))));
-
-                        }
-
-                        @Override
-                        public void onNothingSelected(AdapterView<?> parent) {
-
-                        }
-                    });
-
-
-
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
                 }
-            }
+            };
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
 
-            }
-        };
+
+
+        }
 
         mNewToPay.addTextChangedListener(new TextWatcher() {
 
             public void afterTextChanged(Editable s) {
 
                 String editString = CostUtil.replaceDecimalComma(s.toString());
-                if(s.length() != 0 && CostUtil.isParsableAsDouble(editString) && Double.valueOf(editString)!=0){
+
+
+                if(editString!=null && s.length() != 0 && CostUtil.isParsableAsDouble(editString) && Double.valueOf(editString)!=0){
                     if(Double.valueOf(editString)>Double.valueOf(CostUtil.replaceDecimalComma(mExpenseCost.getText().toString()))){
                         mNewToPay.setText(mExpenseCost.getText().toString());
                     }
+                }
+                else if(editString==null)
+                {
+                    mNewToPay.setError(getString(R.string.err_msg_correct_amount));
+                    mNewToPay.setText("");
                 }
             }
 
@@ -220,7 +308,8 @@ public class ContestExpenseActivity extends BaseActivity {
 
     @Override   //questo serve per il confirm e fill all payments
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_contest, menu);
+        if(expenseState== Expense.State.ONGOING)
+            getMenuInflater().inflate(R.menu.menu_contest, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -231,15 +320,73 @@ public class ContestExpenseActivity extends BaseActivity {
 
         if (id == R.id.confirm_contention) {
 
-            if(mMotivationEditText.getText().toString().isEmpty()){
-                mMotivationEditText.setError(getString(R.string.err_motivation));
-                requestFocus(mMotivationEditText);
+            showProgressDialog();
+            boolean focusRequest = false;
+            final String newToPayString = CostUtil.replaceDecimalComma(mNewToPay.getText().toString());
+            if(newToPayString==null || newToPayString.isEmpty() || !CostUtil.isParsableAsDouble(newToPayString)){
+                mNewToPay.setError(getString(R.string.err_msg_correct_amount));
+                requestFocus(mNewToPay);
                 Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                 // Vibrate for 250 milliseconds
                 vibrator.vibrate(250);
-                return true;
+                focusRequest = true;
+
 
             }
+
+            if(mMotivationEditText.getText().toString().isEmpty()){
+                mMotivationEditText.setError(getString(R.string.err_motivation));
+                if(!focusRequest) {
+                    requestFocus(mMotivationEditText);
+                    Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                    // Vibrate for 250 milliseconds
+                    vibrator.vibrate(250);
+
+                }
+                focusRequest = true;
+            }
+
+            //error case
+            if(focusRequest)
+                return true;
+
+
+            //write inside expense the contest
+            DatabaseReference expenseStateReference = mDatabaseRootReference.child("expenses/"+expenseId+"/state");
+            expenseStateReference.runTransaction(new Transaction.Handler() {
+                @Override
+                public Transaction.Result doTransaction(MutableData mutableData) {
+                    Expense.State expenseState = mutableData.getValue(Expense.State.class);
+                    if(expenseState == Expense.State.ONGOING){
+                        mDatabaseRootReference.child("expenses/"+expenseId+"/paymentContestedId").setValue(paymentFirebase.getId());
+                        mDatabaseRootReference.child("expenses/"+expenseId+"/payments/"+paymentFirebase.getId()+"/newToPay").setValue(Double.parseDouble(newToPayString));
+                        mDatabaseRootReference.child("expenses/"+expenseId+"/payments/"+paymentFirebase.getId()+"/motivation").setValue(mMotivationEditText.getText().toString());
+                        mutableData.setValue(Expense.State.CONTESTED);
+
+                    }else{
+                        return Transaction.abort();
+                    }
+
+
+                    return Transaction.success(mutableData);
+
+                }
+
+                @Override
+                public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+                    if(b){
+                        setResult(RESULT_OK);
+                        hideProgressDialog();
+                        finish();
+                    }
+                    else {
+                        setResult(RESULT_CANCELED);
+                        hideProgressDialog();
+                        finish();
+                    }
+                }
+            });
+
 
 
 

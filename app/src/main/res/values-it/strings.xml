@@ -223,4 +223,11 @@
     <string name="contention">Genera Contesa</string>
     <string name="contention_generated">Contesa generata</string>
     <string name="err_motivation">Inserisci Motivazione</string>
+    <string name="err_no_ongoing">Operazione Fallita: stato spesa cambiato durante operazione</string>
+    <string name="generated_by">Generata da</string>
+    <string name="contention_information">Informazione Contesa</string>
+    <string name="confirm_contention">Conferma Contesa</string>
+    <string name="delete_contention">Annulla Contesa</string>
+    <string name="contention_confermed">Contesa Confermata</string>
+    <string name="contention_deleted">Contesa annullata</string>
 </resources>

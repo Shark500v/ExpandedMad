@@ -31,6 +31,7 @@ import com.polito.madinblack.expandedmad.tabViewGroup.RecyclerViewAdapter;
 
 import java.util.Locale;
 
+import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
 
@@ -43,6 +44,7 @@ public class ExpenseDetailFragment extends Fragment {
     public static final String ARG_EXPENSE_ID = "expenseId";
     private static final int PAYMENT_REQUEST = 2;
     private static final int CONTENTION_REQUEST = 3;
+    private static final int CONTENTION_INFORMATION = 4;
 
     RecyclerViewAdapter adapter;
     RecyclerView recyclerView;
@@ -94,7 +96,7 @@ public class ExpenseDetailFragment extends Fragment {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     final Expense expense = dataSnapshot.getValue(Expense.class);
 
-                    if(expense.getPaidByFirebaseId().equals(ma.getFirebaseId())) {
+                    if(expense.getPaidByFirebaseId().equals(ma.getFirebaseId()) && expense.getState()== Expense.State.ONGOING) {
                         ImageButton imageButtonGo;
                         ((TextView)rootView.findViewById(R.id.head_title)).setText(getString(R.string.list_payment));
                         (imageButtonGo = (ImageButton)rootView.findViewById(R.id.go_button)).setImageResource(R.drawable.payment3);
@@ -113,7 +115,7 @@ public class ExpenseDetailFragment extends Fragment {
                         });
 
 
-                    }else {
+                    }else if(expense.getState()== Expense.State.ONGOING){
                         ImageButton imageButtonGo;
                         ((TextView)rootView.findViewById(R.id.head_title)).setText(getString(R.string.contention));
                         (imageButtonGo = (ImageButton)rootView.findViewById(R.id.go_button)).setImageResource(R.drawable.stop_or_prohibition_sign);
@@ -125,10 +127,34 @@ public class ExpenseDetailFragment extends Fragment {
                                 intent.putExtra(ContestExpenseActivity.ARG_GROUP_ID, expense.getGroupId());
                                 intent.putExtra(ContestExpenseActivity.ARG_EXPENSE_COST, expense.getCost().toString());
                                 intent.putExtra(ContestExpenseActivity.ARG_CURRENCY_ISO, expense.getCurrencyISO().name());
+                                intent.putExtra(ContestExpenseActivity.ARG_EXPENSE_STATE, expense.getState().name());
+                                intent.putExtra(ContestExpenseActivity.ARG_EXPENSE_USER_FIREBASEID, expense.getPaidByFirebaseId());
                                 startActivityForResult(intent, CONTENTION_REQUEST);
 
                             }
                         });
+                    }else{
+                        ImageButton imageButtonGo;
+                        ((TextView)rootView.findViewById(R.id.head_title)).setText(getString(R.string.contention));
+                        (imageButtonGo = (ImageButton)rootView.findViewById(R.id.go_button)).setImageResource(R.drawable.ic_info_black_24dp);
+                        imageButtonGo.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(getContext(), ContestExpenseActivity.class);
+                                intent.putExtra(ContestExpenseActivity.ARG_EXPENSE_ID, expense.getId());
+                                intent.putExtra(ContestExpenseActivity.ARG_GROUP_ID, expense.getGroupId());
+                                intent.putExtra(ContestExpenseActivity.ARG_EXPENSE_COST, expense.getCost().toString());
+                                intent.putExtra(ContestExpenseActivity.ARG_CURRENCY_ISO, expense.getCurrencyISO().name());
+                                intent.putExtra(ContestExpenseActivity.ARG_EXPENSE_STATE, expense.getState().name());
+                                intent.putExtra(ContestExpenseActivity.ARG_EXPENSE_USER_FIREBASEID, expense.getPaidByFirebaseId());
+                                intent.putExtra(ContestExpenseActivity.ARG_PAYMENT_CONTEST_ID, expense.getPaymentRejectedId());
+                                startActivityForResult(intent, CONTENTION_INFORMATION);
+
+                            }
+                        });
+
+
+
                     }
 
                     if(expense.getDescription()!=null && !(expense.getDescription().isEmpty()))
@@ -232,10 +258,27 @@ public class ExpenseDetailFragment extends Fragment {
             if (resultCode == RESULT_OK) {
                 Toast.makeText(getContext(), getString(R.string.contention_generated),
                         Toast.LENGTH_SHORT).show();
-            } else if(resultCode != 0){
+            }else if(resultCode == RESULT_CANCELED){
+                Toast.makeText(getContext(), getString(R.string.err_no_ongoing),
+                        Toast.LENGTH_SHORT).show();
+
+            }
+            else if(resultCode != 0){
                 Toast.makeText(getContext(), getString(R.string.operation_failed),
                         Toast.LENGTH_SHORT).show();
             }
+
+        }
+        else if(requestCode == CONTENTION_INFORMATION){
+            if(resultCode == RESULT_OK){
+                Toast.makeText(getContext(), getString(R.string.contention_confermed),
+                        Toast.LENGTH_SHORT).show();
+
+            }else if(resultCode == RESULT_CANCELED){
+                Toast.makeText(getContext(), getString(R.string.contention_deleted),
+                        Toast.LENGTH_SHORT).show();
+            }
+
 
         }
     }
