@@ -81,6 +81,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
     private ValueEventListener valueEventListener;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private NotificationUtils utils;
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -244,7 +245,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         getMenuInflater().inflate(R.menu.menu_onlysearch, menu);
 
         MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
@@ -285,6 +286,8 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     mValues.clear();
                     duplicato.clear();
+                    searchView.clearFocus();
+
                     for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
 
                         mValues.add(postSnapshot.getValue(GroupForUser.class));
