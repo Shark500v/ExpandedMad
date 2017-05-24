@@ -32,6 +32,7 @@ import com.polito.madinblack.expandedmad.tabViewGroup.RecyclerViewAdapter;
 import java.util.Locale;
 
 import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_FIRST_USER;
 import static android.app.Activity.RESULT_OK;
 
 
@@ -263,10 +264,7 @@ public class ExpenseDetailFragment extends Fragment {
                         Toast.LENGTH_SHORT).show();
 
             }
-            else if(resultCode != 0){
-                Toast.makeText(getContext(), getString(R.string.operation_failed),
-                        Toast.LENGTH_SHORT).show();
-            }
+
 
         }
         else if(requestCode == CONTENTION_INFORMATION){
@@ -277,6 +275,11 @@ public class ExpenseDetailFragment extends Fragment {
             }else if(resultCode == RESULT_CANCELED){
                 Toast.makeText(getContext(), getString(R.string.contention_deleted),
                         Toast.LENGTH_SHORT).show();
+            }
+            else if(resultCode == RESULT_FIRST_USER){
+                Toast.makeText(getContext(), getString(R.string.err_no_ongoing),
+                        Toast.LENGTH_SHORT).show();
+
             }
 
 

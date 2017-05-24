@@ -59,6 +59,7 @@ public class ContestExpenseActivity extends BaseActivity {
     public static final String ARG_EXPENSE_STATE = "expenseState";
     public static final String ARG_PAYMENT_CONTEST_ID = "paymentContestId";
     public static final String ARG_EXPENSE_USER_FIREBASEID = "expenseFirebaseId";
+    public static final int RESULT_MODIFIED_YET = 3;
 
     private DatabaseReference mDatabaseRootReference;
     private DatabaseReference mDatabasePaymentReference;
@@ -238,9 +239,82 @@ public class ContestExpenseActivity extends BaseActivity {
                         if(expenseState== Expense.State.CONTESTED && paymentFirebase.getUserFirebaseId().equals(ma.getFirebaseId())){
                             (findViewById(R.id.confirm_delete_button_layout)).setVisibility(View.VISIBLE);
                             ((Button)findViewById(R.id.confirm_delete_button)).setText(getString(R.string.delete_contention));
+                            (findViewById(R.id.confirm_delete_button)).setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    DatabaseReference expenseStateReference = mDatabaseRootReference.child("expenses/"+expenseId+"/state");
+                                    expenseStateReference.runTransaction(new Transaction.Handler() {
+                                        @Override
+                                        public Transaction.Result doTransaction(MutableData mutableData) {
+                                            Expense.State expenseState = mutableData.getValue(Expense.State.class);
+                                            if(expenseState == Expense.State.CONTESTED){
+                                                mutableData.setValue(Expense.State.ONGOING);
+
+                                            }else{
+                                                return Transaction.abort();
+                                            }
+
+
+                                            return Transaction.success(mutableData);
+
+                                        }
+
+                                        @Override
+                                        public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+                                            if(b){
+                                                setResult(RESULT_CANCELED);
+                                                hideProgressDialog();
+                                                finish();
+                                            }
+                                            else {
+                                                setResult(RESULT_FIRST_USER);
+                                                hideProgressDialog();
+                                                finish();
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+
                         }else if(expenseState== Expense.State.CONTESTED && ma.getFirebaseId().equals(expenseUserFirebaseId)){
                             (findViewById(R.id.confirm_delete_button_layout)).setVisibility(View.VISIBLE);
                             ((Button)findViewById(R.id.confirm_delete_button)).setText(getString(R.string.confirm_contention));
+                            (findViewById(R.id.confirm_delete_button)).setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    DatabaseReference expenseStateReference = mDatabaseRootReference.child("expenses/"+expenseId+"/state");
+                                    expenseStateReference.runTransaction(new Transaction.Handler() {
+                                        @Override
+                                        public Transaction.Result doTransaction(MutableData mutableData) {
+                                            Expense.State expenseState = mutableData.getValue(Expense.State.class);
+                                            if(expenseState == Expense.State.CONTESTED){
+                                               //inside this part there will be the code to create the storno
+
+                                            }else{
+                                                return Transaction.abort();
+                                            }
+
+
+                                            return Transaction.success(mutableData);
+
+                                        }
+
+                                        @Override
+                                        public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+                                            if(b){
+                                                setResult(RESULT_OK);
+                                                hideProgressDialog();
+                                                finish();
+                                            }
+                                            else {
+                                                setResult(RESULT_FIRST_USER);
+                                                hideProgressDialog();
+                                                finish();
+                                            }
+                                        }
+                                    });
+                                }
+                            });
                         }
 
 
