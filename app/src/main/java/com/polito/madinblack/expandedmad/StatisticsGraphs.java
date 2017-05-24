@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
@@ -25,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
+import com.polito.madinblack.expandedmad.model.Currency;
 import com.polito.madinblack.expandedmad.model.ExpenseForUser;
 import com.polito.madinblack.expandedmad.model.GroupForUser;
 import com.polito.madinblack.expandedmad.model.MyApplication;
@@ -35,13 +37,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import static java.security.AccessController.getContext;
 
 
 public class StatisticsGraphs extends AppCompatActivity {
     private Spinner groupSpinner;
     private Spinner yearSpinner;
     private Spinner tagSpinner;
-    //private Button show_button;
     private MyApplication ma;
     private GraphView graph;
     private ValueEventListener mValueEventListener;
@@ -58,11 +60,9 @@ public class StatisticsGraphs extends AppCompatActivity {
     private String yearSelected;
     private String tagSelected;
     private String groupId;
-    List<String> tags = new ArrayList<>();
-    List<String> tagsOth = new ArrayList<>();
-    //private DatabaseReference mDatabase;
-    //private String firebaseId;
-    //private String phoneNumber;
+    private Currency.CurrencyISO myCurrency;
+    List<String> tagsEn = new ArrayList<>();
+    List<String> tagsIt = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,10 +77,10 @@ public class StatisticsGraphs extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        Locale locale = getCurrentLocale();
+        myCurrency = MyApplication.getCurrencyISOFavorite();
 
-        tags = Arrays.asList(getResources().getStringArray(R.array.tags));
-        tagsOth = Arrays.asList(getResources().getStringArray(R.array.tagsOtherLanguage));
+        tagsEn = getEnglishArrayString(R.array.tags);
+        tagsIt = getItalianArrayString(R.array.tags);
 
         graph = (GraphView) findViewById(R.id.graph1);
         setGraph(graph);
@@ -233,7 +233,7 @@ public class StatisticsGraphs extends AppCompatActivity {
         graph.getViewport().setYAxisBoundsManual(true);
 
         graph.getGridLabelRenderer().setHorizontalAxisTitle(getString(R.string.months)); //da il titolo all'asse delle x
-        graph.getGridLabelRenderer().setVerticalAxisTitle(getString(R.string.expenses_in_euro));
+        graph.getGridLabelRenderer().setVerticalAxisTitle(getString(R.string.expenses_in) + " " + myCurrency.toString());
     }
 
     //metodo per inizializzare i dati del grafico
@@ -303,7 +303,7 @@ public class StatisticsGraphs extends AppCompatActivity {
                                         Double month = Double.valueOf(expenseForUser.getMonth());
                                         expenseCost += groupExpensesByMonth.get(month);
                                         groupExpensesByMonth.put(month, expenseCost);
-                                    }else if(tagStr.equals(tagSelected)){
+                                    }else if(posTagSel == getTagPosition(tagStr)){
                                         Double expenseCost = expenseForUser.getCost();
                                         Double month = Double.valueOf(expenseForUser.getMonth());
                                         expenseCost += groupExpensesByMonth.get(month);
@@ -315,7 +315,7 @@ public class StatisticsGraphs extends AppCompatActivity {
                                 Double month = Double.valueOf(expenseForUser.getMonth());
                                 expenseCost += groupExpensesByMonth.get(month);                                 //gli aggiungo il valore già presente nella mappa ai passi precedenti
                                 groupExpensesByMonth.put(month, expenseCost);    //aggiorno la mappa alla posizione del mese della expense
-                            }else if (tagStr.equals(tagSelected)){
+                            }else if (posTagSel == getTagPosition(tagStr)){
                                 Double expenseCost = expenseForUser.getCost();
                                 Double month = Double.valueOf(expenseForUser.getMonth());
                                 expenseCost += groupExpensesByMonth.get(month);
@@ -387,7 +387,7 @@ public class StatisticsGraphs extends AppCompatActivity {
             }
         }
         graph.addSeries(series); //aggiunge la serie di dati al grafico
-        if(max>10) {
+        if(max>5) {
             graph.getViewport().setMaxY(max + max / 4);
         }
 
@@ -403,23 +403,41 @@ public class StatisticsGraphs extends AppCompatActivity {
     }
 
     public int getTagPosition(String tagSelected){
-        for(int i = 0; i < tags.size(); i++){
-            if(tags.get(i).equals(tagSelected))
+        for(int i = 0; i < tagsIt.size(); i++){
+            if(tagsIt.get(i).equals(tagSelected))
                 return i;
-            if(tagsOth.get(i).equals(tagSelected))
+            if(tagsEn.get(i).equals(tagSelected))
                 return i;
         }
         return -1;
     }
 
-    @TargetApi(Build.VERSION_CODES.N)
-    public Locale getCurrentLocale(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
-            return getResources().getConfiguration().getLocales().get(0);
-        } else{
-            //noinspection deprecation
-            return getResources().getConfiguration().locale;
-        }
+    @NonNull
+    protected List<String> getEnglishArrayString(int tags) {
+        Configuration configuration = getEnglishConfiguration();
+
+        return Arrays.asList(getApplicationContext().createConfigurationContext(configuration).getResources().getStringArray(tags));
+    }
+
+    @NonNull
+    private Configuration getEnglishConfiguration() {
+        Configuration configuration = new Configuration(getApplicationContext().getResources().getConfiguration());
+        configuration.setLocale(new Locale("en"));
+        return configuration;
+    }
+
+    @NonNull
+    protected List<String> getItalianArrayString(int tags) {
+        Configuration configuration = getItalianConfiguration();
+
+        return Arrays.asList(getApplicationContext().createConfigurationContext(configuration).getResources().getStringArray(tags));
+    }
+
+    @NonNull
+    private Configuration getItalianConfiguration() {
+        Configuration configuration = new Configuration(getApplicationContext().getResources().getConfiguration());
+        configuration.setLocale(new Locale("it"));
+        return configuration;
     }
 
     @Override

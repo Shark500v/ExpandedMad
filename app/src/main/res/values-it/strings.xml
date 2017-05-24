@@ -30,17 +30,6 @@
         <item name="hotel">Hotel</item>
         <item name="other">Altro</item>
     </string-array>
-    <string-array name="tagsOtherLanguage">
-        <item name="water_bill">Water_Bill</item>
-        <item name="light_bill">Light_Bill</item>
-        <item name="gas_bill">Gas_Bill</item>
-        <item name="flight">Flight</item>
-        <item name="fuel">Fuel</item>
-        <item name="drinks">Drink</item>
-        <item name="food">Food</item>
-        <item name="hotel">Hotel</item>
-        <item name="other">Other</item>
-    </string-array>
     <string-array name="tagsForGraph">
         <item name="select_tag">Seleziona tag</item>
         <item name="all_tags">Generale</item>
@@ -190,7 +179,7 @@
     <string name="select_year">Seleziona anno</string>
     <string name="show_graph">VISUALIZZA</string>
     <string name="months">Mesi</string>
-    <string name="expenses_in_euro">Spese (€)</string>
+    <string name="expenses_in">Spese in</string>
     <string name="chat_hint">Scrivi un messaggio</string>
     <string name="rounded_cost">Costo arrotondato</string>
 
