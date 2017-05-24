@@ -19,7 +19,6 @@
         android:gravity="center_horizontal"
         android:text="send"
         android:textColor="@color/colorPrimary"
-        android:onClick="sendNotification"
         android:textSize="26dp" />
 
     <TextView
