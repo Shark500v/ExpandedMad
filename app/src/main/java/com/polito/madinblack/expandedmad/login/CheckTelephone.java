@@ -1,7 +1,10 @@
 package com.polito.madinblack.expandedmad.login;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.widget.TextView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -11,12 +14,17 @@ import com.google.firebase.database.ValueEventListener;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.groupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.model.MyApplication;
+import com.polito.madinblack.expandedmad.notification.Config;
+
+import static com.polito.madinblack.expandedmad.notification.NotificationUtils.saveTokenOnDb;
 
 /**
  * Created by Ale on 01/05/2017.
  */
 
 public class CheckTelephone extends BaseActivity {
+
+    private static final String TAG = "CheckTelephone";
 
     private ValueEventListener  mValueListener;
     private DatabaseReference   mDatabaseTelephoneReference;
@@ -44,6 +52,10 @@ public class CheckTelephone extends BaseActivity {
                 if (dataSnapshot.exists()) {
                     ma.setUserPhoneNumber(dataSnapshot.getValue(String.class));
                     ma.setIsPhone(true);
+
+                    //added for user token, useful for notification
+                    String token = getUserToken();
+                    saveTokenOnDb(token, ma.getUserPhoneNumber());
 
                     /*google login and number yet inserted jump to group page*/
                     Intent intent = new Intent(CheckTelephone.this, GroupListActivity.class);
@@ -74,6 +86,20 @@ public class CheckTelephone extends BaseActivity {
     public void onStart() {
         super.onStart();
         mDatabaseTelephoneReference.addListenerForSingleValueEvent(mValueListener);
+    }
+
+    private String getUserToken() {
+        SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
+        String regId = pref.getString("regId", null);
+
+        Log.e(TAG, "Firebase reg id: " + regId);
+
+        //da spostare quando si fa login
+        //saveTokenOnDb(regId);
+        if (!TextUtils.isEmpty(regId))
+            return regId;
+        else
+            return null;
     }
 
 
