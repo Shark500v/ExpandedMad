@@ -138,7 +138,7 @@ public class GroupSettings extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(!visible) {
-                    Glide.with(getApplicationContext()).load(url).into(fullscreen);
+                    Glide.with(getApplicationContext()).load(url).error(R.drawable.teamwork).into(fullscreen);
                     fullscreen.setVisibility(View.VISIBLE);
                     visible = true;
                 }

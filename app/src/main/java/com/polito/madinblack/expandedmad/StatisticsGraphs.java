@@ -83,7 +83,7 @@ public class StatisticsGraphs extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        coordinatorLayout = (CoordinatorLayout)findViewById(R.id.snackbarPosition);
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.snackbarPosition);
 
         myCurrency = MyApplication.getCurrencyISOFavorite();
         myCurrencySymbol = Currency.getSymbol(myCurrency);
@@ -95,6 +95,10 @@ public class StatisticsGraphs extends AppCompatActivity {
         setGraph(graph);
 
         resetMap(groupExpensesByMonth);
+
+        groupSpinner = (Spinner) findViewById(R.id.group_spinner);
+        yearSpinner = (Spinner) findViewById(R.id.year_spinner);
+        tagSpinner = (Spinner) findViewById(R.id.tag_spinner_graph);
 
         groupSelected = getString(R.string.select_group);
         yearSelected = getString(R.string.select_year);
@@ -119,93 +123,9 @@ public class StatisticsGraphs extends AppCompatActivity {
                     groupMap.put(groupName, groupId);
                 }
 
-                groupSpinner = (Spinner) findViewById(R.id.group_spinner);
-                yearSpinner = (Spinner) findViewById(R.id.year_spinner);
-                tagSpinner = (Spinner) findViewById(R.id.tag_spinner_graph);
-
                 ArrayAdapter<String> groupAdapter = new ArrayAdapter<String>(StatisticsGraphs.this, android.R.layout.simple_spinner_item, groupArray);
                 groupAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
                 groupSpinner.setAdapter(groupAdapter);
-
-                groupSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        groupSelected = parent.getItemAtPosition(position).toString();
-                        groupId = groupMap.get(groupSelected);
-                        if ((!groupMap.get(groupSelected).equals(getString(R.string.select_group))) && (!yearSelected.equals(getString(R.string.select_year))) && (!tagSelected.equals(getString(R.string.select_tag)))) {
-                            if(groupMap.get(groupSelected).equals(getString(R.string.all_groups))){
-                                mDatabaseAllExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber())
-                                        .child(ma.getFirebaseId()).child("groups");
-                                initGraph(graph, groupMap.get(groupSelected), yearSelected, groupSelected, tagSelected);   //una volta selezionati sia l'anno che il gruppo chiama il metodo
-                            }else {
-                                mDatabaseExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber())
-                                        .child(ma.getFirebaseId()).child("groups").child(groupId).child("expenses");
-                                initGraph(graph, groupMap.get(groupSelected), yearSelected, groupSelected, tagSelected);   //una volta selezionati sia l'anno che il gruppo chiama il metodo
-
-                                //if(groupMap.get(groupSelected) != null) {
-                                //initGraph(graph, groupMap.get(groupSelected));
-                                //}
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-
-                    }
-                });
-                yearSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        yearSelected = parent.getItemAtPosition(position).toString();
-
-                        if ((!groupMap.get(groupSelected).equals(getString(R.string.select_group))) && (!yearSelected.equals(getString(R.string.select_year))) && (!tagSelected.equals(getString(R.string.select_tag)))) {
-                            if (groupMap.get(groupSelected).equals(getString(R.string.all_groups))) {
-                                mDatabaseAllExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber())
-                                        .child(ma.getFirebaseId()).child("groups");
-                                initGraph(graph, groupMap.get(groupSelected), yearSelected, groupSelected, tagSelected);   //una volta selezionati sia l'anno che il gruppo chiama il metodo
-
-                            } else {
-                                mDatabaseExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber())
-                                        .child(ma.getFirebaseId()).child("groups").child(groupId).child("expenses");
-                                initGraph(graph, groupMap.get(groupSelected), yearSelected, groupSelected, tagSelected);   //una volta selezionati sia l'anno che il gruppo chiama il metodo
-                            }
-                        }
-
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-
-                    }
-                });
-
-                tagSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        tagSelected = parent.getItemAtPosition(position).toString();
-                        if ((!groupMap.get(groupSelected).equals(getString(R.string.select_group))) && (!yearSelected.equals(getString(R.string.select_year))) && (!tagSelected.equals(getString(R.string.select_tag)))) {
-                            if(groupMap.get(groupSelected).equals(getString(R.string.all_groups))){
-                                mDatabaseAllExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber())
-                                        .child(ma.getFirebaseId()).child("groups");
-                                initGraph(graph, groupMap.get(groupSelected), yearSelected, groupSelected, tagSelected);   //una volta selezionati sia l'anno che il gruppo chiama il metodo
-                            }else {
-                                mDatabaseExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber())
-                                        .child(ma.getFirebaseId()).child("groups").child(groupId).child("expenses");
-                                initGraph(graph, groupMap.get(groupSelected), yearSelected, groupSelected, tagSelected);   //una volta selezionati sia l'anno che il gruppo chiama il metodo
-
-                                //if(groupMap.get(groupSelected) != null) {
-                                //initGraph(graph, groupMap.get(groupSelected));
-                                //}
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-
-                    }
-                });
             }
 
             @Override
@@ -213,6 +133,85 @@ public class StatisticsGraphs extends AppCompatActivity {
 
             }
         };
+
+        groupSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                groupSelected = parent.getItemAtPosition(position).toString();
+                groupId = groupMap.get(groupSelected);
+                if ((!groupId.equals(getString(R.string.select_group))) && (!yearSelected.equals(getString(R.string.select_year))) && (!tagSelected.equals(getString(R.string.select_tag)))) {
+                    if (groupId.equals(getString(R.string.all_groups))) {
+                        mDatabaseAllExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber())
+                                .child(ma.getFirebaseId()).child("groups");
+                        initGraph(graph, yearSelected, groupSelected, tagSelected);   //una volta selezionati sia l'anno che il gruppo chiama il metodo
+                    } else {
+                        mDatabaseExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber())
+                                .child(ma.getFirebaseId()).child("groups").child(groupId).child("expenses");
+                        initGraph(graph, yearSelected, groupSelected, tagSelected);   //una volta selezionati sia l'anno che il gruppo chiama il metodo
+
+                        //if(groupMap.get(groupSelected) != null) {
+                        //initGraph(graph, groupMap.get(groupSelected));
+                        //}
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        yearSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                yearSelected = parent.getItemAtPosition(position).toString();
+                groupId = groupMap.get(groupSelected);
+                if ((!groupId.equals(getString(R.string.select_group))) && (!yearSelected.equals(getString(R.string.select_year))) && (!tagSelected.equals(getString(R.string.select_tag)))) {
+                    if (groupId.equals(getString(R.string.all_groups))) {
+                        mDatabaseAllExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber())
+                                .child(ma.getFirebaseId()).child("groups");
+                        initGraph(graph, yearSelected, groupSelected, tagSelected);   //una volta selezionati sia l'anno che il gruppo chiama il metodo
+                    } else {
+                        mDatabaseExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber())
+                                .child(ma.getFirebaseId()).child("groups").child(groupId).child("expenses");
+                        initGraph(graph, yearSelected, groupSelected, tagSelected);   //una volta selezionati sia l'anno che il gruppo chiama il metodo
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        tagSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                tagSelected = parent.getItemAtPosition(position).toString();
+                groupId = groupMap.get(groupSelected);
+                if ((!groupId.equals(getString(R.string.select_group))) && (!yearSelected.equals(getString(R.string.select_year))) && (!tagSelected.equals(getString(R.string.select_tag)))) {
+                    if (groupId.equals(getString(R.string.all_groups))) {
+                        mDatabaseAllExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber())
+                                .child(ma.getFirebaseId()).child("groups");
+                        initGraph(graph, yearSelected, groupSelected, tagSelected);   //una volta selezionati sia l'anno che il gruppo chiama il metodo
+                    } else {
+                        mDatabaseExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber())
+                                .child(ma.getFirebaseId()).child("groups").child(groupId).child("expenses");
+                        initGraph(graph, yearSelected, groupSelected, tagSelected);   //una volta selezionati sia l'anno che il gruppo chiama il metodo
+
+                        //if(groupMap.get(groupSelected) != null) {
+                        //initGraph(graph, groupMap.get(groupSelected));
+                        //}
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
 
         //show_button = (Button)findViewById(R.id.show_button);
@@ -228,7 +227,6 @@ public class StatisticsGraphs extends AppCompatActivity {
         //    }
 
         //});
-
     }
 
     private void setGraph(GraphView graph){
@@ -245,7 +243,7 @@ public class StatisticsGraphs extends AppCompatActivity {
     }
 
     //metodo per inizializzare i dati del grafico
-    public void initGraph(final GraphView graph, String groupId, String year, final String groupName, String tag) {
+    public void initGraph(final GraphView graph, String year, final String groupName, String tag) {
         final String yearSelected = year;
         final String tagSelected = tag;
         final int posTagSel = getTagPosition(tagSelected);
@@ -475,7 +473,7 @@ public class StatisticsGraphs extends AppCompatActivity {
     public void onStart(){
         super.onStart();
         if(mValueEventListener!=null)
-            mDatabaseGroupReference.addValueEventListener(mValueEventListener);
+            mDatabaseGroupReference.addListenerForSingleValueEvent(mValueEventListener);
     }
 
     @Override

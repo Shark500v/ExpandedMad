@@ -286,7 +286,8 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     mValues.clear();
                     duplicato.clear();
-                    searchView.clearFocus();
+                    if(searchView!=null)
+                        searchView.clearFocus();
 
                     for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
 

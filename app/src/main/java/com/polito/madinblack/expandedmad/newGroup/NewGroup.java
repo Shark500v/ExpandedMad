@@ -1,5 +1,6 @@
 package com.polito.madinblack.expandedmad.newGroup;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -25,6 +26,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -157,6 +159,7 @@ public class NewGroup extends AppCompatActivity {
                     visible = true;
                 }*/
                 if(!visible) {
+                    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
                     Glide.with(getApplicationContext()).load(imageData).error(R.drawable.teamwork).into(fullScreen);
                     fullScreen.setVisibility(View.VISIBLE);
                     visible = true;
@@ -168,10 +171,6 @@ public class NewGroup extends AppCompatActivity {
         fullScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*if(visible){
-                    fullScreen.setVisibility(View.GONE);
-                    visible = false;
-                }*/
                 if(visible){
                     fullScreen.setVisibility(View.GONE);
                     visible = false;

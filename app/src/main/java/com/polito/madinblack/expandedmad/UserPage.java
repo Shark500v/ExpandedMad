@@ -92,7 +92,7 @@ public class UserPage extends AppCompatActivity{
         valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String url = dataSnapshot.getValue(String.class);
+                url = dataSnapshot.getValue(String.class);
                 Glide.with(getApplicationContext()).load(url).diskCacheStrategy(DiskCacheStrategy.SOURCE).error(R.drawable.businessman).into(userImage);
             }
 
@@ -112,7 +112,7 @@ public class UserPage extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 if(!visible) {
-                    Glide.with(getApplicationContext()).load(url).into(fullscreen);
+                    Glide.with(getApplicationContext()).load(url).error(R.drawable.businessman).into(fullscreen);
                     fullscreen.setVisibility(View.VISIBLE);
                     visible = true;
                 }
