@@ -10,6 +10,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.polito.madinblack.expandedmad.R;
+import com.polito.madinblack.expandedmad.model.MyApplication;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
     public List<SelectUser> _data, groupMem;
     private ArrayList<SelectUser> arraylist;
     Context _c;
+    MyApplication ma;
 
     public UserRecyclerViewAdapter(List<SelectUser> selectUsers, Context context, List<SelectUser> GroupM) {
         _data = selectUsers;
@@ -29,6 +31,7 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
         this.arraylist = new ArrayList<>();
         this.arraylist.addAll(_data);
         groupMem = GroupM;      //questa è la lista che devo aggiornre di volta in volta un utente viene aggiunto al gruppo dall'user
+        ma = MyApplication.getInstance();
     }
 
     @Override
@@ -41,8 +44,16 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
     public void onBindViewHolder(final UserRecyclerViewAdapter.ViewHolder holder, final int position) {
         final SelectUser data = _data.get(position);
         holder.title.setText(data.getName());
-        holder.check.setChecked(data.getCheckedBox());
         holder.phone.setText(data.getPhone());
+        if(data.getPhone().equals(ma.getUserPhoneNumber())){
+            holder.check.setChecked(true);
+            holder.check.setEnabled(false);
+            holder.me.setVisibility(View.VISIBLE);
+        }else{
+            holder.check.setChecked(data.getCheckedBox());
+            holder.check.setEnabled(true);
+            holder.me.setVisibility(View.INVISIBLE);
+        }
 
         // Set image if exists
         try {
@@ -84,7 +95,7 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         CircleImageView imageView;
-        TextView title, phone;
+        TextView title, phone, me;
         CheckBox check;
 
         public ViewHolder(View view) {
@@ -93,6 +104,7 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
             title = (TextView) view.findViewById(R.id.name);
             check = (CheckBox) view.findViewById(R.id.check);
             phone = (TextView) view.findViewById(R.id.no);
+            me = (TextView) view.findViewById(R.id.me);
             imageView = (CircleImageView) view.findViewById(R.id.pic);
         }
     }
