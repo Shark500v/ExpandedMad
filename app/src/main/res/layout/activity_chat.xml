@@ -48,11 +48,11 @@
                 android:layout_height="wrap_content"
                 android:layout_toLeftOf="@id/send_button"
                 android:layout_centerVertical="true"
+                android:inputType="textCapSentences|textAutoComplete|textAutoCorrect|textMultiLine"
                 android:maxLines="4"
                 android:paddingStart="@dimen/padding"
                 android:paddingEnd="@dimen/padding"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:inputType="textCapSentences|textAutoComplete|textAutoCorrect"
                 android:textColorHint="#CFD8DC"
                 android:textColor="#CFD8DC"
                 android:hint="@string/chat_hint" />
