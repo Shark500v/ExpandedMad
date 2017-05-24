@@ -44,12 +44,13 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
     public void onBindViewHolder(final UserRecyclerViewAdapter.ViewHolder holder, final int position) {
         final SelectUser data = _data.get(position);
         holder.title.setText(data.getName());
-        holder.check.setChecked(data.getCheckedBox());
         holder.phone.setText(data.getPhone());
         if(data.getPhone().equals(ma.getUserPhoneNumber())){
+            holder.check.setChecked(true);
             holder.check.setEnabled(false);
             holder.me.setVisibility(View.VISIBLE);
         }else{
+            holder.check.setChecked(data.getCheckedBox());
             holder.check.setEnabled(true);
             holder.me.setVisibility(View.INVISIBLE);
         }

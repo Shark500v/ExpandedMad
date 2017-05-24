@@ -114,7 +114,7 @@ public class NewGroup extends AppCompatActivity {
         mValueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(SelectUser selectUser : groupM){
+                for(SelectUser selectUser : realMembers){
                     String phone = selectUser.getPhone();
                     String firebaseId = selectUser.getFirebaseId();
                     User user = dataSnapshot.child(phone).child(firebaseId).getValue(User.class);
