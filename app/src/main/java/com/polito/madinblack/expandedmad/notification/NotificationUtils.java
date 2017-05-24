@@ -110,7 +110,7 @@ public class NotificationUtils {
             content = madeBy + " : "+message+" ";
         }else{
             //expense
-            content = madeBy + mContext.getString(R.string.history_expense);
+            content = madeBy + " "+ mContext.getString(R.string.history_expense);
         }
 
         Notification notification;

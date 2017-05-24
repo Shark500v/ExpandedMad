@@ -65,7 +65,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             String title = data.get("title");
             String message = data.get("message");
             String madeBy = data.get("madeBy");
-            String imageUrl = data.get("image");
+            String imageUrl = data.get("imageUrl");
             String timestamp = data.get("timestamp");
             String payload = data.get("payload");
 
