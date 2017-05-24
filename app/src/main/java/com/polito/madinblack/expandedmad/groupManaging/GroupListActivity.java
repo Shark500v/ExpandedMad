@@ -42,6 +42,7 @@ import com.google.firebase.storage.StorageReference;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.notification.Config;
 import com.polito.madinblack.expandedmad.notification.NotificationUtils;
+import com.polito.madinblack.expandedmad.newGroup.SelectUser;
 import com.polito.madinblack.expandedmad.settings.*;
 import com.polito.madinblack.expandedmad.StatisticsGraphs;
 import com.polito.madinblack.expandedmad.UserPage;
@@ -55,6 +56,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -79,6 +81,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
     private ValueEventListener valueEventListener;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private NotificationUtils utils;
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -242,9 +245,21 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         getMenuInflater().inflate(R.menu.menu_onlysearch, menu);
 
         MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
 
-        // Configure the search info and add any event listeners...
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                mAdapter.filter(newText);
+                return false;
+            }
+        });
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -270,14 +285,16 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     mValues.clear();
+                    duplicato.clear();
+                    searchView.clearFocus();
+
                     for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
 
                         mValues.add(postSnapshot.getValue(GroupForUser.class));
+                        duplicato.add(postSnapshot.getValue(GroupForUser.class));
 
                     }
                     notifyDataSetChanged();
-
-
                 }
 
                 @Override
@@ -288,7 +305,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                         Toast.makeText(mContext, getString(R.string.fail_load_group),
                                 Toast.LENGTH_SHORT).show();
                     }
-                    }
+                }
             };
             if(ref!=null)
                 ref.addValueEventListener(eventListener);
@@ -418,6 +435,23 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                 return super.toString();
             }
         }
-    }
 
+        // Filter Class
+        public void filter(String charText) {
+            charText = charText.toLowerCase(Locale.getDefault());
+            mValues.clear();
+            if (charText.length() == 0) {
+                mValues.addAll(duplicato);
+            } else {
+                for (GroupForUser wp : duplicato) {
+                    if (wp.getName().toLowerCase(Locale.getDefault())
+                            .contains(charText)) {
+                        mValues.add(wp);
+                    }
+                }
+            }
+            notifyDataSetChanged();
+        }
+
+    }
 }

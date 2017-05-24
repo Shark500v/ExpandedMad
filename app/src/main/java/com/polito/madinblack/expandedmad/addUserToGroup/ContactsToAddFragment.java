@@ -193,6 +193,22 @@ public class ContactsToAddFragment extends Fragment {
         rootView = inflater.inflate(R.layout.contact_to_add_list, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.list_to_add);
 
+        search = (SearchView) rootView.findViewById(R.id.search_view);
+
+        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.filter(newText);
+                return false;
+            }
+        });
+
         return rootView;
     }
 }
