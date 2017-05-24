@@ -41,7 +41,8 @@ import static android.app.Activity.RESULT_OK;
 public class ExpenseDetailFragment extends Fragment {
     public static final String ARG_EXPENSE_NAME = "expenseName";
     public static final String ARG_EXPENSE_ID = "expenseId";
-    private static final int CONTACT_REQUEST = 2;
+    private static final int PAYMENT_REQUEST = 2;
+    private static final int CONTENTION_REQUEST = 3;
 
     RecyclerViewAdapter adapter;
     RecyclerView recyclerView;
@@ -107,14 +108,14 @@ public class ExpenseDetailFragment extends Fragment {
                                 intent.putExtra(PaymentDetailActivity.ARG_USER_NAME, expense.getPaidByName());
                                 intent.putExtra(PaymentDetailActivity.ARG_USER_SURNAME, expense.getPaidBySurname());
                                 intent.putExtra(PaymentDetailActivity.ARG_CURRENCY_ISO, expense.getCurrencyISO().name());
-                                startActivityForResult(intent, CONTACT_REQUEST);
+                                startActivityForResult(intent, PAYMENT_REQUEST);
                             }
                         });
 
 
                     }else {
                         ImageButton imageButtonGo;
-                        ((TextView)rootView.findViewById(R.id.head_title)).setText(getString(R.string.list_payment));
+                        ((TextView)rootView.findViewById(R.id.head_title)).setText(getString(R.string.contention));
                         (imageButtonGo = (ImageButton)rootView.findViewById(R.id.go_button)).setImageResource(R.drawable.stop_or_prohibition_sign);
                         imageButtonGo.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -124,7 +125,8 @@ public class ExpenseDetailFragment extends Fragment {
                                 intent.putExtra(ContestExpenseActivity.ARG_GROUP_ID, expense.getGroupId());
                                 intent.putExtra(ContestExpenseActivity.ARG_EXPENSE_COST, expense.getCost().toString());
                                 intent.putExtra(ContestExpenseActivity.ARG_CURRENCY_ISO, expense.getCurrencyISO().name());
-                                startActivityForResult(intent, CONTACT_REQUEST);
+                                startActivityForResult(intent, CONTENTION_REQUEST);
+
                             }
                         });
                     }
@@ -216,9 +218,19 @@ public class ExpenseDetailFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == CONTACT_REQUEST) {
+        if (requestCode == PAYMENT_REQUEST) {
             if (resultCode == RESULT_OK) {
                 Toast.makeText(getContext(), getString(R.string.payment_updated),
+                        Toast.LENGTH_SHORT).show();
+            } else if(resultCode != 0){
+                Toast.makeText(getContext(), getString(R.string.operation_failed),
+                        Toast.LENGTH_SHORT).show();
+            }
+
+        }
+        else if(requestCode == CONTENTION_REQUEST){
+            if (resultCode == RESULT_OK) {
+                Toast.makeText(getContext(), getString(R.string.contention_generated),
                         Toast.LENGTH_SHORT).show();
             } else if(resultCode != 0){
                 Toast.makeText(getContext(), getString(R.string.operation_failed),

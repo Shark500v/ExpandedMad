@@ -12,14 +12,6 @@
         android:name="android.hardware.camera"
         android:required="true" />
 
-    <service
-        android:name=".MyFirebaseMessagingService">
-        <intent-filter>
-            <action android:name="com.google.firebase.MESSAGING_EVENT"/>
-        </intent-filter>
-    </service>
-
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_wallet"
@@ -29,6 +21,19 @@
         android:configChanges="orientation|screenSize|locale"
         android:name=".AppMain"
         android:theme="@style/AppTheme">
+
+        <service
+            android:name=".notification.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
+        <service android:name=".notification.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
 
         <activity
             android:name=".groupManaging.GroupListActivity"
@@ -201,6 +206,16 @@
         </activity>
 
         <activity
+            android:name=".expenseDetail.ContestExpenseActivity"
+            android:label="@string/contention"
+            android:parentActivityName=".expenseDetail.ExpenseDetailActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.polito.madinblack.expandedmad.expenseDetail.ExpenseDetailActivity" />
+        </activity>
+
+        <activity
             android:name=".UserPage"
             android:parentActivityName=".groupManaging.GroupListActivity"
             android:theme="@style/AppTheme.NoActionBar"
@@ -265,6 +280,17 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.expenseDetail.ExpenseDetailActivity" />
         </activity>
+
+        <activity
+            android:name=".notification.NotificationProof"
+            android:label="Notification Proof"
+            android:parentActivityName=".groupManaging.GroupListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.polito.madinblack.expandedmad.groupManaging.GroupListActivity" />
+        </activity>
+
 
     </application>
 

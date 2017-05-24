@@ -11,11 +11,12 @@
         android:background="@color/colorPrimaryLight"
         android:id="@+id/search_frag">
 
-        <SearchView
-            android:id="@+id/searchview"
+        <android.support.v7.widget.SearchView
+            android:id="@+id/search_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right" />
+            android:clickable="true"
+            android:layout_gravity="right"/>
 
     </FrameLayout>
 

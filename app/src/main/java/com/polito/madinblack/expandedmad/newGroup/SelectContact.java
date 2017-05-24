@@ -55,7 +55,7 @@ public class SelectContact extends AppCompatActivity {
         fragment = new ContactsFragment();
         fragment.setArguments(arguments);
         //lancio il fragment
-        getSupportFragmentManager().beginTransaction().add(R.id.frameLayout, fragment).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.frame_layout_2, fragment).commit();
     }
 
     @Override
@@ -75,7 +75,7 @@ public class SelectContact extends AppCompatActivity {
 
             if (groupM.isEmpty()) {
 
-                View mv = findViewById(R.id.frameLayout);
+                View mv = findViewById(R.id.frame_layout_2);
                 Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                 // Vibrate for 250 milliseconds
                 v.vibrate(250);

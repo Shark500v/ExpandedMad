@@ -221,4 +221,6 @@
     <string name="all_tags">All tags</string>
     <string name="contention">Generate Contention</string>
     <string name="no_expense_found">No expenses found</string>
+    <string name="contention_generated">Contention generated</string>
+    <string name="err_motivation">Insert motivation</string>
 </resources>

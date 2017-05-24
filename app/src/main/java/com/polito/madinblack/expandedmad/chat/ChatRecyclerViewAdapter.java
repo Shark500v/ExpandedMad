@@ -17,6 +17,9 @@ import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.Message;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 //questa classe la usa per fare il managing della lista che deve mostrare
 public class ChatRecyclerViewAdapter extends FirebaseRecyclerAdapter<Message,RecyclerView.ViewHolder> {
     /**
@@ -40,11 +43,12 @@ public class ChatRecyclerViewAdapter extends FirebaseRecyclerAdapter<Message,Rec
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void populateViewHolder(RecyclerView.ViewHolder viewHolder, Message model, int position) {
-        //da cambiare il controllo, è solo per ricordarmi che se mio mess va a destra
+        DateFormat dateFormat = new SimpleDateFormat("HH:mm");
+
         if(model.getSentById().equals(ma.getUserPhoneNumber())){
             ViewHolderRight holder = (ViewHolderRight)viewHolder;
             holder.mContentView.setText(model.getMessage());
-            //holder.mTime.setText(Integer.toString(model.getDate().getHours()) + ":" + Integer.toString(model.getDate().getMinutes()));
+            holder.mTime.setText(dateFormat.format(model.getDate()));
         }
         else{
             ViewHolderLeft holder = (ViewHolderLeft)viewHolder;
@@ -53,7 +57,7 @@ public class ChatRecyclerViewAdapter extends FirebaseRecyclerAdapter<Message,Rec
             if(holder.mContentView.getWidth()<holder.mName.getWidth()){
                 holder.mContentView.setWidth(holder.mName.getWidth());
             }
-            //holder.mTime.setText(Integer.toString(model.getDate().getHours()) + ":" + Integer.toString(model.getDate().getMinutes()));
+            holder.mTime.setText(dateFormat.format(model.getDate()));
             //devo poi settare la foto
         }
     }

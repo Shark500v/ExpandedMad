@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/rounded_corner_bot"
                 android:layout_alignParentRight="true"
-                android:paddingBottom="16dp"
+                android:paddingBottom="4dp"
                 android:paddingRight="16dp"
                 android:paddingLeft="16dp"
                 android:text="hh:mm"

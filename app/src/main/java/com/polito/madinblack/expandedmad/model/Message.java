@@ -16,6 +16,7 @@ public class Message {
         this.sentByName = sentByName;
         this.sentById = sentById;
         this.message = message;
+        date = new Date();
     }
 
     public String getSentByName() {

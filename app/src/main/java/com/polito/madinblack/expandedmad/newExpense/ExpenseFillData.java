@@ -756,11 +756,7 @@ public class ExpenseFillData extends AppCompatActivity {
 
 
         public SimpleItemRecyclerViewAdapter(List<Payment> payments) {
-
             mValues = payments;
-
-
-
         }
 
         @Override

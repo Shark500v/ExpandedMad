@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.polito.madinblack.expandedmad.newGroup.SelectContact">
+    tools:context="com.polito.madinblack.expandedmad.expenseDetail.ContestExpenseActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -17,18 +17,20 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="@string/select_members"
+            app:title="@string/contention"
             app:titleMarginStart="0dp"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
+
     </android.support.design.widget.AppBarLayout>
 
     <FrameLayout
-        android:id="@+id/frame_layout_2"
+        android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <include layout="@layout/contact_list" />
+        <include layout="@layout/contest_expense" />
     </FrameLayout>
+
 
 </android.support.design.widget.CoordinatorLayout>

@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.polito.madinblack.expandedmad.notification.NotificationUtils.saveTokenOnDb;
+
 public class User {
 
     private String name;
@@ -31,11 +33,13 @@ public class User {
         this.id          = phoneNumber;
     }
 
-    public static void writeNewUser(DatabaseReference mDatabase, String firebaseId, String name, String surname, String phoneNumber, String email) {
+    public static void writeNewUser(DatabaseReference mDatabase, String firebaseId, String name, String surname, String phoneNumber, String email, String token) {
         User user = new User(name, surname, phoneNumber, email);
         user.setFirebaseId(firebaseId);
         mDatabase.child("users/"+phoneNumber+"/"+firebaseId).setValue(user);
         mDatabase.child("registration/"+firebaseId).setValue(phoneNumber);
+        if(token != null)
+            saveTokenOnDb(token, phoneNumber);
     }
 
 
