@@ -33,8 +33,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnPausedListener;
 import com.google.firebase.storage.OnProgressListener;
@@ -44,6 +47,7 @@ import com.polito.madinblack.expandedmad.groupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.Group;
 import com.polito.madinblack.expandedmad.model.MyApplication;
+import com.polito.madinblack.expandedmad.model.User;
 import com.polito.madinblack.expandedmad.model.UserForGroup;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -61,6 +65,8 @@ public class NewGroup extends AppCompatActivity {
     private DatabaseReference mDatabaseReferenceRoot;
     private StorageReference mStorage;
     private DatabaseReference mDatabaseForUrl;
+    private ValueEventListener mValueEventListener;
+    private DatabaseReference mDatabaseUsersReference;
     private MyApplication ma;
     private List<SelectUser> groupM;
     private List<SelectUser> invite;
@@ -74,6 +80,7 @@ public class NewGroup extends AppCompatActivity {
     private byte[] imageData;
     private boolean visible = false; //boolean per visualizzazione a schermo intero
     private String url;
+    private final Map<String,String> usersInDatabase = new HashMap<>();
 
     private RecyclerView recyclerView;
     private GroupMembersRecyclerViewAdapter adapter;
@@ -101,6 +108,27 @@ public class NewGroup extends AppCompatActivity {
         groupImage = (CircleImageView)findViewById(R.id.group_icon);
         btn_group_image = (CircleImageView)findViewById(R.id.btn_group_image);
         fullScreen = (ImageView)findViewById(R.id.full_screen);
+
+        mDatabaseUsersReference = FirebaseDatabase.getInstance().getReference().child("users");
+
+        mValueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(SelectUser selectUser : groupM){
+                    String phone = selectUser.getPhone();
+                    String firebaseId = selectUser.getFirebaseId();
+                    User user = dataSnapshot.child(phone).child(firebaseId).getValue(User.class);
+                    String name = user.getName();
+                    String surname = user.getSurname();
+                    usersInDatabase.put(firebaseId, name + "," + surname);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
 
         //controllo per rotazione dello schermo che richiama la onCreate
         //serve per non far sparire l'immagine caricata nella ImageView quando ruoto il cell
@@ -179,6 +207,15 @@ public class NewGroup extends AppCompatActivity {
         }else {
             realMembers.addAll(groupM);
         }
+        if(mValueEventListener!=null)
+            mDatabaseUsersReference.addValueEventListener(mValueEventListener);
+    }
+
+    @Override
+    protected void onStop() {
+        if(mValueEventListener!=null)
+            mDatabaseUsersReference.removeEventListener(mValueEventListener);
+        super.onStop();
     }
 
     void fillMembers(){
@@ -277,7 +314,7 @@ public class NewGroup extends AppCompatActivity {
 
             for(SelectUser selectUser : realMembers){
 
-                String name = selectUser.getName();
+                /*String name = selectUser.getName();
                 String[] items = new String[2];
                 if(name.contains(" ")){
                     items = name.split(" ");
@@ -292,7 +329,18 @@ public class NewGroup extends AppCompatActivity {
                 }else{
                     items[0] = " ";
                     items[1] = " ";
+                }*/
+                String nameSurname = usersInDatabase.get(selectUser.getFirebaseId());
+                String[] items = new String[2];
+                if(nameSurname.contains(",")) {
+                    items = nameSurname.split(",");
+                    if (items[0] == null)
+                        items[0] = " ";
+                    if (items[1] == null)
+                        items[1] = " ";
                 }
+
+
 
                 UserForGroup userForGroup = new UserForGroup(selectUser.getPhone(), selectUser.getFirebaseId(), items[0], items[1]);
                 for(int i=0; i<userForGroupList.size(); i++){

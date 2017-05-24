@@ -49,4 +49,15 @@
         android:background="@color/dividerColor"
         android:layout_alignParentBottom="true"/>
 
+    <TextView
+        android:id="@+id/me"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:text="@string/me"
+        android:textSize="18dp"
+        android:textColor="@color/colorPrimary"
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@+id/check" />
+
 </RelativeLayout>

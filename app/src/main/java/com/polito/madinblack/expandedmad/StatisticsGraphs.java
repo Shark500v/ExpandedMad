@@ -8,6 +8,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -22,6 +25,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.BarGraphSeries;
@@ -49,7 +53,7 @@ public class StatisticsGraphs extends AppCompatActivity {
     private ValueEventListener mValueEventListener;
     private ValueEventListener mGroupsEventListener;
     private ValueEventListener mExpensesEventListener;
-    private DatabaseReference mDatabaseGroupReference;
+    private Query mDatabaseGroupReference;
     private DatabaseReference mDatabaseExpenseReference;
     private DatabaseReference mDatabaseAllExpenseReference;
     private List<String> groupArray = new ArrayList<>(); //groupName
@@ -62,6 +66,7 @@ public class StatisticsGraphs extends AppCompatActivity {
     private String groupId;
     private Currency.CurrencyISO myCurrency;
     private String myCurrencySymbol;
+    CoordinatorLayout coordinatorLayout;
     List<String> tagsEn = new ArrayList<>();
     List<String> tagsIt = new ArrayList<>();
 
@@ -77,6 +82,8 @@ public class StatisticsGraphs extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+        coordinatorLayout = (CoordinatorLayout)findViewById(R.id.snackbarPosition);
 
         myCurrency = MyApplication.getCurrencyISOFavorite();
         myCurrencySymbol = Currency.getSymbol(myCurrency);
@@ -94,7 +101,7 @@ public class StatisticsGraphs extends AppCompatActivity {
         tagSelected = getString(R.string.select_tag);
 
         ma = MyApplication.getInstance();
-        mDatabaseGroupReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber()).child(ma.getFirebaseId()).child("groups");
+        mDatabaseGroupReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber()).child(ma.getFirebaseId()).child("groups").orderByChild("timestamp");
 
         mValueEventListener = new ValueEventListener() {
             @Override
@@ -115,7 +122,6 @@ public class StatisticsGraphs extends AppCompatActivity {
                 groupSpinner = (Spinner) findViewById(R.id.group_spinner);
                 yearSpinner = (Spinner) findViewById(R.id.year_spinner);
                 tagSpinner = (Spinner) findViewById(R.id.tag_spinner_graph);
-
 
                 ArrayAdapter<String> groupAdapter = new ArrayAdapter<String>(StatisticsGraphs.this, android.R.layout.simple_spinner_item, groupArray);
                 groupAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
@@ -352,38 +358,54 @@ public class StatisticsGraphs extends AppCompatActivity {
         series.setDrawValuesOnTop(true);
         series.setValuesOnTopColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
         //series.setTitle(groupName + "-" + yearSelected);                     //etichetta della serie di dati
-        /*if(max == 0.0) {
+        if(max == 0.0) {
             if(!groupName.equals(getString(R.string.all_groups))) {
                 if(yearSelected.equals(getString(R.string.general))){
                     if(tagSelected.equals(getString(R.string.all_tags))){
-                        Toast.makeText(getApplicationContext(), getString(R.string.no_expenses) + " " + groupName, Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getApplicationContext(), getString(R.string.no_expenses) + " " + groupName, Toast.LENGTH_LONG).show();
+                        Snackbar.make(coordinatorLayout, getString(R.string.no_expenses) + " " + groupName, Snackbar.LENGTH_LONG).show();
+
                     }else {
-                        Toast.makeText(getApplicationContext(), getString(R.string.no_expenses) + " " + groupName + " " + getString(R.string.related_to) + " " + tagSelected, Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getApplicationContext(), getString(R.string.no_expenses) + " " + groupName + " " + getString(R.string.related_to) + " " + tagSelected, Toast.LENGTH_LONG).show();
+                        Snackbar.make(coordinatorLayout, getString(R.string.no_expenses) + " " + groupName + " " + getString(R.string.related_to) + " " + tagSelected, Snackbar.LENGTH_LONG).show();
+
                     }
                 }else {
                     if(tagSelected.equals(getString(R.string.all_tags))) {
-                        Toast.makeText(getApplicationContext(), getString(R.string.no_expenses) + " " + groupName + " " + getString(R.string.in) + " " + yearSelected, Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getApplicationContext(), getString(R.string.no_expenses) + " " + groupName + " " + getString(R.string.in) + " " + yearSelected, Toast.LENGTH_LONG).show();
+                        Snackbar.make(coordinatorLayout, getString(R.string.no_expenses) + " " + groupName + " " + getString(R.string.in) + " " + yearSelected, Snackbar.LENGTH_LONG).show();
+
                     }else{
-                        Toast.makeText(getApplicationContext(), getString(R.string.no_expenses) + " " + groupName + " " + getString(R.string.related_to) + " " + tagSelected + " " + getString(R.string.in) + " " + yearSelected, Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getApplicationContext(), getString(R.string.no_expenses) + " " + groupName + " " + getString(R.string.related_to) + " " + tagSelected + " " + getString(R.string.in) + " " + yearSelected, Toast.LENGTH_LONG).show();
+                        Snackbar.make(coordinatorLayout, getString(R.string.no_expenses) + " " + groupName + " " + getString(R.string.related_to) + " " + tagSelected + " " + getString(R.string.in) + " " + yearSelected, Snackbar.LENGTH_LONG).show();
+
                     }
                 }
             }else{
                 if(yearSelected.equals(getString(R.string.general))){
                     if(tagSelected.equals(getString(R.string.all_tags))){
-                        Toast.makeText(getApplicationContext(), getString(R.string.no_expense_found), Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getApplicationContext(), getString(R.string.no_expense_found), Toast.LENGTH_LONG).show();
+                        Snackbar.make(coordinatorLayout, getString(R.string.no_expense_found), Snackbar.LENGTH_LONG).show();
+
                     }else{
-                        Toast.makeText(getApplicationContext(), getString(R.string.no_expense_found) + " " + getString(R.string.related_to) + " " + tagSelected, Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getApplicationContext(), getString(R.string.no_expense_found) + " " + getString(R.string.related_to) + " " + tagSelected, Toast.LENGTH_LONG).show();
+                        Snackbar.make(coordinatorLayout, getString(R.string.no_expense_found) + " " + getString(R.string.related_to) + " " + tagSelected, Snackbar.LENGTH_LONG).show();
+
                     }
 
                 }else{
                     if(tagSelected.equals(getString(R.string.all_tags))) {
-                        Toast.makeText(getApplicationContext(), getString(R.string.no_expenses_in) + " " + yearSelected, Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getApplicationContext(), getString(R.string.no_expenses_in) + " " + yearSelected, Toast.LENGTH_LONG).show();
+                        Snackbar.make(coordinatorLayout, getString(R.string.no_expenses_in) + " " + yearSelected, Snackbar.LENGTH_LONG).show();
+
                     }else{
-                        Toast.makeText(getApplicationContext(), getString(R.string.no_expenses_in) + " " + yearSelected + " " + getString(R.string.related_to) + " " + tagSelected, Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getApplicationContext(), getString(R.string.no_expenses_in) + " " + yearSelected + " " + getString(R.string.related_to) + " " + tagSelected, Toast.LENGTH_LONG).show();
+                        Snackbar.make(coordinatorLayout, getString(R.string.no_expenses_in) + " " + yearSelected + " " + getString(R.string.related_to) + " " + tagSelected, Snackbar.LENGTH_LONG).show();
+
                     }
                 }
             }
-        }*/
+        }
         graph.addSeries(series); //aggiunge la serie di dati al grafico
         if(max>5) {
             graph.getViewport().setMaxY(max + max / 4);
@@ -458,19 +480,13 @@ public class StatisticsGraphs extends AppCompatActivity {
 
     @Override
     public void onStop() {
-        super.onStop();
         if(mValueEventListener!=null)
             mDatabaseGroupReference.removeEventListener(mValueEventListener);
         if(mGroupsEventListener!=null)
             mDatabaseExpenseReference.removeEventListener(mGroupsEventListener);
         if(mExpensesEventListener!=null)
             mDatabaseAllExpenseReference.removeEventListener(mExpensesEventListener);
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
+        super.onStop();
     }
 }
 

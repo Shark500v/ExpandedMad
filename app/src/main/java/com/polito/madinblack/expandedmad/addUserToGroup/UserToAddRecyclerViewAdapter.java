@@ -11,6 +11,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.polito.madinblack.expandedmad.R;
+import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.newGroup.SelectUser;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class UserToAddRecyclerViewAdapter extends RecyclerView.Adapter<UserToAdd
     public List<SelectUser> _data, groupMem;
     private ArrayList<SelectUser> arraylist;
     Context _c;
+    private MyApplication ma;
 
     public UserToAddRecyclerViewAdapter(List<SelectUser> selectUsers, Context context, List<SelectUser> GroupM) {
         _data = selectUsers;
@@ -31,6 +33,7 @@ public class UserToAddRecyclerViewAdapter extends RecyclerView.Adapter<UserToAdd
         this.arraylist = new ArrayList<>();
         this.arraylist.addAll(_data);
         groupMem = GroupM;      //questa è la lista che devo aggiornre di volta in volta un utente viene aggiunto al gruppo dall'user
+        ma = MyApplication.getInstance();
     }
 
     @Override
@@ -42,6 +45,12 @@ public class UserToAddRecyclerViewAdapter extends RecyclerView.Adapter<UserToAdd
     @Override
     public void onBindViewHolder(final UserToAddRecyclerViewAdapter.ViewHolder holder, final int position) {
         final SelectUser data = _data.get(position);
+
+        if(data.getPhone().equals(ma.getUserPhoneNumber())){
+            holder.me.setVisibility(View.VISIBLE);
+        }else{
+            holder.me.setVisibility(View.INVISIBLE);
+        }
 
         if(data.getCheckedBox()) {
             holder.check.setEnabled(false);
@@ -97,7 +106,7 @@ public class UserToAddRecyclerViewAdapter extends RecyclerView.Adapter<UserToAdd
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         CircleImageView imageView;
-        TextView title, phone, already_in;
+        TextView title, phone, already_in, me;
         CheckBox check;
 
         public ViewHolder(View view) {
@@ -107,6 +116,7 @@ public class UserToAddRecyclerViewAdapter extends RecyclerView.Adapter<UserToAdd
             check = (CheckBox) view.findViewById(R.id.check);
             phone = (TextView) view.findViewById(R.id.no);
             already_in = (TextView) view.findViewById(R.id.already_in);
+            me = (TextView) view.findViewById(R.id.meToAdd);
             imageView = (CircleImageView) view.findViewById(R.id.pic);
         }
     }
