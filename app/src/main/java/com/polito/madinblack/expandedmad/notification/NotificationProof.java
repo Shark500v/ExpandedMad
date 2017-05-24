@@ -103,11 +103,7 @@ public class NotificationProof extends AppCompatActivity {
     }
 
     public void saveTokenOnDb(String token){
-        FirebaseDatabase.getInstance().getReference().child("tokens/"+ ma.getFirebaseId()).setValue(token);
+        FirebaseDatabase.getInstance().getReference().child("tokens/"+ ma.getUserPhoneNumber()).setValue(token);
     }
 
-    public void sendNotification(View view) {
-        FirebaseMessaging.getInstance().subscribeToTopic(Config.TOPIC_GLOBAL);
-        FirebaseDatabase.getInstance().getReference().child("projects").push().setValue("prova");
-    }
 }

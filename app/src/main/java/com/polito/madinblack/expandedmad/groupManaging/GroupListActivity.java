@@ -1,11 +1,14 @@
 package com.polito.madinblack.expandedmad.groupManaging;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -37,6 +40,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.polito.madinblack.expandedmad.R;
+import com.polito.madinblack.expandedmad.notification.Config;
+import com.polito.madinblack.expandedmad.notification.NotificationUtils;
 import com.polito.madinblack.expandedmad.newGroup.SelectUser;
 import com.polito.madinblack.expandedmad.settings.*;
 import com.polito.madinblack.expandedmad.StatisticsGraphs;
@@ -74,6 +79,8 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
     private SimpleItemRecyclerViewAdapter mAdapter;
     private NavigationView navigationView;
     private ValueEventListener valueEventListener;
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
+    private NotificationUtils utils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +94,9 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
 
         mUserGroupsReference   = mDatabaseRootReference.child("users/"+ma.getUserPhoneNumber()+"/"+ma.getFirebaseId()+"/groups");
         mQueryUserGroupsReference = mUserGroupsReference.orderByChild("timestamp");
+
+        utils = new NotificationUtils(this);
+        mRegistrationBroadcastReceiver = utils.getBroadcastReceiver();
 
         //toolbar settings
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -181,6 +191,18 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         for (int i = 0; i < size; i++) {
             navigationView.getMenu().getItem(i).setChecked(false);
         }
+
+        // register GCM registration complete receiver
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                new IntentFilter(Config.REGISTRATION_COMPLETE));
+
+        // register new push message receiver
+        // by doing this, the activity will be notified each time a new message arrives
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                new IntentFilter(Config.PUSH_NOTIFICATION));
+
+        // clear the notification area when the app is opened
+        NotificationUtils.clearNotifications(getApplicationContext());
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

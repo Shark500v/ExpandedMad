@@ -4,10 +4,12 @@ import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.Ringtone;
@@ -17,9 +19,14 @@ import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.text.Html;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
+import android.widget.Toast;
 
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.polito.madinblack.expandedmad.R;
+import com.polito.madinblack.expandedmad.model.MyApplication;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,9 +42,11 @@ public class NotificationUtils {
     private static String TAG = NotificationUtils.class.getSimpleName();
 
     private Context mContext;
+    private MyApplication ma;
 
     public NotificationUtils(Context mContext) {
         this.mContext = mContext;
+        this.ma = MyApplication.getInstance();
     }
 
     public void showNotificationMessage(String title, String message, String timeStamp, Intent intent) {
@@ -206,5 +215,39 @@ public class NotificationUtils {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    public static void saveTokenOnDb(String token, String phone){
+        FirebaseDatabase.getInstance().getReference().child("tokens/"+ phone).setValue(token);
+    }
+
+    public BroadcastReceiver getBroadcastReceiver(){
+        return new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                // checking for type intent filter
+                if (intent.getAction().equals(Config.REGISTRATION_COMPLETE)) {
+                    SharedPreferences pref = mContext.getSharedPreferences(Config.SHARED_PREF, 0);
+                    String regId = pref.getString("regId", null);
+
+                    Log.e(TAG, "Firebase reg id: " + regId);
+
+                    //da spostare quando si fa login
+                    //saveTokenOnDb(regId);
+                    if (!TextUtils.isEmpty(regId) &&  ma.getUserPhoneNumber()!= null)
+                        saveTokenOnDb(regId, ma.getUserPhoneNumber());
+
+                } else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                    // new push notification is received
+
+                    //per ora non faccio niente
+                    /*String message = intent.getStringExtra("message");
+
+                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();*/
+
+                }
+            }
+        };
     }
 }
