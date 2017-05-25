@@ -16,31 +16,22 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
-import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
-import android.widget.RemoteViews;
-import android.widget.Toast;
-
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.polito.madinblack.expandedmad.R;
-import com.polito.madinblack.expandedmad.groupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.model.Currency;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.tabViewGroup.TabView;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -51,11 +42,11 @@ public class NotificationUtils {
     private static String TAG = NotificationUtils.class.getSimpleName();
 
     private Context mContext;
-    private MyApplication ma;
+
 
     public NotificationUtils(Context mContext) {
         this.mContext = mContext;
-        this.ma = MyApplication.getInstance();
+
     }
 
     public void showNotificationMessage(String title, String message, String timeStamp, Intent intent) {
@@ -195,11 +186,20 @@ public class NotificationUtils {
 
     // Playing notification sound
     public void playNotificationSound() {
+        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(mContext);
+        String strRingtonePreference = preference.getString("pref_key_notifications_ringtone", "DEFAULT_SOUND");
         try {
-            Uri alarmSound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE
-                    + "://" + mContext.getPackageName() + "/raw/notification");
-            Ringtone r = RingtoneManager.getRingtone(mContext, alarmSound);
-            r.play();
+
+            if(strRingtonePreference.compareTo("") != 0){
+                Uri alarmSound = Uri.parse(strRingtonePreference);
+                Ringtone r = RingtoneManager.getRingtone(mContext, alarmSound);
+                r.play();
+            }
+
+            if (preference.getBoolean("pref_key_notifications_vibrate", false)){
+                Vibrator v = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+                v.vibrate(400);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -315,8 +315,8 @@ public class NotificationUtils {
 
                     Log.e(TAG, "Firebase reg id: " + regId);
 
-                    if (!TextUtils.isEmpty(regId) &&  ma.getUserPhoneNumber()!= null)
-                        saveTokenOnDb(regId, ma.getUserPhoneNumber());
+                    if (!TextUtils.isEmpty(regId) &&  MyApplication.getUserPhoneNumber()!= null)
+                        saveTokenOnDb(regId, MyApplication.getUserPhoneNumber());
 
                 } else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
                     // new push notification is received

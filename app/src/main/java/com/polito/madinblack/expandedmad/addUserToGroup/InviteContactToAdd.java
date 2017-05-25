@@ -8,7 +8,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 
 import com.polito.madinblack.expandedmad.R;
-import com.polito.madinblack.expandedmad.addUserToGroup.InviteActivityToAdd;
 import com.polito.madinblack.expandedmad.newGroup.SelectUser;
 
 import java.io.Serializable;

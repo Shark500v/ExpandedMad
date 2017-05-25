@@ -40,7 +40,6 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
      * @param ref             The Firebase location to watch for data changes. Can also be a slice of a location,
      *                        using some combination of {@code limit()}, {@code startAt()}, and {@code endAt()}.
      */
-    private MyApplication ma;
     private Map<String, PaymentInfo> changedPayment;
     private Context contex;
     private Currency.CurrencyISO expenseCurrencyISO;
@@ -49,7 +48,6 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
     public PaymentRecyclerAdapter(Class<PaymentFirebase> modelClass, int modelLayout, Class<RecyclerView.ViewHolder> viewHolderClass, Context contex, Query ref,
                                   Map<String, PaymentInfo> changedPayment, Currency.CurrencyISO expenseCurrencyISO) {
         super(modelClass, modelLayout, viewHolderClass, ref);
-        ma =  MyApplication.getInstance();
         this.changedPayment = changedPayment;
         this.contex = contex;
         this.expenseCurrencyISO = expenseCurrencyISO;
@@ -68,13 +66,14 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
         final PaymentFirebase paymentFirebase = model;
         final ViewHolder holder = (PaymentRecyclerAdapter.ViewHolder) viewHolder;
 
-        if(!model.getUserFirebaseId().equals(ma.getFirebaseId())){
+        if(!model.getUserFirebaseId().equals(MyApplication.getFirebaseId())){
 
             holder.mCurrency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     String item = (String) parent.getItemAtPosition(position);
                     holder.mToPay.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(paymentFirebase.getDebit(), expenseCurrencyISO, Currency.getISOCode(item))));
+                    holder.mPaid.setText(holder.mPaid.getText());
                 }
 
                 @Override

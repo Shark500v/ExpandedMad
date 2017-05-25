@@ -13,14 +13,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.database.ChildEventListener;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.polito.madinblack.expandedmad.expenseDetail.ExpenseDetailActivity;
 import com.polito.madinblack.expandedmad.expenseDetail.ExpenseDetailFragment;
@@ -41,7 +37,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private Query dataref;
     private Context mContext;
     private ValueEventListener mEventListener;
-    private MyApplication ma;
+
 
 
 
@@ -51,7 +47,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public RecyclerViewAdapter(Context ct, Query dr) {
         dataref = dr;
         mContext = ct;
-        ma = MyApplication.getInstance();
+
 
         // Create child event listener
         // [START child_event_listener_recycler]
@@ -107,7 +103,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
 
         final SpannableStringBuilder str;
-        if(mValues.get(position).getPaidByPhoneNumber().equals(ma.getUserPhoneNumber())) {
+        if(mValues.get(position).getPaidByPhoneNumber().equals(MyApplication.getUserPhoneNumber())) {
             str = new SpannableStringBuilder(mContext.getString(R.string.paid_by)+" "+ mContext.getString(R.string.you));
             str.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), mContext.getString(R.string.paid_by).length()+1, (mContext.getString(R.string.paid_by).length()+1 + mContext.getString(R.string.you).length()), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }

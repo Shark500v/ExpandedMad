@@ -25,7 +25,6 @@ public class UserToAddRecyclerViewAdapter extends RecyclerView.Adapter<UserToAdd
     public List<SelectUser> _data, groupMem;
     private ArrayList<SelectUser> arraylist;
     Context _c;
-    private MyApplication ma;
 
     public UserToAddRecyclerViewAdapter(List<SelectUser> selectUsers, Context context, List<SelectUser> GroupM) {
         _data = selectUsers;
@@ -33,7 +32,7 @@ public class UserToAddRecyclerViewAdapter extends RecyclerView.Adapter<UserToAdd
         this.arraylist = new ArrayList<>();
         this.arraylist.addAll(_data);
         groupMem = GroupM;      //questa è la lista che devo aggiornre di volta in volta un utente viene aggiunto al gruppo dall'user
-        ma = MyApplication.getInstance();
+
     }
 
     @Override
@@ -46,7 +45,7 @@ public class UserToAddRecyclerViewAdapter extends RecyclerView.Adapter<UserToAdd
     public void onBindViewHolder(final UserToAddRecyclerViewAdapter.ViewHolder holder, final int position) {
         final SelectUser data = _data.get(position);
 
-        if(data.getPhone().equals(ma.getUserPhoneNumber())){
+        if(data.getPhone().equals(MyApplication.getUserPhoneNumber())){
             holder.me.setVisibility(View.VISIBLE);
         }else{
             holder.me.setVisibility(View.INVISIBLE);

@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,7 +23,6 @@ import com.polito.madinblack.expandedmad.model.HistoryInfo;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.PaymentFirebase;
 import com.polito.madinblack.expandedmad.model.PaymentInfo;
-import com.polito.madinblack.expandedmad.tabViewGroup.TabView;
 
 
 import java.util.HashMap;
@@ -50,7 +48,6 @@ public class PaymentDetailActivity extends BaseActivity {
     private String expenseUserName;
     private String expenseUserSurname;
     private Double expenseCost;
-    private MyApplication ma;
     private PaymentRecyclerAdapter mAdapter;
     Map<String, PaymentInfo> changedPayments;
 
@@ -61,7 +58,7 @@ public class PaymentDetailActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.payment_detail);
 
-        ma = MyApplication.getInstance();
+
 
         expenseId           = getIntent().getStringExtra(ARG_EXPENSE_ID);
         groupId             = getIntent().getStringExtra(ARG_GROUP_ID);
@@ -127,10 +124,13 @@ public class PaymentDetailActivity extends BaseActivity {
 
         if (id == R.id.confirm_payment && changedPayments.size()>1) {
 
+
+
             showProgressDialog();
 
+
             Double totPaid = 0D;
-            PaymentInfo paymentInfoUserPaid = changedPayments.remove(ma.getUserPhoneNumber());
+            PaymentInfo paymentInfoUserPaid = changedPayments.remove(MyApplication.getUserPhoneNumber());
             final Map<String, PaymentInfo> paymentToUpdate = new HashMap<>();
             paymentToUpdate.putAll(changedPayments);
             changedPayments.clear();

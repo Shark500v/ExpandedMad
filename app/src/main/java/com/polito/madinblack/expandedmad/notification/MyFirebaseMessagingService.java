@@ -2,19 +2,11 @@ package com.polito.madinblack.expandedmad.notification;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.IntegerRes;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
-
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.polito.madinblack.expandedmad.groupManaging.GroupListActivity;
-import com.polito.madinblack.expandedmad.login.CheckLogIn;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.Map;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {

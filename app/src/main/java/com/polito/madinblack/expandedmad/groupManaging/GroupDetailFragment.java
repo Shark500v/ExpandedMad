@@ -19,7 +19,7 @@ public class GroupDetailFragment extends Fragment {
 
     private GroupForUser mItem;
 
-    private MyApplication ma;
+
 
     public GroupDetailFragment() {
     }
@@ -28,7 +28,7 @@ public class GroupDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ma = MyApplication.getInstance();   //retrive del DB
+
 
         //mItem = ma.getGroupForUser();
 

@@ -1,12 +1,10 @@
 package com.polito.madinblack.expandedmad.newGroup;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -20,17 +18,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -69,7 +63,6 @@ public class NewGroup extends AppCompatActivity {
     private DatabaseReference mDatabaseForUrl;
     private ValueEventListener mValueEventListener;
     private DatabaseReference mDatabaseUsersReference;
-    private MyApplication ma;
     private List<SelectUser> groupM;
     private List<SelectUser> invite;
     private List<SelectUser> realMembers = new ArrayList<>();
@@ -99,7 +92,7 @@ public class NewGroup extends AppCompatActivity {
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ma = MyApplication.getInstance();
+
 
         mStorage = FirebaseStorage.getInstance().getReference();
 
@@ -350,7 +343,7 @@ public class NewGroup extends AppCompatActivity {
                 userForGroupList.add(userForGroup);
             }
 
-            UserForGroup userForGroup = new UserForGroup(ma.getUserPhoneNumber(), ma.getFirebaseId(), ma.getUserName(), ma.getUserSurname());
+            UserForGroup userForGroup = new UserForGroup(MyApplication.getUserPhoneNumber(), MyApplication.getFirebaseId(), MyApplication.getUserName(), MyApplication.getUserSurname());
             for(int i=0; i<userForGroupList.size(); i++){
                 userForGroupList.get(i).connect(userForGroup);
                 userForGroup.connect(userForGroupList.get(i));

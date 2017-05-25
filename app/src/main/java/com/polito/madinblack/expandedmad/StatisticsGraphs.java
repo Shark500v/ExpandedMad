@@ -1,10 +1,8 @@
 package com.polito.madinblack.expandedmad;
 
 
-import android.annotation.TargetApi;
-import android.app.Activity;
+
 import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,10 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.Toast;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -41,14 +36,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import static java.security.AccessController.getContext;
 
 
 public class StatisticsGraphs extends AppCompatActivity {
     private Spinner groupSpinner;
     private Spinner yearSpinner;
     private Spinner tagSpinner;
-    private MyApplication ma;
     private GraphView graph;
     private ValueEventListener mValueEventListener;
     private ValueEventListener mGroupsEventListener;
@@ -57,13 +50,14 @@ public class StatisticsGraphs extends AppCompatActivity {
     private DatabaseReference mDatabaseExpenseReference;
     private DatabaseReference mDatabaseAllExpenseReference;
     private List<String> groupArray = new ArrayList<>(); //groupName
-    private Map<String,String> groupMap = new HashMap<String,String>(); //key->groupName value->groupId
+    private Map<Integer,String> groupMap = new HashMap<Integer,String>(); //key->groupName value->groupId
     private Map<Double,Double> groupExpensesByMonth = new HashMap<>();
     private DataPoint[] dataPoints;
     private String groupSelected;
     private String yearSelected;
     private String tagSelected;
     private String groupId;
+    private Integer counter = 2;
     private Currency.CurrencyISO myCurrency;
     private String myCurrencySymbol;
     CoordinatorLayout coordinatorLayout;
@@ -104,23 +98,24 @@ public class StatisticsGraphs extends AppCompatActivity {
         yearSelected = getString(R.string.select_year);
         tagSelected = getString(R.string.select_tag);
 
-        ma = MyApplication.getInstance();
-        mDatabaseGroupReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber()).child(ma.getFirebaseId()).child("groups").orderByChild("timestamp");
+
+        mDatabaseGroupReference = FirebaseDatabase.getInstance().getReference().child("users").child(MyApplication.getUserPhoneNumber()).child(MyApplication.getFirebaseId()).child("groups").orderByChild("timestamp");
 
         mValueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 groupArray.add(getString(R.string.select_group)); //aggiungo all'array e alla mappa <groupName,groupId> il valore di default
                 groupArray.add(getString(R.string.all_groups));
-                groupMap.put(getString(R.string.select_group), getString(R.string.select_group));
-                groupMap.put(getString(R.string.all_groups), getString(R.string.all_groups));
+                groupMap.put(0, getString(R.string.select_group));
+                groupMap.put(1, getString(R.string.all_groups));
 
                 for (DataSnapshot groupSnapshot : dataSnapshot.getChildren()) {
                     GroupForUser groupForUser = groupSnapshot.getValue(GroupForUser.class);
                     String groupName = groupForUser.getName(); //prendo il groupForUser dal db e aggiungo i campi che mi servono all'array e alla mappa
                     groupArray.add(groupName);
                     String groupId = groupForUser.getId();
-                    groupMap.put(groupName, groupId);
+                    groupMap.put(counter, groupId);
+                    counter = counter + 1;
                 }
 
                 ArrayAdapter<String> groupAdapter = new ArrayAdapter<String>(StatisticsGraphs.this, android.R.layout.simple_spinner_item, groupArray);
@@ -138,15 +133,15 @@ public class StatisticsGraphs extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 groupSelected = parent.getItemAtPosition(position).toString();
-                groupId = groupMap.get(groupSelected);
+                groupId = groupMap.get(position);
                 if ((!groupId.equals(getString(R.string.select_group))) && (!yearSelected.equals(getString(R.string.select_year))) && (!tagSelected.equals(getString(R.string.select_tag)))) {
                     if (groupId.equals(getString(R.string.all_groups))) {
-                        mDatabaseAllExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber())
-                                .child(ma.getFirebaseId()).child("groups");
+                        mDatabaseAllExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(MyApplication.getUserPhoneNumber())
+                                .child(MyApplication.getFirebaseId()).child("groups");
                         initGraph(graph, yearSelected, groupSelected, tagSelected);   //una volta selezionati sia l'anno che il gruppo chiama il metodo
                     } else {
-                        mDatabaseExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber())
-                                .child(ma.getFirebaseId()).child("groups").child(groupId).child("expenses");
+                        mDatabaseExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(MyApplication.getUserPhoneNumber())
+                                .child(MyApplication.getFirebaseId()).child("groups").child(groupId).child("expenses");
                         initGraph(graph, yearSelected, groupSelected, tagSelected);   //una volta selezionati sia l'anno che il gruppo chiama il metodo
 
                         //if(groupMap.get(groupSelected) != null) {
@@ -165,15 +160,16 @@ public class StatisticsGraphs extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 yearSelected = parent.getItemAtPosition(position).toString();
-                groupId = groupMap.get(groupSelected);
+                Integer groupPosition = groupSpinner.getSelectedItemPosition();
+                groupId = groupMap.get(groupPosition);
                 if ((!groupId.equals(getString(R.string.select_group))) && (!yearSelected.equals(getString(R.string.select_year))) && (!tagSelected.equals(getString(R.string.select_tag)))) {
                     if (groupId.equals(getString(R.string.all_groups))) {
-                        mDatabaseAllExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber())
-                                .child(ma.getFirebaseId()).child("groups");
+                        mDatabaseAllExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(MyApplication.getUserPhoneNumber())
+                                .child(MyApplication.getFirebaseId()).child("groups");
                         initGraph(graph, yearSelected, groupSelected, tagSelected);   //una volta selezionati sia l'anno che il gruppo chiama il metodo
                     } else {
-                        mDatabaseExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber())
-                                .child(ma.getFirebaseId()).child("groups").child(groupId).child("expenses");
+                        mDatabaseExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(MyApplication.getUserPhoneNumber())
+                                .child(MyApplication.getFirebaseId()).child("groups").child(groupId).child("expenses");
                         initGraph(graph, yearSelected, groupSelected, tagSelected);   //una volta selezionati sia l'anno che il gruppo chiama il metodo
                     }
                 }
@@ -189,15 +185,16 @@ public class StatisticsGraphs extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 tagSelected = parent.getItemAtPosition(position).toString();
-                groupId = groupMap.get(groupSelected);
+                Integer groupPosition = groupSpinner.getSelectedItemPosition();
+                groupId = groupMap.get(groupPosition);
                 if ((!groupId.equals(getString(R.string.select_group))) && (!yearSelected.equals(getString(R.string.select_year))) && (!tagSelected.equals(getString(R.string.select_tag)))) {
                     if (groupId.equals(getString(R.string.all_groups))) {
-                        mDatabaseAllExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber())
-                                .child(ma.getFirebaseId()).child("groups");
+                        mDatabaseAllExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(MyApplication.getUserPhoneNumber())
+                                .child(MyApplication.getFirebaseId()).child("groups");
                         initGraph(graph, yearSelected, groupSelected, tagSelected);   //una volta selezionati sia l'anno che il gruppo chiama il metodo
                     } else {
-                        mDatabaseExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber())
-                                .child(ma.getFirebaseId()).child("groups").child(groupId).child("expenses");
+                        mDatabaseExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(MyApplication.getUserPhoneNumber())
+                                .child(MyApplication.getFirebaseId()).child("groups").child(groupId).child("expenses");
                         initGraph(graph, yearSelected, groupSelected, tagSelected);   //una volta selezionati sia l'anno che il gruppo chiama il metodo
 
                         //if(groupMap.get(groupSelected) != null) {
@@ -282,8 +279,8 @@ public class StatisticsGraphs extends AppCompatActivity {
             mExpensesEventListener = mDatabaseAllExpenseReference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    for(int i = 2; i < groupArray.size(); i++){             //parto da perche i primi 2 campi dell'array sono quello di default e "tutti i gruppi"
-                        String groupIdSelected = groupMap.get(groupArray.get(i));
+                    for(int i = 2; i < groupMap.size(); i++){             //parto da perche i primi 2 campi dell'array sono quello di default e "tutti i gruppi"
+                        String groupIdSelected = groupMap.get(i);
                         for(DataSnapshot expenseSnapshot : dataSnapshot.child(groupIdSelected).child("expenses").getChildren()){
                             ExpenseForUser expenseForUser = expenseSnapshot.getValue(ExpenseForUser.class);
                             String yearStr = String.valueOf(expenseForUser.getYear());
@@ -361,21 +358,21 @@ public class StatisticsGraphs extends AppCompatActivity {
                 if(yearSelected.equals(getString(R.string.general))){
                     if(tagSelected.equals(getString(R.string.all_tags))){
                         //Toast.makeText(getApplicationContext(), getString(R.string.no_expenses) + " " + groupName, Toast.LENGTH_LONG).show();
-                        Snackbar.make(coordinatorLayout, getString(R.string.no_expenses) + " " + groupName, Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(coordinatorLayout, getString(R.string.no_expenses) + " \"" + groupName + "\"", Snackbar.LENGTH_LONG).show();
 
                     }else {
                         //Toast.makeText(getApplicationContext(), getString(R.string.no_expenses) + " " + groupName + " " + getString(R.string.related_to) + " " + tagSelected, Toast.LENGTH_LONG).show();
-                        Snackbar.make(coordinatorLayout, getString(R.string.no_expenses) + " " + groupName + " " + getString(R.string.related_to) + " " + tagSelected, Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(coordinatorLayout, getString(R.string.no_expenses) + " \"" + groupName + "\" " + getString(R.string.related_to) + " " + tagSelected.toLowerCase(), Snackbar.LENGTH_LONG).show();
 
                     }
                 }else {
                     if(tagSelected.equals(getString(R.string.all_tags))) {
                         //Toast.makeText(getApplicationContext(), getString(R.string.no_expenses) + " " + groupName + " " + getString(R.string.in) + " " + yearSelected, Toast.LENGTH_LONG).show();
-                        Snackbar.make(coordinatorLayout, getString(R.string.no_expenses) + " " + groupName + " " + getString(R.string.in) + " " + yearSelected, Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(coordinatorLayout, getString(R.string.no_expenses) + " \"" + groupName + "\" " + getString(R.string.in) + " " + yearSelected, Snackbar.LENGTH_LONG).show();
 
                     }else{
                         //Toast.makeText(getApplicationContext(), getString(R.string.no_expenses) + " " + groupName + " " + getString(R.string.related_to) + " " + tagSelected + " " + getString(R.string.in) + " " + yearSelected, Toast.LENGTH_LONG).show();
-                        Snackbar.make(coordinatorLayout, getString(R.string.no_expenses) + " " + groupName + " " + getString(R.string.related_to) + " " + tagSelected + " " + getString(R.string.in) + " " + yearSelected, Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(coordinatorLayout, getString(R.string.no_expenses) + " \"" + groupName + "\" " + getString(R.string.related_to) + " " + tagSelected.toLowerCase() + " " + getString(R.string.in) + " " + yearSelected, Snackbar.LENGTH_LONG).show();
 
                     }
                 }
@@ -387,7 +384,7 @@ public class StatisticsGraphs extends AppCompatActivity {
 
                     }else{
                         //Toast.makeText(getApplicationContext(), getString(R.string.no_expense_found) + " " + getString(R.string.related_to) + " " + tagSelected, Toast.LENGTH_LONG).show();
-                        Snackbar.make(coordinatorLayout, getString(R.string.no_expense_found) + " " + getString(R.string.related_to) + " " + tagSelected, Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(coordinatorLayout, getString(R.string.no_expense_found) + " " + getString(R.string.related_to) + " " + tagSelected.toLowerCase(), Snackbar.LENGTH_LONG).show();
 
                     }
 
@@ -398,7 +395,7 @@ public class StatisticsGraphs extends AppCompatActivity {
 
                     }else{
                         //Toast.makeText(getApplicationContext(), getString(R.string.no_expenses_in) + " " + yearSelected + " " + getString(R.string.related_to) + " " + tagSelected, Toast.LENGTH_LONG).show();
-                        Snackbar.make(coordinatorLayout, getString(R.string.no_expenses_in) + " " + yearSelected + " " + getString(R.string.related_to) + " " + tagSelected, Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(coordinatorLayout, getString(R.string.no_expenses_in) + " " + yearSelected + " " + getString(R.string.related_to) + " " + tagSelected.toLowerCase(), Snackbar.LENGTH_LONG).show();
 
                     }
                 }
