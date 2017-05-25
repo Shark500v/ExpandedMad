@@ -59,7 +59,8 @@ public class ContestExpenseActivity extends BaseActivity {
     public static final String ARG_EXPENSE_STATE = "expenseState";
     public static final String ARG_PAYMENT_CONTEST_ID = "paymentContestId";
     public static final String ARG_EXPENSE_USER_FIREBASEID = "expenseFirebaseId";
-    public static final int RESULT_MODIFIED_YET = 3;
+    public static final int RESULT_MODIFIED_YET = 2;
+    public static final int RESULT_DELETED = 3;
 
     private DatabaseReference mDatabaseRootReference;
     private DatabaseReference mDatabasePaymentReference;
@@ -156,10 +157,11 @@ public class ContestExpenseActivity extends BaseActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
+                        PaymentFirebase tmpPaymentFirebase;
                         for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
-                            paymentFirebase = childDataSnapshot.getValue(PaymentFirebase.class);
-                            if (paymentFirebase.getUserFirebaseId().equals(ma.getFirebaseId())) {
-
+                            tmpPaymentFirebase = childDataSnapshot.getValue(PaymentFirebase.class);
+                            if (tmpPaymentFirebase.getUserFirebaseId().equals(ma.getFirebaseId())) {
+                                paymentFirebase = tmpPaymentFirebase;
                                 mOldToPay.setText(String.format(Locale.getDefault(), "%.2f", paymentFirebase.getToPay()));
                             }
 
@@ -262,12 +264,12 @@ public class ContestExpenseActivity extends BaseActivity {
                                         @Override
                                         public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
                                             if(b){
-                                                setResult(RESULT_CANCELED);
+                                                setResult(RESULT_DELETED);
                                                 hideProgressDialog();
                                                 finish();
                                             }
                                             else {
-                                                setResult(RESULT_FIRST_USER);
+                                                setResult(RESULT_MODIFIED_YET);
                                                 hideProgressDialog();
                                                 finish();
                                             }
@@ -307,7 +309,7 @@ public class ContestExpenseActivity extends BaseActivity {
                                                 finish();
                                             }
                                             else {
-                                                setResult(RESULT_FIRST_USER);
+                                                setResult(RESULT_MODIFIED_YET);
                                                 hideProgressDialog();
                                                 finish();
                                             }
@@ -394,7 +396,7 @@ public class ContestExpenseActivity extends BaseActivity {
 
         if (id == R.id.confirm_contention) {
 
-            showProgressDialog();
+
             boolean focusRequest = false;
             final String newToPayString = CostUtil.replaceDecimalComma(mNewToPay.getText().toString());
             if(newToPayString==null || newToPayString.isEmpty() || !CostUtil.isParsableAsDouble(newToPayString)){
@@ -424,6 +426,7 @@ public class ContestExpenseActivity extends BaseActivity {
             if(focusRequest)
                 return true;
 
+            showProgressDialog();
 
             //write inside expense the contest
             DatabaseReference expenseStateReference = mDatabaseRootReference.child("expenses/"+expenseId+"/state");

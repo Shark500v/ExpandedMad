@@ -14,9 +14,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,12 +26,9 @@ import com.polito.madinblack.expandedmad.model.Expense;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.PaymentFirebase;
 import com.polito.madinblack.expandedmad.tabViewGroup.RecyclerViewAdapter;
-
 import java.util.Locale;
-
-import static android.app.Activity.RESULT_CANCELED;
-import static android.app.Activity.RESULT_FIRST_USER;
 import static android.app.Activity.RESULT_OK;
+
 
 
 /**
@@ -136,7 +131,7 @@ public class ExpenseDetailFragment extends Fragment {
                         });
                     }else{
                         ImageButton imageButtonGo;
-                        ((TextView)rootView.findViewById(R.id.head_title)).setText(getString(R.string.contention));
+                        ((TextView)rootView.findViewById(R.id.head_title)).setText(getString(R.string.contention_information));
                         (imageButtonGo = (ImageButton)rootView.findViewById(R.id.go_button)).setImageResource(R.drawable.ic_info_black_24dp);
                         imageButtonGo.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -148,7 +143,7 @@ public class ExpenseDetailFragment extends Fragment {
                                 intent.putExtra(ContestExpenseActivity.ARG_CURRENCY_ISO, expense.getCurrencyISO().name());
                                 intent.putExtra(ContestExpenseActivity.ARG_EXPENSE_STATE, expense.getState().name());
                                 intent.putExtra(ContestExpenseActivity.ARG_EXPENSE_USER_FIREBASEID, expense.getPaidByFirebaseId());
-                                intent.putExtra(ContestExpenseActivity.ARG_PAYMENT_CONTEST_ID, expense.getPaymentRejectedId());
+                                intent.putExtra(ContestExpenseActivity.ARG_PAYMENT_CONTEST_ID, expense.getPaymentContestedId());
                                 startActivityForResult(intent, CONTENTION_INFORMATION);
 
                             }
@@ -259,7 +254,7 @@ public class ExpenseDetailFragment extends Fragment {
             if (resultCode == RESULT_OK) {
                 Toast.makeText(getContext(), getString(R.string.contention_generated),
                         Toast.LENGTH_SHORT).show();
-            }else if(resultCode == RESULT_CANCELED){
+            }else if(resultCode == ContestExpenseActivity.RESULT_MODIFIED_YET){
                 Toast.makeText(getContext(), getString(R.string.err_no_ongoing),
                         Toast.LENGTH_SHORT).show();
 
@@ -272,11 +267,11 @@ public class ExpenseDetailFragment extends Fragment {
                 Toast.makeText(getContext(), getString(R.string.contention_confermed),
                         Toast.LENGTH_SHORT).show();
 
-            }else if(resultCode == RESULT_CANCELED){
+            }else if(resultCode == ContestExpenseActivity.RESULT_DELETED){
                 Toast.makeText(getContext(), getString(R.string.contention_deleted),
                         Toast.LENGTH_SHORT).show();
             }
-            else if(resultCode == RESULT_FIRST_USER){
+            else if(resultCode == ContestExpenseActivity.RESULT_MODIFIED_YET){
                 Toast.makeText(getContext(), getString(R.string.err_no_ongoing),
                         Toast.LENGTH_SHORT).show();
 

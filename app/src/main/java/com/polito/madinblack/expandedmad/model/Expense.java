@@ -29,7 +29,7 @@ public class Expense {
     private Double  roundedCost;
     private Currency.CurrencyISO  currencyISO;
     private State   state;
-    private String  paymentRejectedId;
+    private String  paymentContestedId;
     private String  groupId;
     private Long    year;
     private Long    month;
@@ -231,12 +231,12 @@ public class Expense {
         this.state = state;
     }
 
-    public String getPaymentRejectedId() {
-        return paymentRejectedId;
+    public String getPaymentContestedId() {
+        return paymentContestedId;
     }
 
-    public void setPaymentRejectedId(String paymentRejectedId) {
-        this.paymentRejectedId = paymentRejectedId;
+    public void setPaymentContestedId(String paymentContestedId) {
+        this.paymentContestedId = paymentContestedId;
     }
 
     public static String writeNewExpense(final DatabaseReference mDatabaseRootRefenrence, String name, String tag,
