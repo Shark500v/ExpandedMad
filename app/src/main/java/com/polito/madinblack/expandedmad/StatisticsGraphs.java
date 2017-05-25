@@ -358,21 +358,21 @@ public class StatisticsGraphs extends AppCompatActivity {
                 if(yearSelected.equals(getString(R.string.general))){
                     if(tagSelected.equals(getString(R.string.all_tags))){
                         //Toast.makeText(getApplicationContext(), getString(R.string.no_expenses) + " " + groupName, Toast.LENGTH_LONG).show();
-                        Snackbar.make(coordinatorLayout, getString(R.string.no_expenses) + " " + groupName, Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(coordinatorLayout, getString(R.string.no_expenses) + " \"" + groupName + "\"", Snackbar.LENGTH_LONG).show();
 
                     }else {
                         //Toast.makeText(getApplicationContext(), getString(R.string.no_expenses) + " " + groupName + " " + getString(R.string.related_to) + " " + tagSelected, Toast.LENGTH_LONG).show();
-                        Snackbar.make(coordinatorLayout, getString(R.string.no_expenses) + " " + groupName + " " + getString(R.string.related_to) + " " + tagSelected.toLowerCase(), Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(coordinatorLayout, getString(R.string.no_expenses) + " \"" + groupName + "\" " + getString(R.string.related_to) + " " + tagSelected.toLowerCase(), Snackbar.LENGTH_LONG).show();
 
                     }
                 }else {
                     if(tagSelected.equals(getString(R.string.all_tags))) {
                         //Toast.makeText(getApplicationContext(), getString(R.string.no_expenses) + " " + groupName + " " + getString(R.string.in) + " " + yearSelected, Toast.LENGTH_LONG).show();
-                        Snackbar.make(coordinatorLayout, getString(R.string.no_expenses) + " " + groupName + " " + getString(R.string.in) + " " + yearSelected, Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(coordinatorLayout, getString(R.string.no_expenses) + " \"" + groupName + "\" " + getString(R.string.in) + " " + yearSelected, Snackbar.LENGTH_LONG).show();
 
                     }else{
                         //Toast.makeText(getApplicationContext(), getString(R.string.no_expenses) + " " + groupName + " " + getString(R.string.related_to) + " " + tagSelected + " " + getString(R.string.in) + " " + yearSelected, Toast.LENGTH_LONG).show();
-                        Snackbar.make(coordinatorLayout, getString(R.string.no_expenses) + " " + groupName + " " + getString(R.string.related_to) + " " + tagSelected.toLowerCase() + " " + getString(R.string.in) + " " + yearSelected, Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(coordinatorLayout, getString(R.string.no_expenses) + " \"" + groupName + "\" " + getString(R.string.related_to) + " " + tagSelected.toLowerCase() + " " + getString(R.string.in) + " " + yearSelected, Snackbar.LENGTH_LONG).show();
 
                     }
                 }
