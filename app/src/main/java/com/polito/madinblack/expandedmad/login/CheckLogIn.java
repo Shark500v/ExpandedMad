@@ -27,6 +27,10 @@ public class CheckLogIn extends BaseActivity {
     private FirebaseAuth                    mAuth;
     static boolean calledAlready            = false;
 
+    private String groupIndex;
+    private String groupName;
+    private int index;
+
     private static final String TAG = "GoogleActivity";
 
     @Override
@@ -37,6 +41,13 @@ public class CheckLogIn extends BaseActivity {
         if (!calledAlready) {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
             calledAlready = true;
+        }
+
+
+        if(getIntent().getExtras()!=null){
+            groupIndex = getIntent().getExtras().getString("groupIndex");
+            groupName  = getIntent().getExtras().getString("groupName");
+            index = getIntent().getExtras().getInt("request");
         }
 
         //for the preferences
@@ -137,14 +148,23 @@ public class CheckLogIn extends BaseActivity {
         //[END] Take all user data
 
         Intent intent = new Intent(CheckLogIn.this, CheckTelephone.class);
+        if(groupIndex!= null){
+            intent.putExtra("groupIndex", groupIndex);
+            intent.putExtra("groupName", groupName);
+            intent.putExtra("request", index);
+        }
         startActivity(intent);
-
     }
 
     private void notLogged(){
         // User is signed out
         Log.d(TAG, "onAuthStateChanged:signed_out");
         Intent intent = new Intent(CheckLogIn.this, GoogleSignInActivity.class);
+        if(groupIndex!= null){
+            intent.putExtra("groupIndex", groupIndex);
+            intent.putExtra("groupName", groupName);
+            intent.putExtra("request", index);
+        }
         startActivity(intent);
     }
 

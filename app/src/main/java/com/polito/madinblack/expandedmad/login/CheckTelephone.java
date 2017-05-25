@@ -15,6 +15,7 @@ import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.groupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.notification.Config;
+import com.polito.madinblack.expandedmad.tabViewGroup.TabView;
 
 import static com.polito.madinblack.expandedmad.notification.NotificationUtils.saveTokenOnDb;
 
@@ -29,6 +30,9 @@ public class CheckTelephone extends BaseActivity {
     private ValueEventListener  mValueListener;
     private DatabaseReference   mDatabaseTelephoneReference;
     private TextView            mStatusTextView;
+    private String groupIndex;
+    private String groupName;
+    private int index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +62,17 @@ public class CheckTelephone extends BaseActivity {
 
                     /*google login and number yet inserted jump to group page*/
                     Intent intent = new Intent(CheckTelephone.this, GroupListActivity.class);
+                    if(getIntent().getExtras()!=null){
+                        groupIndex = getIntent().getExtras().getString("groupIndex");
+                        groupName  = getIntent().getExtras().getString("groupName");
+                        index = getIntent().getExtras().getInt("request");
+                        if(index == 1 || index == 2){
+                            intent.putExtra("groupIndex", groupIndex);
+                            intent.putExtra("groupName", groupName);
+                            intent.putExtra("request", index);
+                            startActivity(intent);
+                        }
+                    }
                     startActivity(intent);
                     finish();
 

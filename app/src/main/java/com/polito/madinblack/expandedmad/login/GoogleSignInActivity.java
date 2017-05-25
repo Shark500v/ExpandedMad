@@ -50,6 +50,9 @@ public class GoogleSignInActivity extends BaseActivity implements
     private TextView        mStatusTextView;
     private com.google.android.gms.common.SignInButton mSignInButton;
     private DatabaseReference mDataBaseRoot;
+    private String groupIndex;
+    private String groupName;
+    private int index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,9 +71,14 @@ public class GoogleSignInActivity extends BaseActivity implements
         mStatusTextView.setText(getString(R.string.login));
         mSignInButton.setVisibility(View.VISIBLE);
 
+        if(getIntent().getExtras()!=null){
+            groupIndex = getIntent().getExtras().getString("groupIndex");
+            groupName  = getIntent().getExtras().getString("groupName");
+            index = getIntent().getExtras().getInt("request");
+        }
+
 
         mDataBaseRoot = FirebaseDatabase.getInstance().getReference();
-
 
         // Button listeners
         findViewById(R.id.sign_in_button).setOnClickListener(this);
@@ -163,6 +171,11 @@ public class GoogleSignInActivity extends BaseActivity implements
                             //[END] Take all user data
 
                             Intent intent = new Intent(GoogleSignInActivity.this, CheckTelephone.class);
+                            if(groupIndex!= null){
+                                intent.putExtra("groupIndex", groupIndex);
+                                intent.putExtra("groupName", groupName);
+                                intent.putExtra("request", index);
+                            }
                             startActivity(intent);
                             finish();
                             //updateUI(user);
