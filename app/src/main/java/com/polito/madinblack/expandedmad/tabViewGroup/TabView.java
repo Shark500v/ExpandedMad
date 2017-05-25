@@ -103,6 +103,16 @@ public class TabView extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
+        //check what fragment to charge
+        int index = getIntent().getExtras().getInt("request");
+        if(index == 1){
+            //expense fragment
+            mViewPager.setCurrentItem(1);
+        }else if(index == 2){
+            //chat fragment
+            mViewPager.setCurrentItem(2);
+        }
+
         //this is the tab under the toolbar
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);

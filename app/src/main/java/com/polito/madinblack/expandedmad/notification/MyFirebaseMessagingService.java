@@ -60,11 +60,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private void handleDataMessage(Map<String, String> data) {
+        notificationUtils = new NotificationUtils(getApplicationContext());
         try {
             String type = data.get("type");
             String title = data.get("title");
             String message = data.get("message");
-            String madeBy = data.get("madeBy");
+            String groupId = data.get("groupId");
             String imageUrl = data.get("imageUrl");
             String timestamp = data.get("timestamp");
             String payload = data.get("payload");
@@ -78,6 +79,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
             int typeInt = Integer.parseInt(type);
 
+            message = notificationUtils.getContent(data);
+
 
             if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
                 // app is in foreground, broadcast the push message
@@ -90,15 +93,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 notificationUtils.playNotificationSound();
             } else {
                 // app is in background, show the notification in notification tray
-                Intent resultIntent = new Intent(getApplicationContext(), GroupListActivity.class);
-                resultIntent.putExtra("message", message);
+                Intent resultIntent = notificationUtils.getIntent(typeInt, getApplicationContext(), message, groupId, title);
 
                 // check for image attachment
                 if (TextUtils.isEmpty(imageUrl)) {
-                    showNotificationMessage(getApplicationContext(), title, message, madeBy, typeInt, timestamp, resultIntent);
+                    showNotificationMessage(getApplicationContext(), title, message, timestamp, resultIntent);
                 } else {
                     // image is present, show notification with image
-                    showNotificationMessageWithBigImage(getApplicationContext(), title, message, madeBy, typeInt, timestamp, resultIntent, imageUrl);
+                    showNotificationMessageWithBigImage(getApplicationContext(), title, message, timestamp, resultIntent, imageUrl);
                 }
             }
         } catch (Exception e) {
@@ -110,18 +112,18 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     /**
      * Showing notification with text only
      */
-    private void showNotificationMessage(Context context, String title, String message, String madeBy, int type, String timeStamp, Intent intent) {
+    private void showNotificationMessage(Context context, String title, String message, String timeStamp, Intent intent) {
         notificationUtils = new NotificationUtils(context);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        notificationUtils.showNotificationMessage(title, message, madeBy, type, timeStamp, intent);
+        notificationUtils.showNotificationMessage(title, message, timeStamp, intent);
     }
 
     /**
      * Showing notification with text and image
      */
-    private void showNotificationMessageWithBigImage(Context context, String title, String message, String madeBy, int type, String timeStamp, Intent intent, String imageUrl) {
+    private void showNotificationMessageWithBigImage(Context context, String title, String message, String timeStamp, Intent intent, String imageUrl) {
         notificationUtils = new NotificationUtils(context);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        notificationUtils.showNotificationMessage(title, message, madeBy, type, timeStamp, intent, imageUrl);
+        notificationUtils.showNotificationMessage(title, message, timeStamp, intent, imageUrl);
     }
 }

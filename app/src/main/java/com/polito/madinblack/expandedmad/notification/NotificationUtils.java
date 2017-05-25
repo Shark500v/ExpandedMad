@@ -28,16 +28,22 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.groupManaging.GroupListActivity;
+import com.polito.madinblack.expandedmad.model.Currency;
 import com.polito.madinblack.expandedmad.model.MyApplication;
+import com.polito.madinblack.expandedmad.tabViewGroup.TabView;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
+import static android.content.Context.ACTIVITY_SERVICE;
 
 public class NotificationUtils {
 
@@ -51,11 +57,11 @@ public class NotificationUtils {
         this.ma = MyApplication.getInstance();
     }
 
-    public void showNotificationMessage(String title, String message, String madeBy, int type, String timeStamp, Intent intent) {
-        showNotificationMessage(title, message, madeBy, type, timeStamp, intent, null);
+    public void showNotificationMessage(String title, String message, String timeStamp, Intent intent) {
+        showNotificationMessage(title, message, timeStamp, intent, null);
     }
 
-    public void showNotificationMessage(final String title, final String message, String madeBy, int type, final String timeStamp, Intent intent, String imageUrl) {
+    public void showNotificationMessage(final String title, final String message, final String timeStamp, Intent intent, String imageUrl) {
         // Check for empty push message
         if (TextUtils.isEmpty(message))
             return;
@@ -86,44 +92,38 @@ public class NotificationUtils {
                 Bitmap bitmap = getBitmapFromURL(imageUrl);
 
                 if (bitmap != null) {
-                    showBigNotification(bitmap, mBuilder, icon, title, message, madeBy, type, timeStamp, resultPendingIntent, alarmSound);
+                    showSmallNotification(mBuilder, bitmap, title, message, timeStamp, resultPendingIntent, alarmSound);
+                    playNotificationSound();
                 } else {
-                    showSmallNotification(mBuilder, icon, title, message, madeBy, type, timeStamp, resultPendingIntent, alarmSound);
+                    showSmallNotification(mBuilder, BitmapFactory.decodeResource(mContext.getResources(), icon), title, message, timeStamp, resultPendingIntent, alarmSound);
+                    playNotificationSound();
                 }
             }
         } else {
-            showSmallNotification(mBuilder, icon, title, message, madeBy, type, timeStamp, resultPendingIntent, alarmSound);
+            showSmallNotification(mBuilder, BitmapFactory.decodeResource(mContext.getResources(), icon), title, message, timeStamp, resultPendingIntent, alarmSound);
             playNotificationSound();
         }
     }
 
 
-    private void showSmallNotification(NotificationCompat.Builder mBuilder, int icon, String title, String message, String madeBy, int type,
+    private void showSmallNotification(NotificationCompat.Builder mBuilder, Bitmap icon, String title, String message,
                                        String timeStamp, PendingIntent resultPendingIntent, Uri alarmSound) {
 
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
 
         inboxStyle.addLine(message);
-        String content;
-        if(type == 0){
-            //message
-            content = madeBy + " : "+message+" ";
-        }else{
-            //expense
-            content = madeBy + " "+ mContext.getString(R.string.history_expense);
-        }
 
-        Notification notification;
-        notification = mBuilder.setSmallIcon(icon).setTicker(title).setWhen(0)
+
+        Notification notification = mBuilder.setTicker(title).setWhen(0)
                 .setAutoCancel(true)
                 .setContentTitle(title)
                 .setContentIntent(resultPendingIntent)
                 .setSound(alarmSound)
-                .setStyle(inboxStyle)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
                 .setWhen(getTimeMilliSec(timeStamp))
-                .setSmallIcon(R.drawable.user1)
-                .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), icon))
-                .setContentText(content)
+                .setSmallIcon(R.drawable.notification_icon)
+                .setLargeIcon(icon)
+                .setContentText(message)
                 .build();
 
         NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -173,29 +173,6 @@ public class NotificationUtils {
         notificationmanager.notify(0, builder.build());*/
     }
 
-    private void showBigNotification(Bitmap bitmap, NotificationCompat.Builder mBuilder, int icon, String title, String message, String madeBy, int type,
-                                     String timeStamp, PendingIntent resultPendingIntent, Uri alarmSound) {
-        NotificationCompat.BigPictureStyle bigPictureStyle = new NotificationCompat.BigPictureStyle();
-        bigPictureStyle.setBigContentTitle(title);
-        bigPictureStyle.setSummaryText(Html.fromHtml(message).toString());
-        bigPictureStyle.bigPicture(bitmap);
-        Notification notification;
-        notification = mBuilder.setSmallIcon(icon).setTicker(title).setWhen(0)
-                .setAutoCancel(true)
-                .setContentTitle(title)
-                .setContentIntent(resultPendingIntent)
-                .setSound(alarmSound)
-                .setStyle(bigPictureStyle)
-                .setWhen(getTimeMilliSec(timeStamp))
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), icon))
-                .setContentText(message)
-                .build();
-
-        NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(Config.NOTIFICATION_ID_BIG_IMAGE, notification);
-    }
-
     /**
      * Downloading push notification image before displaying it in
      * the notification tray
@@ -232,7 +209,7 @@ public class NotificationUtils {
      */
     public static boolean isAppIsInBackground(Context context) {
         boolean isInBackground = true;
-        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager am = (ActivityManager) context.getSystemService(ACTIVITY_SERVICE);
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH) {
             List<ActivityManager.RunningAppProcessInfo> runningProcesses = am.getRunningAppProcesses();
             for (ActivityManager.RunningAppProcessInfo processInfo : runningProcesses) {
@@ -276,6 +253,48 @@ public class NotificationUtils {
         FirebaseDatabase.getInstance().getReference().child("tokens/"+ phone).setValue(token);
     }
 
+    public String getContent(Map<String, String> data){
+        String type = data.get("type");
+        int typeInt = Integer.parseInt(type);
+
+        String content;
+        if(typeInt == 0){
+            //message
+            content = data.get("madeBy") + " : "+data.get("message")+" ";
+        }else{
+            //expense
+            content = data.get("madeBy") + " "+ mContext.getString(R.string.history_expense) + " "
+                    + new DecimalFormat("#0.00").format(Double.parseDouble(data.get("message"))) + " "
+                    + Currency.getSymbol(Currency.CurrencyISO.valueOf(data.get("currencyIso")));
+        }
+        return content;
+    }
+
+    public Intent getIntent(int type, Context context, String message, String groupId, String groupName){
+        Intent resultIntent;
+        if(type == 0){
+            //message
+            resultIntent = new Intent(context, TabView.class);
+            resultIntent.putExtra("request", 2);
+        }else{
+            //expense
+            resultIntent = new Intent(context, TabView.class);
+            resultIntent.putExtra("request", 1);
+        }
+        resultIntent.putExtra("groupIndex", groupId);
+        resultIntent.putExtra("groupName", groupName);
+        //resultIntent.putExtra("message", message);
+        return resultIntent;
+    }
+
+    public String getCurrentActivity(){
+        ActivityManager am = (ActivityManager) mContext .getSystemService(ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
+        ComponentName componentInfo = taskInfo.get(0).topActivity;
+        Log.d(TAG, "CURRENT Activity ::" + taskInfo.get(0).topActivity.getClassName()+"   Package Name :  "+componentInfo.getPackageName());
+        return taskInfo.get(0).topActivity.getClassName();
+    }
+
     public BroadcastReceiver getBroadcastReceiver(){
         return new BroadcastReceiver() {
             @Override
@@ -288,8 +307,6 @@ public class NotificationUtils {
 
                     Log.e(TAG, "Firebase reg id: " + regId);
 
-                    //da spostare quando si fa login
-                    //saveTokenOnDb(regId);
                     if (!TextUtils.isEmpty(regId) &&  ma.getUserPhoneNumber()!= null)
                         saveTokenOnDb(regId, ma.getUserPhoneNumber());
 
