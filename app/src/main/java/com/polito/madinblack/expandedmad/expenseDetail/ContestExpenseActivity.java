@@ -100,15 +100,15 @@ public class ContestExpenseActivity extends BaseActivity {
         currencyISO           = Currency.CurrencyISO.valueOf(getIntent().getStringExtra(ARG_CURRENCY_ISO));
         expenseState          = Expense.State.valueOf(getIntent().getStringExtra(ARG_EXPENSE_STATE));
         expenseUserFirebaseId = getIntent().getStringExtra(ARG_EXPENSE_USER_FIREBASEID);
+        if(expenseState != Expense.State.ONGOING) {
+            String mPaymentContestId = getIntent().getStringExtra(ARG_PAYMENT_CONTEST_ID);
+
+        }
+
 
         mDatabaseRootReference = FirebaseDatabase.getInstance().getReference();
-        if(expenseState == Expense.State.ONGOING) {
-            mDatabasePaymentReference = mDatabaseRootReference.child("expenses/" + expenseId + "/payments");
-            //mDatabaseQueryFilter = mDatabasePaymentReference.orderByChild("userFirebaseId").equalTo(ma.getUserPhoneNumber(), "userFirebaseId");
-        }else {
-            String mPaymentContestId = getIntent().getStringExtra(ARG_PAYMENT_CONTEST_ID);
-            mDatabasePaymentReference = mDatabaseRootReference.child("expenses/" + expenseId + "/payments/"+mPaymentContestId);
-        }
+        mDatabasePaymentReference = mDatabaseRootReference.child("expenses/" + expenseId + "/payments");
+        //mDatabaseQueryFilter = mDatabasePaymentReference.orderByChild("userFirebaseId").equalTo(ma.getUserPhoneNumber(), "userFirebaseId");
 
         //toolbar settings
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -204,6 +204,13 @@ public class ContestExpenseActivity extends BaseActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
+                        for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
+                            //memorizzare tutti gli user id e payment firebase solo se uguale a quello passato per parametro
+
+
+                        }
+
+
                             paymentFirebase = dataSnapshot.getValue(PaymentFirebase.class);
                             if (paymentFirebase.getUserFirebaseId().equals(ma.getFirebaseId())) {
                                 mGeneratedByTextView.setText(getString(R.string.you));
@@ -438,6 +445,7 @@ public class ContestExpenseActivity extends BaseActivity {
                         mDatabaseRootReference.child("expenses/"+expenseId+"/paymentContestedId").setValue(paymentFirebase.getId());
                         mDatabaseRootReference.child("expenses/"+expenseId+"/payments/"+paymentFirebase.getId()+"/newToPay").setValue(Double.parseDouble(newToPayString));
                         mDatabaseRootReference.child("expenses/"+expenseId+"/payments/"+paymentFirebase.getId()+"/motivation").setValue(mMotivationEditText.getText().toString());
+                        //mDatabaseRootReference.child("expenses/"+expenseId+"/timestamp/"+paymentFirebase.getId()+"/motivation");
                         mutableData.setValue(Expense.State.CONTESTED);
 
                     }else{
