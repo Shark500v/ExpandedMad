@@ -47,9 +47,11 @@ public class CheckLogIn extends BaseActivity {
         //Local variable of logged user
         ma = MyApplication.getInstance();
 
-        groupIndex = getIntent().getExtras().getString("groupIndex");
-        groupName  = getIntent().getExtras().getString("groupName");
-        index = getIntent().getExtras().getInt("request");
+        if(getIntent().getExtras()!=null){
+            groupIndex = getIntent().getExtras().getString("groupIndex");
+            groupName  = getIntent().getExtras().getString("groupName");
+            index = getIntent().getExtras().getInt("request");
+        }
 
         //for the preferences
         setPreferences();

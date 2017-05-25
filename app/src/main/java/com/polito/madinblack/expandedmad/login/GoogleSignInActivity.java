@@ -73,9 +73,11 @@ public class GoogleSignInActivity extends BaseActivity implements
         mStatusTextView.setText(getString(R.string.login));
         mSignInButton.setVisibility(View.VISIBLE);
 
-        groupIndex = getIntent().getExtras().getString("groupIndex");
-        groupName  = getIntent().getExtras().getString("groupName");
-        index = getIntent().getExtras().getInt("request");
+        if(getIntent().getExtras()!=null){
+            groupIndex = getIntent().getExtras().getString("groupIndex");
+            groupName  = getIntent().getExtras().getString("groupName");
+            index = getIntent().getExtras().getInt("request");
+        }
 
 
         mDataBaseRoot = FirebaseDatabase.getInstance().getReference();

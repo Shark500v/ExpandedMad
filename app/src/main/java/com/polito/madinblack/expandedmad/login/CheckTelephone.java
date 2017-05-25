@@ -61,20 +61,20 @@ public class CheckTelephone extends BaseActivity {
                     String token = getUserToken();
                     saveTokenOnDb(token, ma.getUserPhoneNumber());
 
-                    groupIndex = getIntent().getExtras().getString("groupIndex");
-                    groupName  = getIntent().getExtras().getString("groupName");
-                    index = getIntent().getExtras().getInt("request");
-                    if(index == 1 || index == 2){
-                        Intent intent = new Intent(CheckTelephone.this, TabView.class);
-                        intent.putExtra("groupIndex", groupIndex);
-                        intent.putExtra("groupName", groupName);
-                        intent.putExtra("request", index);
-                        startActivity(intent);
-                    }else{
-                        /*google login and number yet inserted jump to group page*/
-                        Intent intent = new Intent(CheckTelephone.this, GroupListActivity.class);
-                        startActivity(intent);
+                    /*google login and number yet inserted jump to group page*/
+                    Intent intent = new Intent(CheckTelephone.this, GroupListActivity.class);
+                    if(getIntent().getExtras()!=null){
+                        groupIndex = getIntent().getExtras().getString("groupIndex");
+                        groupName  = getIntent().getExtras().getString("groupName");
+                        index = getIntent().getExtras().getInt("request");
+                        if(index == 1 || index == 2){
+                            intent.putExtra("groupIndex", groupIndex);
+                            intent.putExtra("groupName", groupName);
+                            intent.putExtra("request", index);
+                            startActivity(intent);
+                        }
                     }
+                    startActivity(intent);
                     finish();
 
                 }else{

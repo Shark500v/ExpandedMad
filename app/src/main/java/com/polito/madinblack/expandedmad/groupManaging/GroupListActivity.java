@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
@@ -82,6 +83,9 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private NotificationUtils utils;
     private SearchView searchView;
+    private String groupIndex;
+    private String groupName;
+    private int index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,6 +145,20 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
 
         tv1.setText(ma.getUserName() + " " + ma.getUserSurname());
         tv2.setText(ma.getUserPhoneNumber());
+
+        if(getIntent().getExtras()!=null){
+            groupIndex = getIntent().getExtras().getString("groupIndex");
+            groupName  = getIntent().getExtras().getString("groupName");
+            index = getIntent().getExtras().getInt("request");
+            if(index == 1 || index == 2){
+                Intent intent = new Intent(GroupListActivity.this, TabView.class);
+                intent.putExtra("groupIndex", groupIndex);
+                intent.putExtra("groupName", groupName);
+                intent.putExtra("request", index);
+                startActivity(intent);
+            }
+        }
+
     }
 
     @Override
