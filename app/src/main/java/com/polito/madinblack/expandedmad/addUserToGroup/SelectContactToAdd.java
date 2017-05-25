@@ -21,13 +21,16 @@ import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.groupManaging.GroupSettings;
 import com.polito.madinblack.expandedmad.model.Group;
 import com.polito.madinblack.expandedmad.model.MyApplication;
+import com.polito.madinblack.expandedmad.model.User;
 import com.polito.madinblack.expandedmad.model.UserForGroup;
 import com.polito.madinblack.expandedmad.newGroup.SelectUser;
 import com.polito.madinblack.expandedmad.tabViewGroup.TabView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class SelectContactToAdd extends AppCompatActivity {
@@ -35,6 +38,7 @@ public class SelectContactToAdd extends AppCompatActivity {
     private List<SelectUser> groupM = new ArrayList<>();
     private List<SelectUser> invite = new ArrayList<>();    //used to invite new membres to join the app
     private List<String> usersInGroup = new ArrayList<>();
+    private final Map<String,String> usersInDatabase = new HashMap<>();
     private DatabaseReference mDatabaseReference;
     private DatabaseReference mDatabaseReferenceUserInGroup;
     private ValueEventListener mValueEventListener;
@@ -147,15 +151,19 @@ public class SelectContactToAdd extends AppCompatActivity {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             if(!dataSnapshot.exists()){
-                                //groupM.remove(selectUser);
+                                groupM.remove(selectUser);
                                 invite.add(selectUser);
                             }
                             else{
                                 for(DataSnapshot dataSnapshotChild : dataSnapshot.getChildren()){
                                     //int index = groupM.indexOf(selectUser);
                                     String userFirebaseId = dataSnapshotChild.getKey();
+                                    User user = dataSnapshot.child(userFirebaseId).getValue(User.class);
+                                    String name = user.getName();
+                                    String surname = user.getSurname();
                                     selectUser.setFirebaseId(userFirebaseId);
                                     //groupM.set(index, selectUser);
+                                    usersInDatabase.put(userFirebaseId, name + "," + surname);
                                 }
                             }
 
@@ -166,7 +174,7 @@ public class SelectContactToAdd extends AppCompatActivity {
 
                                 for(SelectUser selectUser : groupM){
 
-                                    String name = selectUser.getName();
+                                    /*String name = selectUser.getName();
                                     String[] items = new String[2];
                                     if(name.contains(" ")){
                                         items = name.split(" ");
@@ -181,7 +189,18 @@ public class SelectContactToAdd extends AppCompatActivity {
                                     }else{
                                         items[0] = " ";
                                         items[1] = " ";
+                                    }*/
+
+                                    String nameSurname = usersInDatabase.get(selectUser.getFirebaseId());
+                                    String[] items = new String[2];
+                                    if(nameSurname.contains(",")) {
+                                        items = nameSurname.split(",");
+                                        if (items[0] == null)
+                                            items[0] = " ";
+                                        if (items[1] == null)
+                                            items[1] = " ";
                                     }
+
                                     if(selectUser.getFirebaseId() != null){
                                         UserForGroup userForGroup = new UserForGroup(selectUser.getPhone(), selectUser.getFirebaseId(), items[0], items[1]);
                                         for(int i=0; i<userForGroupList.size(); i++){
