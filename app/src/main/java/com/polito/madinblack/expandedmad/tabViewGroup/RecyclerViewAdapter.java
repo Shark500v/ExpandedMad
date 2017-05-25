@@ -121,6 +121,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             @Override
             public void onClick(final View v) {
 
+
+
                 Context context = v.getContext();
                 Intent intent = new Intent(context, ExpenseDetailActivity.class);
                 intent.putExtra(ExpenseDetailFragment.ARG_EXPENSE_ID, holder.mItem.getId());
