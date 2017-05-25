@@ -38,11 +38,10 @@
             android:id="@+id/go_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/payment3"
             android:background="#00000000"
             android:gravity="end"
             android:layout_margin="16dp"
-            android:contentDescription="@string/go_to_list_of_payments"
+
 
             />
     </LinearLayout>

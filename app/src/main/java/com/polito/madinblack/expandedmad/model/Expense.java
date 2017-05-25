@@ -259,7 +259,7 @@ public class Expense {
         for(Payment payment: paymentList)
             if(!(payment.getUserFirebaseId().equals(paidByFirebaseId)))
                 if(state==State.TRANSFER)
-                    toUpdate.put(payment.getUserPhoneNumber()+expenseKey, payment.getCredit());
+                    toUpdate.put(payment.getUserPhoneNumber()+expenseKey, -payment.getCredit());
                 else
                     toUpdate.put(payment.getUserPhoneNumber()+expenseKey, payment.getDebit());
 

@@ -98,8 +98,9 @@ public class RecyclerViewAdapterUsers extends RecyclerView.Adapter<RecyclerViewA
         MyApplication ma = MyApplication.getInstance();
         if(holder.mItem.getUserPhoneNumber().equals(ma.getUserPhoneNumber()))
             holder.mIdView.setText(mContext.getString(R.string.you));
-        else
+        else {
             holder.mIdView.setText(mValues.get(position).getFullName());               //qui visualizzo nome e cognome
+        }
         //qui invece quanto deve o meno
         if (mValues.get(position).getBalance()>0){
             holder.mContentView.setText(String.format(Locale.getDefault(), "+%.2f", Currency.convertCurrency(mValues.get(position).getBalance(), mValues.get(position).getCurrencyISO(), MyApplication.getCurrencyISOFavorite())) + " " + Currency.getSymbol(MyApplication.getCurrencyISOFavorite()));
