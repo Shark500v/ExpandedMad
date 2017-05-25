@@ -107,8 +107,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             str.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), mContext.getString(R.string.paid_by).length()+1, (mContext.getString(R.string.paid_by).length()+1 + mContext.getString(R.string.you).length()), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         else {
-            str = new SpannableStringBuilder(mContext.getString(R.string.paid_by)+" "+ mValues.get(position).getPaidByName());
-            str.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), mContext.getString(R.string.paid_by).length()+1, (mContext.getString(R.string.paid_by).length()+1 + mValues.get(position).getPaidByName().length()), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            String fullName = mValues.get(position).getPaidByName()+" "+mValues.get(position).getPaidBySurname();
+            str = new SpannableStringBuilder(mContext.getString(R.string.paid_by)+" "+ fullName);
+            str.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), mContext.getString(R.string.paid_by).length()+1, (mContext.getString(R.string.paid_by).length()+1 + fullName.length()), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         }
         holder.mPaydBy.setText(str);

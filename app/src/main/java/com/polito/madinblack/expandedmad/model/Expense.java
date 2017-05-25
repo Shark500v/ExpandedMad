@@ -47,7 +47,14 @@ public class Expense {
 
     }
 
-    public Expense(String id, String name, String tag, String paidByName, String paidBySurname, String paidByFirebaseId, String paidByPhoneNumber, Double cost, Double roundedCost, Currency.CurrencyISO currencyISO, String groupId, Long year, Long month, Long day, String description) {
+    public Expense(Expense expense){
+        this.id     = expense.getId();
+        this.name   = expense.getName();
+        this.tag    = expense.getTag();
+
+    }
+
+    public Expense(String id, String name, String tag, String paidByName, String paidBySurname, String paidByFirebaseId, String paidByPhoneNumber, Double cost, Double roundedCost, Currency.CurrencyISO currencyISO, String groupId, Long year, Long month, Long day, String description, State state) {
         this.id = id;
         this.name = name;
         this.tag = tag;
@@ -63,11 +70,11 @@ public class Expense {
         this.month = month;
         this.day = day;
         this.description = description;
-        this.state = State.ONGOING;
+        this.state = state;
     }
 
 
-    public Expense(String id, String name, String tag, String paidByName, String paidBySurname, String paidByFirebaseId, String paidByPhoneNumber, Double cost, Double roundedCost, Currency.CurrencyISO currencyISO, String groupId, Long year, Long month, Long day, String description, Map<String, PaymentFirebase> payments) {
+    public Expense(String id, String name, String tag, String paidByName, String paidBySurname, String paidByFirebaseId, String paidByPhoneNumber, Double cost, Double roundedCost, Currency.CurrencyISO currencyISO, String groupId, Long year, Long month, Long day, String description, State state, Map<String, PaymentFirebase> payments) {
         this.id = id;
         this.name = name;
         this.tag = tag;
@@ -84,7 +91,7 @@ public class Expense {
         this.day = day;
         this.description = description;
         this.payments = payments;
-        this.state = State.ONGOING;
+        this.state = state;
     }
 
     public String getId() {
@@ -241,12 +248,12 @@ public class Expense {
 
     public static String writeNewExpense(final DatabaseReference mDatabaseRootRefenrence, String name, String tag,
                                          String paidByFirebaseId, String paidByPhoneNumber, String paidByName, String paidBySurname, Double cost, Double roundedCost,
-                                         final Currency.CurrencyISO currencyISO, final String groupId, Long year, Long month, Long day, String description, List<Payment> paymentList){
+                                         final Currency.CurrencyISO currencyISO, final String groupId, Long year, Long month, Long day, String description, State state, Long timestamp, List<Payment> paymentList){
 
         DatabaseReference myExpenseRef = mDatabaseRootRefenrence.child("expenses").push();
         final String expenseKey = myExpenseRef.getKey();
 
-        Expense expense = new Expense(expenseKey, name, tag, paidByName, paidBySurname, paidByFirebaseId, paidByPhoneNumber, CostUtil.round(cost, 2), CostUtil.round(roundedCost, 2), currencyISO, groupId, year, month, day, description);
+        Expense expense = new Expense(expenseKey, name, tag, paidByName, paidBySurname, paidByFirebaseId, paidByPhoneNumber, CostUtil.round(cost, 2), CostUtil.round(roundedCost, 2), currencyISO, groupId, year, month, day, description, state);
         myExpenseRef.setValue(expense);
 
         DatabaseReference myPaymentRef;
@@ -273,7 +280,7 @@ public class Expense {
             myPaymentRef.setValue(paymentFirebase);
 
             ExpenseForUser expenseForUser = new ExpenseForUser(expense, payment.getBalance());
-            expenseForUser.setTimestamp();
+            expenseForUser.setTimestamp(timestamp);
             mDatabaseRootRefenrence.child("users/"+payment.getUserPhoneNumber()+"/"+payment.getUserFirebaseId()+"/groups/"+groupId+"/expenses/"+expenseKey).setValue(expenseForUser);
             mDatabaseRootRefenrence.child("users/"+payment.getUserPhoneNumber()+"/"+payment.getUserFirebaseId()+"/groups/"+groupId+"/timestamp").setValue(expenseForUser.getTimestamp());
 
