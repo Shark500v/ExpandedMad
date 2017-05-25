@@ -219,6 +219,7 @@ public class SelectContactToAdd extends AppCompatActivity {
                                     Intent intent1 = new Intent(SelectContactToAdd.this, TabView.class);
                                     intent1.putExtra("groupIndex", groupId);
                                     intent1.putExtra("groupName", groupName);
+                                    intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
                                     startActivity(intent1);
                                 }else {
                                     //}else{
