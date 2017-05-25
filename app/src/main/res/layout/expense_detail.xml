@@ -284,11 +284,10 @@
         <TextView
             android:id="@+id/description_field"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:paddingStart="16dp"
             android:textColorHint="@color/secondary_text"
             android:layout_margin="16dp"
-            android:gravity="end"
             android:text="@string/type_description_here"
             android:textSize="18sp"
             android:textStyle="bold"/>
