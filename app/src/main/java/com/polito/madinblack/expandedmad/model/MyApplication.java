@@ -1,12 +1,6 @@
 package com.polito.madinblack.expandedmad.model;
 
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
 public class MyApplication {
 

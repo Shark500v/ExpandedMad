@@ -1,7 +1,6 @@
 package com.polito.madinblack.expandedmad.chat;
 
-import android.icu.util.Calendar;
-import android.icu.util.GregorianCalendar;
+
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;

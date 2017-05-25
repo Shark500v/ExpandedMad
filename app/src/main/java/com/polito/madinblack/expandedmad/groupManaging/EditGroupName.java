@@ -9,16 +9,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
-
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.MyApplication;
-import com.polito.madinblack.expandedmad.tabViewGroup.TabView;
-
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
+
 
 public class EditGroupName extends AppCompatActivity {
     private EditText editGroupName;
