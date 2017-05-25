@@ -113,7 +113,7 @@ public class GroupHistory extends AppCompatActivity {
         private DatabaseReference dataref;
         private Stack<String> mValuesIds = new Stack<>();
         private Context mContext;
-        private ChildEventListener mChildEventListener;
+        private ValueEventListener mEventListener;
 
         private static final String TAG = "MyBalanceActivity";
 
@@ -125,10 +125,14 @@ public class GroupHistory extends AppCompatActivity {
             ValueEventListener valueEventListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    for(DataSnapshot childDataSnapshot : dataSnapshot.getChildren()){
-
+                    if(dataSnapshot.exists()) {
+                        for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
+                            mValues.push(childDataSnapshot.getValue(HistoryInfo.class));
+                        }
+                        notifyDataSetChanged();
                     }
                 }
+
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
@@ -136,104 +140,12 @@ public class GroupHistory extends AppCompatActivity {
                 }
             };
 
-            // Create child event listener
-            // [START child_event_listener_recycler]
-            ChildEventListener childEventListener = new ChildEventListener() {
-                @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-                    Log.d(TAG, "onChildAdded:" + dataSnapshot.getKey());
 
-                    // A new info has been added, add it to the displayed list
-                    HistoryInfo historyInfo = dataSnapshot.getValue(HistoryInfo.class);
-
-
-                    // [START_EXCLUDE]
-                    // Update RecyclerView
-                    if(getItemCount() == 0){
-                        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.cardList);
-                        TextView tx = (TextView) findViewById(R.id.textView);
-                        tx.setVisibility(View.GONE);
-                        recyclerView.setVisibility(View.VISIBLE);
-                    }
-                    mValuesIds.push(dataSnapshot.getKey());
-                    mValues.push(historyInfo);
-                    notifyItemInserted(0);
-                    // [END_EXCLUDE]
-
-                }
-
-
-                @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
-                    Log.d(TAG, "onChildChanged:" + dataSnapshot.getKey());
-
-                    // An info has changed, use the key to determine if we are displaying this
-                    // info and if so displayed the changed info.
-                    HistoryInfo historyInfo = dataSnapshot.getValue(HistoryInfo.class);
-                    String infoKey = dataSnapshot.getKey();
-
-                    // [START_EXCLUDE]
-                    int infoIndex = mValuesIds.indexOf(infoKey);
-                    if (infoIndex > -1) {
-                        // Replace with the new data
-                        mValues.set(infoIndex, historyInfo);
-
-                        // Update the RecyclerView
-                        notifyItemChanged(infoIndex);
-
-                    } else {
-                        Log.w(TAG, "onChildChanged:unknown_child:" + infoKey);
-                    }
-                    // [END_EXCLUDE]
-                }
-
-                @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
-                    Log.d(TAG, "onChildRemoved:" + dataSnapshot.getKey());
-
-                    // An info has changed, use the key to determine if we are displaying this
-                    // info and if so remove it.
-                    String infoKey = dataSnapshot.getKey();
-
-                    // [START_EXCLUDE]
-                    int infoIndex = mValuesIds.indexOf(infoKey);
-                    if (infoIndex > -1) {
-                        // Remove data from the list
-                        mValuesIds.remove(infoKey);
-                        mValues.remove(infoIndex);
-
-                        // Update the RecyclerView
-                        notifyItemRemoved(infoIndex);
-                    } else {
-                        Log.w(TAG, "onChildRemoved:unknown_child:" + infoKey);
-                    }
-                    // [END_EXCLUDE]
-                }
-
-                @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
-                    Log.d(TAG, "onChildMoved:" + dataSnapshot.getKey());
-
-                    // A comment has changed position, use the key to determine if we are
-                    // displaying this comment and if so move it.
-                    //Group movedGroup = dataSnapshot.getValue(Group.class);
-                    //String groupKey = dataSnapshot.getKey();
-
-                    // ...
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    Log.w(TAG, "Groups:onCancelled", databaseError.toException());
-                    Toast.makeText(mContext, "Failed to load expenses.",
-                            Toast.LENGTH_SHORT).show();
-                }
-            };
-            dataref.addChildEventListener(childEventListener);
+            dataref.addValueEventListener(valueEventListener);
             // [END child_event_listener_recycler]
 
             // Store reference to listener so it can be removed on app stop
-            mChildEventListener = childEventListener;
+            mEventListener = valueEventListener;
         }
 
 
@@ -278,8 +190,8 @@ public class GroupHistory extends AppCompatActivity {
         }
 
         public void cleanupListener() {
-            if (mChildEventListener != null) {
-                dataref.removeEventListener(mChildEventListener);
+            if (mEventListener != null && dataref!=null) {
+                dataref.removeEventListener(mEventListener);
             }
         }
 
