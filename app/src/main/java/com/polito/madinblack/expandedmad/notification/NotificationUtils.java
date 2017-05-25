@@ -16,6 +16,7 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.text.Html;
@@ -195,11 +196,20 @@ public class NotificationUtils {
 
     // Playing notification sound
     public void playNotificationSound() {
+        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(mContext);
+        String strRingtonePreference = preference.getString("pref_key_notifications_ringtone", "DEFAULT_SOUND");
         try {
-            Uri alarmSound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE
-                    + "://" + mContext.getPackageName() + "/raw/notification");
-            Ringtone r = RingtoneManager.getRingtone(mContext, alarmSound);
-            r.play();
+
+            if(strRingtonePreference.compareTo("") != 0){
+                Uri alarmSound = Uri.parse(strRingtonePreference);
+                Ringtone r = RingtoneManager.getRingtone(mContext, alarmSound);
+                r.play();
+            }
+
+            if (preference.getBoolean("pref_key_notifications_vibrate", false)){
+                Vibrator v = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+                v.vibrate(400);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
