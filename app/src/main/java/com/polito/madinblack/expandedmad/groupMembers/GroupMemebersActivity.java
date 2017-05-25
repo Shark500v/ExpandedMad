@@ -41,7 +41,7 @@ public class GroupMemebersActivity extends AppCompatActivity {
 
     public String groupID = "init";
     private String name = "hello";
-    private MyApplication ma;
+
 
     private static final String TAG = "GroupMemebersActivity";
 
@@ -60,7 +60,7 @@ public class GroupMemebersActivity extends AppCompatActivity {
         groupID = getIntent().getStringExtra("GROUP_ID");
         name = getIntent().getStringExtra("GROUP_NAME");
 
-        ma = MyApplication.getInstance();
+
 
         mUserGroupsReference = FirebaseDatabase.getInstance().getReference()
                 .child("groups").child(groupID).child("users");
@@ -138,7 +138,7 @@ public class GroupMemebersActivity extends AppCompatActivity {
 
                     // [START_EXCLUDE]
                     // Update RecyclerView
-                    if(!userForGroup.getPhoneNumber().equals(ma.getUserPhoneNumber())){
+                    if(!userForGroup.getPhoneNumber().equals(MyApplication.getUserPhoneNumber())){
                         mValuesIds.add(dataSnapshot.getKey());
                         mValues.add(userForGroup);
                         notifyItemInserted(mValues.size() - 1);

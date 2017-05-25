@@ -49,7 +49,6 @@ public class ExpenseDetailFragment extends Fragment {
     private String expenseName;
     private DatabaseReference mDatabaseExpenseReference;
     private ValueEventListener mValueEventListener;
-    private MyApplication ma;
     private View rootView;
 
 
@@ -78,7 +77,7 @@ public class ExpenseDetailFragment extends Fragment {
 
             expenseId = getArguments().getString(ARG_EXPENSE_ID);
             expenseName = getArguments().getString(ARG_EXPENSE_NAME);
-            ma = MyApplication.getInstance();
+
 
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
@@ -93,7 +92,7 @@ public class ExpenseDetailFragment extends Fragment {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     final Expense expense = dataSnapshot.getValue(Expense.class);
 
-                    if(expense.getPaidByFirebaseId().equals(ma.getFirebaseId()) && expense.getState()== Expense.State.ONGOING) {
+                    if(expense.getPaidByFirebaseId().equals(MyApplication.getFirebaseId()) && expense.getState()== Expense.State.ONGOING) {
                         ImageButton imageButtonGo;
                         ((TextView)rootView.findViewById(R.id.head_title)).setText(getString(R.string.list_payment));
                         (imageButtonGo = (ImageButton)rootView.findViewById(R.id.go_button)).setImageResource(R.drawable.payment3);
@@ -164,7 +163,7 @@ public class ExpenseDetailFragment extends Fragment {
                         ((TextView) rootView.findViewById(R.id.description_field)).setTextColor(Color.parseColor("#C1C5C0"));
                     }
 
-                    PaymentFirebase paymentFirebase = expense.paymentFromUser(ma.getFirebaseId());
+                    PaymentFirebase paymentFirebase = expense.paymentFromUser(MyApplication.getFirebaseId());
                     if(paymentFirebase!=null)
                         ((TextView) rootView.findViewById(R.id.paid_container)).setText(paymentFirebase.toString());
                     ((TextView) rootView.findViewById(R.id.tag_container)).setText(expense.getTag());
@@ -180,13 +179,13 @@ public class ExpenseDetailFragment extends Fragment {
                         //((LinearLayout) rootView.findViewById(R.id.currencyLayout)).setLayou
                     }
 
-                    if( expense.getPaidByPhoneNumber().equals(ma.getUserPhoneNumber()) )
+                    if( expense.getPaidByPhoneNumber().equals(MyApplication.getUserPhoneNumber()) )
                         ((TextView) rootView.findViewById(R.id.buyer_container)).setText(getString(R.string.you));
                     else
                         ((TextView) rootView.findViewById(R.id.buyer_container)).setText(expense.getPaidByName()+" "+expense.getPaidBySurname());
                     ((TextView) rootView.findViewById(R.id.date_container)).setText(Long.toString(expense.getDay()) + "/" + Long.toString(expense.getMonth()) + "/" + Long.toString(expense.getYear()));
 
-                    Double balance = expense.paymentFromUser(ma.getFirebaseId()).getBalance();
+                    Double balance = expense.paymentFromUser(MyApplication.getFirebaseId()).getBalance();
 
                     if(balance > 0){
                         ((TextView) rootView.findViewById(R.id.balance_container)).setText(String.format(Locale.getDefault(), "+%.2f",(balance)));

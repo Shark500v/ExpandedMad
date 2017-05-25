@@ -41,7 +41,6 @@ public class ContactsToAddFragment extends Fragment {
     RecyclerView recyclerView;
     UserToAddRecyclerViewAdapter adapter;
     View rootView;
-    MyApplication ma;
     List<String> userIds = new ArrayList<>();
     String groupId;
 
@@ -68,7 +67,6 @@ public class ContactsToAddFragment extends Fragment {
         userIds = (List<String>) getArguments().getSerializable("USERS_LIST");
         groupId = getArguments().getString("groupIndex");
 
-        ma = MyApplication.getInstance();
 
         RequestPerm();  //I need to ask for permission in order to access the contact list stored in the device
     }

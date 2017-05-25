@@ -74,7 +74,6 @@ public class ContestExpenseActivity extends BaseActivity {
     private String groupId;
     private Currency.CurrencyISO currencyISO;
     private Double expenseCost;
-    private MyApplication ma;
     private ValueEventListener valueEventListener;
     private PaymentFirebase paymentFirebase;
     private Spinner mSpinnerCurrency;
@@ -98,7 +97,7 @@ public class ContestExpenseActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.contest_layout);
 
-        ma = MyApplication.getInstance();
+
         paymentFirebaseList = new ArrayList<>();
         paymentList = new ArrayList<>();
 
@@ -169,7 +168,7 @@ public class ContestExpenseActivity extends BaseActivity {
 
                             tmpPaymentFirebase = childDataSnapshot.getValue(PaymentFirebase.class);
                             paymentFirebaseList.add(tmpPaymentFirebase);
-                            if (tmpPaymentFirebase.getUserFirebaseId().equals(ma.getFirebaseId())) {
+                            if (tmpPaymentFirebase.getUserFirebaseId().equals(MyApplication.getFirebaseId())) {
                                 paymentFirebase = tmpPaymentFirebase;
                                 mOldToPay.setText(String.format(Locale.getDefault(), "%.2f", paymentFirebase.getToPay()));
                             }
@@ -185,7 +184,7 @@ public class ContestExpenseActivity extends BaseActivity {
                                 mOldToPayCurrencySymbol.setText(Currency.getSymbol(Currency.CurrencyISO.valueOf(item)));
                                 mNewToPayCurrencySymbol.setText(Currency.getSymbol(Currency.CurrencyISO.valueOf(item)));
                                 mExpenseCost.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(expenseCost, currencyISO, Currency.CurrencyISO.valueOf(item))));
-                                if (paymentFirebase != null && paymentFirebase.getUserFirebaseId().equals(ma.getFirebaseId()))
+                                if (paymentFirebase != null && paymentFirebase.getUserFirebaseId().equals(MyApplication.getFirebaseId()))
                                     mOldToPay.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(paymentFirebase.getToPay(), currencyISO, Currency.CurrencyISO.valueOf(item))));
 
                             }
@@ -224,7 +223,7 @@ public class ContestExpenseActivity extends BaseActivity {
 
 
 
-                            if (paymentFirebase.getUserFirebaseId().equals(ma.getFirebaseId())) {
+                            if (paymentFirebase.getUserFirebaseId().equals(MyApplication.getFirebaseId())) {
                                 mGeneratedByTextView.setText(getString(R.string.you));
 
                             }
@@ -257,7 +256,7 @@ public class ContestExpenseActivity extends BaseActivity {
                             }
                         });
 
-                        if(expenseState== Expense.State.CONTESTED && paymentFirebase.getUserFirebaseId().equals(ma.getFirebaseId())){
+                        if(expenseState== Expense.State.CONTESTED && paymentFirebase.getUserFirebaseId().equals(MyApplication.getFirebaseId())){
                             (findViewById(R.id.confirm_delete_button_layout)).setVisibility(View.VISIBLE);
                             ((Button)findViewById(R.id.confirm_delete_button)).setText(getString(R.string.delete_contention));
                             (findViewById(R.id.confirm_delete_button)).setOnClickListener(new View.OnClickListener() {
@@ -298,7 +297,7 @@ public class ContestExpenseActivity extends BaseActivity {
                                 }
                             });
 
-                        }else if(expenseState== Expense.State.CONTESTED && ma.getFirebaseId().equals(expenseUserFirebaseId)){
+                        }else if(expenseState== Expense.State.CONTESTED && MyApplication.getFirebaseId().equals(expenseUserFirebaseId)){
                             (findViewById(R.id.confirm_delete_button_layout)).setVisibility(View.VISIBLE);
                             ((Button)findViewById(R.id.confirm_delete_button)).setText(getString(R.string.confirm_contention));
                             (findViewById(R.id.confirm_delete_button)).setOnClickListener(new View.OnClickListener() {

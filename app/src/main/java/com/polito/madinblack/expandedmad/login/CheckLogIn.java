@@ -25,7 +25,6 @@ public class CheckLogIn extends BaseActivity {
 
 
     private FirebaseAuth                    mAuth;
-    private MyApplication                   ma;
     static boolean calledAlready            = false;
 
     private static final String TAG = "GoogleActivity";
@@ -39,9 +38,6 @@ public class CheckLogIn extends BaseActivity {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
             calledAlready = true;
         }
-
-        //Local variable of logged user
-        ma = MyApplication.getInstance();
 
         //for the preferences
         setPreferences();
@@ -124,22 +120,20 @@ public class CheckLogIn extends BaseActivity {
         Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
 
         //[START] Take all user data
-        ma.setFirebaseId(user.getUid());
-        ma.setUserEmail(user.getEmail());
+        MyApplication.setFirebaseId(user.getUid());
+        MyApplication.setUserEmail(user.getEmail());
 
         String[] items = user.getDisplayName().split(" ");
         if (items[0] != null)
-            ma.setUserName(items[0]);
+            MyApplication.setUserName(items[0]);
         else
-            ma.setUserName("");
+            MyApplication.setUserName("");
 
         if (items[1] != null)
-            ma.setUserSurname(items[1]);
+            MyApplication.setUserSurname(items[1]);
         else
-            ma.setUserSurname("");
+            MyApplication.setUserSurname("");
 
-        ma.setFirebaseUser(user);
-        ma.setLogged(true);
         //[END] Take all user data
 
         Intent intent = new Intent(CheckLogIn.this, CheckTelephone.class);
@@ -150,7 +144,6 @@ public class CheckLogIn extends BaseActivity {
     private void notLogged(){
         // User is signed out
         Log.d(TAG, "onAuthStateChanged:signed_out");
-        ma.setLogged(false);
         Intent intent = new Intent(CheckLogIn.this, GoogleSignInActivity.class);
         startActivity(intent);
     }

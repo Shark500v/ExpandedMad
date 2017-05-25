@@ -69,7 +69,6 @@ public class NewGroup extends AppCompatActivity {
     private DatabaseReference mDatabaseForUrl;
     private ValueEventListener mValueEventListener;
     private DatabaseReference mDatabaseUsersReference;
-    private MyApplication ma;
     private List<SelectUser> groupM;
     private List<SelectUser> invite;
     private List<SelectUser> realMembers = new ArrayList<>();
@@ -99,7 +98,7 @@ public class NewGroup extends AppCompatActivity {
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ma = MyApplication.getInstance();
+
 
         mStorage = FirebaseStorage.getInstance().getReference();
 
@@ -350,7 +349,7 @@ public class NewGroup extends AppCompatActivity {
                 userForGroupList.add(userForGroup);
             }
 
-            UserForGroup userForGroup = new UserForGroup(ma.getUserPhoneNumber(), ma.getFirebaseId(), ma.getUserName(), ma.getUserSurname());
+            UserForGroup userForGroup = new UserForGroup(MyApplication.getUserPhoneNumber(), MyApplication.getFirebaseId(), MyApplication.getUserName(), MyApplication.getUserSurname());
             for(int i=0; i<userForGroupList.size(); i++){
                 userForGroupList.get(i).connect(userForGroup);
                 userForGroup.connect(userForGroupList.get(i));

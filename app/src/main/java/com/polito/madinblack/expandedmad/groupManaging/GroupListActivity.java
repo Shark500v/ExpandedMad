@@ -40,6 +40,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.polito.madinblack.expandedmad.R;
+import com.polito.madinblack.expandedmad.login.CheckLogIn;
 import com.polito.madinblack.expandedmad.notification.Config;
 import com.polito.madinblack.expandedmad.notification.NotificationUtils;
 import com.polito.madinblack.expandedmad.newGroup.SelectUser;
@@ -63,7 +64,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class GroupListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
-    private MyApplication ma;
+
 
     private static final String TAG = "GroupListActivity";
 
@@ -88,12 +89,18 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.starting_layoute);
 
-        ma = MyApplication.getInstance();   //retrive del DB
 
         mDatabaseRootReference = FirebaseDatabase.getInstance().getReference();
-        mDatabaseForUserUrl = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber()).child(ma.getFirebaseId()).child("urlImage");
 
-        mUserGroupsReference   = mDatabaseRootReference.child("users/"+ma.getUserPhoneNumber()+"/"+ma.getFirebaseId()+"/groups");
+        if(MyApplication.isVariablesAvailable()) {
+            mDatabaseForUserUrl = mDatabaseRootReference.child("users").child(MyApplication.getUserPhoneNumber()).child(MyApplication.getFirebaseId()).child("urlImage");
+            mUserGroupsReference = mDatabaseRootReference.child("users/" + MyApplication.getUserPhoneNumber() + "/" + MyApplication.getFirebaseId() + "/groups");
+        }else {
+            Intent intent = new Intent(GroupListActivity.this, CheckLogIn.class);
+            startActivity(intent);
+            finish();
+
+        }
         mQueryUserGroupsReference = mUserGroupsReference.orderByChild("timestamp");
 
         utils = new NotificationUtils(this);
@@ -139,8 +146,8 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             }
         });*/
 
-        tv1.setText(ma.getUserName() + " " + ma.getUserSurname());
-        tv2.setText(ma.getUserPhoneNumber());
+        tv1.setText(MyApplication.getUserName() + " " + MyApplication.getUserSurname());
+        tv2.setText(MyApplication.getUserPhoneNumber());
     }
 
     @Override
@@ -344,7 +351,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                 public void onClick(View v) {
                     final Context context = v.getContext();
 
-                    final DatabaseReference mDatabaseGroupForUserReference = mDatabaseRootReference.child("users/" + ma.getFirebaseId() + "/" + ma.getUserPhoneNumber() + "groups/" + holder.mItem.getId());
+                    final DatabaseReference mDatabaseGroupForUserReference = mDatabaseRootReference.child("users/" + MyApplication.getFirebaseId() + "/" + MyApplication.getUserPhoneNumber() + "groups/" + holder.mItem.getId());
 
                     mDatabaseGroupForUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override

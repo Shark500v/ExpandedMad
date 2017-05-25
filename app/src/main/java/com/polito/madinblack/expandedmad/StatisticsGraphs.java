@@ -48,7 +48,6 @@ public class StatisticsGraphs extends AppCompatActivity {
     private Spinner groupSpinner;
     private Spinner yearSpinner;
     private Spinner tagSpinner;
-    private MyApplication ma;
     private GraphView graph;
     private ValueEventListener mValueEventListener;
     private ValueEventListener mGroupsEventListener;
@@ -104,8 +103,8 @@ public class StatisticsGraphs extends AppCompatActivity {
         yearSelected = getString(R.string.select_year);
         tagSelected = getString(R.string.select_tag);
 
-        ma = MyApplication.getInstance();
-        mDatabaseGroupReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber()).child(ma.getFirebaseId()).child("groups").orderByChild("timestamp");
+
+        mDatabaseGroupReference = FirebaseDatabase.getInstance().getReference().child("users").child(MyApplication.getUserPhoneNumber()).child(MyApplication.getFirebaseId()).child("groups").orderByChild("timestamp");
 
         mValueEventListener = new ValueEventListener() {
             @Override
@@ -141,12 +140,12 @@ public class StatisticsGraphs extends AppCompatActivity {
                 groupId = groupMap.get(groupSelected);
                 if ((!groupId.equals(getString(R.string.select_group))) && (!yearSelected.equals(getString(R.string.select_year))) && (!tagSelected.equals(getString(R.string.select_tag)))) {
                     if (groupId.equals(getString(R.string.all_groups))) {
-                        mDatabaseAllExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber())
-                                .child(ma.getFirebaseId()).child("groups");
+                        mDatabaseAllExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(MyApplication.getUserPhoneNumber())
+                                .child(MyApplication.getFirebaseId()).child("groups");
                         initGraph(graph, yearSelected, groupSelected, tagSelected);   //una volta selezionati sia l'anno che il gruppo chiama il metodo
                     } else {
-                        mDatabaseExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber())
-                                .child(ma.getFirebaseId()).child("groups").child(groupId).child("expenses");
+                        mDatabaseExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(MyApplication.getUserPhoneNumber())
+                                .child(MyApplication.getFirebaseId()).child("groups").child(groupId).child("expenses");
                         initGraph(graph, yearSelected, groupSelected, tagSelected);   //una volta selezionati sia l'anno che il gruppo chiama il metodo
 
                         //if(groupMap.get(groupSelected) != null) {
@@ -168,12 +167,12 @@ public class StatisticsGraphs extends AppCompatActivity {
                 groupId = groupMap.get(groupSelected);
                 if ((!groupId.equals(getString(R.string.select_group))) && (!yearSelected.equals(getString(R.string.select_year))) && (!tagSelected.equals(getString(R.string.select_tag)))) {
                     if (groupId.equals(getString(R.string.all_groups))) {
-                        mDatabaseAllExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber())
-                                .child(ma.getFirebaseId()).child("groups");
+                        mDatabaseAllExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(MyApplication.getUserPhoneNumber())
+                                .child(MyApplication.getFirebaseId()).child("groups");
                         initGraph(graph, yearSelected, groupSelected, tagSelected);   //una volta selezionati sia l'anno che il gruppo chiama il metodo
                     } else {
-                        mDatabaseExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber())
-                                .child(ma.getFirebaseId()).child("groups").child(groupId).child("expenses");
+                        mDatabaseExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(MyApplication.getUserPhoneNumber())
+                                .child(MyApplication.getFirebaseId()).child("groups").child(groupId).child("expenses");
                         initGraph(graph, yearSelected, groupSelected, tagSelected);   //una volta selezionati sia l'anno che il gruppo chiama il metodo
                     }
                 }
@@ -192,12 +191,12 @@ public class StatisticsGraphs extends AppCompatActivity {
                 groupId = groupMap.get(groupSelected);
                 if ((!groupId.equals(getString(R.string.select_group))) && (!yearSelected.equals(getString(R.string.select_year))) && (!tagSelected.equals(getString(R.string.select_tag)))) {
                     if (groupId.equals(getString(R.string.all_groups))) {
-                        mDatabaseAllExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber())
-                                .child(ma.getFirebaseId()).child("groups");
+                        mDatabaseAllExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(MyApplication.getUserPhoneNumber())
+                                .child(MyApplication.getFirebaseId()).child("groups");
                         initGraph(graph, yearSelected, groupSelected, tagSelected);   //una volta selezionati sia l'anno che il gruppo chiama il metodo
                     } else {
-                        mDatabaseExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber())
-                                .child(ma.getFirebaseId()).child("groups").child(groupId).child("expenses");
+                        mDatabaseExpenseReference = FirebaseDatabase.getInstance().getReference().child("users").child(MyApplication.getUserPhoneNumber())
+                                .child(MyApplication.getFirebaseId()).child("groups").child(groupId).child("expenses");
                         initGraph(graph, yearSelected, groupSelected, tagSelected);   //una volta selezionati sia l'anno che il gruppo chiama il metodo
 
                         //if(groupMap.get(groupSelected) != null) {

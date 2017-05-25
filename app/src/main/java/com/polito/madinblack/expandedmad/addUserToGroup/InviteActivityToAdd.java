@@ -32,7 +32,6 @@ import java.util.List;
 public class InviteActivityToAdd extends AppCompatActivity {
 
     private List<SelectUser> invite;
-    private MyApplication ma;
     private Intent intent;
     private Intent intent1;
     private String groupId;
@@ -52,7 +51,7 @@ public class InviteActivityToAdd extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        ma = MyApplication.getInstance();
+
         invite = (List<SelectUser>) getIntent().getSerializableExtra("INVITE_LIST");
         groupId = getIntent().getStringExtra("groupIndex");
         groupName = getIntent().getStringExtra("groupName");
@@ -122,7 +121,7 @@ public class InviteActivityToAdd extends AppCompatActivity {
 
     private void sendEmail(){
 
-        String userName = ma.getUserName() + " " + ma.getUserSurname();         //devo passargli il nome dell'utente loggato
+        String userName = MyApplication.getUserName() + " " + MyApplication.getUserSurname();         //devo passargli il nome dell'utente loggato
         String code = groupId;                //devo passargli il codice da inviare nella mail
         String[] to = new String[invite.size()];//prendo la mail del/dei destinatari
         for(int i=0; i<invite.size();i++) {

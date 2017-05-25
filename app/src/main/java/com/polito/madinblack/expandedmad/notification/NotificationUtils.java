@@ -52,11 +52,11 @@ public class NotificationUtils {
     private static String TAG = NotificationUtils.class.getSimpleName();
 
     private Context mContext;
-    private MyApplication ma;
+
 
     public NotificationUtils(Context mContext) {
         this.mContext = mContext;
-        this.ma = MyApplication.getInstance();
+
     }
 
     public void showNotificationMessage(String title, String message, String timeStamp, Intent intent) {
@@ -326,8 +326,8 @@ public class NotificationUtils {
 
                     Log.e(TAG, "Firebase reg id: " + regId);
 
-                    if (!TextUtils.isEmpty(regId) &&  ma.getUserPhoneNumber()!= null)
-                        saveTokenOnDb(regId, ma.getUserPhoneNumber());
+                    if (!TextUtils.isEmpty(regId) &&  MyApplication.getUserPhoneNumber()!= null)
+                        saveTokenOnDb(regId, MyApplication.getUserPhoneNumber());
 
                 } else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
                     // new push notification is received

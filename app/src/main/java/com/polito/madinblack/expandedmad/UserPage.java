@@ -47,7 +47,6 @@ public class UserPage extends AppCompatActivity{
     private CircleImageView userImage;
     private CircleImageView imageClick;
     private ImageView fullscreen;
-    private MyApplication ma;
     private TextView name;
     private TextView surname;
     private TextView phoneNumber;
@@ -75,9 +74,9 @@ public class UserPage extends AppCompatActivity{
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        ma = MyApplication.getInstance();
-        mUserStorage = FirebaseStorage.getInstance().getReference().child("users").child(ma.getFirebaseId()).child("userProfilePicture.jpg");
-        mDatabaseForUrl = FirebaseDatabase.getInstance().getReference().child("users").child(ma.getUserPhoneNumber()).child(ma.getFirebaseId()).child("urlImage");
+
+        mUserStorage = FirebaseStorage.getInstance().getReference().child("users").child(MyApplication.getFirebaseId()).child("userProfilePicture.jpg");
+        mDatabaseForUrl = FirebaseDatabase.getInstance().getReference().child("users").child(MyApplication.getUserPhoneNumber()).child(MyApplication.getFirebaseId()).child("urlImage");
         userImage = (CircleImageView)findViewById(R.id.user_picture);
         imageClick = (CircleImageView)findViewById(R.id.set_user_image);
         fullscreen = (ImageView)findViewById(R.id.user_image_fullscreen);
@@ -85,9 +84,9 @@ public class UserPage extends AppCompatActivity{
         name = (TextView)findViewById(R.id.name);
         surname = (TextView)findViewById(R.id.surname);
         phoneNumber = (TextView)findViewById(R.id.phone_number);
-        name.setText(ma.getUserName());
-        surname.setText(ma.getUserSurname());
-        phoneNumber.setText(ma.getUserPhoneNumber());
+        name.setText(MyApplication.getUserName());
+        surname.setText(MyApplication.getUserSurname());
+        phoneNumber.setText(MyApplication.getUserPhoneNumber());
 
         valueEventListener = new ValueEventListener() {
             @Override
@@ -219,7 +218,7 @@ public class UserPage extends AppCompatActivity{
             //progressDialog.setTitle(getString(R.string.uploading));
             //progressDialog.show();
 
-            final StorageReference filePathUsers = FirebaseStorage.getInstance().getReference().child("users").child(ma.getFirebaseId()).child("userProfilePicture.jpg");
+            final StorageReference filePathUsers = FirebaseStorage.getInstance().getReference().child("users").child(MyApplication.getFirebaseId()).child("userProfilePicture.jpg");
 
             filePathUsers.putBytes(imageData).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override

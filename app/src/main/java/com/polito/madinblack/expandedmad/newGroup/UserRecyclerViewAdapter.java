@@ -23,7 +23,7 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
     public List<SelectUser> _data, groupMem;
     private ArrayList<SelectUser> arraylist;
     Context _c;
-    MyApplication ma;
+
 
     public UserRecyclerViewAdapter(List<SelectUser> selectUsers, Context context, List<SelectUser> GroupM) {
         _data = selectUsers;
@@ -31,7 +31,7 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
         this.arraylist = new ArrayList<>();
         this.arraylist.addAll(_data);
         groupMem = GroupM;      //questa è la lista che devo aggiornre di volta in volta un utente viene aggiunto al gruppo dall'user
-        ma = MyApplication.getInstance();
+
     }
 
     @Override
@@ -45,7 +45,7 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
         final SelectUser data = _data.get(position);
         holder.title.setText(data.getName());
         holder.phone.setText(data.getPhone());
-        if(data.getPhone().equals(ma.getUserPhoneNumber())){
+        if(data.getPhone().equals(MyApplication.getUserPhoneNumber())){
             holder.check.setChecked(true);
             holder.check.setEnabled(false);
             holder.me.setVisibility(View.VISIBLE);

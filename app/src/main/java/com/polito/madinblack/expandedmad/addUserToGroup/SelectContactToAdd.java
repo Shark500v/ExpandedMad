@@ -38,7 +38,6 @@ public class SelectContactToAdd extends AppCompatActivity {
     private DatabaseReference mDatabaseReference;
     private DatabaseReference mDatabaseReferenceUserInGroup;
     private ValueEventListener mValueEventListener;
-    private MyApplication ma;
     private String groupId;
     private String groupName;
     private AtomicInteger counter;
@@ -52,7 +51,7 @@ public class SelectContactToAdd extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ma = MyApplication.getInstance();
+
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         // Show the Up button in the action bar.

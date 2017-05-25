@@ -50,7 +50,6 @@ public class PaymentDetailActivity extends BaseActivity {
     private String expenseUserName;
     private String expenseUserSurname;
     private Double expenseCost;
-    private MyApplication ma;
     private PaymentRecyclerAdapter mAdapter;
     Map<String, PaymentInfo> changedPayments;
 
@@ -61,7 +60,7 @@ public class PaymentDetailActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.payment_detail);
 
-        ma = MyApplication.getInstance();
+
 
         expenseId           = getIntent().getStringExtra(ARG_EXPENSE_ID);
         groupId             = getIntent().getStringExtra(ARG_GROUP_ID);
@@ -133,7 +132,7 @@ public class PaymentDetailActivity extends BaseActivity {
 
 
             Double totPaid = 0D;
-            PaymentInfo paymentInfoUserPaid = changedPayments.remove(ma.getUserPhoneNumber());
+            PaymentInfo paymentInfoUserPaid = changedPayments.remove(MyApplication.getUserPhoneNumber());
             final Map<String, PaymentInfo> paymentToUpdate = new HashMap<>();
             paymentToUpdate.putAll(changedPayments);
             changedPayments.clear();

@@ -55,7 +55,6 @@ public class GroupSettings extends AppCompatActivity {
     private Uri uri;
     private Bitmap bitmap;
     private byte[] imageData;
-    private MyApplication ma;
     private boolean visible = false;
     private ValueEventListener valueEventListener;
 
@@ -84,7 +83,7 @@ public class GroupSettings extends AppCompatActivity {
             groupId = extras.getString("groupIndex");
         }
 
-        ma = MyApplication.getInstance();
+
 
         mDatabaseForUrl = FirebaseDatabase.getInstance().getReference().child("groups").child(groupId).child("urlImage");
         mStorageGroup = FirebaseStorage.getInstance().getReference().child("groups").child(groupId).child("groupPicture").child("groupPicture.jpg");

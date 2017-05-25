@@ -76,7 +76,6 @@ public class ExpenseFillData extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private String groupID = "index";
-    private MyApplication ma;
     private List<UserForGroup> users;
     private List<Payment> mValues;
     private DatabaseReference databaseReference;
@@ -129,7 +128,7 @@ public class ExpenseFillData extends AppCompatActivity {
 
        //inputAmount.setFilters(new InputFilter[] { new DecimalDigitsInputFilter(2)});
 
-        ma = MyApplication.getInstance();   //retrive del DB
+
 
         users = new ArrayList<>();
 
@@ -264,7 +263,7 @@ public class ExpenseFillData extends AppCompatActivity {
 
             /*added to set Paid value*/
             for(Payment payment : mValues){
-                if(payment.getUserPhoneNumber().equals(ma.getUserPhoneNumber())){
+                if(payment.getUserPhoneNumber().equals(MyApplication.getUserPhoneNumber())){
                     payment.setPaid(CostUtil.round(roundedAmount, 2));
 
                 }
@@ -274,10 +273,10 @@ public class ExpenseFillData extends AppCompatActivity {
             expenseId = Expense.writeNewExpense(FirebaseDatabase.getInstance().getReference(),
                     expenseName,
                     tag,
-                    ma.getFirebaseId(),
-                    ma.getUserPhoneNumber(),
-                    ma.getUserName(),
-                    ma.getUserSurname(),
+                    MyApplication.getFirebaseId(),
+                    MyApplication.getUserPhoneNumber(),
+                    MyApplication.getUserName(),
+                    MyApplication.getUserSurname(),
                     amount,
                     roundedAmount,
                     currencyISO,
@@ -772,7 +771,7 @@ public class ExpenseFillData extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final ExpenseFillData.SimpleItemRecyclerViewAdapter.ViewHolder holder, int position) {
             holder.mItem = mValues.get(position);
-            if(holder.mItem.getUserPhoneNumber().equals(ma.getUserPhoneNumber()))
+            if(holder.mItem.getUserPhoneNumber().equals(MyApplication.getUserPhoneNumber()))
                 holder.mIdView.setText(getString(R.string.you));
             else
                 holder.mIdView.setText( holder.mItem.getUserFullName());

@@ -95,8 +95,8 @@ public class RecyclerViewAdapterUsers extends RecyclerView.Adapter<RecyclerViewA
     @Override
     public void onBindViewHolder(final RecyclerViewAdapterUsers.ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);                           //singolo utente
-        MyApplication ma = MyApplication.getInstance();
-        if(holder.mItem.getUserPhoneNumber().equals(ma.getUserPhoneNumber()))
+
+        if(holder.mItem.getUserPhoneNumber().equals(MyApplication.getUserPhoneNumber()))
             holder.mIdView.setText(mContext.getString(R.string.you));
         else
             holder.mIdView.setText(mValues.get(position).getFullName());               //qui visualizzo nome e cognome
