@@ -258,7 +258,10 @@ public class Expense {
         /*Initiaze the map*/
         for(Payment payment: paymentList)
             if(!(payment.getUserFirebaseId().equals(paidByFirebaseId)))
-                toUpdate.put(payment.getUserPhoneNumber()+expenseKey, payment.getDebit());
+                if(state==State.TRANSFER)
+                    toUpdate.put(payment.getUserPhoneNumber()+expenseKey, -payment.getCredit());
+                else
+                    toUpdate.put(payment.getUserPhoneNumber()+expenseKey, payment.getDebit());
 
 
         for(Payment payment : paymentList){
