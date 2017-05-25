@@ -30,7 +30,7 @@ public class GroupDetailFragment extends Fragment {
 
         ma = MyApplication.getInstance();   //retrive del DB
 
-        mItem = ma.getGroupForUser();
+        //mItem = ma.getGroupForUser();
 
         Activity activity = this.getActivity();
         CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);

@@ -27,6 +27,24 @@ public class Payment {
         this.isModified         = false;
     }
 
+    public Payment(PaymentFirebase paymentFirebase, String expenseId, boolean reverse){
+        this.userFirebaseId     = paymentFirebase.getUserFirebaseId();
+        this.userPhoneNumber    = paymentFirebase.getUserPhoneNumber();
+        this.userFullName       = paymentFirebase.getUserFullName();
+        this.expenseId          = expenseId;
+
+        if(reverse) {
+            this.paid = paymentFirebase.getToPay();
+            this.toPay = paymentFirebase.getPaid();
+        }else{
+            this.paid = paymentFirebase.getPaid();
+            this.toPay = paymentFirebase.getToPay();
+        }
+        this.weight             = 1;
+        this.isWeightEnabled    = false;
+        this.isModified         = false;
+    }
+
 
     public String getUserFirebaseId() {
         return userFirebaseId;

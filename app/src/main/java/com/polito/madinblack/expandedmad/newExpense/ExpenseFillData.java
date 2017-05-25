@@ -286,6 +286,8 @@ public class ExpenseFillData extends AppCompatActivity {
                     month,
                     day,
                     descriptionS,
+                    Expense.State.ONGOING,
+                    -1*System.currentTimeMillis(),
                     mValues
                     );
             /*
