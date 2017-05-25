@@ -232,4 +232,5 @@
     <string name="delete_contention">Annulla Contesa</string>
     <string name="contention_confermed">Contesa Confermata</string>
     <string name="contention_deleted">Contesa annullata</string>
+    <string name="transfer">(Storno)</string>
 </resources>

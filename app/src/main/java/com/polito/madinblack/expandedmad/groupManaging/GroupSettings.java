@@ -100,7 +100,7 @@ public class GroupSettings extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 url = dataSnapshot.getValue(String.class);
-                Glide.with(getApplicationContext()).load(url).diskCacheStrategy(DiskCacheStrategy.SOURCE).error(R.drawable.teamwork).into(groupImage);
+                Glide.with(getApplicationContext()).load(url).override(128,128).centerCrop().fitCenter().diskCacheStrategy(DiskCacheStrategy.RESULT).error(R.drawable.teamwork).into(groupImage);
             }
 
             @Override
@@ -138,7 +138,7 @@ public class GroupSettings extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(!visible) {
-                    Glide.with(getApplicationContext()).load(url).error(R.drawable.teamwork).into(fullscreen);
+                    Glide.with(getApplicationContext()).load(url).override(1024,1024).centerCrop().fitCenter().diskCacheStrategy(DiskCacheStrategy.RESULT).error(R.drawable.teamwork).into(fullscreen);
                     fullscreen.setVisibility(View.VISIBLE);
                     visible = true;
                 }
@@ -274,7 +274,7 @@ public class GroupSettings extends AppCompatActivity {
                     mDatabaseForUrl = FirebaseDatabase.getInstance().getReference().child("groups").child(groupId).child("urlImage");
                     mDatabaseForUrl.setValue(url);
 
-                    Glide.with(getApplicationContext()).load(url).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(groupImage);
+                    Glide.with(getApplicationContext()).load(url).override(128,128).centerCrop().fitCenter().diskCacheStrategy(DiskCacheStrategy.RESULT).into(groupImage);
 
 
                     //StorageMetadata metadata = new StorageMetadata.Builder().setCustomMetadata("Group", groupCode).build(); //da cambiare, solo per prova
