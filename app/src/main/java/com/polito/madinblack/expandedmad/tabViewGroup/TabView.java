@@ -2,7 +2,6 @@ package com.polito.madinblack.expandedmad.tabViewGroup;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
@@ -10,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -21,10 +19,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.EditText;
 import android.widget.ImageView;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,10 +28,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
-import com.polito.madinblack.expandedmad.groupManaging.GroupDetailActivity;
 import com.polito.madinblack.expandedmad.groupManaging.GroupSettings;
 import com.polito.madinblack.expandedmad.newExpense.ExpenseFillData;
-import com.polito.madinblack.expandedmad.addUserToGroup.SelectContactToAdd;
 import com.polito.madinblack.expandedmad.chat.ChatRecyclerViewAdapter;
 import com.polito.madinblack.expandedmad.groupManaging.GroupHistory;
 import com.polito.madinblack.expandedmad.groupManaging.GroupListActivity;
@@ -53,7 +47,6 @@ public class TabView extends AppCompatActivity {
 
     private ViewPager mViewPager;
 
-    private static MyApplication ma;
 
     private static String groupIndex;
     private static String groupName;
@@ -80,13 +73,13 @@ public class TabView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tab_activity_details);
 
-        ma = MyApplication.getInstance();   //retrive del DB
+
         groupIndex = getIntent().getExtras().getString("groupIndex");
         groupName  = getIntent().getExtras().getString("groupName");
 
-        mDatabaseBalancesReference = FirebaseDatabase.getInstance().getReference().child("groups/"+groupIndex+"/users/"+ma.getFirebaseId()+"/balances");
+        mDatabaseBalancesReference = FirebaseDatabase.getInstance().getReference().child("groups/"+groupIndex+"/users/"+MyApplication.getFirebaseId()+"/balances");
         mDatabaseBalancesQuery = mDatabaseBalancesReference.orderByChild("fullName");
-        mDatabaseExpenseListReference = FirebaseDatabase.getInstance().getReference().child("users/"+ma.getUserPhoneNumber()+"/"+ma.getFirebaseId()+"/groups/"+groupIndex+"/expenses");
+        mDatabaseExpenseListReference = FirebaseDatabase.getInstance().getReference().child("users/"+MyApplication.getUserPhoneNumber()+"/"+MyApplication.getFirebaseId()+"/groups/"+groupIndex+"/expenses");
         mDatabaseExpenseListQuery = mDatabaseExpenseListReference.orderByChild("timestamp");
 
 
@@ -229,7 +222,6 @@ public class TabView extends AppCompatActivity {
     public static class ChatFragment extends Fragment {
 
         private EditText inputMessage;
-        private MyApplication ma;
         private RecyclerView recyclerView;
         private DatabaseReference ref;
         private View rootView = null;
@@ -254,7 +246,7 @@ public class TabView extends AppCompatActivity {
             rootView = inflater.inflate(R.layout.activity_chat, container, false);
 
             inputMessage = (EditText) rootView.findViewById(R.id.input_message);
-            ma = MyApplication.getInstance();
+
 
             recyclerView = (RecyclerView) rootView.findViewById(R.id.message_list);
 
@@ -291,7 +283,7 @@ public class TabView extends AppCompatActivity {
 
             // Read the input field and push a new instance
             // of ChatMessage to the Firebase database
-            ref.push().setValue(new Message(ma.getUserName() + " " + ma.getUserSurname(), ma.getUserPhoneNumber(), inputMessage.getText().toString()));
+            ref.push().setValue(new Message(MyApplication.getUserName() + " " + MyApplication.getUserSurname(), MyApplication.getUserPhoneNumber(), inputMessage.getText().toString()));
 
             // Clear the input
             inputMessage.setText("");
@@ -322,7 +314,7 @@ public class TabView extends AppCompatActivity {
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             //upload newExpense
-            DatabaseReference mDatabaseNewExpenseReference = FirebaseDatabase.getInstance().getReference().child("users/" + ma.getUserPhoneNumber() + "/" + ma.getFirebaseId() + "/groups/" + groupIndex + "/newExpenses");
+            DatabaseReference mDatabaseNewExpenseReference = FirebaseDatabase.getInstance().getReference().child("users/" + MyApplication.getUserPhoneNumber() + "/" + MyApplication.getFirebaseId() + "/groups/" + groupIndex + "/newExpenses");
 
             mDatabaseNewExpenseReference.runTransaction(new Transaction.Handler() {
 

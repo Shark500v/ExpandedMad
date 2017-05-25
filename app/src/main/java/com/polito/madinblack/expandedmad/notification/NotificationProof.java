@@ -10,14 +10,11 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.polito.madinblack.expandedmad.R;
-import com.polito.madinblack.expandedmad.model.Message;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 
 public class NotificationProof extends AppCompatActivity {
@@ -25,7 +22,7 @@ public class NotificationProof extends AppCompatActivity {
     private static final String TAG = NotificationProof.class.getSimpleName();
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private TextView txtRegId, txtMessage;
-    private MyApplication ma;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +31,7 @@ public class NotificationProof extends AppCompatActivity {
 
         txtRegId = (TextView) findViewById(R.id.txt_reg_id);
         txtMessage = (TextView) findViewById(R.id.txt_push_message);
-        ma = MyApplication.getInstance();
+
 
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -103,7 +100,7 @@ public class NotificationProof extends AppCompatActivity {
     }
 
     public void saveTokenOnDb(String token){
-        FirebaseDatabase.getInstance().getReference().child("tokens/"+ ma.getUserPhoneNumber()).setValue(token);
+        FirebaseDatabase.getInstance().getReference().child("tokens/"+ MyApplication.getUserPhoneNumber()).setValue(token);
     }
 
 }

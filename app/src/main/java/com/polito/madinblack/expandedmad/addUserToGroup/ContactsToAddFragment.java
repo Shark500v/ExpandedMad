@@ -21,11 +21,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
-import com.polito.madinblack.expandedmad.groupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.groupManaging.GroupSettings;
-import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.newGroup.SelectUser;
 
 import java.io.IOException;
@@ -41,7 +38,6 @@ public class ContactsToAddFragment extends Fragment {
     RecyclerView recyclerView;
     UserToAddRecyclerViewAdapter adapter;
     View rootView;
-    MyApplication ma;
     List<String> userIds = new ArrayList<>();
     String groupId;
 
@@ -68,7 +64,6 @@ public class ContactsToAddFragment extends Fragment {
         userIds = (List<String>) getArguments().getSerializable("USERS_LIST");
         groupId = getArguments().getString("groupIndex");
 
-        ma = MyApplication.getInstance();
 
         RequestPerm();  //I need to ask for permission in order to access the contact list stored in the device
     }

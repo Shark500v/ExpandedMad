@@ -20,7 +20,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.groupManaging.GroupSettings;
 import com.polito.madinblack.expandedmad.model.Group;
-import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.User;
 import com.polito.madinblack.expandedmad.model.UserForGroup;
 import com.polito.madinblack.expandedmad.newGroup.SelectUser;
@@ -42,7 +41,6 @@ public class SelectContactToAdd extends AppCompatActivity {
     private DatabaseReference mDatabaseReference;
     private DatabaseReference mDatabaseReferenceUserInGroup;
     private ValueEventListener mValueEventListener;
-    private MyApplication ma;
     private String groupId;
     private String groupName;
     private AtomicInteger counter;
@@ -56,7 +54,7 @@ public class SelectContactToAdd extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ma = MyApplication.getInstance();
+
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         // Show the Up button in the action bar.

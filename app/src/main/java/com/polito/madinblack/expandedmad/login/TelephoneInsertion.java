@@ -64,7 +64,6 @@ public class TelephoneInsertion extends AppCompatActivity{
     private AutoCompleteTextView mCountryAutoCompleteTextView;
     private EditText mPrefixTextView;
 
-    private MyApplication ma;
 
     private DatabaseReference mDatabaseRoot;
     private DatabaseReference mDatabaseGroupReference;
@@ -98,10 +97,6 @@ public class TelephoneInsertion extends AppCompatActivity{
 
 
 
-
-
-        ma = MyApplication.getInstance();
-
         mDatabaseRoot = FirebaseDatabase.getInstance().getReference();
 
 
@@ -118,7 +113,7 @@ public class TelephoneInsertion extends AppCompatActivity{
 
         isFirst = true;
 
-        mStatusTextView.setText(getString(R.string.signin_as) + " " + ma.getUserName() + " " + ma.getUserSurname());
+        mStatusTextView.setText(getString(R.string.signin_as) + " " + MyApplication.getUserName() + " " + MyApplication.getUserSurname());
         findViewById(R.id.fields).setVisibility(View.VISIBLE);
         findViewById(R.id.button_field).setVisibility(View.VISIBLE);
         findViewById(R.id.sign_in_button).setVisibility(View.GONE);
@@ -246,15 +241,12 @@ public class TelephoneInsertion extends AppCompatActivity{
 
 
                 mPhoneNumber = mPrefix + mPhoneNumber;
-                ma.setUserPhoneNumber(mPhoneNumber);
+                MyApplication.setUserPhoneNumber(mPhoneNumber);
 
                 //added for user token, useful for notification
                 String token = getUserToken();
 
-                User.writeNewUser(mDatabaseRoot, ma.getFirebaseId(), ma.getUserName(),  ma.getUserSurname(), ma.getUserPhoneNumber(), ma.getUserEmail(), token);
-
-                ma.setIsPhone(true);
-
+                User.writeNewUser(mDatabaseRoot, MyApplication.getFirebaseId(), MyApplication.getUserName(),  MyApplication.getUserSurname(), MyApplication.getUserPhoneNumber(), MyApplication.getUserEmail(), token);
 
                 if(mInvitationCode!=null && !mInvitationCode.isEmpty()){
 
@@ -265,7 +257,7 @@ public class TelephoneInsertion extends AppCompatActivity{
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             if(dataSnapshot.exists()){
                                 String groupName = dataSnapshot.child("name").getValue(String.class);
-                                Group.writeUserToGroup(mDatabaseRoot, mInvitationCode, groupName, ma.getFirebaseId(), ma.getUserPhoneNumber(), ma.getUserName(), ma.getUserSurname());
+                                Group.writeUserToGroup(mDatabaseRoot, mInvitationCode, groupName, MyApplication.getFirebaseId(), MyApplication.getUserPhoneNumber(), MyApplication.getUserName(), MyApplication.getUserSurname());
                                 Intent intent = new Intent(TelephoneInsertion.this, GroupListActivity.class);
                                 startActivity(intent);
                                 finish();

@@ -28,7 +28,6 @@ public class CheckTelephone extends BaseActivity {
 
     private ValueEventListener  mValueListener;
     private DatabaseReference   mDatabaseTelephoneReference;
-    private MyApplication       ma;
     private TextView            mStatusTextView;
 
     @Override
@@ -37,25 +36,25 @@ public class CheckTelephone extends BaseActivity {
         showProgressDialog();
         setContentView(R.layout.google_registration);
 
-        ma = MyApplication.getInstance();
+
 
         mStatusTextView = (TextView) findViewById(R.id.status);
 
-        mStatusTextView.setText(getString(R.string.signin_as) + " " + ma.getUserName() + " " +ma.getUserSurname());
+        mStatusTextView.setText(getString(R.string.signin_as) + " " + MyApplication.getUserName() + " " +MyApplication.getUserSurname());
 
-        mDatabaseTelephoneReference = FirebaseDatabase.getInstance().getReference().child("registration/"+ma.getFirebaseId());
+        mDatabaseTelephoneReference = FirebaseDatabase.getInstance().getReference().child("registration/"+MyApplication.getFirebaseId());
 
         /*maybe better to know if user is logged yet*/
         mValueListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    ma.setUserPhoneNumber(dataSnapshot.getValue(String.class));
-                    ma.setIsPhone(true);
+                    MyApplication.setUserPhoneNumber(dataSnapshot.getValue(String.class));
+
 
                     //added for user token, useful for notification
                     String token = getUserToken();
-                    saveTokenOnDb(token, ma.getUserPhoneNumber());
+                    saveTokenOnDb(token, MyApplication.getUserPhoneNumber());
 
                     /*google login and number yet inserted jump to group page*/
                     Intent intent = new Intent(CheckTelephone.this, GroupListActivity.class);
@@ -64,7 +63,6 @@ public class CheckTelephone extends BaseActivity {
 
                 }else{
 
-                    ma.setIsPhone(false);
                     Intent intent = new Intent(CheckTelephone.this, TelephoneInsertion.class);
                     startActivity(intent);
                     finish();

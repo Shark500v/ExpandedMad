@@ -28,7 +28,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 
-import java.util.Locale;
 
 
 /**
@@ -50,7 +49,6 @@ public class GoogleSignInActivity extends BaseActivity implements
     private GoogleApiClient mGoogleApiClient;
     private TextView        mStatusTextView;
     private com.google.android.gms.common.SignInButton mSignInButton;
-    private MyApplication   ma;
     private DatabaseReference mDataBaseRoot;
 
     @Override
@@ -58,7 +56,7 @@ public class GoogleSignInActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.google_registration);
 
-        ma = MyApplication.getInstance();
+
 
         // Views
         mStatusTextView = (TextView) findViewById(R.id.status);
@@ -148,22 +146,20 @@ public class GoogleSignInActivity extends BaseActivity implements
                             FirebaseUser user = mAuth.getCurrentUser();
 
                             //[START] Take all user data
-                            ma.setFirebaseId(user.getUid());
-                            ma.setUserEmail(user.getEmail());
+                            MyApplication.setFirebaseId(user.getUid());
+                            MyApplication.setUserEmail(user.getEmail());
 
                             String[] items = user.getDisplayName().split(" ");
                             if (items[0] != null)
-                                ma.setUserName(items[0]);
+                                MyApplication.setUserName(items[0]);
                             else
-                                ma.setUserName("");
+                                MyApplication.setUserName("");
 
                             if (items[1] != null)
-                                ma.setUserSurname(items[1]);
+                                MyApplication.setUserSurname(items[1]);
                             else
-                                ma.setUserSurname("");
+                                MyApplication.setUserSurname("");
 
-                            ma.setFirebaseUser(user);
-                            ma.setLogged(true);
                             //[END] Take all user data
 
                             Intent intent = new Intent(GoogleSignInActivity.this, CheckTelephone.class);

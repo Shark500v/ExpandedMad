@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,11 +17,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,25 +29,16 @@ import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.login.BaseActivity;
-import com.polito.madinblack.expandedmad.model.Balance;
 import com.polito.madinblack.expandedmad.model.CostUtil;
 import com.polito.madinblack.expandedmad.model.Currency;
 import com.polito.madinblack.expandedmad.model.Expense;
-import com.polito.madinblack.expandedmad.model.HistoryInfo;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.Payment;
 import com.polito.madinblack.expandedmad.model.PaymentFirebase;
-import com.polito.madinblack.expandedmad.model.PaymentInfo;
-import com.polito.madinblack.expandedmad.tabViewGroup.TabView;
-
-
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
+
 
 public class ContestExpenseActivity extends BaseActivity {
 
@@ -74,7 +61,6 @@ public class ContestExpenseActivity extends BaseActivity {
     private String groupId;
     private Currency.CurrencyISO currencyISO;
     private Double expenseCost;
-    private MyApplication ma;
     private ValueEventListener valueEventListener;
     private PaymentFirebase paymentFirebase;
     private Spinner mSpinnerCurrency;
@@ -98,7 +84,7 @@ public class ContestExpenseActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.contest_layout);
 
-        ma = MyApplication.getInstance();
+
         paymentFirebaseList = new ArrayList<>();
         paymentList = new ArrayList<>();
 
@@ -169,7 +155,7 @@ public class ContestExpenseActivity extends BaseActivity {
 
                             tmpPaymentFirebase = childDataSnapshot.getValue(PaymentFirebase.class);
                             paymentFirebaseList.add(tmpPaymentFirebase);
-                            if (tmpPaymentFirebase.getUserFirebaseId().equals(ma.getFirebaseId())) {
+                            if (tmpPaymentFirebase.getUserFirebaseId().equals(MyApplication.getFirebaseId())) {
                                 paymentFirebase = tmpPaymentFirebase;
                                 mOldToPay.setText(String.format(Locale.getDefault(), "%.2f", paymentFirebase.getToPay()));
                             }
@@ -185,7 +171,7 @@ public class ContestExpenseActivity extends BaseActivity {
                                 mOldToPayCurrencySymbol.setText(Currency.getSymbol(Currency.CurrencyISO.valueOf(item)));
                                 mNewToPayCurrencySymbol.setText(Currency.getSymbol(Currency.CurrencyISO.valueOf(item)));
                                 mExpenseCost.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(expenseCost, currencyISO, Currency.CurrencyISO.valueOf(item))));
-                                if (paymentFirebase != null && paymentFirebase.getUserFirebaseId().equals(ma.getFirebaseId()))
+                                if (paymentFirebase != null && paymentFirebase.getUserFirebaseId().equals(MyApplication.getFirebaseId()))
                                     mOldToPay.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(paymentFirebase.getToPay(), currencyISO, Currency.CurrencyISO.valueOf(item))));
 
                             }
@@ -224,7 +210,7 @@ public class ContestExpenseActivity extends BaseActivity {
 
 
 
-                            if (paymentFirebase.getUserFirebaseId().equals(ma.getFirebaseId())) {
+                            if (paymentFirebase.getUserFirebaseId().equals(MyApplication.getFirebaseId())) {
                                 mGeneratedByTextView.setText(getString(R.string.you));
 
                             }
@@ -257,7 +243,7 @@ public class ContestExpenseActivity extends BaseActivity {
                             }
                         });
 
-                        if(expenseState== Expense.State.CONTESTED && paymentFirebase.getUserFirebaseId().equals(ma.getFirebaseId())){
+                        if(expenseState== Expense.State.CONTESTED && paymentFirebase.getUserFirebaseId().equals(MyApplication.getFirebaseId())){
                             (findViewById(R.id.confirm_delete_button_layout)).setVisibility(View.VISIBLE);
                             ((Button)findViewById(R.id.confirm_delete_button)).setText(getString(R.string.delete_contention));
                             (findViewById(R.id.confirm_delete_button)).setOnClickListener(new View.OnClickListener() {
@@ -298,7 +284,7 @@ public class ContestExpenseActivity extends BaseActivity {
                                 }
                             });
 
-                        }else if(expenseState== Expense.State.CONTESTED && ma.getFirebaseId().equals(expenseUserFirebaseId)){
+                        }else if(expenseState== Expense.State.CONTESTED && MyApplication.getFirebaseId().equals(expenseUserFirebaseId)){
                             (findViewById(R.id.confirm_delete_button_layout)).setVisibility(View.VISIBLE);
                             ((Button)findViewById(R.id.confirm_delete_button)).setText(getString(R.string.confirm_contention));
                             (findViewById(R.id.confirm_delete_button)).setOnClickListener(new View.OnClickListener() {

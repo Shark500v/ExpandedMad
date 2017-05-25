@@ -1,7 +1,6 @@
 package com.polito.madinblack.expandedmad.chat;
 
-import android.icu.util.Calendar;
-import android.icu.util.GregorianCalendar;
+
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
@@ -32,11 +31,11 @@ public class ChatRecyclerViewAdapter extends FirebaseRecyclerAdapter<Message,Rec
      * @param ref             The Firebase location to watch for data changes. Can also be a slice of a location,
      *                        using some combination of {@code limit()}, {@code startAt()}, and {@code endAt()}.
      */
-    private MyApplication ma;
+
 
     public ChatRecyclerViewAdapter(Class<Message> modelClass, int modelLayout, Class<RecyclerView.ViewHolder> viewHolderClass, Query ref) {
         super(modelClass, modelLayout, viewHolderClass, ref);
-        ma =  MyApplication.getInstance();
+
     }
 
 
@@ -45,7 +44,7 @@ public class ChatRecyclerViewAdapter extends FirebaseRecyclerAdapter<Message,Rec
     protected void populateViewHolder(RecyclerView.ViewHolder viewHolder, Message model, int position) {
         DateFormat dateFormat = new SimpleDateFormat("HH:mm");
 
-        if(model.getSentById().equals(ma.getUserPhoneNumber())){
+        if(model.getSentById().equals(MyApplication.getUserPhoneNumber())){
             ViewHolderRight holder = (ViewHolderRight)viewHolder;
             holder.mContentView.setText(model.getMessage());
             holder.mTime.setText(dateFormat.format(model.getDate()));
@@ -80,7 +79,7 @@ public class ChatRecyclerViewAdapter extends FirebaseRecyclerAdapter<Message,Rec
         Message message = getItem(position);
         // 0 : right
         // 1 : left
-        if(message.getSentById().equals(ma.getUserPhoneNumber()))
+        if(message.getSentById().equals(MyApplication.getUserPhoneNumber()))
             return 0;
         else
             return 1;

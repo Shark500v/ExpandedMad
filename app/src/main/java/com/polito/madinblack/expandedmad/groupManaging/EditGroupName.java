@@ -9,23 +9,20 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
-
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.MyApplication;
-import com.polito.madinblack.expandedmad.tabViewGroup.TabView;
-
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
+
 
 public class EditGroupName extends AppCompatActivity {
     private EditText editGroupName;
     private String groupName;
     private String groupId;
     private String newGroupName;
-    private MyApplication ma;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,7 +44,7 @@ public class EditGroupName extends AppCompatActivity {
             groupId = extras.getString("groupIndex");
         }
 
-        ma = MyApplication.getInstance();
+
 
         editGroupName = (EditText)findViewById(R.id.edit_group_name);
         editGroupName.setText(groupName);
@@ -90,7 +87,7 @@ public class EditGroupName extends AppCompatActivity {
         DatabaseReference mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         Map<String,Object> nameUpdate = new HashMap<>();
         nameUpdate.put("/groups/" + groupId + "/name", newGroupName);
-        nameUpdate.put("/users/" + ma.getUserPhoneNumber() + "/" + ma.getFirebaseId() + "/groups/" + groupId + "/name", newGroupName);
+        nameUpdate.put("/users/" + MyApplication.getUserPhoneNumber() + "/" + MyApplication.getFirebaseId() + "/groups/" + groupId + "/name", newGroupName);
         mDatabaseReference.updateChildren(nameUpdate);
     }
 }
