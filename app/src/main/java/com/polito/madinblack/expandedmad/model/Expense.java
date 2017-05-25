@@ -47,12 +47,6 @@ public class Expense {
 
     }
 
-    public Expense(Expense expense){
-        this.id     = expense.getId();
-        this.name   = expense.getName();
-        this.tag    = expense.getTag();
-
-    }
 
     public Expense(String id, String name, String tag, String paidByName, String paidBySurname, String paidByFirebaseId, String paidByPhoneNumber, Double cost, Double roundedCost, Currency.CurrencyISO currencyISO, String groupId, Long year, Long month, Long day, String description, State state) {
         this.id = id;
