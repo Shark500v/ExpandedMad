@@ -30,6 +30,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (remoteMessage == null)
             return;
 
+        notificationUtils = new NotificationUtils(getApplicationContext());
+
+        //if notification disabled don't show
+        if(!notificationUtils.isNotificationEnabled())
+            return;
+
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
             Log.e(TAG, "Notification Body: " + remoteMessage.getNotification().getBody());
@@ -39,7 +45,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
             Log.e(TAG, "Data Payload: " + remoteMessage.getData().toString());
-
             handleDataMessage(remoteMessage.getData());
         }
     }
@@ -60,7 +65,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private void handleDataMessage(Map<String, String> data) {
-        notificationUtils = new NotificationUtils(getApplicationContext());
         try {
             String type = data.get("type");
             String title = data.get("title");

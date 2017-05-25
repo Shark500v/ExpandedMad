@@ -16,6 +16,7 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.text.Html;
 import android.text.TextUtils;
@@ -68,7 +69,7 @@ public class NotificationUtils {
 
 
         // notification icon
-        final int icon = R.drawable.user_pacific;
+        final int icon = R.drawable.teamwork;
 
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         final PendingIntent resultPendingIntent =
@@ -127,7 +128,7 @@ public class NotificationUtils {
                 .build();
 
         NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(Config.NOTIFICATION_ID, notification);
+        notificationManager.notify(++Config.NOTIFICATION_ID, notification);
 
        /* // Using RemoteViews to bind custom layouts into Notification
         RemoteViews remoteViews = new RemoteViews(mContext.getPackageName(),
@@ -293,6 +294,14 @@ public class NotificationUtils {
         ComponentName componentInfo = taskInfo.get(0).topActivity;
         Log.d(TAG, "CURRENT Activity ::" + taskInfo.get(0).topActivity.getClassName()+"   Package Name :  "+componentInfo.getPackageName());
         return taskInfo.get(0).topActivity.getClassName();
+    }
+
+    public boolean isNotificationEnabled(){
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
+        if(pref.getBoolean("pref_key_notifications_able", true))
+            return true;
+        else
+            return false;
     }
 
     public BroadcastReceiver getBroadcastReceiver(){
