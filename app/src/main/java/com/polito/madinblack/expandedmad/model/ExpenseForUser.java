@@ -17,6 +17,7 @@ public class ExpenseForUser {
     private Long year;
     private Long timestamp;
     private String tag;
+    private Expense.State state;
 
 
     public ExpenseForUser(){
@@ -38,6 +39,7 @@ public class ExpenseForUser {
         this.year               = expense.getYear();
         this.cost               = expense.getCost();
         this.tag                = expense.getTag();
+        this.state              = expense.getState();
 
     }
 
@@ -176,5 +178,13 @@ public class ExpenseForUser {
 
     public void setTag(String tag) {
         this.tag = tag;
+    }
+
+    public Expense.State getState() {
+        return state;
+    }
+
+    public void setState(Expense.State state) {
+        this.state = state;
     }
 }
