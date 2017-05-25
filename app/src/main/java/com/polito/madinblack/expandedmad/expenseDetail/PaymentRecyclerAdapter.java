@@ -73,6 +73,7 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     String item = (String) parent.getItemAtPosition(position);
                     holder.mToPay.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(paymentFirebase.getDebit(), expenseCurrencyISO, Currency.getISOCode(item))));
+                    holder.mPaid.setText(holder.mPaid.getText());
                 }
 
                 @Override
