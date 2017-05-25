@@ -23,6 +23,7 @@ public class FullScreenImage extends AppCompatActivity{
         setContentView(R.layout.activity_fullscreen);
         //toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_fullscreen);
+        toolbar.setTitle(expenseName);
         setSupportActionBar(toolbar);
 
         // Show the Up button in the action bar.
@@ -33,9 +34,6 @@ public class FullScreenImage extends AppCompatActivity{
 
         imageFromUrl = getIntent().getStringExtra("imageUrl");
         expenseName = getIntent().getStringExtra("expenseName");
-
-        actionBar.setTitle(expenseName);
-
         imageView = (ImageView)findViewById(R.id.full_screen);
 
         Glide.with(this).load(imageFromUrl).override(1024,1024).centerCrop().fitCenter().diskCacheStrategy(DiskCacheStrategy.RESULT).error(R.drawable.bill).into(imageView);

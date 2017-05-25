@@ -31,6 +31,7 @@ import com.polito.madinblack.expandedmad.tabViewGroup.TabView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Stack;
 
 public class GroupHistory extends AppCompatActivity {
 
@@ -105,9 +106,9 @@ public class GroupHistory extends AppCompatActivity {
 
     public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ContactViewHolder> {
 
-        private List<HistoryInfo> mValues = new ArrayList<>();
+        private Stack<HistoryInfo> mValues = new Stack<>();
         private DatabaseReference dataref;
-        private List<String> mValuesIds = new ArrayList<>();
+        private Stack<String> mValuesIds = new Stack<>();
         private Context mContext;
         private ChildEventListener mChildEventListener;
 
@@ -137,9 +138,9 @@ public class GroupHistory extends AppCompatActivity {
                         tx.setVisibility(View.GONE);
                         recyclerView.setVisibility(View.VISIBLE);
                     }
-                    mValuesIds.add(dataSnapshot.getKey());
-                    mValues.add(historyInfo);
-                    notifyItemInserted(mValues.size() - 1);
+                    mValuesIds.push(dataSnapshot.getKey());
+                    mValues.push(historyInfo);
+                    notifyItemInserted(0);
                     // [END_EXCLUDE]
 
                 }

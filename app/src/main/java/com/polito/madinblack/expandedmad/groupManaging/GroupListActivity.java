@@ -363,7 +363,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             });
 
             mDatabaseForGroupUrl = FirebaseDatabase.getInstance().getReference().child("groups").child(mValues.get(position).getId()).child("urlImage");
-            mDatabaseForGroupUrl.addValueEventListener(new ValueEventListener() {
+            mDatabaseForGroupUrl.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     String url = dataSnapshot.getValue(String.class);
