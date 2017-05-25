@@ -60,11 +60,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private void handleDataMessage(Map<String, String> data) {
+        notificationUtils = new NotificationUtils(getApplicationContext());
         try {
             String type = data.get("type");
             String title = data.get("title");
             String message = data.get("message");
-            String madeBy = data.get("madeBy");
+            String groupId = data.get("groupId");
             String imageUrl = data.get("imageUrl");
             String timestamp = data.get("timestamp");
             String payload = data.get("payload");
@@ -78,7 +79,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
             int typeInt = Integer.parseInt(type);
 
-            String content = notificationUtils.getContent(data);
+            message = notificationUtils.getContent(data);
 
 
             if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
@@ -92,7 +93,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 notificationUtils.playNotificationSound();
             } else {
                 // app is in background, show the notification in notification tray
-                Intent resultIntent = notificationUtils.getIntent(typeInt, getApplicationContext(), message);
+                Intent resultIntent = notificationUtils.getIntent(typeInt, getApplicationContext(), message, title, groupId);
 
                 // check for image attachment
                 if (TextUtils.isEmpty(imageUrl)) {

@@ -28,12 +28,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.groupManaging.GroupListActivity;
+import com.polito.madinblack.expandedmad.model.Currency;
 import com.polito.madinblack.expandedmad.model.MyApplication;
+import com.polito.madinblack.expandedmad.tabViewGroup.TabView;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -107,13 +110,12 @@ public class NotificationUtils {
         inboxStyle.addLine(message);
 
 
-        Notification notification;
-        notification = mBuilder.setSmallIcon(icon).setTicker(title).setWhen(0)
+        Notification notification = mBuilder.setSmallIcon(icon).setTicker(title).setWhen(0)
                 .setAutoCancel(true)
                 .setContentTitle(title)
                 .setContentIntent(resultPendingIntent)
                 .setSound(alarmSound)
-                .setStyle(inboxStyle)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
                 .setWhen(getTimeMilliSec(timeStamp))
                 .setSmallIcon(R.drawable.user1)
                 .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), icon))
@@ -280,21 +282,27 @@ public class NotificationUtils {
             content = data.get("madeBy") + " : "+data.get("message")+" ";
         }else{
             //expense
-            content = data.get("madeBy") + " "+ mContext.getString(R.string.history_expense);
+            content = data.get("madeBy") + " "+ mContext.getString(R.string.history_expense) + " "
+                    + new DecimalFormat("#0.00").format(Double.parseDouble(data.get("message"))) + " "
+                    + Currency.getSymbol(Currency.CurrencyISO.valueOf(data.get("currencyIso")));
         }
         return content;
     }
 
-    public Intent getIntent(int type, Context context, String message){
+    public Intent getIntent(int type, Context context, String message, String groupId, String groupName){
         Intent resultIntent;
         if(type == 0){
             //message
-            resultIntent = new Intent(context, GroupListActivity.class);
+            resultIntent = new Intent(context, TabView.class);
+            resultIntent.putExtra("request", message);
         }else{
             //expense
-            resultIntent = new Intent(context, GroupListActivity.class);
+            resultIntent = new Intent(context, TabView.class);
+            resultIntent.putExtra("request", message);
         }
-        resultIntent.putExtra("message", message);
+        resultIntent.putExtra("groupIndex", groupId);
+        resultIntent.putExtra("groupName", groupName);
+        //resultIntent.putExtra("message", message);
         return resultIntent;
     }
 
