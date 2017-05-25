@@ -160,7 +160,7 @@ public class NewGroup extends AppCompatActivity {
                 }*/
                 if(!visible) {
                     getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-                    Glide.with(getApplicationContext()).load(imageData).error(R.drawable.teamwork).into(fullScreen);
+                    Glide.with(getApplicationContext()).load(imageData).override(1024,1024).centerCrop().fitCenter().error(R.drawable.teamwork).into(fullScreen);
                     fullScreen.setVisibility(View.VISIBLE);
                     visible = true;
                 }
@@ -273,7 +273,7 @@ public class NewGroup extends AppCompatActivity {
                     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
                     imageData = bytes.toByteArray();
-                    Glide.with(getApplicationContext()).load(imageData).into(groupImage);
+                    Glide.with(getApplicationContext()).load(imageData).override(128,128).centerCrop().fitCenter().into(groupImage);
                     /*groupImage.setImageBitmap(bitmap);
                     strBase64 = Base64.encodeToString(imageData, 0);*/
 
@@ -286,7 +286,7 @@ public class NewGroup extends AppCompatActivity {
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
                 imageData = bytes.toByteArray();
-                Glide.with(getApplicationContext()).load(imageData).into(groupImage);
+                Glide.with(getApplicationContext()).load(imageData).override(128,128).centerCrop().fitCenter().into(groupImage);
                 /*groupImage.setImageBitmap(bitmap);
                 strBase64 = Base64.encodeToString(imageData, 0);*/
             }
@@ -418,7 +418,7 @@ public class NewGroup extends AppCompatActivity {
                     mDatabaseForUrl = FirebaseDatabase.getInstance().getReference().child("groups").child(groupCode).child("urlImage");
                     mDatabaseForUrl.setValue(url);
 
-                    Glide.with(getApplicationContext()).load(url).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(groupImage);
+                    Glide.with(getApplicationContext()).load(url).override(128,128).centerCrop().fitCenter().diskCacheStrategy(DiskCacheStrategy.RESULT).into(groupImage);
                     //ma.putImageurl(groupCode, url);
 
                     //StorageMetadata metadata = new StorageMetadata.Builder().setCustomMetadata("Group", groupCode).build(); //da cambiare, solo per prova

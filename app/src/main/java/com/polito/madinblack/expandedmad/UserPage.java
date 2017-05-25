@@ -93,7 +93,7 @@ public class UserPage extends AppCompatActivity{
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 url = dataSnapshot.getValue(String.class);
-                Glide.with(getApplicationContext()).load(url).diskCacheStrategy(DiskCacheStrategy.SOURCE).error(R.drawable.businessman).into(userImage);
+                Glide.with(getApplicationContext()).load(url).override(128,128).centerCrop().fitCenter().diskCacheStrategy(DiskCacheStrategy.RESULT).error(R.drawable.businessman).into(userImage);
             }
 
             @Override
@@ -112,7 +112,7 @@ public class UserPage extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 if(!visible) {
-                    Glide.with(getApplicationContext()).load(url).error(R.drawable.businessman).into(fullscreen);
+                    Glide.with(getApplicationContext()).load(url).override(1024,1024).centerCrop().fitCenter().diskCacheStrategy(DiskCacheStrategy.RESULT).error(R.drawable.businessman).into(fullscreen);
                     fullscreen.setVisibility(View.VISIBLE);
                     visible = true;
                 }
@@ -231,7 +231,7 @@ public class UserPage extends AppCompatActivity{
                     url = taskSnapshot.getDownloadUrl().toString();
                     mDatabaseForUrl.setValue(url);
 
-                    Glide.with(getApplicationContext()).load(url).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(userImage);
+                    Glide.with(getApplicationContext()).load(url).override(128,128).centerCrop().fitCenter().diskCacheStrategy(DiskCacheStrategy.RESULT).into(userImage);
                     //ma.putImageurl(ma.getFirebaseId(), url);
 
                     //StorageMetadata metadata = new StorageMetadata.Builder().setCustomMetadata("Group", groupCode).build(); //da cambiare, solo per prova

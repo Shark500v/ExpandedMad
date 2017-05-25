@@ -242,7 +242,7 @@ public class GroupMemebersActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     url = dataSnapshot.getValue(String.class);
-                    Glide.with(getApplicationContext()).load(url).error(R.drawable.icon_utente).into(holder.mImage);
+                    Glide.with(getApplicationContext()).load(url).override(128,128).centerCrop().fitCenter().diskCacheStrategy(DiskCacheStrategy.RESULT).error(R.drawable.icon_utente).into(holder.mImage);
                 }
 
                 @Override

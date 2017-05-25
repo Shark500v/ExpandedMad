@@ -67,7 +67,7 @@ public class ExpenseDetailActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 url = dataSnapshot.getValue(String.class);
-                Glide.with(getApplicationContext()).load(url).diskCacheStrategy(DiskCacheStrategy.SOURCE).error(R.drawable.bill).into(expenseImage);
+                Glide.with(getApplicationContext()).load(url).override(128,128).centerCrop().fitCenter().diskCacheStrategy(DiskCacheStrategy.RESULT).error(R.drawable.bill).into(expenseImage);
             }
 
             @Override
