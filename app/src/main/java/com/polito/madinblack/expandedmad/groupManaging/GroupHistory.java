@@ -24,11 +24,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.Currency;
 import com.polito.madinblack.expandedmad.model.HistoryInfo;
 import com.polito.madinblack.expandedmad.tabViewGroup.TabView;
 import java.util.ArrayList;
+import java.util.EventListener;
 import java.util.List;
 import java.util.Locale;
 import java.util.Stack;
@@ -49,6 +51,7 @@ public class GroupHistory extends AppCompatActivity {
 
         //toolbar settings
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(getString(R.string.group_history));
         setSupportActionBar(toolbar);
 
         // Show the Up button
@@ -62,7 +65,7 @@ public class GroupHistory extends AppCompatActivity {
             mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("history/"+groupId);
 
         }
-        actionBar.setTitle(getString(R.string.group_history));
+
 
     }
 
@@ -118,6 +121,20 @@ public class GroupHistory extends AppCompatActivity {
             dataref = dr;
             mContext = ct;
 
+
+            ValueEventListener valueEventListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for(DataSnapshot childDataSnapshot : dataSnapshot.getChildren()){
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            };
 
             // Create child event listener
             // [START child_event_listener_recycler]
