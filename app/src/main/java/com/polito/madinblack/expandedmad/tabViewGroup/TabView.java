@@ -2,7 +2,6 @@ package com.polito.madinblack.expandedmad.tabViewGroup;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
