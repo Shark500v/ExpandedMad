@@ -291,7 +291,6 @@
                 android:value="com.polito.madinblack.expandedmad.groupManaging.GroupListActivity" />
         </activity>
 
-
     </application>
 
 </manifest>
