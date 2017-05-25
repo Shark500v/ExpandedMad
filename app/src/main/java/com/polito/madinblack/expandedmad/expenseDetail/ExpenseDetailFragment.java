@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -129,7 +130,10 @@ public class ExpenseDetailFragment extends Fragment {
 
                             }
                         });
-                    }else{
+                    }else if(expense.getState()== Expense.State.TRANSFER){
+                        (rootView.findViewById(R.id.title)).setVisibility(View.GONE);
+                    }
+                    else{
                         ImageButton imageButtonGo;
                         ((TextView)rootView.findViewById(R.id.head_title)).setText(getString(R.string.contention_information));
                         (imageButtonGo = (ImageButton)rootView.findViewById(R.id.go_button)).setImageResource(R.drawable.ic_info_black_24dp);

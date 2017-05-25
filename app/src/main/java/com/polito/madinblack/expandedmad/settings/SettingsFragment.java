@@ -53,7 +53,7 @@ public class SettingsFragment extends PreferenceFragment {
                 // using RingtoneManager.
                 if (TextUtils.isEmpty(stringValue)) {
                     // Empty values correspond to 'silent' (no ringtone).
-                    preference.setSummary("Silent");
+                    preference.setSummary("Shhh");
 
                 } else {
                     Ringtone ringtone = RingtoneManager.getRingtone(
