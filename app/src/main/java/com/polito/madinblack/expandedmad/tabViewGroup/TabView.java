@@ -84,14 +84,6 @@ public class TabView extends AppCompatActivity {
         groupIndex = getIntent().getExtras().getString("groupIndex");
         groupName  = getIntent().getExtras().getString("groupName");
 
-        //check what fragment to charge
-        int index = getIntent().getExtras().getInt("request");
-        if(index == 1){
-            //expense fragment
-        }else if(index == 2){
-            //chat fragment
-        }
-
         mDatabaseBalancesReference = FirebaseDatabase.getInstance().getReference().child("groups/"+groupIndex+"/users/"+ma.getFirebaseId()+"/balances");
         mDatabaseBalancesQuery = mDatabaseBalancesReference.orderByChild("fullName");
         mDatabaseExpenseListReference = FirebaseDatabase.getInstance().getReference().child("users/"+ma.getUserPhoneNumber()+"/"+ma.getFirebaseId()+"/groups/"+groupIndex+"/expenses");
@@ -110,6 +102,16 @@ public class TabView extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+
+        //check what fragment to charge
+        int index = getIntent().getExtras().getInt("request");
+        if(index == 1){
+            //expense fragment
+            mViewPager.setCurrentItem(1);
+        }else if(index == 2){
+            //chat fragment
+            mViewPager.setCurrentItem(2);
+        }
 
         //this is the tab under the toolbar
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);

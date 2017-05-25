@@ -93,8 +93,10 @@ public class NotificationUtils {
 
                 if (bitmap != null) {
                     showSmallNotification(mBuilder, bitmap, title, message, timeStamp, resultPendingIntent, alarmSound);
+                    playNotificationSound();
                 } else {
                     showSmallNotification(mBuilder, BitmapFactory.decodeResource(mContext.getResources(), icon), title, message, timeStamp, resultPendingIntent, alarmSound);
+                    playNotificationSound();
                 }
             }
         } else {
@@ -273,11 +275,11 @@ public class NotificationUtils {
         if(type == 0){
             //message
             resultIntent = new Intent(context, TabView.class);
-            resultIntent.putExtra("request", 1);
+            resultIntent.putExtra("request", 2);
         }else{
             //expense
             resultIntent = new Intent(context, TabView.class);
-            resultIntent.putExtra("request", 2);
+            resultIntent.putExtra("request", 1);
         }
         resultIntent.putExtra("groupIndex", groupId);
         resultIntent.putExtra("groupName", groupName);
