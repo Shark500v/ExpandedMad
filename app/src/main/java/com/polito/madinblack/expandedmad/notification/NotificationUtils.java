@@ -200,14 +200,16 @@ public class NotificationUtils {
         String strRingtonePreference = preference.getString("pref_key_notifications_ringtone", "DEFAULT_SOUND");
         try {
 
-            Uri alarmSound = Uri.parse(strRingtonePreference);
-            Ringtone r = RingtoneManager.getRingtone(mContext, alarmSound);
-            r.play();
-            /*
+            if(strRingtonePreference.compareTo("") != 0){
+                Uri alarmSound = Uri.parse(strRingtonePreference);
+                Ringtone r = RingtoneManager.getRingtone(mContext, alarmSound);
+                r.play();
+            }
+
             if (preference.getBoolean("pref_key_notifications_vibrate", false)){
                 Vibrator v = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
                 v.vibrate(400);
-            }*/
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
