@@ -127,7 +127,10 @@ public class PaymentDetailActivity extends BaseActivity {
 
         if (id == R.id.confirm_payment && changedPayments.size()>1) {
 
+
+
             showProgressDialog();
+
 
             Double totPaid = 0D;
             PaymentInfo paymentInfoUserPaid = changedPayments.remove(ma.getUserPhoneNumber());
