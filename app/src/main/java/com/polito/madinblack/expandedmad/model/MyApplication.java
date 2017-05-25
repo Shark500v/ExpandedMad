@@ -21,17 +21,10 @@ public class MyApplication {
     private static String userEmail;
     private static Boolean logged = false;
     private static Boolean isPhone = false;
-    private static GroupForUser groupForUser;
     private static Currency.CurrencyISO currencyISOFavorite = Currency.CurrencyISO.EUR;
 
 
-    /*groupId --> group*/
-    private Map<Long, Group> groups = new LinkedHashMap<>();
 
-    /*list of all users, can be seen as phonebook*/
-    private Map<Long, User> users = new LinkedHashMap<>();
-
-    private DatabaseReference mDatabase;
 
 
     private MyApplication(){
@@ -45,16 +38,8 @@ public class MyApplication {
         return myApplication;
     }
 
-    public void addGroup(Group g){
-        /*groups.put(g.getId(), g);
-    */
-    }
 
-    public List<Group> getGroup(){ return new ArrayList<Group>(groups.values()); }
 
-    public Group getSingleGroup(Long id) {
-        return groups.get(id);
-    }
 
     public User getMyself() {
         return myself;
@@ -128,13 +113,6 @@ public class MyApplication {
         MyApplication.firebaseUser = firebaseUser;
     }
 
-    public GroupForUser getGroupForUser() {
-        return groupForUser;
-    }
-
-    public void setGroupForUser(GroupForUser groupForUser) {
-        MyApplication.groupForUser = groupForUser;
-    }
 
     public static Currency.CurrencyISO getCurrencyISOFavorite() {
         return currencyISOFavorite;
@@ -143,4 +121,16 @@ public class MyApplication {
     public static void setCurrencyISOFavorite(Currency.CurrencyISO currencyISOFavorite) {
         MyApplication.currencyISOFavorite = currencyISOFavorite;
     }
+
+    public static boolean checkVariables(){
+
+        if(userPhoneNumber==null || firebaseId==null)
+            return false;
+        else
+            return true;
+
+    }
+
+
+
 }

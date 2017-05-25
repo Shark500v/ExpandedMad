@@ -39,6 +39,7 @@ import com.polito.madinblack.expandedmad.model.Currency;
 import com.polito.madinblack.expandedmad.model.Expense;
 import com.polito.madinblack.expandedmad.model.HistoryInfo;
 import com.polito.madinblack.expandedmad.model.MyApplication;
+import com.polito.madinblack.expandedmad.model.Payment;
 import com.polito.madinblack.expandedmad.model.PaymentFirebase;
 import com.polito.madinblack.expandedmad.model.PaymentInfo;
 import com.polito.madinblack.expandedmad.tabViewGroup.TabView;
@@ -46,7 +47,9 @@ import com.polito.madinblack.expandedmad.tabViewGroup.TabView;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -86,6 +89,9 @@ public class ContestExpenseActivity extends BaseActivity {
     private TextInputLayout mMotivationLayout;
     private Expense.State expenseState;
     private String expenseUserFirebaseId;
+    private List<PaymentFirebase> paymentFirebaseList;
+    private List<Payment> paymentList;
+    private String mPaymentContestId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +99,8 @@ public class ContestExpenseActivity extends BaseActivity {
         setContentView(R.layout.contest_layout);
 
         ma = MyApplication.getInstance();
+        paymentFirebaseList = new ArrayList<>();
+        paymentList = new ArrayList<>();
 
         expenseId             = getIntent().getStringExtra(ARG_EXPENSE_ID);
         groupId               = getIntent().getStringExtra(ARG_GROUP_ID);
@@ -101,8 +109,7 @@ public class ContestExpenseActivity extends BaseActivity {
         expenseState          = Expense.State.valueOf(getIntent().getStringExtra(ARG_EXPENSE_STATE));
         expenseUserFirebaseId = getIntent().getStringExtra(ARG_EXPENSE_USER_FIREBASEID);
         if(expenseState != Expense.State.ONGOING) {
-            String mPaymentContestId = getIntent().getStringExtra(ARG_PAYMENT_CONTEST_ID);
-
+            mPaymentContestId = getIntent().getStringExtra(ARG_PAYMENT_CONTEST_ID);
         }
 
 
@@ -159,7 +166,9 @@ public class ContestExpenseActivity extends BaseActivity {
                     if (dataSnapshot.exists()) {
                         PaymentFirebase tmpPaymentFirebase;
                         for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
+
                             tmpPaymentFirebase = childDataSnapshot.getValue(PaymentFirebase.class);
+                            paymentFirebaseList.add(tmpPaymentFirebase);
                             if (tmpPaymentFirebase.getUserFirebaseId().equals(ma.getFirebaseId())) {
                                 paymentFirebase = tmpPaymentFirebase;
                                 mOldToPay.setText(String.format(Locale.getDefault(), "%.2f", paymentFirebase.getToPay()));
@@ -206,7 +215,10 @@ public class ContestExpenseActivity extends BaseActivity {
                     if (dataSnapshot.exists()) {
                         for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
                             //memorizzare tutti gli user id e payment firebase solo se uguale a quello passato per parametro
-
+                            PaymentFirebase tmpPaymentFirebase = childDataSnapshot.getValue(PaymentFirebase.class);
+                            paymentFirebaseList.add(tmpPaymentFirebase);
+                            if(childDataSnapshot.getValue(PaymentFirebase.class).getId().equals(mPaymentContestId))
+                                paymentFirebase = tmpPaymentFirebase;
 
                         }
 
@@ -252,6 +264,7 @@ public class ContestExpenseActivity extends BaseActivity {
                                 @Override
                                 public void onClick(View v) {
                                     DatabaseReference expenseStateReference = mDatabaseRootReference.child("expenses/"+expenseId+"/state");
+                                    showProgressDialog();
                                     expenseStateReference.runTransaction(new Transaction.Handler() {
                                         @Override
                                         public Transaction.Result doTransaction(MutableData mutableData) {
@@ -291,13 +304,41 @@ public class ContestExpenseActivity extends BaseActivity {
                             (findViewById(R.id.confirm_delete_button)).setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
+                                    showProgressDialog();
                                     DatabaseReference expenseStateReference = mDatabaseRootReference.child("expenses/"+expenseId+"/state");
                                     expenseStateReference.runTransaction(new Transaction.Handler() {
                                         @Override
                                         public Transaction.Result doTransaction(MutableData mutableData) {
                                             Expense.State expenseState = mutableData.getValue(Expense.State.class);
                                             if(expenseState == Expense.State.CONTESTED){
+                                                final Long timestamp = -1*System.currentTimeMillis();
                                                //inside this part there will be the code to create the storno
+                                                for(PaymentFirebase paymentFirebase : paymentFirebaseList){
+                                                    mDatabaseRootReference.child("users").child(paymentFirebase.getUserPhoneNumber()).child(paymentFirebase.getUserFirebaseId())
+                                                            .child("groups").child(groupId).child("timestamp").setValue(timestamp);
+                                                    paymentList.add(new Payment(paymentFirebase, expenseId, true));
+
+                                                }
+
+                                                mDatabaseRootReference.child("expenses/"+expenseId).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                                        if(dataSnapshot.exists()){
+                                                            Expense expense = dataSnapshot.getValue(Expense.class);
+                                                            Expense.writeNewExpense(mDatabaseRootReference, expense.getName(), expense.getTag(), expense.getPaidByFirebaseId(), expense.getPaidByPhoneNumber(),
+                                                                    expense.getPaidByName(), expense.getPaidBySurname(), expense.getCost(), expense.getRoundedCost(), expense.getCurrencyISO(),
+                                                                    groupId, expense.getYear(), expense.getMonth(), expense.getDay(), expense.getDescription(), Expense.State.TRANSFER, timestamp, paymentList);
+
+
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(DatabaseError databaseError) {
+
+                                                    }
+                                                });
+
 
                                             }else{
                                                 return Transaction.abort();
@@ -447,6 +488,14 @@ public class ContestExpenseActivity extends BaseActivity {
                         mDatabaseRootReference.child("expenses/"+expenseId+"/payments/"+paymentFirebase.getId()+"/motivation").setValue(mMotivationEditText.getText().toString());
                         //mDatabaseRootReference.child("expenses/"+expenseId+"/timestamp/"+paymentFirebase.getId()+"/motivation");
                         mutableData.setValue(Expense.State.CONTESTED);
+
+                        for(PaymentFirebase paymentFirebase : paymentFirebaseList){
+                            mDatabaseRootReference.child("users").child(paymentFirebase.getUserPhoneNumber()).child(paymentFirebase.getUserFirebaseId())
+                                                .child("groups").child(groupId).child("timestamp").setValue(null);
+
+                        }
+
+
 
                     }else{
                         return Transaction.abort();
