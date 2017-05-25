@@ -217,13 +217,13 @@ public class ContestExpenseActivity extends BaseActivity {
                             //memorizzare tutti gli user id e payment firebase solo se uguale a quello passato per parametro
                             PaymentFirebase tmpPaymentFirebase = childDataSnapshot.getValue(PaymentFirebase.class);
                             paymentFirebaseList.add(tmpPaymentFirebase);
-                            if(childDataSnapshot.getValue(PaymentFirebase.class).getId().equals(mPaymentContestId))
+                            if(tmpPaymentFirebase.getId().equals(mPaymentContestId))
                                 paymentFirebase = tmpPaymentFirebase;
 
                         }
 
 
-                            paymentFirebase = dataSnapshot.getValue(PaymentFirebase.class);
+
                             if (paymentFirebase.getUserFirebaseId().equals(ma.getFirebaseId())) {
                                 mGeneratedByTextView.setText(getString(R.string.you));
 
