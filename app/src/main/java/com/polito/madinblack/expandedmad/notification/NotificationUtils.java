@@ -21,11 +21,13 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
+import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.polito.madinblack.expandedmad.R;
+import com.polito.madinblack.expandedmad.groupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 
 import java.io.IOException;
@@ -49,18 +51,18 @@ public class NotificationUtils {
         this.ma = MyApplication.getInstance();
     }
 
-    public void showNotificationMessage(String title, String message, String timeStamp, Intent intent) {
-        showNotificationMessage(title, message, timeStamp, intent, null);
+    public void showNotificationMessage(String title, String message, String madeBy, int type, String timeStamp, Intent intent) {
+        showNotificationMessage(title, message, madeBy, type, timeStamp, intent, null);
     }
 
-    public void showNotificationMessage(final String title, final String message, final String timeStamp, Intent intent, String imageUrl) {
+    public void showNotificationMessage(final String title, final String message, String madeBy, int type, final String timeStamp, Intent intent, String imageUrl) {
         // Check for empty push message
         if (TextUtils.isEmpty(message))
             return;
 
 
         // notification icon
-        final int icon = R.mipmap.ic_launcher;
+        final int icon = R.drawable.user_pacific;
 
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         final PendingIntent resultPendingIntent =
@@ -77,30 +79,39 @@ public class NotificationUtils {
         final Uri alarmSound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE
                 + "://" + mContext.getPackageName() + "/raw/notification");
 
-        if (!TextUtils.isEmpty(imageUrl)) {
+        if (imageUrl != null) {
 
-            if (imageUrl != null && imageUrl.length() > 4 && Patterns.WEB_URL.matcher(imageUrl).matches()) {
+            if (imageUrl.length() > 4 && Patterns.WEB_URL.matcher(imageUrl).matches()) {
 
                 Bitmap bitmap = getBitmapFromURL(imageUrl);
 
                 if (bitmap != null) {
-                    showBigNotification(bitmap, mBuilder, icon, title, message, timeStamp, resultPendingIntent, alarmSound);
+                    showBigNotification(bitmap, mBuilder, icon, title, message, madeBy, type, timeStamp, resultPendingIntent, alarmSound);
                 } else {
-                    showSmallNotification(mBuilder, icon, title, message, timeStamp, resultPendingIntent, alarmSound);
+                    showSmallNotification(mBuilder, icon, title, message, madeBy, type, timeStamp, resultPendingIntent, alarmSound);
                 }
             }
         } else {
-            showSmallNotification(mBuilder, icon, title, message, timeStamp, resultPendingIntent, alarmSound);
+            showSmallNotification(mBuilder, icon, title, message, madeBy, type, timeStamp, resultPendingIntent, alarmSound);
             playNotificationSound();
         }
     }
 
 
-    private void showSmallNotification(NotificationCompat.Builder mBuilder, int icon, String title, String message, String timeStamp, PendingIntent resultPendingIntent, Uri alarmSound) {
+    private void showSmallNotification(NotificationCompat.Builder mBuilder, int icon, String title, String message, String madeBy, int type,
+                                       String timeStamp, PendingIntent resultPendingIntent, Uri alarmSound) {
 
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
 
         inboxStyle.addLine(message);
+        String content;
+        if(type == 0){
+            //message
+            content = madeBy + " : "+message+" ";
+        }else{
+            //expense
+            content = madeBy + " "+ mContext.getString(R.string.history_expense);
+        }
 
         Notification notification;
         notification = mBuilder.setSmallIcon(icon).setTicker(title).setWhen(0)
@@ -110,16 +121,60 @@ public class NotificationUtils {
                 .setSound(alarmSound)
                 .setStyle(inboxStyle)
                 .setWhen(getTimeMilliSec(timeStamp))
-                .setSmallIcon(R.mipmap.ic_wallet)
+                .setSmallIcon(R.drawable.user1)
                 .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), icon))
-                .setContentText(message)
+                .setContentText(content)
                 .build();
 
         NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(Config.NOTIFICATION_ID, notification);
+
+       /* // Using RemoteViews to bind custom layouts into Notification
+        RemoteViews remoteViews = new RemoteViews(mContext.getPackageName(),
+                R.layout.customnotification);
+
+        // Set Notification Title
+        String strtitle = title;
+        // Set Notification Text
+        String strtext = message;
+
+        // Open NotificationView Class on Notification Click
+        Intent intent = new Intent(mContext, GroupListActivity.class);
+        // Send data to NotificationView Class
+        intent.putExtra("title", strtitle);
+        intent.putExtra("text", strtext);
+        // Open NotificationView.java Activity
+        PendingIntent pIntent = PendingIntent.getActivity(mContext, 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        //Create Notification using NotificationCompat.Builder
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext)
+                // Set Icon
+                .setSmallIcon(R.drawable.ic_wallet)
+                // Set Ticker Message
+                .setTicker("ticker")
+                // Dismiss Notification
+                .setAutoCancel(true)
+                // Set PendingIntent into Notification
+                .setContentIntent(pIntent)
+                // Set RemoteViews into Notification
+                .setContent(remoteViews);
+
+        // Locate and set the Image into customnotificationtext.xml ImageViews
+        remoteViews.setImageViewResource(R.id.imagenotileft,R.drawable.teamwork);
+
+        // Locate and set the Text into customnotificationtext.xml TextViews
+        remoteViews.setTextViewText(R.id.title,strtitle);
+        remoteViews.setTextViewText(R.id.text,strtext);
+
+        // Create Notification Manager
+        NotificationManager notificationmanager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+        // Build Notification with Notification Manager
+        notificationmanager.notify(0, builder.build());*/
     }
 
-    private void showBigNotification(Bitmap bitmap, NotificationCompat.Builder mBuilder, int icon, String title, String message, String timeStamp, PendingIntent resultPendingIntent, Uri alarmSound) {
+    private void showBigNotification(Bitmap bitmap, NotificationCompat.Builder mBuilder, int icon, String title, String message, String madeBy, int type,
+                                     String timeStamp, PendingIntent resultPendingIntent, Uri alarmSound) {
         NotificationCompat.BigPictureStyle bigPictureStyle = new NotificationCompat.BigPictureStyle();
         bigPictureStyle.setBigContentTitle(title);
         bigPictureStyle.setSummaryText(Html.fromHtml(message).toString());
@@ -207,11 +262,11 @@ public class NotificationUtils {
     }
 
     public static long getTimeMilliSec(String timeStamp) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if(timeStamp == null)
+            return 0;
         try {
-            Date date = format.parse(timeStamp);
-            return date.getTime();
-        } catch (ParseException e) {
+            return Long.parseLong(timeStamp);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return 0;

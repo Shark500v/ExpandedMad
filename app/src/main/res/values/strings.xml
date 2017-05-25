@@ -32,7 +32,7 @@
     </string-array>
     <string-array name="tagsForGraph">
         <item name="select_tag">Select tag</item>
-        <item name="all_tags">General</item>
+        <item name="all_tags">All tags</item>
         <item name="water_bill">Water_Bill</item>
         <item name="light_bill">Light_Bill</item>
         <item name="gas_bill">Gas_Bill</item>
@@ -183,11 +183,11 @@
     <string name="months">Months</string>
     <string name="go_to_list_of_payments">Go to list of payments</string>
     <string name="payments_detail">Payments Detail</string>
-    <string name="expenses_in_euro">Expenses (€)</string>
+    <string name="expenses_in">Expenses in</string>
     <string name="chat_hint">Write a message</string>
     <string name="rounded_cost">Rounded cost</string>
     <string name="zero">0.00</string>
-    <string name="no_expenses">No expenses for</string>
+    <string name="no_expenses">No expenses in</string>
     <string name="in">in</string>
     <string name="no_expenses_in">No expenses in</string>
     <string name="all_years">General</string>
@@ -218,8 +218,9 @@
     <string name="motivation">Motivation *</string>
     <string name="select_tag">Select tag</string>
     <string name="related_to">related to</string>
-
+    <string name="all_tags">All tags</string>
     <string name="contention">Generate Contention</string>
+    <string name="no_expense_found">No expenses found</string>
     <string name="contention_generated">Contention generated</string>
     <string name="err_motivation">Insert motivation</string>
     <string name="err_no_ongoing">Operation Failed: expense state changed during operation</string>

@@ -32,7 +32,7 @@
     </string-array>
     <string-array name="tagsForGraph">
         <item name="select_tag">Seleziona tag</item>
-        <item name="all_tags">Generale</item>
+        <item name="all_tags">Tutti i tag</item>
         <item name="water_bill">Bolletta_Acqua</item>
         <item name="light_bill">Bolletta_Luce</item>
         <item name="gas_bill">Bolletta_Gas</item>
@@ -179,7 +179,7 @@
     <string name="select_year">Seleziona anno</string>
     <string name="show_graph">VISUALIZZA</string>
     <string name="months">Mesi</string>
-    <string name="expenses_in_euro">Spese (€)</string>
+    <string name="expenses_in">Spese in</string>
     <string name="chat_hint">Scrivi un messaggio</string>
     <string name="rounded_cost">Costo arrotondato</string>
 
@@ -223,6 +223,8 @@
     <string name="contention">Genera Contesa</string>
     <string name="contention_generated">Contesa generata</string>
     <string name="err_motivation">Inserisci Motivazione</string>
+    <string name="all_tags">Tutti i tag</string>
+    <string name="no_expense_found">Nessuna spesa trovata</string>
     <string name="err_no_ongoing">Operazione Fallita: stato spesa cambiato durante operazione</string>
     <string name="generated_by">Generata da</string>
     <string name="contention_information">Informazione Contesa</string>
