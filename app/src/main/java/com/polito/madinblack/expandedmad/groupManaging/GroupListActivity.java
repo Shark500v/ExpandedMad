@@ -147,13 +147,6 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             groupIndex = getIntent().getExtras().getString("groupIndex");
             groupName  = getIntent().getExtras().getString("groupName");
             index = getIntent().getExtras().getInt("request");
-            if(index == 1 || index == 2){
-                Intent intent = new Intent(GroupListActivity.this, TabView.class);
-                intent.putExtra("groupIndex", groupIndex);
-                intent.putExtra("groupName", groupName);
-                intent.putExtra("request", index);
-                startActivity(intent);
-            }
         }
 
     }
@@ -173,6 +166,13 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         if(mQueryUserGroupsReference!=null) {
             mAdapter = new SimpleItemRecyclerViewAdapter(this, mQueryUserGroupsReference);
             ((RecyclerView) recyclerView).setAdapter(mAdapter);
+        }
+        if(index == 1 || index == 2){
+            Intent intent = new Intent(GroupListActivity.this, TabView.class);
+            intent.putExtra("groupIndex", groupIndex);
+            intent.putExtra("groupName", groupName);
+            intent.putExtra("request", index);
+            startActivity(intent);
         }
     }
 

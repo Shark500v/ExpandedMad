@@ -24,6 +24,7 @@ import android.util.Log;
 import android.util.Patterns;
 import com.google.firebase.database.FirebaseDatabase;
 import com.polito.madinblack.expandedmad.R;
+import com.polito.madinblack.expandedmad.login.CheckLogIn;
 import com.polito.madinblack.expandedmad.model.Currency;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.tabViewGroup.TabView;
@@ -275,11 +276,11 @@ public class NotificationUtils {
         Intent resultIntent;
         if(type == 0){
             //message
-            resultIntent = new Intent(context, TabView.class);
+            resultIntent = new Intent(context, CheckLogIn.class);
             resultIntent.putExtra("request", 2);
         }else{
             //expense
-            resultIntent = new Intent(context, TabView.class);
+            resultIntent = new Intent(context, CheckLogIn.class);
             resultIntent.putExtra("request", 1);
         }
         resultIntent.putExtra("groupIndex", groupId);
