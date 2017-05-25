@@ -123,7 +123,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String url = dataSnapshot.getValue(String.class);
-                Glide.with(getApplicationContext()).load(url).diskCacheStrategy(DiskCacheStrategy.SOURCE).error(R.drawable.businessman).into(userImage);
+                Glide.with(getApplicationContext()).load(url).override(128,128).centerCrop().fitCenter().diskCacheStrategy(DiskCacheStrategy.RESULT).error(R.drawable.businessman).into(userImage);
             }
 
             @Override
@@ -369,7 +369,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     String url = dataSnapshot.getValue(String.class);
-                    //Glide.with(getApplicationContext()).load(url).diskCacheStrategy(DiskCacheStrategy.SOURCE).error(R.drawable.teamwork).into(holder.mImage);
+                    Glide.with(getApplicationContext()).load(url).override(128,128).centerCrop().fitCenter().diskCacheStrategy(DiskCacheStrategy.RESULT).error(R.drawable.teamwork).into(holder.mImage);
 
                 }
 

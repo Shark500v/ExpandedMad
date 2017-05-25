@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.polito.madinblack.expandedmad.expenseDetail.ExpenseDetailActivity;
 import com.polito.madinblack.expandedmad.groupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.groupManaging.GroupSettings;
@@ -44,7 +45,7 @@ public class FullScreenImage extends AppCompatActivity{
 
         imageView = (ImageView)findViewById(R.id.full_screen);
 
-        Glide.with(this).load(imageFromUrl).error(R.drawable.bill).into(imageView);
+        Glide.with(this).load(imageFromUrl).override(1024,1024).centerCrop().fitCenter().diskCacheStrategy(DiskCacheStrategy.RESULT).error(R.drawable.bill).into(imageView);
 
     }
 

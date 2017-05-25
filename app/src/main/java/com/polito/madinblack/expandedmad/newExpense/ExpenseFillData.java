@@ -418,7 +418,7 @@ public class ExpenseFillData extends AppCompatActivity {
                     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
                     bytesArr = bytes.toByteArray();
-                    imageView.setImageBitmap(bitmap);
+                    Glide.with(getApplicationContext()).load(bytesArr).override(128,128).centerCrop().fitCenter().into(imageView);
                 } catch (IOException e) {
 
                     //cambio qui come gestire errore
@@ -446,7 +446,7 @@ public class ExpenseFillData extends AppCompatActivity {
                     e.printStackTrace();
                 }*/
 
-                imageView.setImageBitmap(thumbnail);
+                Glide.with(getApplicationContext()).load(bytesArr).override(128,128).centerCrop().fitCenter().into(imageView);
             }
         }
     }
