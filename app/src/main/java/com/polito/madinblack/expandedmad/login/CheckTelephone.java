@@ -15,6 +15,7 @@ import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.groupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.notification.Config;
+import com.polito.madinblack.expandedmad.tabViewGroup.TabView;
 
 import static com.polito.madinblack.expandedmad.notification.NotificationUtils.saveTokenOnDb;
 
@@ -30,6 +31,9 @@ public class CheckTelephone extends BaseActivity {
     private DatabaseReference   mDatabaseTelephoneReference;
     private MyApplication       ma;
     private TextView            mStatusTextView;
+    private String groupIndex;
+    private String groupName;
+    private int index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,9 +61,20 @@ public class CheckTelephone extends BaseActivity {
                     String token = getUserToken();
                     saveTokenOnDb(token, ma.getUserPhoneNumber());
 
-                    /*google login and number yet inserted jump to group page*/
-                    Intent intent = new Intent(CheckTelephone.this, GroupListActivity.class);
-                    startActivity(intent);
+                    groupIndex = getIntent().getExtras().getString("groupIndex");
+                    groupName  = getIntent().getExtras().getString("groupName");
+                    index = getIntent().getExtras().getInt("request");
+                    if(index == 1 || index == 2){
+                        Intent intent = new Intent(CheckTelephone.this, TabView.class);
+                        intent.putExtra("groupIndex", groupIndex);
+                        intent.putExtra("groupName", groupName);
+                        intent.putExtra("request", index);
+                        startActivity(intent);
+                    }else{
+                        /*google login and number yet inserted jump to group page*/
+                        Intent intent = new Intent(CheckTelephone.this, GroupListActivity.class);
+                        startActivity(intent);
+                    }
                     finish();
 
                 }else{

@@ -28,6 +28,10 @@ public class CheckLogIn extends BaseActivity {
     private MyApplication                   ma;
     static boolean calledAlready            = false;
 
+    private String groupIndex;
+    private String groupName;
+    private int index;
+
     private static final String TAG = "GoogleActivity";
 
     @Override
@@ -42,6 +46,10 @@ public class CheckLogIn extends BaseActivity {
 
         //Local variable of logged user
         ma = MyApplication.getInstance();
+
+        groupIndex = getIntent().getExtras().getString("groupIndex");
+        groupName  = getIntent().getExtras().getString("groupName");
+        index = getIntent().getExtras().getInt("request");
 
         //for the preferences
         setPreferences();
@@ -143,8 +151,12 @@ public class CheckLogIn extends BaseActivity {
         //[END] Take all user data
 
         Intent intent = new Intent(CheckLogIn.this, CheckTelephone.class);
+        if(groupIndex!= null){
+            intent.putExtra("groupIndex", groupIndex);
+            intent.putExtra("groupName", groupName);
+            intent.putExtra("request", index);
+        }
         startActivity(intent);
-
     }
 
     private void notLogged(){
@@ -152,6 +164,11 @@ public class CheckLogIn extends BaseActivity {
         Log.d(TAG, "onAuthStateChanged:signed_out");
         ma.setLogged(false);
         Intent intent = new Intent(CheckLogIn.this, GoogleSignInActivity.class);
+        if(groupIndex!= null){
+            intent.putExtra("groupIndex", groupIndex);
+            intent.putExtra("groupName", groupName);
+            intent.putExtra("request", index);
+        }
         startActivity(intent);
     }
 

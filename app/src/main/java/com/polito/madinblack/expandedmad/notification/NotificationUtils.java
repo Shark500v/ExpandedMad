@@ -284,7 +284,6 @@ public class NotificationUtils {
         }
         resultIntent.putExtra("groupIndex", groupId);
         resultIntent.putExtra("groupName", groupName);
-        //resultIntent.putExtra("message", message);
         return resultIntent;
     }
 
