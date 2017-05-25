@@ -217,13 +217,13 @@ public class ContestExpenseActivity extends BaseActivity {
                             //memorizzare tutti gli user id e payment firebase solo se uguale a quello passato per parametro
                             PaymentFirebase tmpPaymentFirebase = childDataSnapshot.getValue(PaymentFirebase.class);
                             paymentFirebaseList.add(tmpPaymentFirebase);
-                            if(childDataSnapshot.getValue(PaymentFirebase.class).getId().equals(mPaymentContestId))
+                            if(tmpPaymentFirebase.getId().equals(mPaymentContestId))
                                 paymentFirebase = tmpPaymentFirebase;
 
                         }
 
 
-                            paymentFirebase = dataSnapshot.getValue(PaymentFirebase.class);
+
                             if (paymentFirebase.getUserFirebaseId().equals(ma.getFirebaseId())) {
                                 mGeneratedByTextView.setText(getString(R.string.you));
 
@@ -325,7 +325,7 @@ public class ContestExpenseActivity extends BaseActivity {
                                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                                         if(dataSnapshot.exists()){
                                                             Expense expense = dataSnapshot.getValue(Expense.class);
-                                                            Expense.writeNewExpense(mDatabaseRootReference, expense.getName()+getString(R.string.transfer) , expense.getTag(), expense.getPaidByFirebaseId(), expense.getPaidByPhoneNumber(),
+                                                            Expense.writeNewExpense(mDatabaseRootReference, expense.getName(), expense.getTag(), expense.getPaidByFirebaseId(), expense.getPaidByPhoneNumber(),
                                                                     expense.getPaidByName(), expense.getPaidBySurname(), expense.getCost(), expense.getRoundedCost(), expense.getCurrencyISO(),
                                                                     groupId, expense.getYear(), expense.getMonth(), expense.getDay(), expense.getDescription(), Expense.State.TRANSFER, timestamp, paymentList);
 

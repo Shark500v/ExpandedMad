@@ -26,6 +26,7 @@ import com.polito.madinblack.expandedmad.expenseDetail.ExpenseDetailActivity;
 import com.polito.madinblack.expandedmad.expenseDetail.ExpenseDetailFragment;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.Currency;
+import com.polito.madinblack.expandedmad.model.Expense;
 import com.polito.madinblack.expandedmad.model.ExpenseForUser;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 
@@ -89,7 +90,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(final RecyclerViewAdapter.ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);   //mValues.get(position) rappresenta un singolo elemento della nostra lista di spese
-        holder.mIdView.setText(mValues.get(position).getName());
+        if(holder.mItem.getState()== Expense.State.TRANSFER)
+            holder.mIdView.setText(mValues.get(position).getName()+" "+holder.mView.getContext().getString(R.string.transfer));
+        else
+            holder.mIdView.setText(mValues.get(position).getName());
+
         if(mValues.get(position).getMyBalance()>0) {
             holder.mContentView.setText(String.format(Locale.getDefault(), "+%.2f", Currency.convertCurrency(mValues.get(position).getMyBalance(), mValues.get(position).getCurrencyISO(), MyApplication.getCurrencyISOFavorite())) + " " + Currency.getSymbol(MyApplication.getCurrencyISOFavorite()));
             holder.mContentView.setTextColor(Color.parseColor("#00c200"));
