@@ -84,6 +84,14 @@ public class TabView extends AppCompatActivity {
         groupIndex = getIntent().getExtras().getString("groupIndex");
         groupName  = getIntent().getExtras().getString("groupName");
 
+        //check what fragment to charge
+        int index = getIntent().getExtras().getInt("request");
+        if(index == 1){
+            //expense fragment
+        }else if(index == 2){
+            //chat fragment
+        }
+
         mDatabaseBalancesReference = FirebaseDatabase.getInstance().getReference().child("groups/"+groupIndex+"/users/"+ma.getFirebaseId()+"/balances");
         mDatabaseBalancesQuery = mDatabaseBalancesReference.orderByChild("fullName");
         mDatabaseExpenseListReference = FirebaseDatabase.getInstance().getReference().child("users/"+ma.getUserPhoneNumber()+"/"+ma.getFirebaseId()+"/groups/"+groupIndex+"/expenses");

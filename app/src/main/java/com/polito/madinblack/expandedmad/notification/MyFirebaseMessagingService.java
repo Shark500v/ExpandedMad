@@ -93,7 +93,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 notificationUtils.playNotificationSound();
             } else {
                 // app is in background, show the notification in notification tray
-                Intent resultIntent = notificationUtils.getIntent(typeInt, getApplicationContext(), message, title, groupId);
+                Intent resultIntent = notificationUtils.getIntent(typeInt, getApplicationContext(), message, groupId, title);
 
                 // check for image attachment
                 if (TextUtils.isEmpty(imageUrl)) {

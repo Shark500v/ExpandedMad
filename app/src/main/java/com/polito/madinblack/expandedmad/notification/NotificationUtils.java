@@ -43,6 +43,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import static android.content.Context.ACTIVITY_SERVICE;
+
 public class NotificationUtils {
 
     private static String TAG = NotificationUtils.class.getSimpleName();
@@ -90,19 +92,19 @@ public class NotificationUtils {
                 Bitmap bitmap = getBitmapFromURL(imageUrl);
 
                 if (bitmap != null) {
-                    showBigNotification(bitmap, mBuilder, icon, title, message, timeStamp, resultPendingIntent, alarmSound);
+                    showSmallNotification(mBuilder, bitmap, title, message, timeStamp, resultPendingIntent, alarmSound);
                 } else {
-                    showSmallNotification(mBuilder, icon, title, message, timeStamp, resultPendingIntent, alarmSound);
+                    showSmallNotification(mBuilder, BitmapFactory.decodeResource(mContext.getResources(), icon), title, message, timeStamp, resultPendingIntent, alarmSound);
                 }
             }
         } else {
-            showSmallNotification(mBuilder, icon, title, message, timeStamp, resultPendingIntent, alarmSound);
+            showSmallNotification(mBuilder, BitmapFactory.decodeResource(mContext.getResources(), icon), title, message, timeStamp, resultPendingIntent, alarmSound);
             playNotificationSound();
         }
     }
 
 
-    private void showSmallNotification(NotificationCompat.Builder mBuilder, int icon, String title, String message,
+    private void showSmallNotification(NotificationCompat.Builder mBuilder, Bitmap icon, String title, String message,
                                        String timeStamp, PendingIntent resultPendingIntent, Uri alarmSound) {
 
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
@@ -110,15 +112,15 @@ public class NotificationUtils {
         inboxStyle.addLine(message);
 
 
-        Notification notification = mBuilder.setSmallIcon(icon).setTicker(title).setWhen(0)
+        Notification notification = mBuilder.setTicker(title).setWhen(0)
                 .setAutoCancel(true)
                 .setContentTitle(title)
                 .setContentIntent(resultPendingIntent)
                 .setSound(alarmSound)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
                 .setWhen(getTimeMilliSec(timeStamp))
-                .setSmallIcon(R.drawable.user1)
-                .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), icon))
+                .setSmallIcon(R.drawable.notification_icon)
+                .setLargeIcon(icon)
                 .setContentText(message)
                 .build();
 
@@ -169,29 +171,6 @@ public class NotificationUtils {
         notificationmanager.notify(0, builder.build());*/
     }
 
-    private void showBigNotification(Bitmap bitmap, NotificationCompat.Builder mBuilder, int icon, String title, String message,
-                                     String timeStamp, PendingIntent resultPendingIntent, Uri alarmSound) {
-        NotificationCompat.BigPictureStyle bigPictureStyle = new NotificationCompat.BigPictureStyle();
-        bigPictureStyle.setBigContentTitle(title);
-        bigPictureStyle.setSummaryText(Html.fromHtml(message).toString());
-        bigPictureStyle.bigPicture(bitmap);
-        Notification notification;
-        notification = mBuilder.setSmallIcon(icon).setTicker(title).setWhen(0)
-                .setAutoCancel(true)
-                .setContentTitle(title)
-                .setContentIntent(resultPendingIntent)
-                .setSound(alarmSound)
-                .setStyle(bigPictureStyle)
-                .setWhen(getTimeMilliSec(timeStamp))
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), icon))
-                .setContentText(message)
-                .build();
-
-        NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(Config.NOTIFICATION_ID_BIG_IMAGE, notification);
-    }
-
     /**
      * Downloading push notification image before displaying it in
      * the notification tray
@@ -228,7 +207,7 @@ public class NotificationUtils {
      */
     public static boolean isAppIsInBackground(Context context) {
         boolean isInBackground = true;
-        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager am = (ActivityManager) context.getSystemService(ACTIVITY_SERVICE);
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT_WATCH) {
             List<ActivityManager.RunningAppProcessInfo> runningProcesses = am.getRunningAppProcesses();
             for (ActivityManager.RunningAppProcessInfo processInfo : runningProcesses) {
@@ -294,16 +273,24 @@ public class NotificationUtils {
         if(type == 0){
             //message
             resultIntent = new Intent(context, TabView.class);
-            resultIntent.putExtra("request", message);
+            resultIntent.putExtra("request", 1);
         }else{
             //expense
             resultIntent = new Intent(context, TabView.class);
-            resultIntent.putExtra("request", message);
+            resultIntent.putExtra("request", 2);
         }
         resultIntent.putExtra("groupIndex", groupId);
         resultIntent.putExtra("groupName", groupName);
         //resultIntent.putExtra("message", message);
         return resultIntent;
+    }
+
+    public String getCurrentActivity(){
+        ActivityManager am = (ActivityManager) mContext .getSystemService(ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
+        ComponentName componentInfo = taskInfo.get(0).topActivity;
+        Log.d(TAG, "CURRENT Activity ::" + taskInfo.get(0).topActivity.getClassName()+"   Package Name :  "+componentInfo.getPackageName());
+        return taskInfo.get(0).topActivity.getClassName();
     }
 
     public BroadcastReceiver getBroadcastReceiver(){
@@ -318,8 +305,6 @@ public class NotificationUtils {
 
                     Log.e(TAG, "Firebase reg id: " + regId);
 
-                    //da spostare quando si fa login
-                    //saveTokenOnDb(regId);
                     if (!TextUtils.isEmpty(regId) &&  ma.getUserPhoneNumber()!= null)
                         saveTokenOnDb(regId, ma.getUserPhoneNumber());
 
