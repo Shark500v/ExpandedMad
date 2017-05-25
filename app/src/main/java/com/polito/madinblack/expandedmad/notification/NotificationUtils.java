@@ -38,6 +38,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class NotificationUtils {
 
@@ -51,11 +52,11 @@ public class NotificationUtils {
         this.ma = MyApplication.getInstance();
     }
 
-    public void showNotificationMessage(String title, String message, String madeBy, int type, String timeStamp, Intent intent) {
-        showNotificationMessage(title, message, madeBy, type, timeStamp, intent, null);
+    public void showNotificationMessage(String title, String message, String timeStamp, Intent intent) {
+        showNotificationMessage(title, message, timeStamp, intent, null);
     }
 
-    public void showNotificationMessage(final String title, final String message, String madeBy, int type, final String timeStamp, Intent intent, String imageUrl) {
+    public void showNotificationMessage(final String title, final String message, final String timeStamp, Intent intent, String imageUrl) {
         // Check for empty push message
         if (TextUtils.isEmpty(message))
             return;
@@ -86,32 +87,25 @@ public class NotificationUtils {
                 Bitmap bitmap = getBitmapFromURL(imageUrl);
 
                 if (bitmap != null) {
-                    showBigNotification(bitmap, mBuilder, icon, title, message, madeBy, type, timeStamp, resultPendingIntent, alarmSound);
+                    showBigNotification(bitmap, mBuilder, icon, title, message, timeStamp, resultPendingIntent, alarmSound);
                 } else {
-                    showSmallNotification(mBuilder, icon, title, message, madeBy, type, timeStamp, resultPendingIntent, alarmSound);
+                    showSmallNotification(mBuilder, icon, title, message, timeStamp, resultPendingIntent, alarmSound);
                 }
             }
         } else {
-            showSmallNotification(mBuilder, icon, title, message, madeBy, type, timeStamp, resultPendingIntent, alarmSound);
+            showSmallNotification(mBuilder, icon, title, message, timeStamp, resultPendingIntent, alarmSound);
             playNotificationSound();
         }
     }
 
 
-    private void showSmallNotification(NotificationCompat.Builder mBuilder, int icon, String title, String message, String madeBy, int type,
+    private void showSmallNotification(NotificationCompat.Builder mBuilder, int icon, String title, String message,
                                        String timeStamp, PendingIntent resultPendingIntent, Uri alarmSound) {
 
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
 
         inboxStyle.addLine(message);
-        String content;
-        if(type == 0){
-            //message
-            content = madeBy + " : "+message+" ";
-        }else{
-            //expense
-            content = madeBy + " "+ mContext.getString(R.string.history_expense);
-        }
+
 
         Notification notification;
         notification = mBuilder.setSmallIcon(icon).setTicker(title).setWhen(0)
@@ -123,7 +117,7 @@ public class NotificationUtils {
                 .setWhen(getTimeMilliSec(timeStamp))
                 .setSmallIcon(R.drawable.user1)
                 .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), icon))
-                .setContentText(content)
+                .setContentText(message)
                 .build();
 
         NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -173,7 +167,7 @@ public class NotificationUtils {
         notificationmanager.notify(0, builder.build());*/
     }
 
-    private void showBigNotification(Bitmap bitmap, NotificationCompat.Builder mBuilder, int icon, String title, String message, String madeBy, int type,
+    private void showBigNotification(Bitmap bitmap, NotificationCompat.Builder mBuilder, int icon, String title, String message,
                                      String timeStamp, PendingIntent resultPendingIntent, Uri alarmSound) {
         NotificationCompat.BigPictureStyle bigPictureStyle = new NotificationCompat.BigPictureStyle();
         bigPictureStyle.setBigContentTitle(title);
@@ -274,6 +268,34 @@ public class NotificationUtils {
 
     public static void saveTokenOnDb(String token, String phone){
         FirebaseDatabase.getInstance().getReference().child("tokens/"+ phone).setValue(token);
+    }
+
+    public String getContent(Map<String, String> data){
+        String type = data.get("type");
+        int typeInt = Integer.parseInt(type);
+
+        String content;
+        if(typeInt == 0){
+            //message
+            content = data.get("madeBy") + " : "+data.get("message")+" ";
+        }else{
+            //expense
+            content = data.get("madeBy") + " "+ mContext.getString(R.string.history_expense);
+        }
+        return content;
+    }
+
+    public Intent getIntent(int type, Context context, String message){
+        Intent resultIntent;
+        if(type == 0){
+            //message
+            resultIntent = new Intent(context, GroupListActivity.class);
+        }else{
+            //expense
+            resultIntent = new Intent(context, GroupListActivity.class);
+        }
+        resultIntent.putExtra("message", message);
+        return resultIntent;
     }
 
     public BroadcastReceiver getBroadcastReceiver(){
