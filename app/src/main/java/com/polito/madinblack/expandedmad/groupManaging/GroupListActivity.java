@@ -167,14 +167,6 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             mAdapter = new SimpleItemRecyclerViewAdapter(this, mQueryUserGroupsReference);
             ((RecyclerView) recyclerView).setAdapter(mAdapter);
         }
-        if(index == 1 || index == 2){
-            Intent intent = new Intent(GroupListActivity.this, TabView.class);
-            intent.putExtra("groupIndex", groupIndex);
-            intent.putExtra("groupName", groupName);
-            intent.putExtra("request", index);
-            index = 0;
-            startActivity(intent);
-        }
     }
 
     @Override
@@ -220,6 +212,15 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
 
         // clear the notification area when the app is opened
         NotificationUtils.clearNotifications(getApplicationContext());
+
+        if(index == 1 || index == 2){
+            Intent intent = new Intent(GroupListActivity.this, TabView.class);
+            intent.putExtra("groupIndex", groupIndex);
+            intent.putExtra("groupName", groupName);
+            intent.putExtra("request", index);
+            index = 0;
+            startActivity(intent);
+        }
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
