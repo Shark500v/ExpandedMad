@@ -14,6 +14,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -275,7 +277,6 @@ public class TabView extends AppCompatActivity {
         private DatabaseReference ref;
         private View rootView = null;
 
-
         public ChatFragment() {
         }
 
@@ -310,12 +311,13 @@ public class TabView extends AppCompatActivity {
             );
             recyclerView.setAdapter(mAdapter);
 
-            ImageView send = (ImageView) rootView.findViewById(R.id.send_button);
+            final ImageView send = (ImageView) rootView.findViewById(R.id.send_button);
 
             send.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    sendMessage(v);
+                    if(!inputMessage.getText().toString().isEmpty())
+                        sendMessage(v);
                 }
             });
 
@@ -323,6 +325,26 @@ public class TabView extends AppCompatActivity {
                 @Override
                 public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
                     v.scrollBy(0, bottom + 100);
+                }
+            });
+
+            inputMessage.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if(!s.toString().isEmpty()){
+                        send.setImageDrawable(getContext().getDrawable(R.drawable.ic_send_orange));
+                    }
+
                 }
             });
 
@@ -349,7 +371,7 @@ public class TabView extends AppCompatActivity {
 
                     for(DataSnapshot snapshot: dataSnapshot.getChildren()){
                         UserForGroup user = snapshot.getValue(UserForGroup.class);
-                        if(user.getFirebaseId() != MyApplication.getFirebaseId()){
+                        if(!user.getFirebaseId().equals(MyApplication.getFirebaseId())){
                             FirebaseDatabase.getInstance().getReference().child("users/"+user.getPhoneNumber()+"/"+user.getFirebaseId()+"/groups/"+groupIndex+"/newExpenses").runTransaction(new Transaction.Handler() {
 
                                 @Override
