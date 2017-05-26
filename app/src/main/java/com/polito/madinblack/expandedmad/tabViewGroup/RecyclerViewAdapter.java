@@ -39,6 +39,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private List<String> mValuesIds = new ArrayList<>();
     private Query dataref;
     private Context mContext;
+    private int numContest = 0;
     private ChildEventListener mEventListener;
 
     private static final String TAG = "MyBalanceActivity";
@@ -67,9 +68,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     tx.setVisibility(View.GONE);
                     recyclerView.setVisibility(View.VISIBLE);
                 }*/
-                mValuesIds.add(0, dataSnapshot.getKey());
-                mValues.add(0, expenseForUser);
-                notifyItemInserted(0);
+                if(expenseForUser.getState() == Expense.State.CONTESTED){
+                    mValuesIds.add(0, dataSnapshot.getKey());
+                    mValues.add(0, expenseForUser);
+                    numContest++;
+                    notifyItemInserted(numContest);
+                    Log.e(TAG, "Spesa contesa: " + expenseForUser.getName());
+                }else{
+                    mValuesIds.add(numContest, dataSnapshot.getKey());
+                    mValues.add(numContest, expenseForUser);
+                    notifyItemInserted(mValues.size()-1);
+                    Log.e(TAG, "Spesa aggiunta in posizione : " + expenseForUser.getName() + " "+numContest);
+                }
                 // [END_EXCLUDE]
 
             }
@@ -102,23 +112,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Log.d(TAG, "onChildRemoved:" + dataSnapshot.getKey());
-
-                // An info has changed, use the key to determine if we are displaying this
-                // info and if so remove it.
-                String infoKey = dataSnapshot.getKey();
-
-                // [START_EXCLUDE]
-                int infoIndex = mValuesIds.indexOf(infoKey);
-                if (infoIndex > -1) {
-                    // Remove data from the list
-                    mValuesIds.remove(infoKey);
-                    mValues.remove(infoIndex);
-
-                    // Update the RecyclerView
-                    notifyItemRemoved(infoIndex);
-                } else {
-                    Log.w(TAG, "onChildRemoved:unknown_child:" + infoKey);
-                }
                 // [END_EXCLUDE]
             }
 
