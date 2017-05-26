@@ -32,15 +32,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-//questa classe la usa per fare il managing della lista che deve mostrare
+
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
     private List<ExpenseForUser> mValues = new ArrayList<>();
-    private List<String> mValuesIds = new ArrayList<>();
     private Query dataref;
     private Context mContext;
-    private int numContest = 0;
-    private ChildEventListener mEventListener;
+    private ValueEventListener mEventListener;
+
+
+
+
 
     private static final String TAG = "MyBalanceActivity";
 
@@ -51,98 +53,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         // Create child event listener
         // [START child_event_listener_recycler]
-        ChildEventListener childEventListener = new ChildEventListener() {
+        ValueEventListener eventListener = new ValueEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-                Log.d(TAG, "onChildAdded:" + dataSnapshot.getKey());
-
-                // A new info has been added, add it to the displayed list
-                ExpenseForUser expenseForUser = dataSnapshot.getValue(ExpenseForUser.class);
-
-
-                // [START_EXCLUDE]
-                // Update RecyclerView
-                /*if(getItemCount() == 0){
-                    RecyclerView recyclerView = (RecyclerView) findViewById(R.id.cardList);
-                    TextView tx = (TextView) findViewById(R.id.textView);
-                    tx.setVisibility(View.GONE);
-                    recyclerView.setVisibility(View.VISIBLE);
-                }*/
-                if(expenseForUser.getState() == Expense.State.CONTESTED){
-                    mValuesIds.add(0, dataSnapshot.getKey());
-                    mValues.add(0, expenseForUser);
-                    numContest++;
-                    notifyItemInserted(numContest);
-                    Log.e(TAG, "Spesa contesa: " + expenseForUser.getName());
-                }else{
-                    mValuesIds.add(numContest, dataSnapshot.getKey());
-                    mValues.add(numContest, expenseForUser);
-                    notifyItemInserted(mValues.size()-1);
-                    Log.e(TAG, "Spesa aggiunta in posizione : " + expenseForUser.getName() + " "+numContest);
+            public void onDataChange(DataSnapshot dataSnapshot)  {
+                mValues.clear();
+                for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
+                    mValues.add(postSnapshot.getValue(ExpenseForUser.class));
                 }
-                // [END_EXCLUDE]
-
+                notifyDataSetChanged();
             }
 
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
-                Log.d(TAG, "onChildChanged:" + dataSnapshot.getKey());
-
-                // An info has changed, use the key to determine if we are displaying this
-                // info and if so displayed the changed info.
-                ExpenseForUser expenseForUser = dataSnapshot.getValue(ExpenseForUser.class);
-                String infoKey = dataSnapshot.getKey();
-
-                // [START_EXCLUDE]
-                int infoIndex = mValuesIds.indexOf(infoKey);
-                if (infoIndex > -1) {
-                    // Replace with the new data
-                    mValues.set(infoIndex, expenseForUser);
-
-                    // Update the RecyclerView
-                    notifyItemChanged(infoIndex);
-
-                } else {
-                    Log.w(TAG, "onChildChanged:unknown_child:" + infoKey);
-                }
-                // [END_EXCLUDE]
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                Log.d(TAG, "onChildRemoved:" + dataSnapshot.getKey());
-
-                // An info has changed, use the key to determine if we are displaying this
-                // info and if so remove it.
-                String infoKey = dataSnapshot.getKey();
-
-                // [START_EXCLUDE]
-                int infoIndex = mValuesIds.indexOf(infoKey);
-                if (infoIndex > -1) {
-                    // Remove data from the list
-                    mValuesIds.remove(infoKey);
-                    mValues.remove(infoIndex);
-
-                    // Update the RecyclerView
-                    notifyItemRemoved(infoIndex);
-                } else {
-                    Log.w(TAG, "onChildRemoved:unknown_child:" + infoKey);
-                }
-                // [END_EXCLUDE]
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
-                Log.d(TAG, "onChildMoved:" + dataSnapshot.getKey());
-
-                // A comment has changed position, use the key to determine if we are
-                // displaying this comment and if so move it.
-                //Group movedGroup = dataSnapshot.getValue(Group.class);
-                //String groupKey = dataSnapshot.getKey();
-
-                // ...
-            }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -151,11 +72,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                         Toast.LENGTH_SHORT).show();
             }
         };
-        dataref.addChildEventListener(childEventListener);
+        dataref.addValueEventListener(eventListener);
         // [END child_event_listener_recycler]
 
         // Store reference to listener so it can be removed on app stop
-        mEventListener = childEventListener;
+        mEventListener = eventListener;
     }
 
     @Override
