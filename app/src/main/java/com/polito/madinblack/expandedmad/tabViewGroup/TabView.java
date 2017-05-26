@@ -256,7 +256,8 @@ public class TabView extends AppCompatActivity {
                     Message.class,
                     R.layout.list_message_item_left,
                     RecyclerView.ViewHolder.class,
-                    ref
+                    ref,
+                    getContext()
             );
             recyclerView.setAdapter(mAdapter);
 

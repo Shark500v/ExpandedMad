@@ -1,6 +1,7 @@
 package com.polito.madinblack.expandedmad.chat;
 
 
+import android.content.Context;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
@@ -10,14 +11,23 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.Message;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 //questa classe la usa per fare il managing della lista che deve mostrare
 public class ChatRecyclerViewAdapter extends FirebaseRecyclerAdapter<Message,RecyclerView.ViewHolder> {
@@ -32,10 +42,13 @@ public class ChatRecyclerViewAdapter extends FirebaseRecyclerAdapter<Message,Rec
      *                        using some combination of {@code limit()}, {@code startAt()}, and {@code endAt()}.
      */
 
+    private DatabaseReference mDatabaseForUserUrl;
+    private Context mContext;
 
-    public ChatRecyclerViewAdapter(Class<Message> modelClass, int modelLayout, Class<RecyclerView.ViewHolder> viewHolderClass, Query ref) {
+
+    public ChatRecyclerViewAdapter(Class<Message> modelClass, int modelLayout, Class<RecyclerView.ViewHolder> viewHolderClass, Query ref, Context ct) {
         super(modelClass, modelLayout, viewHolderClass, ref);
-
+        mContext = ct;
     }
 
 
@@ -50,14 +63,28 @@ public class ChatRecyclerViewAdapter extends FirebaseRecyclerAdapter<Message,Rec
             holder.mTime.setText(dateFormat.format(model.getDate()));
         }
         else{
-            ViewHolderLeft holder = (ViewHolderLeft)viewHolder;
+            final ViewHolderLeft holder = (ViewHolderLeft)viewHolder;
             holder.mContentView.setText(model.getMessage());
             holder.mName.setText(model.getSentByName());
             if(holder.mContentView.getWidth()<holder.mName.getWidth()){
                 holder.mContentView.setWidth(holder.mName.getWidth());
             }
             holder.mTime.setText(dateFormat.format(model.getDate()));
-            //devo poi settare la foto
+            //setto foto
+
+            mDatabaseForUserUrl = FirebaseDatabase.getInstance().getReference().child("users").child(model.getSentById()).child(mUsersIds.get(position)).child("urlImage");
+            mDatabaseForUserUrl.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    String url = dataSnapshot.getValue(String.class);
+                    Glide.with(mContext).load(url).override(128,128).centerCrop().fitCenter().diskCacheStrategy(DiskCacheStrategy.RESULT).error(R.drawable.icon_utente).into(holder.mIdView);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
         }
     }
 
@@ -67,8 +94,7 @@ public class ChatRecyclerViewAdapter extends FirebaseRecyclerAdapter<Message,Rec
         if(viewType == 0){
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_message_item_right, parent, false);
             return new ViewHolderRight(view);
-        }
-        else{
+        } else {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_message_item_left, parent, false);
             return new ViewHolderLeft(view);
         }
@@ -108,7 +134,7 @@ public class ChatRecyclerViewAdapter extends FirebaseRecyclerAdapter<Message,Rec
     //questa è una classe di supporto che viene usata per creare la vista a schermo
     public class ViewHolderLeft extends RecyclerView.ViewHolder {
         public final View mView;
-        public final ImageView mIdView;
+        public final CircleImageView mIdView;
         public final TextView mContentView;
         public final TextView mName, mTime;
         public Message mItem;
@@ -116,7 +142,7 @@ public class ChatRecyclerViewAdapter extends FirebaseRecyclerAdapter<Message,Rec
         public ViewHolderLeft(View view) {
             super(view);
             mView = view;
-            mIdView = (ImageView) view.findViewById(R.id.imageUser);
+            mIdView = (CircleImageView) view.findViewById(R.id.imageUser);
             mContentView = (TextView) view.findViewById(R.id.textView);
             mName = (TextView) view.findViewById(R.id.name_surname);
             mTime = (TextView) view.findViewById(R.id.time);
