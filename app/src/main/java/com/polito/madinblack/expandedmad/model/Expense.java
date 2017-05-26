@@ -247,7 +247,7 @@ public class Expense {
         DatabaseReference myExpenseRef = mDatabaseRootRefenrence.child("expenses").push();
         final String expenseKey = myExpenseRef.getKey();
 
-        Expense expense = new Expense(expenseKey, name, tag, paidByName, paidBySurname, paidByFirebaseId, paidByPhoneNumber, CostUtil.round(cost, 2), CostUtil.round(roundedCost, 2), currencyISO, groupId, year, month, day, description, state);
+        Expense expense = new Expense(expenseKey, name, tag, paidByName, paidBySurname, paidByFirebaseId, paidByPhoneNumber, CostUtil.round(cost, 2), roundedCost, currencyISO, groupId, year, month, day, description, state);
         myExpenseRef.setValue(expense);
 
         DatabaseReference myPaymentRef;

@@ -28,7 +28,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
+import com.google.firebase.database.ValueEventListener;
 import com.polito.madinblack.expandedmad.groupManaging.GroupSettings;
+import com.polito.madinblack.expandedmad.model.UserForGroup;
 import com.polito.madinblack.expandedmad.newExpense.ExpenseFillData;
 import com.polito.madinblack.expandedmad.chat.ChatRecyclerViewAdapter;
 import com.polito.madinblack.expandedmad.groupManaging.GroupHistory;
@@ -40,6 +42,8 @@ import com.polito.madinblack.expandedmad.model.Message;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 
 import java.util.List;
+
+import static com.polito.madinblack.expandedmad.R.drawable.payment;
 
 public class TabView extends AppCompatActivity {
 
@@ -173,6 +177,26 @@ public class TabView extends AppCompatActivity {
     @Override
     public void onBackPressed()
     {
+        DatabaseReference mDatabaseNewExpenseReference = FirebaseDatabase.getInstance().getReference().child("users/" + MyApplication.getUserPhoneNumber() + "/" + MyApplication.getFirebaseId() + "/groups/" + groupIndex + "/newExpenses");
+
+        mDatabaseNewExpenseReference.runTransaction(new Transaction.Handler() {
+
+            @Override
+            public Transaction.Result doTransaction(MutableData currentData) {
+                if((Long) currentData.getValue()!=0)
+                    currentData.setValue(0L);
+
+                return Transaction.success(currentData);
+            }
+
+            @Override
+            public void onComplete(DatabaseError databaseError,
+                                   boolean committed, DataSnapshot currentData) {
+                //This method will be called once with the results of the transaction.
+                //Update remove the user from the group
+            }
+        });
+
         navigateUpTo(new Intent(this, GroupListActivity.class));    //definisco il parente verso cui devo tornare indietro
     }
 
@@ -194,6 +218,25 @@ public class TabView extends AppCompatActivity {
                 return true;
 
             case R.id.home:
+                DatabaseReference mDatabaseNewExpenseReference = FirebaseDatabase.getInstance().getReference().child("users/" + MyApplication.getUserPhoneNumber() + "/" + MyApplication.getFirebaseId() + "/groups/" + groupIndex + "/newExpenses");
+
+                mDatabaseNewExpenseReference.runTransaction(new Transaction.Handler() {
+
+                    @Override
+                    public Transaction.Result doTransaction(MutableData currentData) {
+                        if((Long) currentData.getValue()!=0)
+                            currentData.setValue(0L);
+
+                        return Transaction.success(currentData);
+                    }
+
+                    @Override
+                    public void onComplete(DatabaseError databaseError,
+                                           boolean committed, DataSnapshot currentData) {
+                        //This method will be called once with the results of the transaction.
+                        //Update remove the user from the group
+                    }
+                });
                 navigateUpTo(new Intent(this, GroupListActivity.class));    //definisco il parente verso cui devo tornare indietro
                 return true;
 
@@ -293,8 +336,51 @@ public class TabView extends AppCompatActivity {
             ref.push().setValue(new Message(MyApplication.getUserName() + " " + MyApplication.getUserSurname(),MyApplication.getFirebaseId(),
                     MyApplication.getUserPhoneNumber(), inputMessage.getText().toString()));
 
+            updateNumberForUsers();
             // Clear the input
             inputMessage.setText("");
+        }
+
+        private void updateNumberForUsers(){
+
+            FirebaseDatabase.getInstance().getReference().child("groups/"+groupIndex+"/users").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    for(DataSnapshot snapshot: dataSnapshot.getChildren()){
+                        UserForGroup user = snapshot.getValue(UserForGroup.class);
+                        if(user.getFirebaseId() != MyApplication.getFirebaseId()){
+                            FirebaseDatabase.getInstance().getReference().child("users/"+user.getPhoneNumber()+"/"+user.getFirebaseId()+"/groups/"+groupIndex+"/newExpenses").runTransaction(new Transaction.Handler() {
+
+                                @Override
+                                public Transaction.Result doTransaction(MutableData currentData) {
+                                    if (currentData.getValue() == null) {
+                                        //no default value for data, set one
+                                        currentData.setValue(1L);
+                                    } else {
+                                        // perform the update operations on data
+                                        currentData.setValue(currentData.getValue(Long.class) + 1);
+                                    }
+                                    return Transaction.success(currentData);
+                                }
+
+                                @Override
+                                public void onComplete(DatabaseError databaseError,
+                                                       boolean committed, DataSnapshot currentData) {
+                                    //This method will be called once with the results of the transaction.
+                                    //Update remove the user from the group
+
+                                }
+                            });
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
         }
     }
 
