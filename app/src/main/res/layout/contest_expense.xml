@@ -15,6 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
+            android:layout_weight="1"
             android:text="@string/generated_by"
             android:textSize="20sp" />
 
@@ -41,6 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
+            android:layout_weight="1"
             android:text="@string/expense_cost"
             android:textSize="20sp" />
 
@@ -79,6 +81,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
+            android:layout_weight="1"
             android:text="@string/to_pay"
             android:textSize="20sp"/>
 
@@ -117,6 +120,7 @@
             android:layout_height="wrap_content"
             android:text="@string/currencyISO"
             android:textSize="20sp"
+            android:layout_weight="1"
             android:layout_margin="16dp"/>
 
         <Spinner
@@ -124,6 +128,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="5dp"
+            android:layout_margin="16dp"
             android:layout_gravity="center" />
 
     </LinearLayout>
@@ -140,6 +145,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
+            android:layout_weight="1"
             android:text="@string/new_to_pay"
             android:textSize="20sp"/>
 
