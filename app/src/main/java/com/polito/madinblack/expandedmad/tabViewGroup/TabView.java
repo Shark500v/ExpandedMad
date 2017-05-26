@@ -79,7 +79,6 @@ public class TabView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tab_activity_details);
 
-
         groupIndex = getIntent().getExtras().getString("groupIndex");
         groupName  = getIntent().getExtras().getString("groupName");
 
