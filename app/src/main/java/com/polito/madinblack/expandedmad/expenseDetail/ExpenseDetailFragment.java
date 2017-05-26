@@ -111,7 +111,7 @@ public class ExpenseDetailFragment extends Fragment {
                                 Intent intent = new Intent(getContext(), PaymentDetailActivity.class);
                                 intent.putExtra(PaymentDetailActivity.ARG_EXPENSE_ID, expense.getId());
                                 intent.putExtra(PaymentDetailActivity.ARG_GROUP_ID, expense.getGroupId());
-                                intent.putExtra(PaymentDetailActivity.ARG_EXPENSE_COST, expense.getCost().toString());
+                                intent.putExtra(PaymentDetailActivity.ARG_EXPENSE_COST, expense.getRoundedCost().toString());
                                 intent.putExtra(PaymentDetailActivity.ARG_USER_NAME, expense.getPaidByName());
                                 intent.putExtra(PaymentDetailActivity.ARG_USER_SURNAME, expense.getPaidBySurname());
                                 intent.putExtra(PaymentDetailActivity.ARG_CURRENCY_ISO, expense.getCurrencyISO().name());
@@ -130,7 +130,7 @@ public class ExpenseDetailFragment extends Fragment {
                                 Intent intent = new Intent(getContext(), ContestExpenseActivity.class);
                                 intent.putExtra(ContestExpenseActivity.ARG_EXPENSE_ID, expense.getId());
                                 intent.putExtra(ContestExpenseActivity.ARG_GROUP_ID, expense.getGroupId());
-                                intent.putExtra(ContestExpenseActivity.ARG_EXPENSE_COST, expense.getCost().toString());
+                                intent.putExtra(ContestExpenseActivity.ARG_EXPENSE_COST, expense.getRoundedCost().toString());
                                 intent.putExtra(ContestExpenseActivity.ARG_CURRENCY_ISO, expense.getCurrencyISO().name());
                                 intent.putExtra(ContestExpenseActivity.ARG_EXPENSE_STATE, expense.getState().name());
                                 intent.putExtra(ContestExpenseActivity.ARG_EXPENSE_USER_FIREBASEID, expense.getPaidByFirebaseId());
@@ -151,7 +151,7 @@ public class ExpenseDetailFragment extends Fragment {
                                 Intent intent = new Intent(getContext(), ContestExpenseActivity.class);
                                 intent.putExtra(ContestExpenseActivity.ARG_EXPENSE_ID, expense.getId());
                                 intent.putExtra(ContestExpenseActivity.ARG_GROUP_ID, expense.getGroupId());
-                                intent.putExtra(ContestExpenseActivity.ARG_EXPENSE_COST, expense.getCost().toString());
+                                intent.putExtra(ContestExpenseActivity.ARG_EXPENSE_COST, expense.getRoundedCost().toString());
                                 intent.putExtra(ContestExpenseActivity.ARG_CURRENCY_ISO, expense.getCurrencyISO().name());
                                 intent.putExtra(ContestExpenseActivity.ARG_EXPENSE_STATE, expense.getState().name());
                                 intent.putExtra(ContestExpenseActivity.ARG_EXPENSE_USER_FIREBASEID, expense.getPaidByFirebaseId());

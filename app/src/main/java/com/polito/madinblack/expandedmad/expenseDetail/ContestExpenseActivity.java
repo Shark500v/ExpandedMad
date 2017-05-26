@@ -305,6 +305,7 @@ public class ContestExpenseActivity extends BaseActivity {
                                                     paymentList.add(new Payment(paymentFirebase, expenseId, true));
 
                                                 }
+                                                mutableData.setValue(Expense.State.REJECTED);
 
                                                 mDatabaseRootReference.child("expenses/"+expenseId).addListenerForSingleValueEvent(new ValueEventListener() {
                                                     @Override

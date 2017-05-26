@@ -26,7 +26,7 @@ public class ExpenseForUser {
 
     public ExpenseForUser(Expense expense, Double myBalance){
         this.name               = expense.getName();
-        this.myBalance          = CostUtil.round(myBalance, 2);
+        this.myBalance          = myBalance;
         this.paidByName         = expense.getPaidByName();
         this.paidBySurname      = expense.getPaidBySurname();
         this.paidByFirebaseId   = expense.getPaidByFirebaseId();
@@ -37,7 +37,7 @@ public class ExpenseForUser {
         this.day                = expense.getDay();
         this.month              = expense.getMonth();
         this.year               = expense.getYear();
-        this.cost               = expense.getCost();
+        this.cost               = expense.getRoundedCost();
         this.tag                = expense.getTag();
         this.state              = expense.getState();
 
@@ -108,7 +108,7 @@ public class ExpenseForUser {
     }
 
     public void setMyBalance(Double myBalance) {
-        this.myBalance = CostUtil.round(myBalance, 2);
+        this.myBalance = myBalance;
     }
 
 

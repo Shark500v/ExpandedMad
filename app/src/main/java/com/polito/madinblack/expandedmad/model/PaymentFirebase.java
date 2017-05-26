@@ -21,8 +21,8 @@ public class PaymentFirebase {
     public PaymentFirebase(Payment payment){
         this.userPhoneNumber    = payment.getUserPhoneNumber();
         this.userFirebaseId     = payment.getUserFirebaseId();
-        this.paid               = CostUtil.round(payment.getPaid(), 2);
-        this.toPay             = CostUtil.round(payment.getToPay(), 2);
+        this.paid               = payment.getPaid();
+        this.toPay              = payment.getToPay();
         this.userFullName       = payment.getUserFullName();
 
     }
@@ -65,7 +65,7 @@ public class PaymentFirebase {
     }
 
     public void setPaid(Double paid) {
-        this.paid = CostUtil.round(paid,2);
+        this.paid = paid;
     }
 
     public Double getToPay() {
@@ -74,7 +74,7 @@ public class PaymentFirebase {
 
 
     public void setToPay(Double toPay) {
-        this.toPay = CostUtil.round(toPay,2);
+        this.toPay = toPay;
     }
 
     public Double getDebit(){
