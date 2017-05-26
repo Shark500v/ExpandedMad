@@ -1,5 +1,4 @@
 package com.polito.madinblack.expandedmad.groupManaging;
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -284,4 +283,3 @@ public class GroupHistory extends AppCompatActivity {
     }
 
 }
-
