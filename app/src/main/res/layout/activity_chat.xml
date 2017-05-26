@@ -28,8 +28,9 @@
             android:id="@+id/editor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimaryDark"
-            android:layout_alignParentBottom="true">
+            android:background="@color/colorPrimaryLight"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true">
 
             <ImageView
                 android:id="@+id/send_button"
@@ -53,8 +54,8 @@
                 android:paddingStart="@dimen/padding"
                 android:paddingEnd="@dimen/padding"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:textColorHint="#CFD8DC"
-                android:textColor="#CFD8DC"
+                android:textColorHint="#3f3f40"
+                android:textColor="#3f3f40"
                 android:hint="@string/chat_hint" />
 
         </RelativeLayout>
