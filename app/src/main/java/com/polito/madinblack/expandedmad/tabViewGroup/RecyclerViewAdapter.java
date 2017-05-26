@@ -172,6 +172,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         else
             holder.mIdView.setText(mValues.get(position).getName());
 
+        if(holder.mItem.getState() == Expense.State.CONTESTED)
+            holder.mIdView.setTextColor(Color.parseColor("#ff9800"));
+        else if(holder.mItem.getState() == Expense.State.ONGOING)
+            holder.mIdView.setTextColor(Color.parseColor("#009688"));
+
         if(mValues.get(position).getMyBalance()>0) {
             holder.mContentView.setText(String.format(Locale.getDefault(), "+%.2f", Currency.convertCurrency(mValues.get(position).getMyBalance(), mValues.get(position).getCurrencyISO(), MyApplication.getCurrencyISOFavorite())) + " " + Currency.getSymbol(MyApplication.getCurrencyISOFavorite()));
             holder.mContentView.setTextColor(Color.parseColor("#00c200"));
