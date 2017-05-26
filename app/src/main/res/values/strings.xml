@@ -156,7 +156,7 @@
     <string name="upload_pause">Upload is paused</string>
     <string name="file_uploaded">File Uploaded</string>
     <string name="coming_soon">Coming soon…!</string>
-    <string name="my_balance">MY BALANCE</string>
+    <string name="my_balance">BALANCE</string>
     <string name="expenses">EXPENSES</string>
     <string name="chat">CHAT</string>
     <string name="read_failed">The read failed:</string>
@@ -174,7 +174,7 @@
     <string name="history_new_memeber">has joined to the group.</string>
     <string name="no_detail">No detail available</string>
     <string name="pay_button">Pay</string>
-    <string name="list_payment">Pending payments</string>
+    <string name="list_payment">Settle the bill</string>
     <string name="pay_everyone">Pay everyone</string>
     <string name="confirm_inserted">Confirm inserted</string>
     <string name="group">Group</string>
@@ -234,4 +234,5 @@
     <string name="contention_confermed">Contention Confermed</string>
     <string name="contention_deleted">Contention deleted</string>
     <string name="transfer">(Transfer)</string>
+    <string name="name_not_modified">Group name not modified</string>
 </resources>

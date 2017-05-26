@@ -114,7 +114,7 @@
     <string name="reset">Reset</string>
     <string name="at_least_one_member">Selezionare almeno un partecipante!</string>
     <string name="select_members">Seleziona partecipanti</string>
-    <string name="group_members">Partecipanti</string>
+    <string name="group_members">Partecipanti al gruppo</string>
     <string name="invalid_group_name">Inserire il nome del gruppo!</string>
     <string name="dialog_single_invite_request">deve essere invitato/a ad usare l\'applicazione per essere aggiunto/a al gruppo che si sta creando.</string>
     <string name="dialog_multiple_invite_request">devono essere invitati ad usare l\'applicazione per essere aggiunti al gruppo che si sta creando.</string>
@@ -151,7 +151,7 @@
     <string name="upload_pause">Caricamento sospeso</string>
     <string name="file_uploaded">File caricato correttamente</string>
     <string name="coming_soon">Disponibile a breve…!</string>
-    <string name="my_balance">BILANCIO</string>
+    <string name="my_balance">SALDO</string>
     <string name="expenses">SPESE</string>
     <string name="chat">CHAT</string>
     <string name="read_failed">Lettura fallita:</string>
@@ -169,7 +169,7 @@
     <string name="history_new_memeber">si è unito al gruppo.</string>
     <string name="no_detail">Nessun dettaglio disponibile</string>
     <string name="pay_button">Salda</string>
-    <string name="list_payment">Pagamenti pendenti</string>
+    <string name="list_payment">Saldare il conto</string>
     <string name="pay_everyone">Salda tutti</string>
     <string name="confirm_inserted">Conferma selezionati</string>
     <string name="go_to_list_of_payments">Vai alla lista di pagamenti</string>
@@ -236,4 +236,5 @@
     <string name="contention_confermed">Contesa Confermata</string>
     <string name="contention_deleted">Contesa annullata</string>
     <string name="transfer">(Storno)</string>
+    <string name="name_not_modified">Nome del gruppo non modificato</string>
 </resources>
