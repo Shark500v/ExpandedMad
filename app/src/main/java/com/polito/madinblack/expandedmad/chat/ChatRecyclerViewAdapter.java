@@ -44,7 +44,7 @@ public class ChatRecyclerViewAdapter extends FirebaseRecyclerAdapter<Message,Rec
     protected void populateViewHolder(RecyclerView.ViewHolder viewHolder, Message model, int position) {
         DateFormat dateFormat = new SimpleDateFormat("HH:mm");
 
-        if(model.getSentById().equals(MyApplication.getUserPhoneNumber())){
+        if(model.getSentByPhone().equals(MyApplication.getUserPhoneNumber())){
             ViewHolderRight holder = (ViewHolderRight)viewHolder;
             holder.mContentView.setText(model.getMessage());
             holder.mTime.setText(dateFormat.format(model.getDate()));
@@ -79,7 +79,7 @@ public class ChatRecyclerViewAdapter extends FirebaseRecyclerAdapter<Message,Rec
         Message message = getItem(position);
         // 0 : right
         // 1 : left
-        if(message.getSentById().equals(MyApplication.getUserPhoneNumber()))
+        if(message.getSentByPhone().equals(MyApplication.getUserPhoneNumber()))
             return 0;
         else
             return 1;
