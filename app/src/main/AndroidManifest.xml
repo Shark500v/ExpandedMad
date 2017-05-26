@@ -281,16 +281,6 @@
                 android:value="com.polito.madinblack.expandedmad.expenseDetail.ExpenseDetailActivity" />
         </activity>
 
-        <activity
-            android:name=".notification.NotificationProof"
-            android:label="Notification Proof"
-            android:parentActivityName=".groupManaging.GroupListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.polito.madinblack.expandedmad.groupManaging.GroupListActivity" />
-        </activity>
-
     </application>
 
 </manifest>
