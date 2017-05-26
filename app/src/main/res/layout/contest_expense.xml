@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
     android:padding="16dp">
@@ -53,7 +53,6 @@
             android:textStyle="bold"
             android:textSize="18sp"
             android:gravity="end"
-            android:layout_gravity=""
             android:layout_margin="16dp"
             tools:text="55" />
 
@@ -65,7 +64,6 @@
             android:textSize="18sp"
             android:gravity="end"
             android:layout_margin="16dp"
-            android:layout_gravity=""
             tools:text="€" />
 
     </LinearLayout>
@@ -181,13 +179,6 @@
         android:paddingBottom="16dp"
         android:orientation="horizontal">
 
-        <!--
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/input_motivation_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        -->
-
             <EditText
                 android:id="@+id/input_motivation"
                 android:layout_width="match_parent"
@@ -198,8 +189,6 @@
                 android:paddingStart="10dp"
                 android:hint="@string/motivation"
                 android:background="@layout/rounded_border_edittext"/>
-
-        <!--</android.support.design.widget.TextInputLayout> -->
 
     </LinearLayout>
 
