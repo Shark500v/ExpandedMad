@@ -353,7 +353,7 @@ public class StatisticsGraphs extends AppCompatActivity {
         //series.setTitle(groupName + "-" + yearSelected);                     //etichetta della serie di dati
         if(max == 0.0) {
             if(!groupName.equals(getString(R.string.all_groups))) {
-                if(yearSelected.equals(getString(R.string.general))){
+                if(yearSelected.equals(getString(R.string.all_years))){
                     if(tagSelected.equals(getString(R.string.all_tags))){
                         //Toast.makeText(getApplicationContext(), getString(R.string.no_expenses) + " " + groupName, Toast.LENGTH_LONG).show();
                         Snackbar.make(coordinatorLayout, getString(R.string.no_expenses) + " \"" + groupName + "\"", Snackbar.LENGTH_LONG).show();
@@ -375,7 +375,7 @@ public class StatisticsGraphs extends AppCompatActivity {
                     }
                 }
             }else{
-                if(yearSelected.equals(getString(R.string.general))){
+                if(yearSelected.equals(getString(R.string.all_years))){
                     if(tagSelected.equals(getString(R.string.all_tags))){
                         //Toast.makeText(getApplicationContext(), getString(R.string.no_expense_found), Toast.LENGTH_LONG).show();
                         Snackbar.make(coordinatorLayout, getString(R.string.no_expense_found), Snackbar.LENGTH_LONG).show();
