@@ -65,6 +65,7 @@ public class GroupMemebersActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(name);
+        toolbar.setSubtitle(R.string.group_members);
         setSupportActionBar(toolbar);
 
         // Show the Up button in the action bar.

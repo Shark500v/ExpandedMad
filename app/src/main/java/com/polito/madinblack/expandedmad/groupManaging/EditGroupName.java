@@ -3,6 +3,8 @@ package com.polito.madinblack.expandedmad.groupManaging;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -19,6 +21,7 @@ import java.util.Map;
 
 public class EditGroupName extends AppCompatActivity {
     private EditText editGroupName;
+    private CoordinatorLayout coordinatorLayout;
     private String groupName;
     private String groupId;
     private String newGroupName;
@@ -37,6 +40,8 @@ public class EditGroupName extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+        coordinatorLayout = (CoordinatorLayout)findViewById(R.id.snackbar_no_modify);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -77,6 +82,8 @@ public class EditGroupName extends AppCompatActivity {
                 intent.putExtra("groupName", newGroupName);
                 intent.putExtra("groupIndex", groupId);
                 navigateUpTo(intent);
+            }else{
+                Snackbar.make(coordinatorLayout, getString(R.string.name_not_modified), Snackbar.LENGTH_LONG).show();
             }
             return true;
         }
