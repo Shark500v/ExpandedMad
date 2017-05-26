@@ -1,5 +1,4 @@
 package com.polito.madinblack.expandedmad.groupManaging;
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -24,16 +23,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.Currency;
 import com.polito.madinblack.expandedmad.model.HistoryInfo;
 import com.polito.madinblack.expandedmad.tabViewGroup.TabView;
 import java.util.ArrayList;
-import java.util.EventListener;
 import java.util.List;
 import java.util.Locale;
-import java.util.Stack;
 
 public class GroupHistory extends AppCompatActivity {
 
@@ -51,7 +47,6 @@ public class GroupHistory extends AppCompatActivity {
 
         //toolbar settings
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(getString(R.string.group_history));
         setSupportActionBar(toolbar);
 
         // Show the Up button
@@ -65,7 +60,7 @@ public class GroupHistory extends AppCompatActivity {
             mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("history/"+groupId);
 
         }
-
+        actionBar.setTitle(getString(R.string.group_history));
 
     }
 
@@ -109,11 +104,11 @@ public class GroupHistory extends AppCompatActivity {
 
     public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ContactViewHolder> {
 
-        private Stack<HistoryInfo> mValues = new Stack<>();
+        private List<HistoryInfo> mValues = new ArrayList<>();
         private DatabaseReference dataref;
-        private Stack<String> mValuesIds = new Stack<>();
+        private List<String> mValuesIds = new ArrayList<>();
         private Context mContext;
-        private ValueEventListener mEventListener;
+        private ChildEventListener mChildEventListener;
 
         private static final String TAG = "MyBalanceActivity";
 
@@ -122,38 +117,104 @@ public class GroupHistory extends AppCompatActivity {
             mContext = ct;
 
 
-            ValueEventListener valueEventListener = new ValueEventListener() {
+            // Create child event listener
+            // [START child_event_listener_recycler]
+            ChildEventListener childEventListener = new ChildEventListener() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if(dataSnapshot.exists()) {
-                        for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
-                            mValues.push(childDataSnapshot.getValue(HistoryInfo.class));
-                        }
+                public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
+                    Log.d(TAG, "onChildAdded:" + dataSnapshot.getKey());
 
-                        if(getItemCount() == 0){
-                            RecyclerView recyclerView = (RecyclerView) findViewById(R.id.cardList);
-                            TextView tx = (TextView) findViewById(R.id.textView);
-                            tx.setVisibility(View.GONE);
-                            recyclerView.setVisibility(View.VISIBLE);
-                        }
-                        notifyDataSetChanged();
+                    // A new info has been added, add it to the displayed list
+                    HistoryInfo historyInfo = dataSnapshot.getValue(HistoryInfo.class);
 
 
+                    // [START_EXCLUDE]
+                    // Update RecyclerView
+                    if(getItemCount() == 0){
+                        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.cardList);
+                        TextView tx = (TextView) findViewById(R.id.textView);
+                        tx.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
                     }
+                    mValuesIds.add(dataSnapshot.getKey());
+                    mValues.add(historyInfo);
+                    notifyItemInserted(mValues.size() - 1);
+                    // [END_EXCLUDE]
+
+                }
+
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
+                    Log.d(TAG, "onChildChanged:" + dataSnapshot.getKey());
+
+                    // An info has changed, use the key to determine if we are displaying this
+                    // info and if so displayed the changed info.
+                    HistoryInfo historyInfo = dataSnapshot.getValue(HistoryInfo.class);
+                    String infoKey = dataSnapshot.getKey();
+
+                    // [START_EXCLUDE]
+                    int infoIndex = mValuesIds.indexOf(infoKey);
+                    if (infoIndex > -1) {
+                        // Replace with the new data
+                        mValues.set(infoIndex, historyInfo);
+
+                        // Update the RecyclerView
+                        notifyItemChanged(infoIndex);
+
+                    } else {
+                        Log.w(TAG, "onChildChanged:unknown_child:" + infoKey);
+                    }
+                    // [END_EXCLUDE]
+                }
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+                    Log.d(TAG, "onChildRemoved:" + dataSnapshot.getKey());
+
+                    // An info has changed, use the key to determine if we are displaying this
+                    // info and if so remove it.
+                    String infoKey = dataSnapshot.getKey();
+
+                    // [START_EXCLUDE]
+                    int infoIndex = mValuesIds.indexOf(infoKey);
+                    if (infoIndex > -1) {
+                        // Remove data from the list
+                        mValuesIds.remove(infoKey);
+                        mValues.remove(infoIndex);
+
+                        // Update the RecyclerView
+                        notifyItemRemoved(infoIndex);
+                    } else {
+                        Log.w(TAG, "onChildRemoved:unknown_child:" + infoKey);
+                    }
+                    // [END_EXCLUDE]
+                }
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
+                    Log.d(TAG, "onChildMoved:" + dataSnapshot.getKey());
+
+                    // A comment has changed position, use the key to determine if we are
+                    // displaying this comment and if so move it.
+                    //Group movedGroup = dataSnapshot.getValue(Group.class);
+                    //String groupKey = dataSnapshot.getKey();
+
+                    // ...
                 }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-
+                    Log.w(TAG, "Groups:onCancelled", databaseError.toException());
+                    Toast.makeText(mContext, "Failed to load expenses.",
+                            Toast.LENGTH_SHORT).show();
                 }
             };
-
-
-            dataref.addValueEventListener(valueEventListener);
+            dataref.addChildEventListener(childEventListener);
             // [END child_event_listener_recycler]
 
             // Store reference to listener so it can be removed on app stop
-            mEventListener = valueEventListener;
+            mChildEventListener = childEventListener;
         }
 
 
@@ -183,6 +244,11 @@ public class GroupHistory extends AppCompatActivity {
                             +getString(R.string.history_payment_part2)+String.format(Locale.getDefault(), "%.2f",hi.getCost()) +" "+Currency.toString(hi.getCurrencyISO());
                 case 2:
                     return getString(R.string.history_new_memeber);
+                case 3:
+                    return getString(R.string.history_new_group);
+                case 4:
+                    return getString(R.string.history_transfer_part1) + " "+ hi.getExpenseName() + " "
+                            + getString(R.string.history_transfer_part2);
                 default:
                     return "Error";
             }
@@ -198,8 +264,8 @@ public class GroupHistory extends AppCompatActivity {
         }
 
         public void cleanupListener() {
-            if (mEventListener != null) {
-                dataref.removeEventListener(mEventListener);
+            if (mChildEventListener != null) {
+                dataref.removeEventListener(mChildEventListener);
             }
         }
 
@@ -217,4 +283,3 @@ public class GroupHistory extends AppCompatActivity {
     }
 
 }
-
