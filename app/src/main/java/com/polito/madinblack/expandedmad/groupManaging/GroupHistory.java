@@ -129,10 +129,18 @@ public class GroupHistory extends AppCompatActivity {
                         for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
                             mValues.push(childDataSnapshot.getValue(HistoryInfo.class));
                         }
+
+                        if(getItemCount() == 0){
+                            RecyclerView recyclerView = (RecyclerView) findViewById(R.id.cardList);
+                            TextView tx = (TextView) findViewById(R.id.textView);
+                            tx.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.VISIBLE);
+                        }
                         notifyDataSetChanged();
+
+
                     }
                 }
-
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
@@ -190,7 +198,7 @@ public class GroupHistory extends AppCompatActivity {
         }
 
         public void cleanupListener() {
-            if (mEventListener != null && dataref!=null) {
+            if (mEventListener != null) {
                 dataref.removeEventListener(mEventListener);
             }
         }
