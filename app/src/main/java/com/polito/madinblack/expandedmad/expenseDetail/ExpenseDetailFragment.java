@@ -200,6 +200,7 @@ public class ExpenseDetailFragment extends Fragment {
                     }
                     else{
                         ((TextView) rootView.findViewById(R.id.balance_container)).setText(String.format(Locale.getDefault(), "%.2f",(balance)));
+                        ((TextView) rootView.findViewById(R.id.balance_container)).setTextColor(Color.parseColor("#000000"));
                     }
                 }
 

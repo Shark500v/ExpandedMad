@@ -112,6 +112,23 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Log.d(TAG, "onChildRemoved:" + dataSnapshot.getKey());
+
+                // An info has changed, use the key to determine if we are displaying this
+                // info and if so remove it.
+                String infoKey = dataSnapshot.getKey();
+
+                // [START_EXCLUDE]
+                int infoIndex = mValuesIds.indexOf(infoKey);
+                if (infoIndex > -1) {
+                    // Remove data from the list
+                    mValuesIds.remove(infoKey);
+                    mValues.remove(infoIndex);
+
+                    // Update the RecyclerView
+                    notifyItemRemoved(infoIndex);
+                } else {
+                    Log.w(TAG, "onChildRemoved:unknown_child:" + infoKey);
+                }
                 // [END_EXCLUDE]
             }
 
@@ -164,6 +181,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
         else{
             holder.mContentView.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(mValues.get(position).getMyBalance(),  mValues.get(position).getCurrencyISO(), MyApplication.getCurrencyISOFavorite())) + " " + Currency.getSymbol(MyApplication.getCurrencyISOFavorite()));
+            holder.mContentView.setTextColor(Color.parseColor("#000000"));
         }
 
         SpannableStringBuilder str;
@@ -185,9 +203,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-
-
-
                 Context context = v.getContext();
                 Intent intent = new Intent(context, ExpenseDetailActivity.class);
                 intent.putExtra(ExpenseDetailFragment.ARG_EXPENSE_ID, holder.mItem.getId());
