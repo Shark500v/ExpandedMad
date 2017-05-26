@@ -180,7 +180,6 @@ public class ExpenseDetailFragment extends Fragment {
                     else {
                         (rootView.findViewById(R.id.roundedCostLayout)).setVisibility(View.VISIBLE);
                         ((TextView) rootView.findViewById(R.id.roundedCost)).setText(String.format(Locale.getDefault(), "%.2f",(expense.getRoundedCost())));
-                        //((LinearLayout) rootView.findViewById(R.id.currencyLayout)).setLayou
                     }
 
                     if( expense.getPaidByPhoneNumber().equals(MyApplication.getUserPhoneNumber()) )
