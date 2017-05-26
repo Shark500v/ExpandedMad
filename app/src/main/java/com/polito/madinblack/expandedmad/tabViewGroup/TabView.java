@@ -343,6 +343,8 @@ public class TabView extends AppCompatActivity {
                 public void afterTextChanged(Editable s) {
                     if(!s.toString().isEmpty()){
                         send.setImageDrawable(getContext().getDrawable(R.drawable.ic_send_orange));
+                    }else{
+                        send.setImageDrawable(getContext().getDrawable(R.drawable.ic_send));
                     }
 
                 }

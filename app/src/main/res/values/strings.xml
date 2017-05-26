@@ -174,7 +174,7 @@
     <string name="history_new_memeber">has joined to the group.</string>
     <string name="no_detail">No detail available</string>
     <string name="pay_button">Pay</string>
-    <string name="list_payment">Pending payments</string>
+    <string name="list_payment">Settle payments</string>
     <string name="pay_everyone">Pay everyone</string>
     <string name="confirm_inserted">Confirm inserted</string>
     <string name="group">Group</string>
