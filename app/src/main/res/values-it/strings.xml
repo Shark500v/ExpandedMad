@@ -50,7 +50,7 @@
     </string-array>
     <string-array name="years">
         <item name="Select year">Seleziona anno</item>
-        <item name="all_years">Generale</item>
+        <item name="all_years">Tutti gli anni</item>
         <item name="2017">2017</item>
         <item name="2018">2018</item>
         <item name="2019">2019</item>
@@ -190,7 +190,7 @@
     <string name="no_expenses">Nessuna spesa in</string>
     <string name="in">nel</string>
     <string name="no_expenses_in">Nessuna spesa nel</string>
-    <string name="all_years">Generale</string>
+    <string name="all_years">Tutti gli anni</string>
     <string name="member">partecipante</string>
     <string name="user_info">Il mio profilo</string>
     <string name="payment_update">Pagamenti aggiornati</string>
