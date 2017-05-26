@@ -171,6 +171,12 @@ public class TabView extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed()
+    {
+        navigateUpTo(new Intent(this, GroupListActivity.class));    //definisco il parente verso cui devo tornare indietro
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.tabview_menu, menu);
@@ -283,8 +289,8 @@ public class TabView extends AppCompatActivity {
 
             // Read the input field and push a new instance
             // of ChatMessage to the Firebase database
-            ref.push().setValue(new Message(MyApplication.getUserName() + " " + MyApplication.getUserSurname(), MyApplication.getUserPhoneNumber(),
-                                MyApplication.getFirebaseId(), inputMessage.getText().toString()));
+            ref.push().setValue(new Message(MyApplication.getUserName() + " " + MyApplication.getUserSurname(),MyApplication.getFirebaseId(),
+                    MyApplication.getUserPhoneNumber(), inputMessage.getText().toString()));
 
             // Clear the input
             inputMessage.setText("");
