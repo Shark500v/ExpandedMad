@@ -45,7 +45,6 @@ public class Message {
         this.sentByPhone = sentByPhone;
     }
 
-
     public String getMessage() {
         return message;
     }
