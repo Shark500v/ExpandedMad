@@ -72,6 +72,8 @@ public class Logout extends DialogFragment implements
         builder.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User cancelled the dialog
+                getActivity().finish();
+                startActivity(getActivity().getIntent());
             }
         });
 
