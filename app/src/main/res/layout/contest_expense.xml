@@ -9,15 +9,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:id="@+id/generated_by_layout"
-        >
+        android:id="@+id/generated_by_layout">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="@string/generated_by"
-            android:textSize="20sp"
-            />
+            android:textSize="20sp" />
+
         <TextView
             android:id="@+id/generated_by_name"
             android:layout_width="wrap_content"
@@ -26,9 +26,7 @@
             android:textSize="18sp"
             android:gravity="end"
             android:layout_margin="16dp"
-            tools:text="Alessandro Nicoletta"
-
-            />
+            tools:text="Alessandro Nicoletta" />
 
     </LinearLayout>
 
@@ -37,15 +35,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_below="@+id/generated_by_layout"
-        >
+        android:layout_below="@+id/generated_by_layout">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:text="@string/expense_cost"
-            android:textSize="20sp"
-            />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/expense_cost"
@@ -54,10 +51,10 @@
             android:textStyle="bold"
             android:textSize="18sp"
             android:gravity="end"
+            android:layout_gravity=""
             android:layout_margin="16dp"
-            tools:text="55"
+            tools:text="55" />
 
-            />
         <TextView
             android:id="@+id/expense_currency"
             android:layout_width="wrap_content"
@@ -66,21 +63,18 @@
             android:textSize="18sp"
             android:gravity="end"
             android:layout_margin="16dp"
-            tools:text="€"
-            />
-
-
+            android:layout_gravity=""
+            tools:text="€" />
 
     </LinearLayout>
-
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/old_topay_layout"
         android:layout_below="@+id/expense_layout"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -97,8 +91,8 @@
             android:gravity="center"
             android:textSize="18sp"
             android:textAlignment="textEnd"
-            tools:text="55"
-            />
+            tools:text="55" />
+
         <TextView
             android:id="@+id/old_topay_currency"
             android:layout_width="wrap_content"
@@ -107,8 +101,7 @@
             android:textSize="18sp"
             android:gravity="end"
             android:layout_margin="16dp"
-            tools:text="€"
-            />
+            tools:text="€" />
 
     </LinearLayout>
 
@@ -117,32 +110,31 @@
         android:layout_height="wrap_content"
         android:id="@+id/currency_layout"
         android:layout_below="@+id/old_topay_layout"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/currencyISO"
             android:textSize="20sp"
             android:layout_margin="16dp"/>
+
         <Spinner
             android:id="@+id/currencyISO"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="5dp"
-            android:layout_gravity="center"
-            />
+            android:layout_gravity="center" />
+
     </LinearLayout>
-
-
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/new_topay_layout"
         android:layout_below="@+id/currency_layout"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
+
         <TextView
             android:id="@+id/balance"
             android:layout_width="wrap_content"
@@ -170,9 +162,7 @@
             android:textSize="18sp"
             android:gravity="end"
             android:layout_margin="16dp"
-            tools:text="€"
-            />
-
+            tools:text="€" />
 
     </LinearLayout>
 
@@ -182,8 +172,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/motivation_layout"
         android:layout_below="@+id/new_topay_layout"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
 
         <!--
         <android.support.design.widget.TextInputLayout
@@ -205,7 +194,6 @@
 
         <!--</android.support.design.widget.TextInputLayout> -->
 
-
     </LinearLayout>
 
     <LinearLayout
@@ -216,9 +204,7 @@
         android:orientation="horizontal"
         android:visibility="gone"
         tools:visibility="visible"
-        >
-
-
+        android:gravity="center">
 
         <Button
             android:id="@+id/confirm_delete_button"
@@ -227,14 +213,8 @@
             android:gravity="center"
             android:padding="10dp"
             android:layout_gravity="center"
-            tools:text = "Confirm Contention"
-            />
-
+            tools:text = "Confirm Contention" />
 
     </LinearLayout>
-
-
-
-
 
 </RelativeLayout>
