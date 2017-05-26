@@ -95,6 +95,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         if(holder.mItem.getState()== Expense.State.CONTESTED)
             holder.mIdView.setTextColor(Color.parseColor("#FF9800"));
+        else if(holder.mItem.getState()== Expense.State.REJECTED)
+            holder.mIdView.setTextColor(Color.parseColor("#ff0000"));
         else
             holder.mIdView.setTextColor(Color.parseColor("#009688"));
 
