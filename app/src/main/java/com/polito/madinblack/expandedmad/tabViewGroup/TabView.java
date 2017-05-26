@@ -14,6 +14,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,7 +30,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
+import com.google.firebase.database.ValueEventListener;
 import com.polito.madinblack.expandedmad.groupManaging.GroupSettings;
+import com.polito.madinblack.expandedmad.model.UserForGroup;
 import com.polito.madinblack.expandedmad.newExpense.ExpenseFillData;
 import com.polito.madinblack.expandedmad.chat.ChatRecyclerViewAdapter;
 import com.polito.madinblack.expandedmad.groupManaging.GroupHistory;
@@ -40,6 +44,8 @@ import com.polito.madinblack.expandedmad.model.Message;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 
 import java.util.List;
+
+import static com.polito.madinblack.expandedmad.R.drawable.payment;
 
 public class TabView extends AppCompatActivity {
 
@@ -80,7 +86,7 @@ public class TabView extends AppCompatActivity {
         mDatabaseBalancesReference = FirebaseDatabase.getInstance().getReference().child("groups/"+groupIndex+"/users/"+MyApplication.getFirebaseId()+"/balances");
         mDatabaseBalancesQuery = mDatabaseBalancesReference.orderByChild("fullName");
         mDatabaseExpenseListReference = FirebaseDatabase.getInstance().getReference().child("users/"+MyApplication.getUserPhoneNumber()+"/"+MyApplication.getFirebaseId()+"/groups/"+groupIndex+"/expenses");
-        mDatabaseExpenseListQuery = mDatabaseExpenseListReference.orderByChild("timestamp");
+        mDatabaseExpenseListQuery = mDatabaseExpenseListReference;
 
 
         //toolbar
@@ -171,6 +177,32 @@ public class TabView extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed()
+    {
+        DatabaseReference mDatabaseNewExpenseReference = FirebaseDatabase.getInstance().getReference().child("users/" + MyApplication.getUserPhoneNumber() + "/" + MyApplication.getFirebaseId() + "/groups/" + groupIndex + "/newExpenses");
+
+        mDatabaseNewExpenseReference.runTransaction(new Transaction.Handler() {
+
+            @Override
+            public Transaction.Result doTransaction(MutableData currentData) {
+                if((Long) currentData.getValue()!=0)
+                    currentData.setValue(0L);
+
+                return Transaction.success(currentData);
+            }
+
+            @Override
+            public void onComplete(DatabaseError databaseError,
+                                   boolean committed, DataSnapshot currentData) {
+                //This method will be called once with the results of the transaction.
+                //Update remove the user from the group
+            }
+        });
+
+        navigateUpTo(new Intent(this, GroupListActivity.class));    //definisco il parente verso cui devo tornare indietro
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.tabview_menu, menu);
@@ -188,6 +220,25 @@ public class TabView extends AppCompatActivity {
                 return true;
 
             case R.id.home:
+                DatabaseReference mDatabaseNewExpenseReference = FirebaseDatabase.getInstance().getReference().child("users/" + MyApplication.getUserPhoneNumber() + "/" + MyApplication.getFirebaseId() + "/groups/" + groupIndex + "/newExpenses");
+
+                mDatabaseNewExpenseReference.runTransaction(new Transaction.Handler() {
+
+                    @Override
+                    public Transaction.Result doTransaction(MutableData currentData) {
+                        if((Long) currentData.getValue()!=0)
+                            currentData.setValue(0L);
+
+                        return Transaction.success(currentData);
+                    }
+
+                    @Override
+                    public void onComplete(DatabaseError databaseError,
+                                           boolean committed, DataSnapshot currentData) {
+                        //This method will be called once with the results of the transaction.
+                        //Update remove the user from the group
+                    }
+                });
                 navigateUpTo(new Intent(this, GroupListActivity.class));    //definisco il parente verso cui devo tornare indietro
                 return true;
 
@@ -226,7 +277,6 @@ public class TabView extends AppCompatActivity {
         private DatabaseReference ref;
         private View rootView = null;
 
-
         public ChatFragment() {
         }
 
@@ -256,16 +306,18 @@ public class TabView extends AppCompatActivity {
                     Message.class,
                     R.layout.list_message_item_left,
                     RecyclerView.ViewHolder.class,
-                    ref
+                    ref,
+                    getContext()
             );
             recyclerView.setAdapter(mAdapter);
 
-            ImageView send = (ImageView) rootView.findViewById(R.id.send_button);
+            final ImageView send = (ImageView) rootView.findViewById(R.id.send_button);
 
             send.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    sendMessage(v);
+                    if(!inputMessage.getText().toString().isEmpty())
+                        sendMessage(v);
                 }
             });
 
@@ -276,6 +328,28 @@ public class TabView extends AppCompatActivity {
                 }
             });
 
+            inputMessage.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if(!s.toString().isEmpty()){
+                        send.setImageDrawable(getContext().getDrawable(R.drawable.ic_send_orange));
+                    }else{
+                        send.setImageDrawable(getContext().getDrawable(R.drawable.ic_send));
+                    }
+
+                }
+            });
+
             return rootView;
         }
 
@@ -283,11 +357,54 @@ public class TabView extends AppCompatActivity {
 
             // Read the input field and push a new instance
             // of ChatMessage to the Firebase database
-            ref.push().setValue(new Message(MyApplication.getUserName() + " " + MyApplication.getUserSurname(), MyApplication.getUserPhoneNumber(),
-                                MyApplication.getFirebaseId(), inputMessage.getText().toString()));
+            ref.push().setValue(new Message(MyApplication.getUserName() + " " + MyApplication.getUserSurname(),MyApplication.getFirebaseId(),
+                    MyApplication.getUserPhoneNumber(), inputMessage.getText().toString()));
 
+            updateNumberForUsers();
             // Clear the input
             inputMessage.setText("");
+        }
+
+        private void updateNumberForUsers(){
+
+            FirebaseDatabase.getInstance().getReference().child("groups/"+groupIndex+"/users").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    for(DataSnapshot snapshot: dataSnapshot.getChildren()){
+                        UserForGroup user = snapshot.getValue(UserForGroup.class);
+                        if(!user.getFirebaseId().equals(MyApplication.getFirebaseId())){
+                            FirebaseDatabase.getInstance().getReference().child("users/"+user.getPhoneNumber()+"/"+user.getFirebaseId()+"/groups/"+groupIndex+"/newExpenses").runTransaction(new Transaction.Handler() {
+
+                                @Override
+                                public Transaction.Result doTransaction(MutableData currentData) {
+                                    if (currentData.getValue() == null) {
+                                        //no default value for data, set one
+                                        currentData.setValue(1L);
+                                    } else {
+                                        // perform the update operations on data
+                                        currentData.setValue(currentData.getValue(Long.class) + 1);
+                                    }
+                                    return Transaction.success(currentData);
+                                }
+
+                                @Override
+                                public void onComplete(DatabaseError databaseError,
+                                                       boolean committed, DataSnapshot currentData) {
+                                    //This method will be called once with the results of the transaction.
+                                    //Update remove the user from the group
+
+                                }
+                            });
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
         }
     }
 

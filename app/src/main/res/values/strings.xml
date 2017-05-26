@@ -146,7 +146,7 @@
     <string name="paid_topay">Paid/toPay</string>
     <string name="type">Type</string>
     <string name="currency">Currency</string>
-    <string name="currencyISO">CurrencyISO</string>
+    <string name="currencyISO">Currency ISO</string>
     <string name="date_format">dd/mm/yyyy</string>
     <string name="date">Date</string>
     <string name="paid_by">Paid by</string>
@@ -174,7 +174,7 @@
     <string name="history_new_memeber">has joined to the group.</string>
     <string name="no_detail">No detail available</string>
     <string name="pay_button">Pay</string>
-    <string name="list_payment">Pending payments</string>
+    <string name="list_payment">Settle payments</string>
     <string name="pay_everyone">Pay everyone</string>
     <string name="confirm_inserted">Confirm inserted</string>
     <string name="group">Group</string>

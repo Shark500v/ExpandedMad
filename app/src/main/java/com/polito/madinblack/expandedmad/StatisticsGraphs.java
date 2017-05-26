@@ -44,8 +44,6 @@ public class StatisticsGraphs extends AppCompatActivity {
     private Spinner tagSpinner;
     private GraphView graph;
     private ValueEventListener mValueEventListener;
-    private ValueEventListener mGroupsEventListener;
-    private ValueEventListener mExpensesEventListener;
     private Query mDatabaseGroupReference;
     private DatabaseReference mDatabaseExpenseReference;
     private DatabaseReference mDatabaseAllExpenseReference;
@@ -101,7 +99,7 @@ public class StatisticsGraphs extends AppCompatActivity {
 
         mDatabaseGroupReference = FirebaseDatabase.getInstance().getReference().child("users").child(MyApplication.getUserPhoneNumber()).child(MyApplication.getFirebaseId()).child("groups").orderByChild("timestamp");
 
-        mDatabaseGroupReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        mValueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 groupArray.add(getString(R.string.select_group)); //aggiungo all'array e alla mappa <groupName,groupId> il valore di default
@@ -127,7 +125,7 @@ public class StatisticsGraphs extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        };
 
         groupSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -338,7 +336,7 @@ public class StatisticsGraphs extends AppCompatActivity {
         double max = 0.0;
 
         for (int i = 0; i < 12; i++) {                               // da 0 venga visualizzato male
-            double cost = groupExpensesByMonth.get(Double.valueOf(i+1));
+            double cost = groupExpensesByMonth.get(i+1D);
             if(cost > max) {
                 max = cost;
             }
@@ -413,7 +411,7 @@ public class StatisticsGraphs extends AppCompatActivity {
 
     private void resetMap(Map <Double,Double> map){
         for(int i = 1; i <= 12; i++){
-            map.put(Double.valueOf(i), 0.0);
+            map.put(((Integer)i).doubleValue(), 0.0);
         }
     }
 
@@ -443,7 +441,7 @@ public class StatisticsGraphs extends AppCompatActivity {
         Double expenseCost = expenseForUser.getCost();
         Currency.CurrencyISO expenseCurrency = expenseForUser.getCurrencyISO();
         if (!expenseCurrency.equals(myCurrency)) {
-            expenseCost = Double.valueOf(Currency.convertCurrency(expenseCost, expenseCurrency, myCurrency));
+            expenseCost = Currency.convertCurrency(expenseCost, expenseCurrency, myCurrency);
         }
         Double month = Double.valueOf(expenseForUser.getMonth());
         expenseCost += groupExpensesByMonth.get(month);
@@ -453,6 +451,8 @@ public class StatisticsGraphs extends AppCompatActivity {
     @Override
     public void onStart(){
         super.onStart();
+        if(mValueEventListener!=null)
+            mDatabaseGroupReference.addListenerForSingleValueEvent(mValueEventListener);
     }
 
     @Override

@@ -23,7 +23,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.Currency;
 import com.polito.madinblack.expandedmad.model.HistoryInfo;
@@ -82,15 +81,15 @@ public class GroupHistory extends AppCompatActivity {
         super.onStart();
 
 
-        adapter = new HistoryAdapter(getApplicationContext(), mDatabaseReference);
+        adapter = new HistoryAdapter( this, mDatabaseReference);
 
         recyclerView = (RecyclerView) findViewById(R.id.cardList);
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        /*recyclerView.setHasFixedSize(true);
+        recyclerView.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(llm);*/
+        recyclerView.setLayoutManager(llm);
     }
 
     @Override
@@ -103,13 +102,13 @@ public class GroupHistory extends AppCompatActivity {
     }
 
 
-    public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
+    public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ContactViewHolder> {
 
         private List<HistoryInfo> mValues = new ArrayList<>();
         private DatabaseReference dataref;
         private List<String> mValuesIds = new ArrayList<>();
         private Context mContext;
-        private ValueEventListener mEventListener;
+        private ChildEventListener mChildEventListener;
 
         private static final String TAG = "MyBalanceActivity";
 
@@ -118,38 +117,104 @@ public class GroupHistory extends AppCompatActivity {
             mContext = ct;
 
 
-            ValueEventListener valueEventListener = new ValueEventListener() {
+            // Create child event listener
+            // [START child_event_listener_recycler]
+            ChildEventListener childEventListener = new ChildEventListener() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    mValues.clear();
-                    mValuesIds.clear();
-                        for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
-                            mValuesIds.add(dataSnapshot.getKey());
-                            mValues.add(childDataSnapshot.getValue(HistoryInfo.class));
+                public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
+                    Log.d(TAG, "onChildAdded:" + dataSnapshot.getKey());
 
-                        }/*
-                        if(getItemCount() == 0){
-                            RecyclerView recyclerView = (RecyclerView) findViewById(R.id.cardList);
-                            TextView tx = (TextView) findViewById(R.id.textView);
-                            tx.setVisibility(View.GONE);
-                            recyclerView.setVisibility(View.VISIBLE);
-                        }*/
-                        notifyDataSetChanged();
+                    // A new info has been added, add it to the displayed list
+                    HistoryInfo historyInfo = dataSnapshot.getValue(HistoryInfo.class);
 
+
+                    // [START_EXCLUDE]
+                    // Update RecyclerView
+                    if(getItemCount() == 0){
+                        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.cardList);
+                        TextView tx = (TextView) findViewById(R.id.textView);
+                        tx.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
+                    }
+                    mValuesIds.add(0, dataSnapshot.getKey());
+                    mValues.add(0, historyInfo);
+                    notifyItemInserted(0);
+                    // [END_EXCLUDE]
+
+                }
+
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
+                    Log.d(TAG, "onChildChanged:" + dataSnapshot.getKey());
+
+                    // An info has changed, use the key to determine if we are displaying this
+                    // info and if so displayed the changed info.
+                    HistoryInfo historyInfo = dataSnapshot.getValue(HistoryInfo.class);
+                    String infoKey = dataSnapshot.getKey();
+
+                    // [START_EXCLUDE]
+                    int infoIndex = mValuesIds.indexOf(infoKey);
+                    if (infoIndex > -1) {
+                        // Replace with the new data
+                        mValues.set(infoIndex, historyInfo);
+
+                        // Update the RecyclerView
+                        notifyItemChanged(infoIndex);
+
+                    } else {
+                        Log.w(TAG, "onChildChanged:unknown_child:" + infoKey);
+                    }
+                    // [END_EXCLUDE]
+                }
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+                    Log.d(TAG, "onChildRemoved:" + dataSnapshot.getKey());
+
+                    // An info has changed, use the key to determine if we are displaying this
+                    // info and if so remove it.
+                    String infoKey = dataSnapshot.getKey();
+
+                    // [START_EXCLUDE]
+                    int infoIndex = mValuesIds.indexOf(infoKey);
+                    if (infoIndex > -1) {
+                        // Remove data from the list
+                        mValuesIds.remove(infoKey);
+                        mValues.remove(infoIndex);
+
+                        // Update the RecyclerView
+                        notifyItemRemoved(infoIndex);
+                    } else {
+                        Log.w(TAG, "onChildRemoved:unknown_child:" + infoKey);
+                    }
+                    // [END_EXCLUDE]
+                }
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
+                    Log.d(TAG, "onChildMoved:" + dataSnapshot.getKey());
+
+                    // A comment has changed position, use the key to determine if we are
+                    // displaying this comment and if so move it.
+                    //Group movedGroup = dataSnapshot.getValue(Group.class);
+                    //String groupKey = dataSnapshot.getKey();
+
+                    // ...
                 }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-
+                    Log.w(TAG, "Groups:onCancelled", databaseError.toException());
+                    Toast.makeText(mContext, "Failed to load expenses.",
+                            Toast.LENGTH_SHORT).show();
                 }
             };
-
-
-            dataref.addValueEventListener(valueEventListener);
+            dataref.addChildEventListener(childEventListener);
             // [END child_event_listener_recycler]
 
             // Store reference to listener so it can be removed on app stop
-            mEventListener = valueEventListener;
+            mChildEventListener = childEventListener;
         }
 
 
@@ -159,14 +224,14 @@ public class GroupHistory extends AppCompatActivity {
         }
 
         @Override
-        public void onBindViewHolder(HistoryAdapter.ViewHolder holder, int i) {
-            holder.mItem = mValues.get(i);
+        public void onBindViewHolder(ContactViewHolder contactViewHolder, int i) {
+            HistoryInfo ci = mValues.get(i);
 
-            String message = getMessageFromNumber(holder.mItem);
-            SpannableString spanString = new SpannableString(holder.mItem.getName() + " " + message );
-            spanString.setSpan(new StyleSpan(Typeface.BOLD), 0, holder.mItem.getName().length(), 0);
-            holder.vContent.setText( spanString );
-            holder.vTitle.setText(holder.mItem.convertDateToString());
+            String message = getMessageFromNumber(ci);
+            SpannableString spanString = new SpannableString(ci.getName() + " " + message );
+            spanString.setSpan(new StyleSpan(Typeface.BOLD), 0, ci.getName().length(), 0);
+            contactViewHolder.vContent.setText( spanString );
+            contactViewHolder.vTitle.setText(ci.convertDateToString());
         }
 
         private String getMessageFromNumber(HistoryInfo hi){
@@ -190,27 +255,26 @@ public class GroupHistory extends AppCompatActivity {
         }
 
         @Override
-        public HistoryAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public ContactViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             View itemView = LayoutInflater.
                     from(viewGroup.getContext()).
                     inflate(R.layout.card_layout_history, viewGroup, false);
 
-            return new HistoryAdapter.ViewHolder(itemView);
+            return new ContactViewHolder(itemView);
         }
 
         public void cleanupListener() {
-            if (mEventListener != null) {
-                dataref.removeEventListener(mEventListener);
+            if (mChildEventListener != null) {
+                dataref.removeEventListener(mChildEventListener);
             }
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder {
+        public class ContactViewHolder extends RecyclerView.ViewHolder {
 
-            public TextView vContent;
-            public TextView vTitle;
-            public HistoryInfo mItem;
+            protected TextView vContent;
+            protected TextView vTitle;
 
-            public ViewHolder(View v) {
+            public ContactViewHolder(View v) {
                 super(v);
                 vContent = (TextView)  v.findViewById(R.id.txtContent);
                 vTitle = (TextView) v.findViewById(R.id.title);

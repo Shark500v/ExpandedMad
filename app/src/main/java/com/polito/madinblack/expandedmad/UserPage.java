@@ -106,7 +106,7 @@ public class UserPage extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 if(!visible) {
-                    Glide.with(getApplicationContext()).load(url).override(1024,1024).centerCrop().fitCenter().diskCacheStrategy(DiskCacheStrategy.RESULT).error(R.drawable.businessman).into(fullscreen);
+                    Glide.with(getApplicationContext()).load(url).override(2048,2048).centerCrop().fitCenter().diskCacheStrategy(DiskCacheStrategy.RESULT).error(R.drawable.businessman).into(fullscreen);
                     fullscreen.setVisibility(View.VISIBLE);
                     visible = true;
                 }

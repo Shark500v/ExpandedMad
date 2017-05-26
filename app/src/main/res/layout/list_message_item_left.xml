@@ -6,12 +6,14 @@
     android:orientation="horizontal"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <ImageView
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageUser"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginTop="0dp"
-        android:src="@drawable/user_pratikshya" />
+        android:src="@drawable/icon_utente" />
 
     <FrameLayout
         android:layout_width="match_parent"

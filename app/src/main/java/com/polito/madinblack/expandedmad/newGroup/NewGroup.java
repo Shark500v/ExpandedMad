@@ -153,7 +153,7 @@ public class NewGroup extends AppCompatActivity {
                 }*/
                 if(!visible) {
                     getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-                    Glide.with(getApplicationContext()).load(imageData).override(1024,1024).centerCrop().fitCenter().error(R.drawable.teamwork).into(fullScreen);
+                    Glide.with(getApplicationContext()).load(imageData).override(2048,2048).centerCrop().fitCenter().error(R.drawable.teamwork).into(fullScreen);
                     fullScreen.setVisibility(View.VISIBLE);
                     visible = true;
                 }

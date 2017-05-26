@@ -169,7 +169,7 @@
     <string name="history_new_memeber">si è unito al gruppo.</string>
     <string name="no_detail">Nessun dettaglio disponibile</string>
     <string name="pay_button">Salda</string>
-    <string name="list_payment">Pagamenti pendenti</string>
+    <string name="list_payment">Saldo pagamenti</string>
     <string name="pay_everyone">Salda tutti</string>
     <string name="confirm_inserted">Conferma selezionati</string>
     <string name="go_to_list_of_payments">Vai alla lista di pagamenti</string>
@@ -210,7 +210,7 @@
     <string name="new_paid">Nuova cifra pagata</string>
     <string name="expense_cost">Costo Spesa</string>
     <string name="old_paid_topay">Da Pagare assegnati</string>
-    <string name="currencyISO">CurrencyISO</string>
+    <string name="currencyISO">Valuta ISO</string>
     <string name="err_msg_prefix">Prefisso non valido</string>
     <string name="err_msg_prefix_number">Inserire il numero senza il prefisso</string>
     <string name="hint_prefix">prefisso</string>
@@ -236,4 +236,5 @@
     <string name="contention_confermed">Contesa Confermata</string>
     <string name="contention_deleted">Contesa annullata</string>
     <string name="transfer">(Storno)</string>
+    <string name="paid">Pagato</string>
 </resources>

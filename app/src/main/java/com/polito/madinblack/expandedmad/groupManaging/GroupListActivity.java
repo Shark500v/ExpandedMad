@@ -218,7 +218,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             intent.putExtra("groupIndex", groupIndex);
             intent.putExtra("groupName", groupName);
             intent.putExtra("request", index);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             finish();
         }
