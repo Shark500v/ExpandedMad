@@ -172,6 +172,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             intent.putExtra("groupIndex", groupIndex);
             intent.putExtra("groupName", groupName);
             intent.putExtra("request", index);
+            index = 0;
             startActivity(intent);
         }
     }
@@ -359,23 +360,11 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                 public void onClick(View v) {
                     final Context context = v.getContext();
 
-                    final DatabaseReference mDatabaseGroupForUserReference = mDatabaseRootReference.child("users/" + MyApplication.getFirebaseId() + "/" + MyApplication.getUserPhoneNumber() + "groups/" + holder.mItem.getId());
+                    Intent intent = new Intent(context, TabView.class); //qui setto la nuova attività da mostrare a schermo dopo che clicco
+                    intent.putExtra("groupIndex", holder.mItem.getId());    //passo alla nuova activity l'ide del gruppo chè l'utente ha selezionto
+                    intent.putExtra("groupName", holder.mItem.getName());
+                    context.startActivity(intent);
 
-                    mDatabaseGroupForUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-
-                            Intent intent = new Intent(context, TabView.class); //qui setto la nuova attività da mostrare a schermo dopo che clicco
-                            intent.putExtra("groupIndex", holder.mItem.getId());    //passo alla nuova activity l'ide del gruppo chè l'utente ha selezionto
-                            intent.putExtra("groupName", holder.mItem.getName());
-                            context.startActivity(intent);
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
                 }
             });
 

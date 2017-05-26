@@ -211,7 +211,7 @@ public class PaymentDetailActivity extends BaseActivity {
 
 
                 /*update the history*/
-                HistoryInfo historyInfo = new HistoryInfo(paymentInfo.getUserNameDisplayed(), 1L, paymentInfo.getPaidNow(),
+                HistoryInfo historyInfo = new HistoryInfo(paymentInfo.getUserNameDisplayed(), null, 1L, paymentInfo.getPaidNow(),
                                 currencyISO, expenseUserName + " " + expenseUserSurname);
                 mDatabaseRootReference.child("history/"+groupId).push().setValue(historyInfo);
 

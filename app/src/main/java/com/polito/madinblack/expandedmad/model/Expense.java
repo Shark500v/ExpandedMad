@@ -371,7 +371,11 @@ public class Expense {
         mDatabaseRootRefenrence.child("groups/"+groupId+"/expenses/"+expenseKey).setValue(true);
 
         /*update the history*/
-        HistoryInfo historyInfo = new HistoryInfo(paidByName+" "+paidBySurname, 0l, cost, currencyISO, null);
+        HistoryInfo historyInfo;
+        if(state==State.TRANSFER)
+            historyInfo = new HistoryInfo(paidByName+" "+paidBySurname, name, 4l, cost, currencyISO, null);
+        else
+            historyInfo = new HistoryInfo(paidByName+" "+paidBySurname, null, 0l, cost, currencyISO, null);
         mDatabaseRootRefenrence.child("history/"+groupId).push().setValue(historyInfo);
 
         return expenseKey;

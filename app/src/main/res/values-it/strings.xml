@@ -160,6 +160,9 @@
     <string name="add_proof">Aggiungi Immagine Spesa</string>
     <string name="no_reports">Non ci sono notizie</string>
     <string name="group_history">Riepilogo Gruppo</string>
+    <string name="history_new_group">ha creato questo gruppo.</string>
+    <string name="history_transfer_part1">ha effettuato lo storno della spesa</string>
+    <string name="history_transfer_part2">.</string>
     <string name="history_expense">ha aggiunto una nuova spesa. Costo : </string>
     <string name="history_payment_part1">ha pagato</string>
     <string name="history_payment_part2">. Costo :</string>
