@@ -138,7 +138,7 @@ public class GroupHistory extends AppCompatActivity {
                     }
                     mValuesIds.add(0, dataSnapshot.getKey());
                     mValues.add(0, historyInfo);
-                    notifyItemInserted(mValues.size() - 1);
+                    notifyItemInserted(0);
                     // [END_EXCLUDE]
 
                 }
