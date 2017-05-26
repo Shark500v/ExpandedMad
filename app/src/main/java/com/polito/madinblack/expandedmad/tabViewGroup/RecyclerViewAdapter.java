@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
@@ -24,6 +25,7 @@ import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.Currency;
 import com.polito.madinblack.expandedmad.model.Expense;
 import com.polito.madinblack.expandedmad.model.ExpenseForUser;
+import com.polito.madinblack.expandedmad.model.HistoryInfo;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 
 import java.util.ArrayList;
@@ -34,13 +36,10 @@ import java.util.Locale;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
     private List<ExpenseForUser> mValues = new ArrayList<>();
+    private List<String> mValuesIds = new ArrayList<>();
     private Query dataref;
     private Context mContext;
-    private ValueEventListener mEventListener;
-
-
-
-
+    private ChildEventListener mEventListener;
 
     private static final String TAG = "MyBalanceActivity";
 
@@ -51,17 +50,89 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         // Create child event listener
         // [START child_event_listener_recycler]
-        ValueEventListener eventListener = new ValueEventListener() {
+        ChildEventListener childEventListener = new ChildEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot)  {
-                mValues.clear();
-                for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
-                    mValues.add(postSnapshot.getValue(ExpenseForUser.class));
-                }
-                notifyDataSetChanged();
+            public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
+                Log.d(TAG, "onChildAdded:" + dataSnapshot.getKey());
+
+                // A new info has been added, add it to the displayed list
+                ExpenseForUser expenseForUser = dataSnapshot.getValue(ExpenseForUser.class);
+
+
+                // [START_EXCLUDE]
+                // Update RecyclerView
+                /*if(getItemCount() == 0){
+                    RecyclerView recyclerView = (RecyclerView) findViewById(R.id.cardList);
+                    TextView tx = (TextView) findViewById(R.id.textView);
+                    tx.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                }*/
+                mValuesIds.add(0, dataSnapshot.getKey());
+                mValues.add(0, expenseForUser);
+                notifyItemInserted(0);
+                // [END_EXCLUDE]
+
             }
 
 
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
+                Log.d(TAG, "onChildChanged:" + dataSnapshot.getKey());
+
+                // An info has changed, use the key to determine if we are displaying this
+                // info and if so displayed the changed info.
+                ExpenseForUser expenseForUser = dataSnapshot.getValue(ExpenseForUser.class);
+                String infoKey = dataSnapshot.getKey();
+
+                // [START_EXCLUDE]
+                int infoIndex = mValuesIds.indexOf(infoKey);
+                if (infoIndex > -1) {
+                    // Replace with the new data
+                    mValues.set(infoIndex, expenseForUser);
+
+                    // Update the RecyclerView
+                    notifyItemChanged(infoIndex);
+
+                } else {
+                    Log.w(TAG, "onChildChanged:unknown_child:" + infoKey);
+                }
+                // [END_EXCLUDE]
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Log.d(TAG, "onChildRemoved:" + dataSnapshot.getKey());
+
+                // An info has changed, use the key to determine if we are displaying this
+                // info and if so remove it.
+                String infoKey = dataSnapshot.getKey();
+
+                // [START_EXCLUDE]
+                int infoIndex = mValuesIds.indexOf(infoKey);
+                if (infoIndex > -1) {
+                    // Remove data from the list
+                    mValuesIds.remove(infoKey);
+                    mValues.remove(infoIndex);
+
+                    // Update the RecyclerView
+                    notifyItemRemoved(infoIndex);
+                } else {
+                    Log.w(TAG, "onChildRemoved:unknown_child:" + infoKey);
+                }
+                // [END_EXCLUDE]
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
+                Log.d(TAG, "onChildMoved:" + dataSnapshot.getKey());
+
+                // A comment has changed position, use the key to determine if we are
+                // displaying this comment and if so move it.
+                //Group movedGroup = dataSnapshot.getValue(Group.class);
+                //String groupKey = dataSnapshot.getKey();
+
+                // ...
+            }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -70,11 +141,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                         Toast.LENGTH_SHORT).show();
             }
         };
-        dataref.addValueEventListener(eventListener);
+        dataref.addChildEventListener(childEventListener);
         // [END child_event_listener_recycler]
 
         // Store reference to listener so it can be removed on app stop
-        mEventListener = eventListener;
+        mEventListener = childEventListener;
     }
 
     @Override

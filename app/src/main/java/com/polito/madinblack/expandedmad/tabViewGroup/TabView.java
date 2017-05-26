@@ -86,7 +86,7 @@ public class TabView extends AppCompatActivity {
         mDatabaseBalancesReference = FirebaseDatabase.getInstance().getReference().child("groups/"+groupIndex+"/users/"+MyApplication.getFirebaseId()+"/balances");
         mDatabaseBalancesQuery = mDatabaseBalancesReference.orderByChild("fullName");
         mDatabaseExpenseListReference = FirebaseDatabase.getInstance().getReference().child("users/"+MyApplication.getUserPhoneNumber()+"/"+MyApplication.getFirebaseId()+"/groups/"+groupIndex+"/expenses");
-        mDatabaseExpenseListQuery = mDatabaseExpenseListReference.orderByChild("timestamp");
+        mDatabaseExpenseListQuery = mDatabaseExpenseListReference;
 
 
         //toolbar
@@ -343,6 +343,8 @@ public class TabView extends AppCompatActivity {
                 public void afterTextChanged(Editable s) {
                     if(!s.toString().isEmpty()){
                         send.setImageDrawable(getContext().getDrawable(R.drawable.ic_send_orange));
+                    }else{
+                        send.setImageDrawable(getContext().getDrawable(R.drawable.ic_send));
                     }
 
                 }

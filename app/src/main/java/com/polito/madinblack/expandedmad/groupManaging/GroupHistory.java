@@ -136,9 +136,9 @@ public class GroupHistory extends AppCompatActivity {
                         tx.setVisibility(View.GONE);
                         recyclerView.setVisibility(View.VISIBLE);
                     }
-                    mValuesIds.add(dataSnapshot.getKey());
-                    mValues.add(historyInfo);
-                    notifyItemInserted(mValues.size() - 1);
+                    mValuesIds.add(0, dataSnapshot.getKey());
+                    mValues.add(0, historyInfo);
+                    notifyItemInserted(0);
                     // [END_EXCLUDE]
 
                 }
