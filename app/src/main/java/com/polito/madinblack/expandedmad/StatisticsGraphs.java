@@ -101,7 +101,7 @@ public class StatisticsGraphs extends AppCompatActivity {
 
         mDatabaseGroupReference = FirebaseDatabase.getInstance().getReference().child("users").child(MyApplication.getUserPhoneNumber()).child(MyApplication.getFirebaseId()).child("groups").orderByChild("timestamp");
 
-        mValueEventListener = new ValueEventListener() {
+        mDatabaseGroupReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 groupArray.add(getString(R.string.select_group)); //aggiungo all'array e alla mappa <groupName,groupId> il valore di default
@@ -127,7 +127,7 @@ public class StatisticsGraphs extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        };
+        });
 
         groupSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -246,7 +246,7 @@ public class StatisticsGraphs extends AppCompatActivity {
         final int posTagSel = getTagPosition(tagSelected);
         resetMap(groupExpensesByMonth);
         if(!groupName.equals(getString(R.string.all_groups))) {
-            mGroupsEventListener = mDatabaseExpenseReference.addValueEventListener(new ValueEventListener() {
+            mDatabaseExpenseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot expenseSnapshot : dataSnapshot.getChildren()) {
@@ -276,7 +276,7 @@ public class StatisticsGraphs extends AppCompatActivity {
                 }
             });
         }else{
-            mExpensesEventListener = mDatabaseAllExpenseReference.addValueEventListener(new ValueEventListener() {
+            mDatabaseAllExpenseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for(int i = 2; i < groupMap.size(); i++){             //parto da perche i primi 2 campi dell'array sono quello di default e "tutti i gruppi"
@@ -453,18 +453,10 @@ public class StatisticsGraphs extends AppCompatActivity {
     @Override
     public void onStart(){
         super.onStart();
-        if(mValueEventListener!=null)
-            mDatabaseGroupReference.addListenerForSingleValueEvent(mValueEventListener);
     }
 
     @Override
     public void onStop() {
-        if(mValueEventListener!=null)
-            mDatabaseGroupReference.removeEventListener(mValueEventListener);
-        if(mGroupsEventListener!=null)
-            mDatabaseExpenseReference.removeEventListener(mGroupsEventListener);
-        if(mExpensesEventListener!=null)
-            mDatabaseAllExpenseReference.removeEventListener(mExpensesEventListener);
         super.onStop();
     }
 }

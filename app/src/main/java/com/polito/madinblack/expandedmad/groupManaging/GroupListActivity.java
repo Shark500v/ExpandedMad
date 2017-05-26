@@ -218,8 +218,9 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             intent.putExtra("groupIndex", groupIndex);
             intent.putExtra("groupName", groupName);
             intent.putExtra("request", index);
-            index = 0;
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
+            finish();
         }
     }
 
@@ -359,18 +360,16 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final Context context = v.getContext();
-
+                    Context context = v.getContext();
                     Intent intent = new Intent(context, TabView.class); //qui setto la nuova attività da mostrare a schermo dopo che clicco
                     intent.putExtra("groupIndex", holder.mItem.getId());    //passo alla nuova activity l'ide del gruppo chè l'utente ha selezionto
                     intent.putExtra("groupName", holder.mItem.getName());
                     context.startActivity(intent);
-
                 }
             });
 
             mDatabaseForGroupUrl = FirebaseDatabase.getInstance().getReference().child("groups").child(mValues.get(position).getId()).child("urlImage");
-            mDatabaseForGroupUrl.addValueEventListener(new ValueEventListener() {
+            mDatabaseForGroupUrl.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     String url = dataSnapshot.getValue(String.class);

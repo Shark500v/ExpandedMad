@@ -284,7 +284,8 @@ public class TabView extends AppCompatActivity {
 
             // Read the input field and push a new instance
             // of ChatMessage to the Firebase database
-            ref.push().setValue(new Message(MyApplication.getUserName() + " " + MyApplication.getUserSurname(), MyApplication.getUserPhoneNumber(), inputMessage.getText().toString()));
+            ref.push().setValue(new Message(MyApplication.getUserName() + " " + MyApplication.getUserSurname(), MyApplication.getUserPhoneNumber(),
+                                MyApplication.getFirebaseId(), inputMessage.getText().toString()));
 
             // Clear the input
             inputMessage.setText("");

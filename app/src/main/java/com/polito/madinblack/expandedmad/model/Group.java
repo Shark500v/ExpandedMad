@@ -111,14 +111,11 @@ public class Group {
                         }
 
 
-
-
-
                     });
 
-
-
                 }
+
+
                 mDatabaseRootReference.child("groups/"+groupId+"/users/"+userFirebaseId).setValue(newUserForGroup);
 
                 mDatabaseRootReference.child("groups/"+groupId+"/size").runTransaction(new Transaction.Handler(){
@@ -139,6 +136,7 @@ public class Group {
                                            boolean committed, DataSnapshot currentData){
                         if(committed){
                             GroupForUser newGroupForUser = new GroupForUser(groupName, groupId, (Long) currentData.getValue(), 0L);
+                            newGroupForUser.setTimestamp();
                             mDatabaseRootReference.child("users/"+userPhoneNumber+"/"+userFirebaseId+"/groups/"+groupId).setValue(newGroupForUser);
 
                             /*update the history*/
