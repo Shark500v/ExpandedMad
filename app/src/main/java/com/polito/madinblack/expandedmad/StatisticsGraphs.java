@@ -82,8 +82,8 @@ public class StatisticsGraphs extends AppCompatActivity {
         myCurrency = MyApplication.getCurrencyISOFavorite();
         myCurrencySymbol = Currency.getSymbol(myCurrency);
 
-        tagsEn = getEnglishArrayString(R.array.tags);
-        tagsIt = getItalianArrayString(R.array.tags);
+        tagsEn = getLocaleArrayString(R.array.tags, "en");
+        tagsIt = getLocaleArrayString(R.array.tags, "it");
 
         graph = (GraphView) findViewById(R.id.graph1);
         setGraph(graph);
@@ -419,39 +419,23 @@ public class StatisticsGraphs extends AppCompatActivity {
 
     public int getTagPosition(String tagSelected){
         for(int i = 0; i < tagsIt.size(); i++){
-            if(tagsIt.get(i).equals(tagSelected))
-                return i;
-            if(tagsEn.get(i).equals(tagSelected))
+            if(tagsIt.get(i).equals(tagSelected) || tagsEn.get(i).equals(tagSelected))
                 return i;
         }
         return -1;
     }
 
     @NonNull
-    protected List<String> getEnglishArrayString(int tags) {
-        Configuration configuration = getEnglishConfiguration();
+    protected List<String> getLocaleArrayString(int tags, String locale) {
+        Configuration configuration = getLocaleConfiguration(locale);
 
         return Arrays.asList(getApplicationContext().createConfigurationContext(configuration).getResources().getStringArray(tags));
     }
 
     @NonNull
-    private Configuration getEnglishConfiguration() {
+    private Configuration getLocaleConfiguration(String locale) {
         Configuration configuration = new Configuration(getApplicationContext().getResources().getConfiguration());
-        configuration.setLocale(new Locale("en"));
-        return configuration;
-    }
-
-    @NonNull
-    protected List<String> getItalianArrayString(int tags) {
-        Configuration configuration = getItalianConfiguration();
-
-        return Arrays.asList(getApplicationContext().createConfigurationContext(configuration).getResources().getStringArray(tags));
-    }
-
-    @NonNull
-    private Configuration getItalianConfiguration() {
-        Configuration configuration = new Configuration(getApplicationContext().getResources().getConfiguration());
-        configuration.setLocale(new Locale("it"));
+        configuration.setLocale(new Locale(locale));
         return configuration;
     }
 
