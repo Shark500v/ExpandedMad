@@ -6,15 +6,17 @@ public class Message {
 
     private String sentByName;
     private String sentById;
+    private String sentByPhone;
     private String message;
     private Date date;
 
     public Message() {
     }
 
-    public Message(String sentByName, String sentById, String message){
+    public Message(String sentByName, String sentById, String sentByPhone, String message){
         this.sentByName = sentByName;
         this.sentById = sentById;
+        this.sentByPhone = sentByPhone;
         this.message = message;
         date = new Date();
     }
@@ -33,6 +35,14 @@ public class Message {
 
     public void setSentById(String sentById) {
         this.sentById = sentById;
+    }
+
+    public String getSentByPhone() {
+        return sentByPhone;
+    }
+
+    public void setSentByPhone(String sentByPhone) {
+        this.sentByPhone = sentByPhone;
     }
 
     public String getMessage() {
