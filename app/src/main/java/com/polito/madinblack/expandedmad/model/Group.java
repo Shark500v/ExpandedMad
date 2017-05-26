@@ -51,7 +51,7 @@ public class Group {
 
 
     /*return of group id*/
-    public static String writeNewGroup(DatabaseReference mDatabaseRootReference, String name, List<UserForGroup> usersForGroup) {
+    public static String writeNewGroup(DatabaseReference mDatabaseRootReference, String name, List<UserForGroup> usersForGroup, String userName) {
 
         Group group = new Group(name, usersForGroup);
 
@@ -67,6 +67,10 @@ public class Group {
         for(UserForGroup userForGroup : usersForGroup) {
             mDatabaseRootReference.child("users/"+userForGroup.getPhoneNumber()+"/"+userForGroup.getFirebaseId()+"/groups/"+groupKey).setValue(groupForUser);
         }
+
+        HistoryInfo historyInfo = new HistoryInfo(userName, null, 3l, 0d, null, null);
+        mDatabaseRootReference.child("history/"+groupKey).push().setValue(historyInfo);
+
         return groupKey;
 
     }
@@ -138,7 +142,7 @@ public class Group {
                             mDatabaseRootReference.child("users/"+userPhoneNumber+"/"+userFirebaseId+"/groups/"+groupId).setValue(newGroupForUser);
 
                             /*update the history*/
-                            HistoryInfo historyInfo = new HistoryInfo(userName+" "+userSurname, 2L, 0D, null, null);
+                            HistoryInfo historyInfo = new HistoryInfo(userName+" "+userSurname, null, 2L, 0D, null, null);
                             mDatabaseRootReference.child("history/"+groupId).push().setValue(historyInfo);
 
                         }
@@ -146,11 +150,6 @@ public class Group {
                     }
 
                 });
-
-
-
-
-
 
             }
 

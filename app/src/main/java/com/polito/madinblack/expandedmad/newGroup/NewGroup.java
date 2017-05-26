@@ -351,7 +351,7 @@ public class NewGroup extends AppCompatActivity {
             }
             userForGroupList.add(userForGroup);
 
-            groupCode = Group.writeNewGroup(mDatabaseReferenceRoot, groupName, userForGroupList);
+            groupCode = Group.writeNewGroup(mDatabaseReferenceRoot, groupName, userForGroupList, MyApplication.getUserName() + " " + MyApplication.getUserSurname());
 
             if(groupCode != null) {
                 uploadGroupPhoto();

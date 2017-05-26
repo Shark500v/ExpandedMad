@@ -2,8 +2,10 @@ package com.polito.madinblack.expandedmad.expenseDetail;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
@@ -26,6 +28,10 @@ import com.polito.madinblack.expandedmad.model.Expense;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.PaymentFirebase;
 import com.polito.madinblack.expandedmad.tabViewGroup.RecyclerViewAdapter;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import static android.app.Activity.RESULT_OK;
 
@@ -49,6 +55,8 @@ public class ExpenseDetailFragment extends Fragment {
     private DatabaseReference mDatabaseExpenseReference;
     private ValueEventListener mValueEventListener;
     private View rootView;
+    private List<String> tagsIt = new ArrayList<>();
+    private List<String> tagsEn = new ArrayList<>();
 
 
     public ExpenseDetailFragment() {
@@ -77,6 +85,8 @@ public class ExpenseDetailFragment extends Fragment {
             expenseId = getArguments().getString(ARG_EXPENSE_ID);
             expenseName = getArguments().getString(ARG_EXPENSE_NAME);
 
+            tagsIt = getLocaleArrayString(R.array.tags, "it");
+            tagsEn = getLocaleArrayString(R.array.tags, "en");
 
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
@@ -165,7 +175,13 @@ public class ExpenseDetailFragment extends Fragment {
                     PaymentFirebase paymentFirebase = expense.paymentFromUser(MyApplication.getFirebaseId());
                     if(paymentFirebase!=null)
                         ((TextView) rootView.findViewById(R.id.paid_container)).setText(paymentFirebase.toString());
-                    ((TextView) rootView.findViewById(R.id.tag_container)).setText(expense.getTag());
+
+                    int tagPos = getTagPosition(expense.getTag());
+                    if(Locale.getDefault().toString().equals("en"))
+                        ((TextView) rootView.findViewById(R.id.tag_container)).setText(tagsEn.get(tagPos));
+                    else if(Locale.getDefault().toString().equals("it"))
+                        ((TextView) rootView.findViewById(R.id.tag_container)).setText(tagsIt.get(tagPos));
+
                     ((TextView) rootView.findViewById(R.id.cost_container)).setText(String.format(Locale.getDefault(), "%.2f",(expense.getCost())));
                     ((TextView) rootView.findViewById(R.id.currency_container)).setText(Currency.toString(expense.getCurrencyISO()));
 
@@ -281,5 +297,27 @@ public class ExpenseDetailFragment extends Fragment {
 
 
         }
+    }
+
+    @NonNull
+    protected List<String> getLocaleArrayString(int tags, String locale) {
+        Configuration configuration = getLocaleConfiguration(locale);
+
+        return Arrays.asList(getContext().createConfigurationContext(configuration).getResources().getStringArray(tags));
+    }
+
+    @NonNull
+    private Configuration getLocaleConfiguration(String locale) {
+        Configuration configuration = new Configuration(getContext().getResources().getConfiguration());
+        configuration.setLocale(new Locale(locale));
+        return configuration;
+    }
+
+    public int getTagPosition(String tagSelected){
+        for(int i = 0; i < tagsIt.size(); i++){
+            if(tagsIt.get(i).equals(tagSelected) || tagsEn.get(i).equals(tagSelected))
+                return i;
+        }
+        return -1;
     }
 }

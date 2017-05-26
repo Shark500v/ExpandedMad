@@ -10,8 +10,11 @@ public class HistoryInfo {
      *  0: New Expense
      *  1: New Payment
      *  2: New User In Group
+     *  3: Someone created the group
+     *  4: Expense transfer
      */
     private String name;
+    private String expenseName;
     private Long content;
     private Double cost;
     private Currency.CurrencyISO currencyISO;
@@ -22,8 +25,9 @@ public class HistoryInfo {
 
     }
 
-    public HistoryInfo(String name, Long content, Double cost, Currency.CurrencyISO currencyISO, String paidTo){
+    public HistoryInfo(String name, String expenseName, Long content, Double cost, Currency.CurrencyISO currencyISO, String paidTo){
         this.name = name;
+        this.expenseName = expenseName;
         this.content = content;
         this.cost = cost;
         this.currencyISO = currencyISO;
@@ -37,6 +41,14 @@ public class HistoryInfo {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getExpenseName() {
+        return expenseName;
+    }
+
+    public void setExpenseName(String expenseName) {
+        this.expenseName = expenseName;
     }
 
     public Long getContent() {
