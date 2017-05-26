@@ -36,7 +36,7 @@ public class FullScreenImage extends AppCompatActivity{
         expenseName = getIntent().getStringExtra("expenseName");
         imageView = (ImageView)findViewById(R.id.full_screen);
 
-        Glide.with(this).load(imageFromUrl).override(1024,1024).centerCrop().fitCenter().diskCacheStrategy(DiskCacheStrategy.RESULT).error(R.drawable.bill).into(imageView);
+        Glide.with(this).load(imageFromUrl).override(2048,2048).centerCrop().fitCenter().diskCacheStrategy(DiskCacheStrategy.RESULT).error(R.drawable.bill).into(imageView);
 
     }
 
