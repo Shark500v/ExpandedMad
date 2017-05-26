@@ -72,7 +72,7 @@ public class ChatRecyclerViewAdapter extends FirebaseRecyclerAdapter<Message,Rec
             holder.mTime.setText(dateFormat.format(model.getDate()));
             //setto foto
 
-            mDatabaseForUserUrl = FirebaseDatabase.getInstance().getReference().child("users").child(model.getSentById()).child(mUsersIds.get(position)).child("urlImage");
+            mDatabaseForUserUrl = FirebaseDatabase.getInstance().getReference().child("users").child(model.getSentByPhone()).child(model.getSentById()).child("urlImage");
             mDatabaseForUserUrl.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
