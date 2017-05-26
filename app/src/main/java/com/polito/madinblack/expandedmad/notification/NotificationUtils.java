@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -117,7 +118,14 @@ public class NotificationUtils {
                 .setSmallIcon(R.drawable.notification_icon)
                 .setLargeIcon(icon)
                 .setContentText(message)
+                .setLights(Color.GREEN, 3000, 3000)
                 .build();
+
+        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(mContext);
+        if (preference.getBoolean("pref_key_notifications_vibrate", false)){
+            notification = mBuilder.setVibrate(new long[] { 300, 300, 300, 300 })
+                    .build();
+        }
 
         NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(++Config.NOTIFICATION_ID, notification);
@@ -197,10 +205,6 @@ public class NotificationUtils {
                 r.play();
             }
 
-            if (preference.getBoolean("pref_key_notifications_vibrate", false)){
-                Vibrator v = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
-                v.vibrate(400);
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }

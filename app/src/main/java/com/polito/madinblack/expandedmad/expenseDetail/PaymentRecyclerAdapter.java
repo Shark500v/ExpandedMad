@@ -102,7 +102,12 @@ public class PaymentRecyclerAdapter extends FirebaseRecyclerAdapter<PaymentFireb
                 public void afterTextChanged(Editable s) {
 
                     String editString = CostUtil.replaceDecimalComma(s.toString());
-                    if(s.length() != 0 && CostUtil.isParsableAsDouble(editString) && Double.valueOf(editString)!=0){
+                    if(editString==null){
+                        holder.mPaid.setError(holder.mView.getContext().getString(R.string.err_msg_correct_amount));
+                        holder.mPaid.setText("");
+                        changedPayment.remove(paymentFirebase.getUserPhoneNumber());
+
+                    } else if(s.length() != 0 && CostUtil.isParsableAsDouble(editString) && Double.valueOf(editString)!=0){
                         if(Double.valueOf(editString)>Double.valueOf(CostUtil.replaceDecimalComma(holder.mToPay.getText().toString()))){
                             holder.mPaid.setText(holder.mToPay.getText().toString());
                         }else{
