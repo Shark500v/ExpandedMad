@@ -68,11 +68,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     tx.setVisibility(View.GONE);
                     recyclerView.setVisibility(View.VISIBLE);
                 }*/
+                if (mValuesIds.indexOf(dataSnapshot.getKey()) <0) {
+                    Log.e(TAG, "Spesa duplicata: " + expenseForUser.getName());
+                    return;
+                }
                 if(expenseForUser.getState() == Expense.State.CONTESTED){
                     mValuesIds.add(0, dataSnapshot.getKey());
                     mValues.add(0, expenseForUser);
-                    numContest++;
                     notifyItemInserted(numContest);
+                    numContest++;
                     Log.e(TAG, "Spesa contesa: " + expenseForUser.getName());
                 }else{
                     mValuesIds.add(numContest, dataSnapshot.getKey());
