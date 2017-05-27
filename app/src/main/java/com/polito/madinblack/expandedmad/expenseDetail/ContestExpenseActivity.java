@@ -257,6 +257,13 @@ public class ContestExpenseActivity extends BaseActivity {
                                             Expense.State expenseState = mutableData.getValue(Expense.State.class);
                                             if(expenseState == Expense.State.CONTESTED){
                                                 mutableData.setValue(Expense.State.ONGOING);
+                                                final Long timestamp = -1*System.currentTimeMillis();
+                                                for(PaymentFirebase paymentFirebase : paymentFirebaseList){
+                                                    mDatabaseRootReference.child("users").child(paymentFirebase.getUserPhoneNumber()).child(paymentFirebase.getUserFirebaseId())
+                                                            .child("groups").child(groupId).child("expenses").child(expenseId).child("state").setValue(Expense.State.ONGOING);
+                                                    mDatabaseRootReference.child("users").child(paymentFirebase.getUserPhoneNumber()).child(paymentFirebase.getUserFirebaseId())
+                                                            .child("groups").child(groupId).child("expenses").child(expenseId).child("timestamp").setValue(timestamp);
+                                                }
 
                                             }else{
                                                 return Transaction.abort();
@@ -302,9 +309,14 @@ public class ContestExpenseActivity extends BaseActivity {
                                                 for(PaymentFirebase paymentFirebase : paymentFirebaseList){
                                                     mDatabaseRootReference.child("users").child(paymentFirebase.getUserPhoneNumber()).child(paymentFirebase.getUserFirebaseId())
                                                             .child("groups").child(groupId).child("timestamp").setValue(timestamp);
+                                                    mDatabaseRootReference.child("users").child(paymentFirebase.getUserPhoneNumber()).child(paymentFirebase.getUserFirebaseId())
+                                                            .child("groups").child(groupId).child("expenses").child(expenseId).child("timestamp").setValue(timestamp);
+                                                    mDatabaseRootReference.child("users").child(paymentFirebase.getUserPhoneNumber()).child(paymentFirebase.getUserFirebaseId())
+                                                            .child("groups").child(groupId).child("expenses").child(expenseId).child("state").setValue(Expense.State.REJECTED);
                                                     paymentList.add(new Payment(paymentFirebase, expenseId, true));
 
                                                 }
+                                                mutableData.setValue(Expense.State.REJECTED);
 
                                                 mDatabaseRootReference.child("expenses/"+expenseId).addListenerForSingleValueEvent(new ValueEventListener() {
                                                     @Override
@@ -478,7 +490,10 @@ public class ContestExpenseActivity extends BaseActivity {
                         for(PaymentFirebase paymentFirebase : paymentFirebaseList){
                             mDatabaseRootReference.child("users").child(paymentFirebase.getUserPhoneNumber()).child(paymentFirebase.getUserFirebaseId())
                                                 .child("groups").child(groupId).child("timestamp").setValue(null);
-
+                            mDatabaseRootReference.child("users").child(paymentFirebase.getUserPhoneNumber()).child(paymentFirebase.getUserFirebaseId())
+                                    .child("groups").child(groupId).child("expenses").child(expenseId).child("timestamp").setValue(null);
+                            mDatabaseRootReference.child("users").child(paymentFirebase.getUserPhoneNumber()).child(paymentFirebase.getUserFirebaseId())
+                                    .child("groups").child(groupId).child("expenses").child(expenseId).child("state").setValue(Expense.State.CONTESTED);
                         }
 
 

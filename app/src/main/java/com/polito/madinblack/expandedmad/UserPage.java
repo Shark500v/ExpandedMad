@@ -213,7 +213,7 @@ public class UserPage extends AppCompatActivity{
             //progressDialog.setTitle(getString(R.string.uploading));
             //progressDialog.show();
 
-            final StorageReference filePathUsers = FirebaseStorage.getInstance().getReference().child("users").child(MyApplication.getFirebaseId()).child("userProfilePicture.jpg");
+            StorageReference filePathUsers = FirebaseStorage.getInstance().getReference().child("users").child(MyApplication.getFirebaseId()).child("userProfilePicture.jpg");
 
             filePathUsers.putBytes(imageData).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override

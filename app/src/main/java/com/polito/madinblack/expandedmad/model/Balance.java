@@ -19,7 +19,7 @@ public class Balance {
     public Balance(String userPhoneNumber, String userName, String userSurname, Double balance, Currency.CurrencyISO currencyISO) {
         this.userPhoneNumber = userPhoneNumber;
         this.fullName = userName + " " + userSurname;
-        this.balance = CostUtil.round(balance, 2);
+        this.balance = balance;
         this.currencyISO = currencyISO;
     }
 
@@ -38,7 +38,7 @@ public class Balance {
     }
 
     public void setBalance(Double balance) {
-        this.balance = CostUtil.round(balance, 2);
+        this.balance = balance;
     }
 
 

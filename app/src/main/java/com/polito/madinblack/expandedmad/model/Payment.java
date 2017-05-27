@@ -20,8 +20,8 @@ public class Payment {
         this.userPhoneNumber    = userPhoneNumber;
         this.userFullName       = userName + " " + userSurname;
         this.expenseId          = expenseId;
-        this.paid               = CostUtil.round(paid, 2);;
-        this.toPay             = CostUtil.round(toPay, 2);
+        this.paid               = paid;
+        this.toPay              = toPay;
         this.weight             = 1;
         this.isWeightEnabled    = false;
         this.isModified         = false;
@@ -115,7 +115,7 @@ public class Payment {
     }
 
     public void setPaid(Double paid) {
-        this.paid = CostUtil.round(paid,2);
+        this.paid = paid;
     }
 
     public double getToPay() {
@@ -124,7 +124,7 @@ public class Payment {
 
     public void setToPay(double toPay) {
 
-        this.toPay = CostUtil.round(toPay, 2);
+        this.toPay = toPay;
     }
 
 

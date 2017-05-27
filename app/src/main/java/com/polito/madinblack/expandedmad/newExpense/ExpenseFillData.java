@@ -261,7 +261,7 @@ public class ExpenseFillData extends AppCompatActivity {
             /*added to set Paid value*/
             for(Payment payment : mValues){
                 if(payment.getUserPhoneNumber().equals(MyApplication.getUserPhoneNumber())){
-                    payment.setPaid(CostUtil.round(roundedAmount, 2));
+                    payment.setPaid(roundedAmount);
 
                 }
             }
