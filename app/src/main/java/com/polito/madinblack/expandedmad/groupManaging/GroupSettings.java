@@ -308,5 +308,15 @@ public class GroupSettings extends AppCompatActivity {
                     });
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        if(!visible){
+            super.onBackPressed();
+        }else{
+            fullscreen.setVisibility(View.GONE);
+            visible = false;
+        }
+    }
 }
 

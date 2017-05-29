@@ -447,6 +447,16 @@ public class NewGroup extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        if(!visible){
+            super.onBackPressed();
+        }else{
+            fullScreen.setVisibility(View.GONE);
+            visible = false;
+        }
+    }
+
 
     //salvo l'immagine per poterla visualizzare dopo la rotazione del cell
     /*@Override
