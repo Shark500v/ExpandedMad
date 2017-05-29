@@ -53,6 +53,7 @@ public class InviteContactToAdd extends DialogFragment {
         }else
             list += " " + getString(R.string.dialog_single_invite_to_add_request) + " \"" + groupName + "\".";
 
+        builder.setCancelable(false);
         builder.setTitle(getString(R.string.invite_members)).setMessage(list);
         // Add the buttons
         builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
