@@ -18,6 +18,9 @@ public class Group {
     private String  id;
     private Long    size;
     private String  urlImage;
+    private String  createdByFullName;
+    private String  createdByPhoneNumber;
+
 
     //image attribute will be combination of url and group id
 
@@ -30,17 +33,21 @@ public class Group {
 
     }
 
-    public Group(String name){
-        this.name        = name;
-        this.size        = 0L;
+    public Group(String name, String createdByFullName, String createdByPhoneNumber){
+        this.name                   = name;
+        this.size                   = 0L;
+        this.createdByFullName      = createdByFullName;
+        this.createdByPhoneNumber   = createdByPhoneNumber;
+
 
 
     }
 
-    public Group(String name, List<UserForGroup> usersForGroup){
-        this.name        = name;
-        this.size        = Long.valueOf(usersForGroup.size());
-
+    public Group(String name, String createdByFullName, String createdByPhoneNumber, List<UserForGroup> usersForGroup){
+        this.name                   = name;
+        this.createdByFullName      = createdByFullName;
+        this.size                   = ((Integer)usersForGroup.size()).longValue();
+        this.createdByPhoneNumber   = createdByPhoneNumber;
 
         for(UserForGroup userForGroup : usersForGroup){
             this.users.put(userForGroup.getFirebaseId(), userForGroup);
@@ -49,11 +56,26 @@ public class Group {
 
     }
 
+    public String getCreatedByFullName() {
+        return createdByFullName;
+    }
+
+    public void setCreatedByFullName(String createdByFullName) {
+        this.createdByFullName = createdByFullName;
+    }
+
+    public String getCreatedByPhoneNumber() {
+        return createdByPhoneNumber;
+    }
+
+    public void setCreatedByPhoneNumber(String createdByPhoneNumber) {
+        this.createdByPhoneNumber = createdByPhoneNumber;
+    }
 
     /*return of group id*/
-    public static String writeNewGroup(DatabaseReference mDatabaseRootReference, String name, List<UserForGroup> usersForGroup, String userName) {
+    public static String writeNewGroup(DatabaseReference mDatabaseRootReference, String name, List<UserForGroup> usersForGroup, String userName, String userPhoneNumber) {
 
-        Group group = new Group(name, usersForGroup);
+        Group group = new Group(name, userName, userPhoneNumber, usersForGroup);
 
         DatabaseReference myGroupRef = mDatabaseRootReference.child("groups").push();
         String groupKey = myGroupRef.getKey();

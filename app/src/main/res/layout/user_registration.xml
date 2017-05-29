@@ -56,7 +56,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/name"
-            android:textSize="20dp" />
+            android:textSize="20sp" />
         <EditText
             android:id="@+id/name_field"
             android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/surname"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:layout_below="@+id/name_field"/>
         <EditText
             android:id="@+id/surname_field"

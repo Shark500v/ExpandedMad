@@ -58,11 +58,12 @@
             android:id="@+id/paid_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="x/y"
             android:textStyle="bold"
             android:textSize="18sp"
             android:gravity="end"
-            android:textAlignment="textEnd" />
+            android:textAlignment="textEnd"
+            tools:text="x/y"
+            />
 
     </LinearLayout>
 
@@ -89,10 +90,11 @@
             android:id="@+id/balance_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="75"
             android:textStyle="bold"
             android:textAlignment="textEnd"
-            android:textSize="18sp"/>
+            android:textSize="18sp"
+            tools:text="75"
+            />
     </LinearLayout>
 
 
@@ -116,10 +118,11 @@
             android:id="@+id/cost_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Value"
             android:textStyle="bold"
             android:textAlignment="textEnd"
-            android:textSize="18sp"/>
+            android:textSize="18sp"
+            tools:text="Value"
+            />
     </LinearLayout>
 
     <LinearLayout
@@ -144,11 +147,11 @@
             android:id="@+id/roundedCost"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Value"
             android:textStyle="bold"
             android:textSize="18sp"
             android:gravity="end"
             android:textAlignment="textEnd"
+            tools:text="Value"
             />
     </LinearLayout>
 
@@ -172,13 +175,14 @@
             android:textSize="20sp"/>
         <TextView
             android:id="@+id/currency_container"
-            android:text="Euro"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:textSize="18sp"
             android:gravity="end"
-            android:textAlignment="textEnd"/>
+            android:textAlignment="textEnd"
+            tools:text="Euro"
+            />
     </LinearLayout>
 
     <LinearLayout
