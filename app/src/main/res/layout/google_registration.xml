@@ -54,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:gravity="center"
-                android:text="Italy"
+                android:text="@string/italy"
 
                 />
             <LinearLayout

@@ -83,7 +83,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/group_members"
-            android:textSize="12dp"
+            android:textSize="12sp"
             android:textColor="#ffffff"
             android:textAlignment="center"
             android:background="@color/dividerColor"

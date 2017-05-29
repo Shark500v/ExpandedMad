@@ -6,7 +6,7 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/group_image_storage"
-        android:contentDescription="GroupImage"
+        android:contentDescription="@string/group_image"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginTop="@dimen/text_margin"
@@ -17,7 +17,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:layout_weight="1"
         android:orientation="vertical"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@id/group_image_storage">
@@ -26,7 +25,7 @@
             android:id="@+id/content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:maxLines="1"
             android:textAppearance="?attr/textAppearanceListItem" />
 
@@ -34,7 +33,7 @@
             android:id="@+id/num_members"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="12dp"
+            android:textSize="12sp"
             android:textAppearance="?attr/textAppearanceListItem" />
 
     </LinearLayout>
@@ -55,7 +54,7 @@
             android:textAppearance="?attr/textAppearanceListItem"
             android:gravity="center"
             android:textColor="#FFFFFF"
-            android:textSize="15dp" />
+            android:textSize="15sp" />
 
     </RelativeLayout>
 

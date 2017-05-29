@@ -34,6 +34,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.addUserToGroup.SelectContactToAdd;
+import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.tabViewGroup.TabView;
 
 import java.io.ByteArrayOutputStream;
@@ -56,6 +57,10 @@ public class GroupSettings extends AppCompatActivity {
     private byte[] imageData;
     private boolean visible = false;
     private ValueEventListener valueEventListener;
+    private ValueEventListener valueEventListenerName;
+    private TextView createdBy;
+    private DatabaseReference mCreatedByName;
+    private DatabaseReference mCreatedByPhoneNumber;
 
 
     //a constant to track the file chooser intent
@@ -86,12 +91,15 @@ public class GroupSettings extends AppCompatActivity {
 
         mDatabaseForUrl = FirebaseDatabase.getInstance().getReference().child("groups").child(groupId).child("urlImage");
         mStorageGroup = FirebaseStorage.getInstance().getReference().child("groups").child(groupId).child("groupPicture").child("groupPicture.jpg");
+        mCreatedByPhoneNumber = FirebaseDatabase.getInstance().getReference().child("groups").child(groupId).child("createdByPhoneNumber");
+        mCreatedByName = FirebaseDatabase.getInstance().getReference().child("groups").child(groupId).child("createdByFullName");
 
         groupImage = (CircleImageView) findViewById(R.id.group_picture);
         editGroupImage = (CircleImageView) findViewById(R.id.set_group_image);
         fullscreen = (ImageView)findViewById(R.id.group_image_fullscreen);
         editGroupName = (TextView) findViewById(R.id.edit_group_name);
-        editGroupName.setText(groupName);
+        editGroupName.setText(String.format("%s: %s", getString(R.string.group_name), groupName));
+        createdBy = (TextView) findViewById(R.id.created_by);
 
 
         valueEventListener = new ValueEventListener() {
@@ -99,6 +107,39 @@ public class GroupSettings extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 url = dataSnapshot.getValue(String.class);
                 Glide.with(getApplicationContext()).load(url).override(128,128).centerCrop().fitCenter().diskCacheStrategy(DiskCacheStrategy.RESULT).error(R.drawable.teamwork).into(groupImage);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+
+        valueEventListenerName = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    String userPhoneNumber = dataSnapshot.getValue(String.class);
+                    if(userPhoneNumber.equals(MyApplication.getUserPhoneNumber()))
+                        createdBy.setText(String.format("%s: %s", getString(R.string.created_by), getString(R.string.you)));
+                    else{
+                        mCreatedByName.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if(dataSnapshot.exists())
+                                    createdBy.setText(String.format("%s:\t%s", getString(R.string.created_by), dataSnapshot.getValue(String.class)));
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+
+                    }
+                }
+
             }
 
             @Override
@@ -157,9 +198,11 @@ public class GroupSettings extends AppCompatActivity {
     @Override
     public void onStart(){
         super.onStart();
-
         if(mDatabaseForUrl!=null && valueEventListener!=null)
             mDatabaseForUrl.addValueEventListener(valueEventListener);
+
+        if(mCreatedByPhoneNumber!=null && valueEventListenerName!=null)
+            mCreatedByPhoneNumber.addListenerForSingleValueEvent(valueEventListenerName);
 
 
     }

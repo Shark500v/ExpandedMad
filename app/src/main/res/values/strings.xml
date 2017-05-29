@@ -136,7 +136,7 @@
     <string name="compile_all_fields">Please, compile all fields.</string>
     <string name="choose_email_client">Choose an Email client:</string>
     <string name="no_contacts_in_list">No contacts in your contact list.</string>
-    <string name="group_settings">Group settings</string>
+    <string name="group_settings">Group info</string>
     <string name="debt_credits">My debts/credits</string>
     <string name="group_members_to_group">Members balance</string>
     <string name="next">Next</string>
@@ -235,4 +235,6 @@
     <string name="contention_deleted">Contention deleted</string>
     <string name="transfer">(Transfer)</string>
     <string name="name_not_modified">Group name not modified</string>
+    <string name="created_by">Created By</string>
+    <string name="italy">Italy</string>
 </resources>

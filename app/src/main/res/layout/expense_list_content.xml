@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="72dp">
+    android:layout_height="72dp"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
         android:id="@+id/main_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:layout_marginTop="@dimen/text_margin"
         android:orientation="vertical"
         android:layout_centerVertical="true">
@@ -17,17 +17,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?attr/textAppearanceListItem"
-            android:text="Spesa 1"
-            android:textSize="20dp"
-            android:textColor="@color/colorPrimary"/>
+            android:textSize="20sp"
+            android:textColor="@color/colorPrimary"
+            tools:text="Spesa 1"
+            />
 
         <TextView
             android:id="@+id/paidBy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?attr/textAppearanceListItem"
-            android:textSize="15dp"
-            android:text="Paid By : Marco"/>
+            android:textSize="15sp"
+            tools:text="Paid By : Marco"/>
 
     </LinearLayout>
 
@@ -37,9 +38,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/text_margin"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textAppearance="?attr/textAppearanceListItem"
-        android:text="+30"
+        tools:text="+30"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"/>
 
