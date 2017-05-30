@@ -9,11 +9,13 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -217,15 +219,26 @@ public class ExpenseDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         rootView = inflater.inflate(R.layout.expense_detail, container, false);
-        /*tv = (TextView) rootView.findViewById(R.id.head_title);
+
+        /*LinearLayout ll = (LinearLayout) rootView.findViewById(R.id.title);
+
+        ll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.go_button);
+                fab.callOnClick();
+            }
+        });*/
+
+        tv = (TextView) rootView.findViewById(R.id.head_title);
 
         tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.go_button);
-                fab.setPressed(true);
+                fab.callOnClick();
             }
-        });*/
+        });
         return rootView;
     }
 
