@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -58,7 +59,9 @@ import com.polito.madinblack.expandedmad.model.UserForGroup;
 import com.polito.madinblack.expandedmad.tabViewGroup.TabView;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -95,6 +98,8 @@ public class ExpenseFillData extends AppCompatActivity {
     private Spinner spinner;
     private String url;
     private String groupName;
+
+    private static int THUMBNAIL_SIZE = 128;
 
     private static int RESULT_LOAD_IMAGE = 1;
     private static int RESULT_REQUEST_CAMERA = 0;
@@ -410,7 +415,8 @@ public class ExpenseFillData extends AppCompatActivity {
 
                 //imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
                 try {
-                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
+                    bitmap = getThumbnail(selectedImage);
+                    //bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
                     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
                     bytesArr = bytes.toByteArray();
@@ -495,6 +501,36 @@ public class ExpenseFillData extends AppCompatActivity {
                         }
                     });
         }
+    }
+
+    public Bitmap getThumbnail(Uri uri) throws FileNotFoundException, IOException{
+        InputStream input = this.getContentResolver().openInputStream(uri);
+
+        BitmapFactory.Options onlyBoundsOptions = new BitmapFactory.Options();
+        onlyBoundsOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeStream(input, null, onlyBoundsOptions);
+        input.close();
+
+        if ((onlyBoundsOptions.outWidth == -1) || (onlyBoundsOptions.outHeight == -1)) {
+            return null;
+        }
+
+        int originalSize = (onlyBoundsOptions.outHeight > onlyBoundsOptions.outWidth) ? onlyBoundsOptions.outHeight : onlyBoundsOptions.outWidth;
+
+        double ratio = (originalSize > THUMBNAIL_SIZE) ? (originalSize / THUMBNAIL_SIZE) : 1.0;
+
+        BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+        bitmapOptions.inSampleSize = getPowerOfTwoForSampleRatio(ratio);
+        input = this.getContentResolver().openInputStream(uri);
+        Bitmap bitmap = BitmapFactory.decodeStream(input, null, bitmapOptions);
+        input.close();
+        return bitmap;
+    }
+
+    private static int getPowerOfTwoForSampleRatio(double ratio){
+        int k = Integer.highestOneBit((int)Math.floor(ratio));
+        if(k==0) return 1;
+        else return k;
     }
 
 
