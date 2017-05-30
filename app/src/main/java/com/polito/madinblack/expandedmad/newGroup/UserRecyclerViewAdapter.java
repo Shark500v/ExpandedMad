@@ -10,6 +10,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.polito.madinblack.expandedmad.R;
+import com.polito.madinblack.expandedmad.login.CheckLogIn;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 
 import java.util.ArrayList;
@@ -80,6 +81,24 @@ public class UserRecyclerViewAdapter extends RecyclerView.Adapter<UserRecyclerVi
                     groupMem.add(data);
                 } else {
                     data.setCheckedBox(false);
+                    //elimino l'utente precedentemente aggiunto nel caso l'user cambiasse idea
+                    groupMem.remove(data);
+                }
+            }
+        });
+
+        holder.mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CheckBox ck = (CheckBox) v.findViewById(R.id.check);
+                if (!ck.isChecked()){
+                    data.setCheckedBox(true);
+                    ck.setChecked(true);
+                    //agiungo l'utente alla lista di utenti che devo contattare quando creo il gruppo
+                    groupMem.add(data);
+                } else {
+                    data.setCheckedBox(false);
+                    ck.setChecked(false);
                     //elimino l'utente precedentemente aggiunto nel caso l'user cambiasse idea
                     groupMem.remove(data);
                 }
