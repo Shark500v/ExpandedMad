@@ -48,7 +48,7 @@ public class InviteContact extends DialogFragment {
         }else
             list += " " + getString(R.string.dialog_single_invite_request);
 
-        builder.setCancelable(false);
+        //builder.setCancelable(false);
         builder.setTitle(getString(R.string.invite_members)).setMessage(list);
         // Add the buttons
         builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
