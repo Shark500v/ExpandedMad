@@ -9,10 +9,13 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,6 +53,7 @@ public class ExpenseDetailFragment extends Fragment {
     private View rootView;
     private List<String> tagsIt = new ArrayList<>();
     private List<String> tagsEn = new ArrayList<>();
+    private TextView tv;
 
 
     public ExpenseDetailFragment() {
@@ -208,11 +212,7 @@ public class ExpenseDetailFragment extends Fragment {
 
                 }
             };
-
-
         }
-
-
     }
 
     @Override
@@ -220,6 +220,25 @@ public class ExpenseDetailFragment extends Fragment {
 
         rootView = inflater.inflate(R.layout.expense_detail, container, false);
 
+        /*LinearLayout ll = (LinearLayout) rootView.findViewById(R.id.title);
+
+        ll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.go_button);
+                fab.callOnClick();
+            }
+        });*/
+
+        tv = (TextView) rootView.findViewById(R.id.head_title);
+
+        tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.go_button);
+                fab.callOnClick();
+            }
+        });
         return rootView;
     }
 
@@ -278,17 +297,13 @@ public class ExpenseDetailFragment extends Fragment {
             else if(resultCode == ContestExpenseActivity.RESULT_MODIFIED_YET){
                 Toast.makeText(getContext(), getString(R.string.err_no_ongoing),
                         Toast.LENGTH_SHORT).show();
-
             }
-
-
         }
     }
 
     @NonNull
     protected List<String> getLocaleArrayString(int tags, String locale) {
         Configuration configuration = getLocaleConfiguration(locale);
-
         return Arrays.asList(getContext().createConfigurationContext(configuration).getResources().getStringArray(tags));
     }
 

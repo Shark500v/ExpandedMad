@@ -82,6 +82,24 @@ public class UserToAddRecyclerViewAdapter extends RecyclerView.Adapter<UserToAdd
             }
         });
 
+        holder.mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CheckBox ck = (CheckBox) v.findViewById(R.id.check);
+                if (!ck.isChecked()){
+                    data.setCheckedBox(true);
+                    ck.setChecked(true);
+                    //agiungo l'utente alla lista di utenti che devo contattare quando creo il gruppo
+                    groupMem.add(data);
+                } else {
+                    data.setCheckedBox(false);
+                    ck.setChecked(false);
+                    //elimino l'utente precedentemente aggiunto nel caso l'user cambiasse idea
+                    groupMem.remove(data);
+                }
+            }
+        });
+
         // Set image if exists
         try {
             if (data.getThumb() != null) {
