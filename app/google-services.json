@@ -1,67 +1,67 @@
 {
   "project_info": {
-    "project_number": "464647118990",
-    "firebase_url": "https://madtest-ff430.firebaseio.com",
-    "project_id": "madtest-ff430",
-    "storage_bucket": "madtest-ff430.appspot.com"
+    "project_number": "966761317680",
+    "firebase_url": "https://fir-new-a9059.firebaseio.com",
+    "project_id": "fir-new-a9059",
+    "storage_bucket": "fir-new-a9059.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:464647118990:android:6f1c8c48c3ca6de9",
+        "mobilesdk_app_id": "1:966761317680:android:5fa5456dbb32895a",
         "android_client_info": {
-          "package_name": "com.polito.madinblack.expandedmadv3"
+          "package_name": "com.polito.madinblack.expandedmadv4"
         }
       },
       "oauth_client": [
         {
-          "client_id": "464647118990-bgval84v78km9vls1pknetnvsq8oaj9r.apps.googleusercontent.com",
+          "client_id": "966761317680-i2rb6jg8qv9410ga96dk23fknhb93ulp.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.polito.madinblack.expandedmadv3",
+            "package_name": "com.polito.madinblack.expandedmadv4",
             "certificate_hash": "fd725f476699f058cae5318c0b0ac7aa0db1b5a9"
           }
         },
         {
-          "client_id": "464647118990-6cd9gjs483q3knqg3kf1c5f1mjfte94u.apps.googleusercontent.com",
+          "client_id": "966761317680-fdsi1no81fe0gbillprpqqal3p8kujnp.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.polito.madinblack.expandedmadv3",
+            "package_name": "com.polito.madinblack.expandedmadv4",
             "certificate_hash": "87145c6f5d430e88d3a2c9d0de9cbc3a71595215"
           }
         },
         {
-          "client_id": "464647118990-gnau7u3qlbv0oh8pu515r65irfooggsj.apps.googleusercontent.com",
+          "client_id": "966761317680-q6ga3lvmjed456hodk3v218mtk8gs9ln.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.polito.madinblack.expandedmadv3",
+            "package_name": "com.polito.madinblack.expandedmadv4",
             "certificate_hash": "955df5bcbbca4807c7ca36264311741bb50a1465"
           }
         },
         {
-          "client_id": "464647118990-bmf6uk03c9qiukfhb4omm2f0htdt6c95.apps.googleusercontent.com",
+          "client_id": "966761317680-e59st02nlmg0o9f1pcimgsmemr2v2sut.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.polito.madinblack.expandedmadv3",
+            "package_name": "com.polito.madinblack.expandedmadv4",
             "certificate_hash": "36e8d59f529eca63b4bc2be9ba403c38198e1048"
           }
         },
         {
-          "client_id": "464647118990-4k845hu8crctjebjeekl0ggqf214j9kt.apps.googleusercontent.com",
+          "client_id": "966761317680-h2s56a2ml2k85om8qablqp7agqca3l2m.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.polito.madinblack.expandedmadv3",
+            "package_name": "com.polito.madinblack.expandedmadv4",
             "certificate_hash": "7b52da34cc42499abe70e757cc93fc6186d45bfe"
           }
         },
         {
-          "client_id": "464647118990-b39omnsimtrgfc2n9utarlsc5135ivgh.apps.googleusercontent.com",
+          "client_id": "966761317680-04a304vtqgtaatkp91i2dn5peo16vba1.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDR5Wn58pt4FIWuyzeJBrKIJhmsmhB1BGY"
+          "current_key": "AIzaSyAiICKZv76hTE0pFhiuVfkaaUNLkndRb8Q"
         }
       ],
       "services": {
@@ -72,7 +72,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "464647118990-b39omnsimtrgfc2n9utarlsc5135ivgh.apps.googleusercontent.com",
+              "client_id": "966761317680-04a304vtqgtaatkp91i2dn5peo16vba1.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
