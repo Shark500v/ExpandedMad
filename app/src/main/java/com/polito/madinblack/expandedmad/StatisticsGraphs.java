@@ -26,6 +26,7 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 import com.polito.madinblack.expandedmad.model.Currency;
+import com.polito.madinblack.expandedmad.model.Expense;
 import com.polito.madinblack.expandedmad.model.ExpenseForUser;
 import com.polito.madinblack.expandedmad.model.GroupForUser;
 import com.polito.madinblack.expandedmad.model.MyApplication;
@@ -438,14 +439,16 @@ public class StatisticsGraphs extends AppCompatActivity {
     }
 
     public void computeExpense(ExpenseForUser expenseForUser) {
-        Double expenseCost = expenseForUser.getCost();
-        Currency.CurrencyISO expenseCurrency = expenseForUser.getCurrencyISO();
-        if (!expenseCurrency.equals(myCurrency)) {
-            expenseCost = Currency.convertCurrency(expenseCost, expenseCurrency, myCurrency);
+        if((expenseForUser.getState() == Expense.State.ONGOING) || (expenseForUser.getState() == Expense.State.CONTESTED)) {
+            Double expenseCost = expenseForUser.getCost();
+            Currency.CurrencyISO expenseCurrency = expenseForUser.getCurrencyISO();
+            if (expenseCurrency != myCurrency) {
+                expenseCost = Currency.convertCurrency(expenseCost, expenseCurrency, myCurrency);
+            }
+            Double month = Double.valueOf(expenseForUser.getMonth());
+            expenseCost += groupExpensesByMonth.get(month);
+            groupExpensesByMonth.put(month, expenseCost);
         }
-        Double month = Double.valueOf(expenseForUser.getMonth());
-        expenseCost += groupExpensesByMonth.get(month);
-        groupExpensesByMonth.put(month, expenseCost);
     }
 
     @Override

@@ -20,6 +20,7 @@
         <item name="yen">¥ (JPY)</item>
     </string-array>
     <string-array name="tags">
+        <item name="select_tag">Select tag</item>
         <item name="water_bill">Water_Bill</item>
         <item name="light_bill">Light_Bill</item>
         <item name="gas_bill">Gas_Bill</item>

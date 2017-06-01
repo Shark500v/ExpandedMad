@@ -3,6 +3,7 @@ package com.polito.madinblack.expandedmad;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -29,9 +30,12 @@ import com.google.firebase.storage.OnPausedListener;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.polito.madinblack.expandedmad.groupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -51,6 +55,7 @@ public class UserPage extends AppCompatActivity{
     private byte[] imageData;
     private boolean visible = false;
     private ValueEventListener valueEventListener;
+    private static int THUMBNAIL_SIZE = 128;
 
     //a constant to track the file chooser intent
     private static int RESULT_LOAD_IMAGE = 1;
@@ -187,7 +192,8 @@ public class UserPage extends AppCompatActivity{
             if (requestCode == RESULT_LOAD_IMAGE) {
                 uri = data.getData();
                 try {
-                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                    bitmap = getThumbnail(uri);
+                    //bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
                     imageData = bytes.toByteArray();
@@ -261,6 +267,43 @@ public class UserPage extends AppCompatActivity{
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        if(!visible){
+            navigateUpTo(new Intent(UserPage.this, GroupListActivity.class));
+        }else{
+            fullscreen.setVisibility(View.GONE);
+            visible = false;
+        }
+    }
 
+    public Bitmap getThumbnail(Uri uri) throws FileNotFoundException, IOException{
+        InputStream input = this.getContentResolver().openInputStream(uri);
 
+        BitmapFactory.Options onlyBoundsOptions = new BitmapFactory.Options();
+        onlyBoundsOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeStream(input, null, onlyBoundsOptions);
+        input.close();
+
+        if ((onlyBoundsOptions.outWidth == -1) || (onlyBoundsOptions.outHeight == -1)) {
+            return null;
+        }
+
+        int originalSize = (onlyBoundsOptions.outHeight > onlyBoundsOptions.outWidth) ? onlyBoundsOptions.outHeight : onlyBoundsOptions.outWidth;
+
+        double ratio = (originalSize > THUMBNAIL_SIZE) ? (originalSize / THUMBNAIL_SIZE) : 1.0;
+
+        BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+        bitmapOptions.inSampleSize = getPowerOfTwoForSampleRatio(ratio);
+        input = this.getContentResolver().openInputStream(uri);
+        Bitmap bitmap = BitmapFactory.decodeStream(input, null, bitmapOptions);
+        input.close();
+        return bitmap;
+    }
+
+    private static int getPowerOfTwoForSampleRatio(double ratio){
+        int k = Integer.highestOneBit((int)Math.floor(ratio));
+        if(k==0) return 1;
+        else return k;
+    }
 }
