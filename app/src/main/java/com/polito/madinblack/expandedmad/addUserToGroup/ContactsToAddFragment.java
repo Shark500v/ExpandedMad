@@ -176,7 +176,7 @@ public class ContactsToAddFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            adapter = new UserToAddRecyclerViewAdapter(selectUsers, getContext(), groupMembers);
+            adapter = new UserToAddRecyclerViewAdapter(selectUsers, getContext(), groupMembers, userIds);
             recyclerView.setAdapter(adapter);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
         }
