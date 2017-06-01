@@ -18,8 +18,6 @@ public class User {
     private String email;
     private String urlImage;
 
-    /*all groups for user*/
-    private Map<String, Boolean> groups = new HashMap<>();
 
     public User(){
 
