@@ -101,7 +101,7 @@
     <string name="login">Login con Google</string>
     <string name="hint_email">nome.cognome@gmail.com</string>
     <string name="hint_date">Data</string>
-    <string name="gallery">Sfoglia Galleria</string>
+    <string name="gallery">Sfoglia galleria</string>
     <string name="err_msg_title">Inserisci il nome della spesa</string>
     <string name="err_msg_telephone">Numero di telefono non valido</string>
     <string name="err_msg_invitation">Codice di invito non valido</string>
@@ -137,7 +137,7 @@
     <string name="invite_new_members">Invita nuovi partecipanti</string>
     <string name="name_surname">Nome Cognome</string>
     <string name="phone_number">Numero di telefono</string>
-    <string name="paid_topay">Pagato/da Pagare</string>
+    <string name="paid_topay">Pagato/da pagare</string>
     <string name="type">Tipo</string>
     <string name="currency">Valuta</string>
     <string name="date_format">gg/mm/aaaa</string>
@@ -147,7 +147,7 @@
     <string name="desc_firebase_lockup">Nome app e logo</string>
     <string name="mad_title_text">Mad Expense Sign In</string>
     <string name="registration">Registrati a Mad Expenses</string>
-    <string name="add_photo">Aggiungi Foto</string>
+    <string name="add_photo">Aggiungi foto</string>
     <string name="uploading">Caricamento</string>
     <string name="upload_pause">Caricamento sospeso</string>
     <string name="file_uploaded">File caricato correttamente</string>
@@ -158,9 +158,9 @@
     <string name="read_failed">Lettura fallita:</string>
     <string name="add_new_expense">Aggiungi nuova spesa</string>
     <string name="loading">Caricamento</string>
-    <string name="add_proof">Aggiungi Immagine Spesa</string>
+    <string name="add_proof">Aggiungi immagine spesa</string>
     <string name="no_reports">Non ci sono notizie</string>
-    <string name="group_history">Storia Gruppo</string>
+    <string name="group_history">Storia gruppo</string>
     <string name="history_new_group">ha creato questo gruppo.</string>
     <string name="history_transfer_part1">ha effettuato lo storno della spesa</string>
     <string name="history_transfer_part2">.</string>
@@ -174,7 +174,7 @@
     <string name="pay_everyone">Salda tutti</string>
     <string name="confirm_inserted">Conferma selezionati</string>
     <string name="go_to_list_of_payments">Vai alla lista di pagamenti</string>
-    <string name="payments_detail">Dettaglio Pagamenti</string>
+    <string name="payments_detail">Dettaglio pagamenti</string>
 
     <string name="group">Gruppo</string>
     <string name="all_groups">Tutti i gruppi</string>
@@ -205,12 +205,12 @@
     <string name="payment_updated">Pagamenti aggiornati</string>
     <string name="operation_failed">Operazione fallita</string>
 
-    <string name="to_pay">Da Pagare</string>
+    <string name="to_pay">Da pagare</string>
     <string name="Paid">Pagato</string>
     <string name="new_to_pay">Nuova cifra da pagare</string>
     <string name="new_paid">Nuova cifra pagata</string>
-    <string name="expense_cost">Costo Spesa</string>
-    <string name="old_paid_topay">Da Pagare assegnati</string>
+    <string name="expense_cost">Costo spesa</string>
+    <string name="old_paid_topay">Da pagare assegnati</string>
     <string name="currencyISO">Valuta ISO</string>
     <string name="err_msg_prefix">Prefisso non valido</string>
     <string name="err_msg_prefix_number">Inserire il numero senza il prefisso</string>
@@ -224,17 +224,17 @@
     <string name="motivation">Motivazione *</string>
     <string name="select_tag">Seleziona tag</string>
     <string name="related_to">relativa a</string>
-    <string name="contention">Genera Contesa</string>
+    <string name="contention">Genera contesa</string>
     <string name="contention_generated">Contesa generata</string>
-    <string name="err_motivation">Inserisci Motivazione</string>
+    <string name="err_motivation">Inserisci motivazione</string>
     <string name="all_tags">Tutti i tag</string>
     <string name="no_expense_found">Nessuna spesa trovata</string>
-    <string name="err_no_ongoing">Operazione Fallita: stato spesa cambiato durante operazione</string>
+    <string name="err_no_ongoing">Operazione fallita: stato spesa cambiato durante operazione</string>
     <string name="generated_by">Generata da</string>
-    <string name="contention_information">Informazione Contesa</string>
-    <string name="confirm_contention">Conferma Contesa</string>
-    <string name="delete_contention">Annulla Contesa</string>
-    <string name="contention_confermed">Contesa Confermata</string>
+    <string name="contention_information">Informazione contesa</string>
+    <string name="confirm_contention">Conferma contesa</string>
+    <string name="delete_contention">Annulla contesa</string>
+    <string name="contention_confermed">Contesa confermata</string>
     <string name="contention_deleted">Contesa annullata</string>
     <string name="transfer">(Storno)</string>
     <string name="name_not_modified">Nome del gruppo non modificato</string>
