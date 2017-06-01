@@ -1,12 +1,18 @@
 package com.polito.madinblack.expandedmad.model;
 
 
+import android.content.Intent;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
+import com.polito.madinblack.expandedmad.groupManaging.GroupSettings;
+
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -155,21 +161,46 @@ public class Group {
 
                     @Override
                     public void onComplete(DatabaseError databaseError,
-                                           boolean committed, DataSnapshot currentData){
+                                           boolean committed, DataSnapshot dataSnapshot){
                         if(committed){
-                            GroupForUser newGroupForUser = new GroupForUser(groupName, groupId, (Long) currentData.getValue(), 0L);
-                            newGroupForUser.setTimestamp();
-                            mDatabaseRootReference.child("users/"+userPhoneNumber+"/"+userFirebaseId+"/groups/"+groupId).setValue(newGroupForUser);
+                            final Long size = dataSnapshot.getValue(Long.class);
 
-                            /*update the history*/
-                            HistoryInfo historyInfo = new HistoryInfo(userName+" "+userSurname, null, 2L, 0D, null, null);
-                            mDatabaseRootReference.child("history/"+groupId).push().setValue(historyInfo);
+                            FirebaseDatabase.getInstance().getReference().child("groups/"+groupId+"/name").runTransaction(new Transaction.Handler() {
+
+                                @Override
+                                public Transaction.Result doTransaction(MutableData name) {
+                                    return Transaction.success(name);
+                                }
+
+                                @Override
+                                public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot2) {
+                                    if(b){
+                                        String name = dataSnapshot2.getValue(String.class);
+                                        GroupForUser newGroupForUser = new GroupForUser(name, groupId, size, 0L);
+                                        newGroupForUser.setTimestamp();
+                                        mDatabaseRootReference.child("users/"+userPhoneNumber+"/"+userFirebaseId+"/groups/"+groupId).setValue(newGroupForUser);
+
+                                        /*update the history*/
+                                        HistoryInfo historyInfo = new HistoryInfo(userName+" "+userSurname, null, 2L, 0D, null, null);
+                                        mDatabaseRootReference.child("history/"+groupId).push().setValue(historyInfo);
+
+
+
+                                    }
+
+                                }
+                            });
+
+
+
 
                         }
 
                     }
 
                 });
+
+
 
             }
 
