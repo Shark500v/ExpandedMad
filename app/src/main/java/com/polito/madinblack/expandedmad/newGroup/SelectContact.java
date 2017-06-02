@@ -86,6 +86,7 @@ public class SelectContact extends AppCompatActivity {
                 //verifico contatti e riempo la lista degli invite (contatti da invitare)!
 
                 counter = new AtomicInteger(groupM.size());
+                invite.clear();
 
                 for(final SelectUser selectUser : groupM){
 

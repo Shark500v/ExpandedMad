@@ -55,7 +55,7 @@ public class UserPage extends AppCompatActivity{
     private byte[] imageData;
     private boolean visible = false;
     private ValueEventListener valueEventListener;
-    private static int THUMBNAIL_SIZE = 128;
+    private static int THUMBNAIL_SIZE = 256;
 
     //a constant to track the file chooser intent
     private static int RESULT_LOAD_IMAGE = 1;

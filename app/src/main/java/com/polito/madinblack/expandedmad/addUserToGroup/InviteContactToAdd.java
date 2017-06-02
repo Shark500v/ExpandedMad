@@ -7,7 +7,11 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.polito.madinblack.expandedmad.R;
+import com.polito.madinblack.expandedmad.model.Group;
+import com.polito.madinblack.expandedmad.model.UserForGroup;
 import com.polito.madinblack.expandedmad.newGroup.SelectUser;
 
 import java.io.Serializable;
@@ -20,9 +24,11 @@ import java.util.List;
 public class InviteContactToAdd extends DialogFragment {
 
     private List<SelectUser> invite;
+    private List<UserForGroup> userForGroupList;
     //private List<SelectUser> groupM;
     private String groupId;
     private String groupName;
+    private DatabaseReference mDatabaseReference;
     private String list = "";
 
     @Override
@@ -33,9 +39,12 @@ public class InviteContactToAdd extends DialogFragment {
 
         //retriving the list of contacts I need to invite
         invite = (List<SelectUser>) getArguments().getSerializable("invite");
+        userForGroupList = (List<UserForGroup>) getArguments().getSerializable("usersToAdd");
         groupId = getArguments().getString("groupIndex");
         groupName = getArguments().getString("groupName");
         //groupM = (List<SelectUser>) getArguments().getSerializable("Group Members");
+
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         for(int i=0; i<invite.size(); i++){
             SelectUser contact= invite.get(i);
@@ -53,7 +62,7 @@ public class InviteContactToAdd extends DialogFragment {
         }else
             list += " " + getString(R.string.dialog_single_invite_to_add_request) + " \"" + groupName + "\".";
 
-        builder.setCancelable(false);
+        //builder.setCancelable(false);
         builder.setTitle(getString(R.string.invite_members)).setMessage(list);
         // Add the buttons
         builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
@@ -65,6 +74,9 @@ public class InviteContactToAdd extends DialogFragment {
                 intent1.putExtra("INVITE_LIST", (Serializable) invite);
                 intent1.putExtra("groupIndex", groupId);
                 intent1.putExtra("groupName", groupName);
+                for(int i = 0; i < userForGroupList.size(); i++){
+                    Group.writeUserToGroup(mDatabaseReference, groupId, groupName, userForGroupList.get(i).getFirebaseId(), userForGroupList.get(i).getPhoneNumber(), userForGroupList.get(i).getName(), userForGroupList.get(i).getSurname());
+                }
                 startActivity(intent1);
             }
         });

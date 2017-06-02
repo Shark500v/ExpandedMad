@@ -23,16 +23,17 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class UserToAddRecyclerViewAdapter extends RecyclerView.Adapter<UserToAddRecyclerViewAdapter.ViewHolder>{
 
     public List<SelectUser> _data, groupMem;
+    public List<String> usersAlreadyIn;
     private ArrayList<SelectUser> arraylist;
     Context _c;
 
-    public UserToAddRecyclerViewAdapter(List<SelectUser> selectUsers, Context context, List<SelectUser> GroupM) {
+    public UserToAddRecyclerViewAdapter(List<SelectUser> selectUsers, Context context, List<SelectUser> GroupM, List<String> userIds) {
         _data = selectUsers;
         _c = context;
         this.arraylist = new ArrayList<>();
         this.arraylist.addAll(_data);
         groupMem = GroupM;      //questa è la lista che devo aggiornre di volta in volta un utente viene aggiunto al gruppo dall'user
-
+        usersAlreadyIn = userIds;
     }
 
     @Override
@@ -51,10 +52,10 @@ public class UserToAddRecyclerViewAdapter extends RecyclerView.Adapter<UserToAdd
             holder.me.setVisibility(View.INVISIBLE);
         }
 
-        if(data.getCheckedBox()) {
+        if(usersAlreadyIn.contains(data.getPhone())) {
             holder.check.setEnabled(false);
             holder.already_in.setText(_c.getString(R.string.already_in));
-        }else if (!data.getCheckedBox()){
+        }else if (!usersAlreadyIn.contains(data.getPhone())){
             holder.check.setEnabled(true);
             holder.already_in.setText("");
             holder.title.setTextColor(ContextCompat.getColor(_c, R.color.primary_text));

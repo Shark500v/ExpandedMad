@@ -65,7 +65,7 @@ public class GroupSettings extends AppCompatActivity {
     private DatabaseReference mCreatedByName;
     private DatabaseReference mCreatedByPhoneNumber;
 
-    private static int THUMBNAIL_SIZE = 128;
+    private static int THUMBNAIL_SIZE = 256;
 
     //a constant to track the file chooser intent
     private static int RESULT_LOAD_IMAGE = 1;

@@ -142,6 +142,7 @@ public class SelectContactToAdd extends AppCompatActivity {
                 //verifico contatti e riempo la lista degli invite (contatti da invitare)!
 
                 counter = new AtomicInteger(groupM.size());
+                invite.clear();
 
                 for(final SelectUser selectUser : groupM){
 
@@ -149,7 +150,7 @@ public class SelectContactToAdd extends AppCompatActivity {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             if(!dataSnapshot.exists()){
-                                groupM.remove(selectUser);
+                                //groupM.remove(selectUser);
                                 invite.add(selectUser);
                             }
                             else{
@@ -170,50 +171,52 @@ public class SelectContactToAdd extends AppCompatActivity {
                                 //se la lista è vuota non ci sono inviti da fare e posso andare oltre, altrimenti devo procedere ad invitare le persone mancanti prima di aggiungere le persone al gruppo
                                 List<UserForGroup> userForGroupList = new ArrayList<>();
 
-                                for(SelectUser selectUser : groupM){
+                                for(SelectUser selectUser : groupM) {
+                                    if (!invite.contains(selectUser)){
 
-                                    /*String name = selectUser.getName();
-                                    String[] items = new String[2];
-                                    if(name.contains(" ")){
-                                        items = name.split(" ");
-                                        if(items[0] == null)
-                                            items[0] = " ";
-                                        if(items[1] == null) {
+                                        /*String name = selectUser.getName();
+                                        String[] items = new String[2];
+                                        if(name.contains(" ")){
+                                            items = name.split(" ");
+                                            if(items[0] == null)
+                                                items[0] = " ";
+                                            if(items[1] == null) {
+                                                items[1] = " ";
+                                            }
+                                        }else if(name.length() >= 1){
+                                            items[0] = name;
                                             items[1] = " ";
-                                        }
-                                    }else if(name.length() >= 1){
-                                        items[0] = name;
-                                        items[1] = " ";
-                                    }else{
-                                        items[0] = " ";
-                                        items[1] = " ";
-                                    }*/
-
-                                    String nameSurname = usersInDatabase.get(selectUser.getFirebaseId());
-                                    String[] items = new String[2];
-                                    if(nameSurname.contains(",")) {
-                                        items = nameSurname.split(",");
-                                        if (items[0] == null)
+                                        }else{
                                             items[0] = " ";
-                                        if (items[1] == null)
                                             items[1] = " ";
-                                    }
+                                        }*/
 
-                                    if(selectUser.getFirebaseId() != null){
-                                        UserForGroup userForGroup = new UserForGroup(selectUser.getPhone(), selectUser.getFirebaseId(), items[0], items[1]);
-                                        for(int i=0; i<userForGroupList.size(); i++){
-                                            userForGroupList.get(i).connect(userForGroup);
-                                            userForGroup.connect(userForGroupList.get(i));
-
+                                            String nameSurname = usersInDatabase.get(selectUser.getFirebaseId());
+                                        String[] items = new String[2];
+                                        if (nameSurname.contains(",")) {
+                                            items = nameSurname.split(",");
+                                            if (items[0] == null)
+                                                items[0] = " ";
+                                            if (items[1] == null)
+                                                items[1] = " ";
                                         }
-                                        userForGroupList.add(userForGroup);
+
+                                        if (selectUser.getFirebaseId() != null) {
+                                            UserForGroup userForGroup = new UserForGroup(selectUser.getPhone(), selectUser.getFirebaseId(), items[0], items[1]);
+                                            for (int i = 0; i < userForGroupList.size(); i++) {
+                                                userForGroupList.get(i).connect(userForGroup);
+                                                userForGroup.connect(userForGroupList.get(i));
+
+                                            }
+                                            userForGroupList.add(userForGroup);
+                                        }
                                     }
-                                }
-                                for(int i = 0; i < userForGroupList.size(); i++){
-                                    Group.writeUserToGroup(mDatabaseReference, groupId, groupName, userForGroupList.get(i).getFirebaseId(), userForGroupList.get(i).getPhoneNumber(), userForGroupList.get(i).getName(), userForGroupList.get(i).getSurname());
                                 }
 
                                 if(invite.isEmpty()) {
+                                    for(int i = 0; i < userForGroupList.size(); i++){
+                                        Group.writeUserToGroup(mDatabaseReference, groupId, groupName, userForGroupList.get(i).getFirebaseId(), userForGroupList.get(i).getPhoneNumber(), userForGroupList.get(i).getName(), userForGroupList.get(i).getSurname());
+                                    }
                                     Intent intent1 = new Intent(SelectContactToAdd.this, TabView.class);
                                     intent1.putExtra("groupIndex", groupId);
                                     intent1.putExtra("groupName", groupName);
@@ -225,6 +228,7 @@ public class SelectContactToAdd extends AppCompatActivity {
                                     //invito le persone che non sono ancora nel DB
                                     Bundle arguments = new Bundle();
                                     arguments.putSerializable("invite", (Serializable) invite);
+                                    arguments.putSerializable("usersToAdd", (Serializable) userForGroupList);
                                     arguments.putString("groupIndex", groupId);
                                     arguments.putString("groupName", groupName);
                                     //arguments.putSerializable("Group Members", (Serializable) groupM);  //lista di utenti già inscritti
