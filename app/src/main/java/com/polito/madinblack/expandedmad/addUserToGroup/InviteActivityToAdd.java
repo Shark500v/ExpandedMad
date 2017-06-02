@@ -113,7 +113,7 @@ public class InviteActivityToAdd extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        intent = new Intent(InviteActivityToAdd.this, TabView.class);
+        intent = new Intent(InviteActivityToAdd.this, GroupSettings.class);
         intent.putExtra("groupIndex", groupId);
         intent.putExtra("groupName", groupName);
         navigateUpTo(intent);
