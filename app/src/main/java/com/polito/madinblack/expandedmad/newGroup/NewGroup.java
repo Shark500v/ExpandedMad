@@ -8,11 +8,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Vibrator;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -40,6 +42,8 @@ import com.google.firebase.storage.OnPausedListener;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.polito.madinblack.expandedmad.BuildConfig;
+import com.polito.madinblack.expandedmad.UserPage;
 import com.polito.madinblack.expandedmad.groupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.model.Group;
@@ -47,11 +51,14 @@ import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.User;
 import com.polito.madinblack.expandedmad.model.UserForGroup;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,6 +86,7 @@ public class NewGroup extends AppCompatActivity {
     private boolean visible = false; //boolean per visualizzazione a schermo intero
     private String url;
     private final Map<String,String> usersInDatabase = new HashMap<>();
+    private String pictureImagePath;
 
     private RecyclerView recyclerView;
     private GroupMembersRecyclerViewAdapter adapter;
@@ -243,9 +251,22 @@ public class NewGroup extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which){
                 if(items[which].equals(getString(R.string.photo))) {
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    /*Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     if (intent.resolveActivity(getPackageManager()) != null) {
                         startActivityForResult(intent, RESULT_REQUEST_CAMERA);
+                    }*/
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                    String imageFileName = timeStamp + ".jpg";
+                    File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                    if(storageDir != null) {
+                        pictureImagePath = storageDir.getAbsolutePath() + "/" + imageFileName;
+                        File file = new File(pictureImagePath);
+                        uri = FileProvider.getUriForFile(NewGroup.this, BuildConfig.APPLICATION_ID + ".provider", file);
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                        if (intent.resolveActivity(getPackageManager()) != null) {
+                            startActivityForResult(intent, RESULT_REQUEST_CAMERA);
+                        }
                     }
                 } else if(items[which].equals(getString(R.string.gallery))){
                     Intent intent = new Intent();
@@ -263,8 +284,8 @@ public class NewGroup extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK && data != null) {
-            if (requestCode == RESULT_LOAD_IMAGE) {
+        if(resultCode == RESULT_OK) {
+            if (requestCode == RESULT_LOAD_IMAGE && data != null) {
                 uri = data.getData();
                 try {
                     bitmap = getThumbnail(uri);
@@ -281,11 +302,24 @@ public class NewGroup extends AppCompatActivity {
                 }
             }
             else if (requestCode == RESULT_REQUEST_CAMERA) {
-                bitmap = (Bitmap) data.getExtras().get("data");
+                File imgFile = new File(pictureImagePath);
+                if (imgFile.exists()) {
+                    try {
+                        bitmap = getThumbnail(FileProvider.getUriForFile(NewGroup.this, BuildConfig.APPLICATION_ID + ".provider", imgFile));
+                        //bitmap = (Bitmap) data.getExtras().get("data");
+                        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+                        imageData = bytes.toByteArray();
+                        Glide.with(getApplicationContext()).load(imageData).override(128,128).centerCrop().fitCenter().into(groupImage);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                /*bitmap = (Bitmap) data.getExtras().get("data");
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
                 imageData = bytes.toByteArray();
-                Glide.with(getApplicationContext()).load(imageData).override(128,128).centerCrop().fitCenter().into(groupImage);
+                Glide.with(getApplicationContext()).load(imageData).override(128,128).centerCrop().fitCenter().into(groupImage);*/
                 /*groupImage.setImageBitmap(bitmap);
                 strBase64 = Base64.encodeToString(imageData, 0);*/
             }

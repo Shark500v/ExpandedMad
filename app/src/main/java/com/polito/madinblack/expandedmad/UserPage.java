@@ -6,9 +6,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -33,9 +35,12 @@ import com.google.firebase.storage.UploadTask;
 import com.polito.madinblack.expandedmad.groupManaging.GroupListActivity;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -56,6 +61,7 @@ public class UserPage extends AppCompatActivity{
     private boolean visible = false;
     private ValueEventListener valueEventListener;
     private static int THUMBNAIL_SIZE = 256;
+    private String pictureImagePath;
 
     //a constant to track the file chooser intent
     private static int RESULT_LOAD_IMAGE = 1;
@@ -169,8 +175,17 @@ public class UserPage extends AppCompatActivity{
             public void onClick(DialogInterface dialog, int which){
                 if(items[which].equals(getString(R.string.photo))) {
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    if (intent.resolveActivity(getPackageManager()) != null) {
-                        startActivityForResult(intent, RESULT_REQUEST_CAMERA);
+                    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                    String imageFileName = timeStamp + ".jpg";
+                    File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                    if(storageDir != null) {
+                        pictureImagePath = storageDir.getAbsolutePath() + "/" + imageFileName;
+                        File file = new File(pictureImagePath);
+                        uri = FileProvider.getUriForFile(UserPage.this, BuildConfig.APPLICATION_ID + ".provider", file);
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                        if (intent.resolveActivity(getPackageManager()) != null) {
+                            startActivityForResult(intent, RESULT_REQUEST_CAMERA);
+                        }
                     }
                 } else if(items[which].equals(getString(R.string.gallery))){
                     Intent intent = new Intent();
@@ -188,8 +203,8 @@ public class UserPage extends AppCompatActivity{
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK && data != null) {
-            if (requestCode == RESULT_LOAD_IMAGE) {
+        if(resultCode == RESULT_OK) {
+            if (requestCode == RESULT_LOAD_IMAGE && data != null) {
                 uri = data.getData();
                 try {
                     bitmap = getThumbnail(uri);
@@ -203,11 +218,31 @@ public class UserPage extends AppCompatActivity{
                 }
             }
             else if (requestCode == RESULT_REQUEST_CAMERA) {
-                bitmap = (Bitmap) data.getExtras().get("data");
-                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-                imageData = bytes.toByteArray();
-                uploadProfilePicture();  //da decidere se caricare sullo storage qua o dando conferma
+                File imgFile = new File(pictureImagePath);
+                if (imgFile.exists()) {
+                    try {
+                        bitmap = getThumbnail(FileProvider.getUriForFile(UserPage.this, BuildConfig.APPLICATION_ID + ".provider", imgFile));
+                        //bitmap = (Bitmap) data.getExtras().get("data");
+                        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+                        imageData = bytes.toByteArray();
+                        uploadProfilePicture();  //da decidere se caricare sullo storage qua o dando conferma
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                /*File imgFile = new  File(pictureImagePath);
+                if(imgFile.exists()) {
+                    try {
+                        bitmap = (Bitmap) data.getExtras().get("data");
+                        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+                        imageData = bytes.toByteArray();
+                        uploadProfilePicture();  //da decidere se caricare sullo storage qua o dando conferma
+                    }catch(IOException e){
+                        e.printStackTrace();
+                    }
+                }*/
             }
         }
     }

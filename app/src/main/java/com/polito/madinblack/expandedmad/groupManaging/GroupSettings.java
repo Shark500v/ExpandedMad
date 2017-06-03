@@ -6,9 +6,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -33,15 +35,20 @@ import com.google.firebase.storage.OnPausedListener;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.polito.madinblack.expandedmad.BuildConfig;
 import com.polito.madinblack.expandedmad.R;
+import com.polito.madinblack.expandedmad.UserPage;
 import com.polito.madinblack.expandedmad.addUserToGroup.SelectContactToAdd;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.tabViewGroup.TabView;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -64,6 +71,7 @@ public class GroupSettings extends AppCompatActivity {
     private TextView createdBy;
     private DatabaseReference mCreatedByName;
     private DatabaseReference mCreatedByPhoneNumber;
+    private String pictureImagePath;
 
     private static int THUMBNAIL_SIZE = 256;
 
@@ -256,9 +264,22 @@ public class GroupSettings extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which){
                 if(items[which].equals(getString(R.string.photo))) {
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    /*Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     if (intent.resolveActivity(getPackageManager()) != null) {
                         startActivityForResult(intent, RESULT_REQUEST_CAMERA);
+                    }*/
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                    String imageFileName = timeStamp + ".jpg";
+                    File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                    if(storageDir != null) {
+                        pictureImagePath = storageDir.getAbsolutePath() + "/" + imageFileName;
+                        File file = new File(pictureImagePath);
+                        uri = FileProvider.getUriForFile(GroupSettings.this, BuildConfig.APPLICATION_ID + ".provider", file);
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                        if (intent.resolveActivity(getPackageManager()) != null) {
+                            startActivityForResult(intent, RESULT_REQUEST_CAMERA);
+                        }
                     }
                 } else if(items[which].equals(getString(R.string.gallery))){
                     Intent intent = new Intent();
@@ -276,8 +297,8 @@ public class GroupSettings extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK && data != null) {
-            if (requestCode == RESULT_LOAD_IMAGE) {
+        if(resultCode == RESULT_OK) {
+            if (requestCode == RESULT_LOAD_IMAGE && data != null) {
                 uri = data.getData();
                 try {
                     bitmap = getThumbnail(uri);
@@ -291,11 +312,24 @@ public class GroupSettings extends AppCompatActivity {
                 }
             }
             else if (requestCode == RESULT_REQUEST_CAMERA) {
-                bitmap = (Bitmap) data.getExtras().get("data");
+                /*bitmap = (Bitmap) data.getExtras().get("data");
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
                 imageData = bytes.toByteArray();
-                uploadGroupPicture();  //da decidere se caricare sullo storage qua o dando conferma
+                uploadGroupPicture();  //da decidere se caricare sullo storage qua o dando conferma*/
+                File imgFile = new File(pictureImagePath);
+                if (imgFile.exists()) {
+                    try {
+                        bitmap = getThumbnail(FileProvider.getUriForFile(GroupSettings.this, BuildConfig.APPLICATION_ID + ".provider", imgFile));
+                        //bitmap = (Bitmap) data.getExtras().get("data");
+                        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+                        imageData = bytes.toByteArray();
+                        uploadGroupPicture();  //da decidere se caricare sullo storage qua o dando conferma
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
     }
