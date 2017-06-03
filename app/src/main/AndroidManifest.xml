@@ -281,6 +281,15 @@
                 android:value="com.polito.madinblack.expandedmad.expenseDetail.ExpenseDetailActivity" />
         </activity>
 
+        <activity
+            android:name="balanceDetail.BalanceDetailActivity"
+            android:parentActivityName=".tabViewGroup.TabView"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.polito.madinblack.expandedmad.tabViewGroup.TabView" />
+        </activity>
+
     </application>
 
 </manifest>

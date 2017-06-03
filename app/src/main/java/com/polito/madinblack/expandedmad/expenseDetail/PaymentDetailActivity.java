@@ -18,20 +18,25 @@ import com.google.firebase.database.Transaction;
 import com.polito.madinblack.expandedmad.R;
 import com.polito.madinblack.expandedmad.login.BaseActivity;
 import com.polito.madinblack.expandedmad.model.Balance;
+import com.polito.madinblack.expandedmad.model.BalanceHistory;
 import com.polito.madinblack.expandedmad.model.Currency;
+import com.polito.madinblack.expandedmad.model.Expense;
 import com.polito.madinblack.expandedmad.model.HistoryInfo;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.PaymentFirebase;
 import com.polito.madinblack.expandedmad.model.PaymentInfo;
+import com.polito.madinblack.expandedmad.model.Type;
 
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 public class PaymentDetailActivity extends BaseActivity {
 
     public static final String ARG_EXPENSE_ID = "expenseId";
-    public static final String ARG_GROUP_ID ="expenseName";
+    public static final String ARG_EXPENSE_NAME = "expenseName";
+    public static final String ARG_GROUP_ID ="groupId";
     public static final String ARG_EXPENSE_COST ="expenseCost";
     public static final String ARG_CURRENCY_ISO ="currencyISO";
     public static final String ARG_USER_NAME ="userName" ;
@@ -43,6 +48,7 @@ public class PaymentDetailActivity extends BaseActivity {
     private RecyclerView recyclerView;
 
     private String expenseId;
+    private String expenseName;
     private String groupId;
     private Currency.CurrencyISO currencyISO;
     private String expenseUserName;
@@ -61,6 +67,7 @@ public class PaymentDetailActivity extends BaseActivity {
 
 
         expenseId           = getIntent().getStringExtra(ARG_EXPENSE_ID);
+        expenseName         = getIntent().getStringExtra(ARG_EXPENSE_NAME);
         groupId             = getIntent().getStringExtra(ARG_GROUP_ID);
         expenseCost         = Double.valueOf(getIntent().getStringExtra(ARG_EXPENSE_COST));
         currencyISO         = Currency.CurrencyISO.valueOf(getIntent().getStringExtra(ARG_CURRENCY_ISO));
@@ -136,7 +143,7 @@ public class PaymentDetailActivity extends BaseActivity {
             changedPayments.clear();
 
 
-
+            final Date date = new Date();
             for(String paymentKey : paymentToUpdate.keySet()){
 
                 final PaymentInfo paymentInfo = paymentToUpdate.get(paymentKey);
@@ -161,8 +168,12 @@ public class PaymentDetailActivity extends BaseActivity {
                             @Override
                             public void onComplete(DatabaseError databaseError,
                                                    boolean committed, DataSnapshot currentData) {
-                                //This method will be called once with the results of the transaction.
-                                //Update remove the user from the group
+
+                                if(committed){
+                                    Balance balanceUp = currentData.getValue(Balance.class);
+                                    BalanceHistory balanceHistory = new BalanceHistory(expenseName, Type.SETTLE_UP, Currency.convertCurrency(paymentToUpdate.get(balanceUp.getUserPhoneNumber()).getPaidNow(), currencyISO, balanceUp.getCurrencyISO()), date);
+                                    currentData.getRef().child("balancesHistory").push().setValue(balanceHistory);
+                                }
 
                             
                             }
@@ -190,9 +201,11 @@ public class PaymentDetailActivity extends BaseActivity {
                             @Override
                             public void onComplete(DatabaseError databaseError,
                                                    boolean committed, DataSnapshot currentData) {
-                                //This method will be called once with the results of the transaction.
-                                //Update remove the user from the group
-                                //if secondo thread ferma showDialog
+                                if(committed){
+                                    Balance balanceUp = currentData.getValue(Balance.class);
+                                    BalanceHistory balanceHistory = new BalanceHistory(expenseName, Type.SETTLE_UP, -Currency.convertCurrency(paymentToUpdate.get(balanceUp.getUserPhoneNumber()).getPaidNow(), currencyISO, balanceUp.getCurrencyISO()), date);
+                                    currentData.getRef().child("balancesHistory").push().setValue(balanceHistory);
+                                }
 
                             }
                         });
@@ -212,7 +225,7 @@ public class PaymentDetailActivity extends BaseActivity {
 
                 /*update the history*/
                 HistoryInfo historyInfo = new HistoryInfo(paymentInfo.getUserNameDisplayed(), null, 1L, paymentInfo.getPaidNow(),
-                                currencyISO, expenseUserName + " " + expenseUserSurname);
+                                currencyISO, expenseUserName + " " + expenseUserSurname, date);
                 mDatabaseRootReference.child("history/"+groupId).push().setValue(historyInfo);
 
 
@@ -251,7 +264,5 @@ public class PaymentDetailActivity extends BaseActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-
 
 }

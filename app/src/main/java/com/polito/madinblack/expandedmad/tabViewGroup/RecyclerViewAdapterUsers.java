@@ -1,6 +1,7 @@
 package com.polito.madinblack.expandedmad.tabViewGroup;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -20,6 +21,9 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.polito.madinblack.expandedmad.R;
+import com.polito.madinblack.expandedmad.balanceDetail.BalanceDetailActivity;
+import com.polito.madinblack.expandedmad.expenseDetail.ExpenseDetailActivity;
+import com.polito.madinblack.expandedmad.expenseDetail.ExpenseDetailFragment;
 import com.polito.madinblack.expandedmad.model.Balance;
 import com.polito.madinblack.expandedmad.model.Currency;
 import com.polito.madinblack.expandedmad.model.MyApplication;
@@ -41,13 +45,15 @@ public class RecyclerViewAdapterUsers extends RecyclerView.Adapter<RecyclerViewA
     private DatabaseReference mDatabaseForUserUrl;
     private Context mContext;
     private ValueEventListener mEventListener;
+    private String mGroupId;
 
     private static final String TAG = "MyBalanceActivity";
 
-    public RecyclerViewAdapterUsers(Context ct, Query dr) {
+    public RecyclerViewAdapterUsers(Context ct, Query dr, String groupId) {
 
         dataref = dr;
         mContext = ct;
+        mGroupId = groupId;
 
         // Create child event listener
         // [START child_event_listener_recycler]
@@ -90,6 +96,7 @@ public class RecyclerViewAdapterUsers extends RecyclerView.Adapter<RecyclerViewA
     @Override
     public void onBindViewHolder(final RecyclerViewAdapterUsers.ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);                           //singolo utente
+        holder.mId   = mValuesIds.get(position);
 
         if(holder.mItem.getUserPhoneNumber().equals(MyApplication.getUserPhoneNumber()))
             holder.mIdView.setText(mContext.getString(R.string.you));
@@ -116,6 +123,27 @@ public class RecyclerViewAdapterUsers extends RecyclerView.Adapter<RecyclerViewA
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        holder.mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Context context = v.getContext();
+                Intent intent = new Intent(context, BalanceDetailActivity.class);
+                intent.putExtra(BalanceDetailActivity.ARG_BALANCE_ID, holder.mId);
+                String [] nameSurname = holder.mItem.getFullName().split(" ");
+                String name;
+                if(nameSurname[0]!=null && !nameSurname[0].isEmpty())
+                    name = nameSurname[0];
+                else
+                    name = nameSurname[1];
+                intent.putExtra(BalanceDetailActivity.ARG_USER_BALANCE_NAME, name);
+                intent.putExtra(BalanceDetailActivity.ARG_GROUP_ID, mGroupId);
+                intent.putExtra(BalanceDetailActivity.ARG_BALANCE_CURRENCY, holder.mItem.getCurrencyISO().name());
+                context.startActivity(intent);
+
 
             }
         });
@@ -158,6 +186,7 @@ public class RecyclerViewAdapterUsers extends RecyclerView.Adapter<RecyclerViewA
         public final CircleImageView mImage;
         public final TextView mIdView;
         public final TextView mContentView;
+        public String mId;
         public Balance mItem;
 
         public ViewHolder(View view) {

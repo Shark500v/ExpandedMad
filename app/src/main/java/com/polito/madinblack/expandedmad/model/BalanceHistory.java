@@ -1,21 +1,21 @@
 package com.polito.madinblack.expandedmad.model;
 
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
-/**
- * Created by Ale on 01/06/2017.
- */
-
-enum Type{NEW_EXPENSE, SETTLE_UP, STORNED};
+;
 
 public class BalanceHistory {
 
     private String expenseName;
     private Type type;
-    private Long value;
+    private Double value;
     private Date date;
 
-    public BalanceHistory(String expenseName, Type type, Long value, Date date) {
+
+    public BalanceHistory(String expenseName, Type type, Double value, Date date) {
         this.expenseName = expenseName;
         this.type = type;
         this.value = value;
@@ -38,11 +38,11 @@ public class BalanceHistory {
         this.type = type;
     }
 
-    public Long getValue() {
+    public Double getValue() {
         return value;
     }
 
-    public void setValue(Long value) {
+    public void setValue(Double value) {
         this.value = value;
     }
 
@@ -52,5 +52,18 @@ public class BalanceHistory {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public String convertDateToString(){
+
+        SimpleDateFormat dateFormat;
+        if(Locale.getDefault()==Locale.ITALIAN){
+            dateFormat = new SimpleDateFormat("dd/MM/yy kk:mm", Locale.getDefault());
+        }
+        else{
+            dateFormat = new SimpleDateFormat("MM/dd/yy hh:mm aa", Locale.getDefault());
+        }
+
+        return dateFormat.format(date);
     }
 }

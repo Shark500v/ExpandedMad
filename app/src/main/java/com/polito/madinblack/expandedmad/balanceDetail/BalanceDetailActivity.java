@@ -1,16 +1,12 @@
-package com.polito.madinblack.expandedmad.groupManaging;
+package com.polito.madinblack.expandedmad.balanceDetail;
+
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.SpannableString;
-import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -24,26 +20,52 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.polito.madinblack.expandedmad.R;
+import com.polito.madinblack.expandedmad.login.BaseActivity;
+import com.polito.madinblack.expandedmad.model.BalanceHistory;
 import com.polito.madinblack.expandedmad.model.Currency;
-import com.polito.madinblack.expandedmad.model.HistoryInfo;
+import com.polito.madinblack.expandedmad.model.MyApplication;
+import com.polito.madinblack.expandedmad.model.Type;
 import com.polito.madinblack.expandedmad.tabViewGroup.TabView;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class GroupHistory extends AppCompatActivity {
+/**
+ * Created by Ale on 02/06/2017.
+ */
 
-    private HistoryAdapter adapter;
-    private RecyclerView recyclerView;
-    private DatabaseReference mDatabaseReference;
+public class BalanceDetailActivity extends BaseActivity {
+
+    public static final String ARG_GROUP_ID = "groupID";
+    public static final String ARG_BALANCE_ID = "balanceID";
+    public static final String ARG_USER_BALANCE_NAME = "userBalanceName";
+    public static final String ARG_BALANCE_CURRENCY = "balanceCurrency";
+
     private String groupId;
+    private String balanceId;
+    private String userBalanceName;
+    private Currency.CurrencyISO balanceCurrencyISO;
+    private RecyclerView recyclerView;
+    private BalanceAdapter mAdapter;
+    private DatabaseReference mDatabaseBalanceHistoryReference;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_my);
+        setContentView(R.layout.balance_detail);
 
-        setContentView(R.layout.activity_group_history);
+
+        groupId             = getIntent().getStringExtra(ARG_GROUP_ID);
+        balanceId           = getIntent().getStringExtra(ARG_BALANCE_ID);
+        userBalanceName     = getIntent().getStringExtra(ARG_USER_BALANCE_NAME);
+        balanceCurrencyISO  = Currency.CurrencyISO.valueOf(getIntent().getStringExtra(ARG_BALANCE_CURRENCY));
+
+        mDatabaseBalanceHistoryReference = FirebaseDatabase.getInstance().getReference()
+                .child("groups/"+groupId+"/users/"+ MyApplication.getFirebaseId()+"/balances/"+balanceId+"/balancesHistory");
+
+
 
         //toolbar settings
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -53,68 +75,63 @@ public class GroupHistory extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(getString(R.string.group_history));
-        }
-        if (savedInstanceState == null) {
-            groupId = getIntent().getStringExtra("GROUP_ID");
-
-            mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("history/"+groupId);
-
         }
 
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == 16908332){
-            Intent intent = new Intent(this, TabView.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            navigateUpTo(intent);
-            return true;
-        }else
-            return super.onOptionsItemSelected(item);
-    }
 
+
+    }
 
     @Override
     public void onStart(){
         super.onStart();
 
+        recyclerView = (RecyclerView) findViewById(R.id.balance_list);
+        mAdapter = new BalanceAdapter(
+                getApplicationContext(),
+                mDatabaseBalanceHistoryReference
+        );
+        if(recyclerView!=null && mAdapter!=null)
+            recyclerView.setAdapter(mAdapter);
 
-        adapter = new HistoryAdapter( this, mDatabaseReference);
-
-        recyclerView = (RecyclerView) findViewById(R.id.cardList);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setHasFixedSize(true);
-        LinearLayoutManager llm = new LinearLayoutManager(this);
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(llm);
     }
 
     @Override
-    public void onStop() {
+    public void onStop(){
         super.onStop();
+        if(mAdapter!=null)
+            mAdapter.cleanupListener();
 
-        // Clean up comments listener
-        if(adapter!=null)
-            adapter.cleanupListener();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            Intent intent = new Intent(this, TabView.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            navigateUpTo(intent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 
-    public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ContactViewHolder> {
+    public class BalanceAdapter extends RecyclerView.Adapter<BalanceAdapter.BalanceViewHolder> {
 
-        private List<HistoryInfo> mValues = new ArrayList<>();
+        private List<BalanceHistory> mValues = new ArrayList<>();
         private DatabaseReference dataref;
         private List<String> mValuesIds = new ArrayList<>();
         private Context mContext;
         private ChildEventListener mChildEventListener;
+        private Double totValue;
 
-        private static final String TAG = "MyBalanceActivity";
+        private static final String TAG = "BalanceDetailActivity";
 
-        public HistoryAdapter(Context ct, DatabaseReference dr) {
+        public BalanceAdapter(Context ct, DatabaseReference dr) {
             dataref = dr;
             mContext = ct;
+            totValue = 0D;
 
 
             // Create child event listener
@@ -125,7 +142,7 @@ public class GroupHistory extends AppCompatActivity {
                     Log.d(TAG, "onChildAdded:" + dataSnapshot.getKey());
 
                     // A new info has been added, add it to the displayed list
-                    HistoryInfo historyInfo = dataSnapshot.getValue(HistoryInfo.class);
+                    BalanceHistory balanceHistory = dataSnapshot.getValue(BalanceHistory.class);
 
 
                     // [START_EXCLUDE]
@@ -137,7 +154,7 @@ public class GroupHistory extends AppCompatActivity {
                         recyclerView.setVisibility(View.VISIBLE);
                     }
                     mValuesIds.add(0, dataSnapshot.getKey());
-                    mValues.add(0, historyInfo);
+                    mValues.add(0, balanceHistory);
                     notifyItemInserted(0);
                     // [END_EXCLUDE]
 
@@ -150,14 +167,14 @@ public class GroupHistory extends AppCompatActivity {
 
                     // An info has changed, use the key to determine if we are displaying this
                     // info and if so displayed the changed info.
-                    HistoryInfo historyInfo = dataSnapshot.getValue(HistoryInfo.class);
+                    BalanceHistory balanceHistory = dataSnapshot.getValue(BalanceHistory.class);
                     String infoKey = dataSnapshot.getKey();
 
                     // [START_EXCLUDE]
                     int infoIndex = mValuesIds.indexOf(infoKey);
                     if (infoIndex > -1) {
                         // Replace with the new data
-                        mValues.set(infoIndex, historyInfo);
+                        mValues.set(infoIndex, balanceHistory);
 
                         // Update the RecyclerView
                         notifyItemChanged(infoIndex);
@@ -224,43 +241,52 @@ public class GroupHistory extends AppCompatActivity {
         }
 
         @Override
-        public void onBindViewHolder(ContactViewHolder contactViewHolder, int i) {
-            HistoryInfo ci = mValues.get(i);
-
-            String message = getMessageFromNumber(ci);
-            SpannableString spanString = new SpannableString(ci.getName() + " " + message );
-            spanString.setSpan(new StyleSpan(Typeface.BOLD), 0, ci.getName().length(), 0);
-            contactViewHolder.vContent.setText( spanString );
-            contactViewHolder.vTitle.setText(ci.convertDateToString());
-        }
-
-        private String getMessageFromNumber(HistoryInfo hi){
-            long l = hi.getContent();
-            switch ((int)l){
-                case 0:
-                    return getString(R.string.history_expense)+ " "+String.format(Locale.getDefault(), "%.2f",hi.getCost()) +" "+ Currency.toString(hi.getCurrencyISO());
-                case 1:
-                    return getString(R.string.history_payment_part1)+ " "+ hi.getPaidTo()+ " "
-                            +getString(R.string.history_payment_part2)+String.format(Locale.getDefault(), "%.2f",hi.getCost()) +" "+Currency.toString(hi.getCurrencyISO());
-                case 2:
-                    return getString(R.string.history_new_memeber);
-                case 3:
-                    return getString(R.string.history_new_group);
-                case 4:
-                    return getString(R.string.history_transfer_part1) + " "+ hi.getExpenseName() + " "
-                            + getString(R.string.history_transfer_part2);
-                default:
-                    return "Error";
+        public void onBindViewHolder(BalanceAdapter.BalanceViewHolder balanceViewHolder, int i) {
+            BalanceHistory balanceHistory = mValues.get(i);
+            String textType;
+            balanceViewHolder.mExpenseName.setText(balanceHistory.getExpenseName());
+            if(balanceHistory.getType()== Type.NEW_EXPENSE){
+                textType = mContext.getResources().getString(R.string.new_expense);
+                balanceViewHolder.mExpenseName.setTextColor(Color.parseColor("#009688"));
+            }else if(balanceHistory.getType()== Type.SETTLE_UP) {
+                textType = mContext.getResources().getString(R.string.settle_up_of);
+                balanceViewHolder.mExpenseName.setTextColor(Color.parseColor("#009688"));
+            }else if(balanceHistory.getType()== Type.STORNED) {
+                textType = mContext.getResources().getString(R.string.storned);
+                balanceViewHolder.mExpenseName.setTextColor(Color.parseColor("#ff0000"));
+            }else {
+                textType = "";
             }
+
+            balanceViewHolder.mType.setText(textType);
+            if(balanceHistory.getValue()>0) {
+                balanceViewHolder.mValue.setText(String.format(Locale.getDefault(), "+%.2f", Currency.convertCurrency(balanceHistory.getValue(), balanceCurrencyISO, MyApplication.getCurrencyISOFavorite()))
+                        + Currency.getSymbol(MyApplication.getCurrencyISOFavorite()));
+                balanceViewHolder.mValue.setTextColor(Color.parseColor("#00c200"));
+            }else if(balanceHistory.getValue()<0){
+                balanceViewHolder.mValue.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(balanceHistory.getValue(), balanceCurrencyISO, MyApplication.getCurrencyISOFavorite()))
+                        + Currency.getSymbol(MyApplication.getCurrencyISOFavorite()));
+                balanceViewHolder.mValue.setTextColor(Color.parseColor("#ff0000"));
+            }else{
+                balanceViewHolder.mValue.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(balanceHistory.getValue(), balanceCurrencyISO, MyApplication.getCurrencyISOFavorite()))
+                        + Currency.getSymbol(MyApplication.getCurrencyISOFavorite()));
+            }
+
+            balanceViewHolder.mDate.setText(balanceHistory.convertDateToString());
+
+
+
+
         }
+
 
         @Override
-        public ContactViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        public BalanceViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             View itemView = LayoutInflater.
                     from(viewGroup.getContext()).
                     inflate(R.layout.card_layout_history, viewGroup, false);
 
-            return new ContactViewHolder(itemView);
+            return new BalanceViewHolder(itemView);
         }
 
         public void cleanupListener() {
@@ -269,17 +295,23 @@ public class GroupHistory extends AppCompatActivity {
             }
         }
 
-        public class ContactViewHolder extends RecyclerView.ViewHolder {
+        public class BalanceViewHolder extends RecyclerView.ViewHolder {
 
-            protected TextView vContent;
-            protected TextView vTitle;
+            protected TextView mType;
+            protected TextView mExpenseName;
+            protected TextView mValue;
+            protected TextView mDate;
 
-            public ContactViewHolder(View v) {
+            public BalanceViewHolder(View v) {
                 super(v);
-                vContent = (TextView)  v.findViewById(R.id.txtContent);
-                vTitle = (TextView) v.findViewById(R.id.title);
+                mType = (TextView)  v.findViewById(R.id.type);
+                mExpenseName = (TextView) v.findViewById(R.id.expense_name);
+                mValue = (TextView) v.findViewById(R.id.value);
+                mDate = (TextView) v.findViewById(R.id.date);
             }
         }
     }
 
 }
+
+
