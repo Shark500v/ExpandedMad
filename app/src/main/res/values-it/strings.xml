@@ -7,6 +7,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="balance">Saldo</string>
     <string name="tag">Tag</string>
+    <string name="tag_new_expense">Tag *</string>
     <string name="cost">Prezzo</string>
     <string name="policy">Policy</string>
     <string name="description">Descrizione</string>
@@ -106,6 +107,7 @@
     <string name="err_msg_telephone">Numero di telefono non valido</string>
     <string name="err_msg_invitation">Codice di invito non valido</string>
     <string name="err_msg_correct_amount">Inserisci un prezzo corretto</string>
+    <string name="err_msg_tag">Inserisci il tag della spesa</string>
     <string name="err_msg_amount">Inserisci il prezzo</string>
     <string name="disconnect">Disconnetti</string>
     <string name="confirm">Conferma</string>

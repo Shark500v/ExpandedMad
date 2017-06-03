@@ -7,6 +7,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="balance">Balance</string>
     <string name="tag">Tag</string>
+    <string name="tag_new_expense">Tag *</string>
     <string name="cost">Cost</string>
     <string name="policy">Policy</string>
     <string name="description">Description</string>
@@ -70,6 +71,7 @@
     <string name="err_msg_title">Enter the expense name</string>
     <string name="err_msg_amount">Enter the amount</string>
     <string name="err_msg_correct_amount">Enter a correct amount</string>
+    <string name="err_msg_tag">Enter the expense tag</string>
     <string name="hint_phonenumber">Enter your phone number</string>
     <string name="hint_password">Enter your password</string>
     <string name="hint_password_confirm">Confirm your password</string>
