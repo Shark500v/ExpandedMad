@@ -284,7 +284,7 @@ public class BalanceDetailActivity extends BaseActivity {
         public BalanceViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             View itemView = LayoutInflater.
                     from(viewGroup.getContext()).
-                    inflate(R.layout.card_layout_history, viewGroup, false);
+                    inflate(R.layout.balance_list_item, viewGroup, false);
 
             return new BalanceViewHolder(itemView);
         }
