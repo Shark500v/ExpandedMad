@@ -54,8 +54,10 @@ public class SelectContact extends AppCompatActivity {
         arguments.putSerializable("LIST", (Serializable) groupM);
         fragment = new ContactsFragment();
         fragment.setArguments(arguments);
+
         //lancio il fragment
-        getSupportFragmentManager().beginTransaction().add(R.id.frame_layout_2, fragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_2, fragment).commit();
+
     }
 
     @Override

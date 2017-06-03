@@ -47,7 +47,7 @@ public class SelectContactToAdd extends AppCompatActivity {
     private ContactsToAddFragment fragment;                              //used to show the contact list
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_contact_to_add);
 
@@ -88,7 +88,7 @@ public class SelectContactToAdd extends AppCompatActivity {
                 fragment = new ContactsToAddFragment();
                 fragment.setArguments(arguments);
                 //lancio il fragment
-                getSupportFragmentManager().beginTransaction().add(R.id.frameLayout, fragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, fragment).commit();
             }
 
             @Override
