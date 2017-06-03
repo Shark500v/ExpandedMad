@@ -177,14 +177,15 @@ public class UserPage extends AppCompatActivity{
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
                     String imageFileName = timeStamp + ".jpg";
-                    File storageDir = Environment.getExternalStoragePublicDirectory(
-                            Environment.DIRECTORY_PICTURES);
-                    pictureImagePath = storageDir.getAbsolutePath() + "/" + imageFileName;
-                    File file = new File(pictureImagePath);
-                    uri = FileProvider.getUriForFile(UserPage.this, BuildConfig.APPLICATION_ID + ".provider", file);
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-                    if (intent.resolveActivity(getPackageManager()) != null) {
-                        startActivityForResult(intent, RESULT_REQUEST_CAMERA);
+                    File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                    if(storageDir != null) {
+                        pictureImagePath = storageDir.getAbsolutePath() + "/" + imageFileName;
+                        File file = new File(pictureImagePath);
+                        uri = FileProvider.getUriForFile(UserPage.this, BuildConfig.APPLICATION_ID + ".provider", file);
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                        if (intent.resolveActivity(getPackageManager()) != null) {
+                            startActivityForResult(intent, RESULT_REQUEST_CAMERA);
+                        }
                     }
                 } else if(items[which].equals(getString(R.string.gallery))){
                     Intent intent = new Intent();
@@ -202,8 +203,8 @@ public class UserPage extends AppCompatActivity{
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK && data != null) {
-            if (requestCode == RESULT_LOAD_IMAGE) {
+        if(resultCode == RESULT_OK) {
+            if (requestCode == RESULT_LOAD_IMAGE && data != null) {
                 uri = data.getData();
                 try {
                     bitmap = getThumbnail(uri);
@@ -216,22 +217,7 @@ public class UserPage extends AppCompatActivity{
                     e.printStackTrace();
                 }
             }
-            /*else if (requestCode == RESULT_REQUEST_CAMERA) {
-                File imgFile = new  File(pictureImagePath);
-                if(imgFile.exists()) {
-                    try {
-                        bitmap = (Bitmap) data.getExtras().get("data");
-                        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-                        imageData = bytes.toByteArray();
-                        uploadProfilePicture();  //da decidere se caricare sullo storage qua o dando conferma
-                    }catch(IOException e){
-                        e.printStackTrace();
-                    }
-                }
-            }*/
-        }else {
-            if (requestCode == RESULT_REQUEST_CAMERA) {
+            else if (requestCode == RESULT_REQUEST_CAMERA) {
                 File imgFile = new File(pictureImagePath);
                 if (imgFile.exists()) {
                     try {
@@ -245,6 +231,18 @@ public class UserPage extends AppCompatActivity{
                         e.printStackTrace();
                     }
                 }
+                /*File imgFile = new  File(pictureImagePath);
+                if(imgFile.exists()) {
+                    try {
+                        bitmap = (Bitmap) data.getExtras().get("data");
+                        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+                        imageData = bytes.toByteArray();
+                        uploadProfilePicture();  //da decidere se caricare sullo storage qua o dando conferma
+                    }catch(IOException e){
+                        e.printStackTrace();
+                    }
+                }*/
             }
         }
     }
