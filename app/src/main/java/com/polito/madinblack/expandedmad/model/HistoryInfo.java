@@ -12,6 +12,7 @@ public class HistoryInfo {
      *  2: New User In Group
      *  3: Someone created the group
      *  4: Expense transfer
+     *  5: Contest Expense
      */
     private String name;
     private String expenseName;
