@@ -72,8 +72,11 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -769,7 +772,7 @@ public class ExpenseFillData extends AppCompatActivity {
 
     private void showDate(Date data) {
         EditText dateText = (EditText)findViewById(R.id.input_date);
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         dateText.setText(dateFormat.format(data)); //16/11/2016
     }
 
@@ -797,8 +800,18 @@ public class ExpenseFillData extends AppCompatActivity {
                         users.clear();
                         for (DataSnapshot postSnapshot : snapshot.getChildren()) {
                             UserForGroup user = postSnapshot.getValue(UserForGroup.class);
-                            users.add(user);
+                            if(!user.getFirebaseId().equals(MyApplication.getFirebaseId()))
+                                users.add(user);
+                            else
+                                users.add(0, user);
                         }
+                        Collections.sort(users.subList(1, users.size()), new Comparator<UserForGroup>() {
+                            @Override
+                            public int compare(UserForGroup u1, UserForGroup u2) {
+                                return u1.getName().equals(u2.getName()) ? u1.getSurname().compareTo(u2.getSurname()) : u1.getName().compareTo(u2.getName());
+                            }
+                        });
+
 
                         List<Payment> payment = new ArrayList<>();
                         for(int i=0;i<users.size();i++){

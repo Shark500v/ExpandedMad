@@ -89,11 +89,6 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         if(MyApplication.isVariablesAvailable()) {
             mDatabaseForUserUrl = mDatabaseRootReference.child("users").child(MyApplication.getUserPhoneNumber()).child(MyApplication.getFirebaseId()).child("urlImage");
             mUserGroupsReference = mDatabaseRootReference.child("users/" + MyApplication.getUserPhoneNumber() + "/" + MyApplication.getFirebaseId() + "/groups");
-        }else {
-            Intent intent = new Intent(GroupListActivity.this, CheckLogIn.class);
-            startActivity(intent);
-            finish();
-
         }
         mQueryUserGroupsReference = mUserGroupsReference.orderByChild("timestamp");
 
@@ -140,14 +135,16 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             }
         });*/
 
-        tv1.setText(MyApplication.getUserName() + " " + MyApplication.getUserSurname());
-        tv2.setText(MyApplication.getUserPhoneNumber());
 
-        if(getIntent().getExtras()!=null){
-            groupIndex = getIntent().getExtras().getString("groupIndex");
-            groupName  = getIntent().getExtras().getString("groupName");
-            index = getIntent().getExtras().getInt("request");
+        if(MyApplication.isVariablesAvailable()) {
+            tv1.setText(MyApplication.getUserName() + " " + MyApplication.getUserSurname());
+            tv2.setText(MyApplication.getUserPhoneNumber());
         }
+            if (getIntent().getExtras() != null) {
+                groupIndex = getIntent().getExtras().getString("groupIndex");
+                groupName = getIntent().getExtras().getString("groupName");
+                index = getIntent().getExtras().getInt("request");
+            }
 
     }
 
@@ -166,6 +163,13 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         if(mQueryUserGroupsReference!=null) {
             mAdapter = new SimpleItemRecyclerViewAdapter(this, mQueryUserGroupsReference);
             ((RecyclerView) recyclerView).setAdapter(mAdapter);
+        }
+
+        if(!MyApplication.isVariablesAvailable()) {
+            Intent intent = new Intent(GroupListActivity.this, CheckLogIn.class);
+            startActivity(intent);
+            finish();
+
         }
     }
 

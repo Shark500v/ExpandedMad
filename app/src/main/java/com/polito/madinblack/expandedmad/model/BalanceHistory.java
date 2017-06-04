@@ -63,7 +63,7 @@ public class BalanceHistory {
             dateFormat = new SimpleDateFormat("dd/MM/yy kk:mm", Locale.getDefault());
         }
         else{
-            dateFormat = new SimpleDateFormat("MM/dd/yy hh:mm aa", Locale.getDefault());
+            dateFormat = new SimpleDateFormat("dd/MM/yy hh:mm aa", Locale.getDefault());
         }
 
         return dateFormat.format(date);
