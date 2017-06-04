@@ -2,6 +2,8 @@ package com.polito.madinblack.expandedmad.expenseDetail;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.design.widget.TextInputLayout;
@@ -17,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import com.google.firebase.database.DataSnapshot;
@@ -220,8 +223,11 @@ public class ContestExpenseActivity extends BaseActivity {
                         mOldToPay.setText(String.format(Locale.getDefault(), "%.2f", paymentFirebase.getToPay()));
                         mNewToPay.setText(String.format(Locale.getDefault(), "%.2f", paymentFirebase.getNewToPay()));
                         mNewToPay.setEnabled(false);
-                        mMotivationEditText.setText(paymentFirebase.getMotivation());
-                        mMotivationEditText.setEnabled(false);
+                        mMotivationEditText.setVisibility(View.GONE);
+                        findViewById(R.id.motivation_layout_after).setVisibility(View.VISIBLE);
+                        ((TextView)findViewById(R.id.motivation_after)).setText(paymentFirebase.getMotivation());
+
+
 
 
                         mSpinnerCurrency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

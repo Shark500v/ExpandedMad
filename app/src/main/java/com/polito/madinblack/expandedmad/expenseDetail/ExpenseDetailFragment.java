@@ -107,6 +107,7 @@ public class ExpenseDetailFragment extends Fragment {
                             public void onClick(View v) {
                                 Intent intent = new Intent(getContext(), PaymentDetailActivity.class);
                                 intent.putExtra(PaymentDetailActivity.ARG_EXPENSE_ID, expense.getId());
+                                intent.putExtra(PaymentDetailActivity.ARG_EXPENSE_NAME, expense.getName());
                                 intent.putExtra(PaymentDetailActivity.ARG_GROUP_ID, expense.getGroupId());
                                 intent.putExtra(PaymentDetailActivity.ARG_EXPENSE_COST, expense.getRoundedCost().toString());
                                 intent.putExtra(PaymentDetailActivity.ARG_USER_NAME, expense.getPaidByName());

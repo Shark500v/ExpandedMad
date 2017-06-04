@@ -221,7 +221,8 @@
     <string name="notifications">Notifiche</string>
     <string name="ringtone">Suoneria</string>
     <string name="vibrate">Vibrazione</string>
-    <string name="motivation">Motivazione *</string>
+    <string name="motivation_hint">Motivazione *</string>
+    <string name="motivation">Motivazione</string>
     <string name="select_tag">Seleziona tag</string>
     <string name="related_to">relativa a</string>
     <string name="contention">Genera contesa</string>
@@ -242,4 +243,12 @@
     <string name="group_image">ImmagineGruppo</string>
     <string name="created_by">Creato da</string>
     <string name="italy">Italia</string>
+    <string name="balance_towards">Saldo rispetto</string>
+    <string name="new_expense">Nuova spesa</string>
+    <string name="settle_up_of">Pagamento di</string>
+    <string name="storned">Storno di</string>
+    <string name="balance_detail">Dettagli saldo</string>
+    <string name="no_movements">Nessun movimento</string>+
+
+
 </resources>

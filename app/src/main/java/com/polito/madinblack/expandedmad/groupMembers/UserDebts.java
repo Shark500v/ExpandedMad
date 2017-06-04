@@ -40,6 +40,7 @@ public class UserDebts extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(name + " " + surname + " " + getString(R.string.balance));
         }
 
         if (savedInstanceState == null) {
@@ -60,7 +61,7 @@ public class UserDebts extends AppCompatActivity {
             groupId = extras.getString("GROUP_ID");
             firebaseId = extras.getString("FIREBASE_ID");
 
-            actionBar.setTitle(name + " " + surname + " " + getString(R.string.balance));
+
 
             mDatabaseBalancesReference = FirebaseDatabase.getInstance().getReference().child("groups/"+groupId+"/users/"+firebaseId+"/balances");
 
@@ -72,7 +73,7 @@ public class UserDebts extends AppCompatActivity {
     public void onStart(){
         super.onStart();
 
-        adapter = new RecyclerViewAdapterUsers(this, mDatabaseBalancesReference);
+        adapter = new RecyclerViewAdapterUsers(this, mDatabaseBalancesReference, groupId);
 
         recyclerView = (RecyclerView) findViewById(R.id.item_list);
         recyclerView.setAdapter(adapter);

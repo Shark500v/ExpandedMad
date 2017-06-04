@@ -219,7 +219,8 @@
     <string name="notifications">Notifications</string>
     <string name="ringtone">Ringtone</string>
     <string name="vibrate">Vibrate</string>
-    <string name="motivation">Motivation *</string>
+    <string name="motivation_hint">Motivation *</string>
+    <string name="motivation">Motivation</string>
     <string name="select_tag">Select Tag</string>
     <string name="related_to">related to</string>
     <string name="all_tags">All Tags</string>
@@ -238,4 +239,10 @@
     <string name="name_not_modified">Group name not modified</string>
     <string name="created_by">Created by</string>
     <string name="italy">Italy</string>
+    <string name="balance_towards">Balance Towards</string>
+    <string name="new_expense">New Expense</string>
+    <string name="settle_up_of">Settle Up of</string>
+    <string name="storned">Transfer of</string>
+    <string name="balance_detail">Balance Detail</string>
+    <string name="no_movements">No movements yet</string>
 </resources>

@@ -8,9 +8,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -48,7 +50,9 @@ import com.google.firebase.storage.OnPausedListener;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.polito.madinblack.expandedmad.BuildConfig;
 import com.polito.madinblack.expandedmad.R;
+import com.polito.madinblack.expandedmad.UserPage;
 import com.polito.madinblack.expandedmad.model.CostUtil;
 import com.polito.madinblack.expandedmad.model.Currency;
 import com.polito.madinblack.expandedmad.model.Expense;
@@ -59,6 +63,7 @@ import com.polito.madinblack.expandedmad.model.UserForGroup;
 import com.polito.madinblack.expandedmad.tabViewGroup.TabView;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -98,6 +103,7 @@ public class ExpenseFillData extends AppCompatActivity {
     private Spinner spinner;
     private String url;
     private String groupName;
+    private String pictureImagePath;
 
     private static int THUMBNAIL_SIZE = 256;
 
@@ -382,9 +388,22 @@ public class ExpenseFillData extends AppCompatActivity {
 
     private void photoFromCamera()
     {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        /*Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(intent, RESULT_REQUEST_CAMERA);
+        }*/
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = timeStamp + ".jpg";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        if(storageDir != null) {
+            pictureImagePath = storageDir.getAbsolutePath() + "/" + imageFileName;
+            File file = new File(pictureImagePath);
+            selectedImage = FileProvider.getUriForFile(ExpenseFillData.this, BuildConfig.APPLICATION_ID + ".provider", file);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, selectedImage);
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                startActivityForResult(intent, RESULT_REQUEST_CAMERA);
+            }
         }
     }
 
@@ -397,7 +416,7 @@ public class ExpenseFillData extends AppCompatActivity {
             CircleImageView imageView = (CircleImageView) findViewById(R.id.expense_proof);
             imageView.setPadding(4,4,4,4);
 
-            if (requestCode == RESULT_LOAD_IMAGE && null != data){
+            if (requestCode == RESULT_LOAD_IMAGE && data != null){
                 selectedImage = data.getData();
                 //String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
@@ -428,10 +447,10 @@ public class ExpenseFillData extends AppCompatActivity {
                 }
             }
             else if (requestCode == RESULT_REQUEST_CAMERA){ //null!=data?????????
-                Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+                /*Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                 thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-                bytesArr = bytes.toByteArray();
+                bytesArr = bytes.toByteArray();*/
 
                 /*File destination = new File(Environment.getExternalStorageDirectory(),
                         System.currentTimeMillis() + ".jpg");
@@ -447,6 +466,18 @@ public class ExpenseFillData extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }*/
+                File imgFile = new File(pictureImagePath);
+                if (imgFile.exists()) {
+                    try {
+                        bitmap = getThumbnail(FileProvider.getUriForFile(ExpenseFillData.this, BuildConfig.APPLICATION_ID + ".provider", imgFile));
+                        //bitmap = (Bitmap) data.getExtras().get("data");
+                        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+                        bytesArr = bytes.toByteArray();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
 
                 Glide.with(getApplicationContext()).load(bytesArr).override(128,128).centerCrop().fitCenter().into(imageView);
             }

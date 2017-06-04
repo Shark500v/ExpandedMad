@@ -53,6 +53,7 @@ public class GroupHistory extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(getString(R.string.group_history));
         }
         if (savedInstanceState == null) {
             groupId = getIntent().getStringExtra("GROUP_ID");
@@ -60,7 +61,6 @@ public class GroupHistory extends AppCompatActivity {
             mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("history/"+groupId);
 
         }
-        actionBar.setTitle(getString(R.string.group_history));
 
     }
 

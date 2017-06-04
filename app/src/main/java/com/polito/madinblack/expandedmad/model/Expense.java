@@ -6,6 +6,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -240,15 +244,16 @@ public class Expense {
         this.paymentContestedId = paymentContestedId;
     }
 
-    public static String writeNewExpense(final DatabaseReference mDatabaseRootRefenrence, String name, String tag,
+    public static String writeNewExpense(final DatabaseReference mDatabaseRootRefenrence, final String name, String tag,
                                          String paidByFirebaseId, String paidByPhoneNumber, String paidByName, String paidBySurname, Double cost, Double roundedCost,
-                                         final Currency.CurrencyISO currencyISO, final String groupId, Long year, Long month, Long day, String description, State state, Long timestamp, List<Payment> paymentList){
+                                         final Currency.CurrencyISO currencyISO, final String groupId, Long year, Long month, Long day, String description, final State state, Long timestamp, List<Payment> paymentList){
 
         DatabaseReference myExpenseRef = mDatabaseRootRefenrence.child("expenses").push();
         final String expenseKey = myExpenseRef.getKey();
 
-        Expense expense = new Expense(expenseKey, name, tag, paidByName, paidBySurname, paidByFirebaseId, paidByPhoneNumber, cost, roundedCost, currencyISO, groupId, year, month, day, description, state);
+        final Expense expense = new Expense(expenseKey, name, tag, paidByName, paidBySurname, paidByFirebaseId, paidByPhoneNumber, cost, roundedCost, currencyISO, groupId, year, month, day, description, state);
         myExpenseRef.setValue(expense);
+        final Date date = new Date();
 
         DatabaseReference myPaymentRef;
         String paymentKey;
@@ -264,7 +269,7 @@ public class Expense {
                     toUpdate.put(payment.getUserPhoneNumber()+expenseKey, payment.getDebit());
 
 
-        for(Payment payment : paymentList){
+        for(final Payment payment : paymentList){
 
             myPaymentRef = myExpenseRef.child("payments").push();
             paymentKey = myPaymentRef.getKey();
@@ -306,10 +311,7 @@ public class Expense {
                     }
                 });
 
-                /*update users balances*/
-
-
-                /*RIVEDERE*/
+                //update users balances
                 mDatabaseRootRefenrence.child("groups/"+groupId+"/users/"+payment.getUserFirebaseId()+"/balances/"+paidByFirebaseId).runTransaction(new Transaction.Handler() {
 
                     @Override
@@ -319,6 +321,7 @@ public class Expense {
                             for(MutableData currentDataChild : currentData.getChildren()){
                                 if(currentDataChild.getKey().equals("balance")) {
                                     currentDataChild.setValue(balance.getBalance() - Currency.convertCurrency(toUpdate.get(balance.getParentUserPhoneNumber() + expenseKey), currencyISO, balance.getCurrencyISO()));
+
                                 }
                             }
 
@@ -331,39 +334,54 @@ public class Expense {
                     @Override
                     public void onComplete(DatabaseError databaseError,
                                            boolean committed, DataSnapshot currentData) {
-                        //This method will be called once with the results of the transaction.
-                        //Update remove the user from the group
-
+                        if(committed){
+                            Balance balanceUp = currentData.getValue(Balance.class);
+                            BalanceHistory balanceHistory;
+                            if(state==State.TRANSFER)
+                                balanceHistory = new BalanceHistory(name, Type.STORNED, -Currency.convertCurrency(toUpdate.get(balanceUp.getParentUserPhoneNumber() + expenseKey), currencyISO, balanceUp.getCurrencyISO()), date);
+                            else
+                                balanceHistory = new BalanceHistory(name, Type.NEW_EXPENSE, -Currency.convertCurrency(toUpdate.get(balanceUp.getParentUserPhoneNumber() + expenseKey), currencyISO, balanceUp.getCurrencyISO()), date);
+                            currentData.getRef().child("balancesHistory").push().setValue(balanceHistory);
+                        }
 
                     }
                 });
+
+
 
                 mDatabaseRootRefenrence.child("groups/"+groupId+"/users/"+paidByFirebaseId+"/balances/"+payment.getUserFirebaseId()).runTransaction(new Transaction.Handler() {
 
                     @Override
                     public Transaction.Result doTransaction(MutableData currentData) {
                         if (currentData.getValue() != null) {
-                            if (currentData.getValue() != null) {
-                                Balance balance = currentData.getValue(Balance.class);
-                                for(MutableData currentDataChild : currentData.getChildren()){
-                                    if(currentDataChild.getKey().equals("balance"))
-                                        currentDataChild.setValue(balance.getBalance() + Currency.convertCurrency(toUpdate.get(balance.getUserPhoneNumber() + expenseKey), currencyISO, balance.getCurrencyISO()));
-                                }
-
+                            Balance balance = currentData.getValue(Balance.class);
+                            for(MutableData currentDataChild : currentData.getChildren()){
+                                if(currentDataChild.getKey().equals("balance"))
+                                    currentDataChild.setValue(balance.getBalance() + Currency.convertCurrency(toUpdate.get(balance.getUserPhoneNumber() + expenseKey), currencyISO, balance.getCurrencyISO()));
                             }
+
                         }
+
                         return Transaction.success(currentData);
                     }
 
                     @Override
                     public void onComplete(DatabaseError databaseError,
                                            boolean committed, DataSnapshot currentData) {
-                        //This method will be called once with the results of the transaction.
-                        //Update remove the user from the group
+                        if(committed){
+                            Balance balanceUp = currentData.getValue(Balance.class);
+                            BalanceHistory balanceHistory;
+                            if(state==State.TRANSFER)
+                                balanceHistory = new BalanceHistory(name, Type.STORNED, Currency.convertCurrency(toUpdate.get(balanceUp.getUserPhoneNumber() + expenseKey), currencyISO, balanceUp.getCurrencyISO()), date);
+                            else
+                                balanceHistory = new BalanceHistory(name, Type.NEW_EXPENSE, Currency.convertCurrency(toUpdate.get(balanceUp.getUserPhoneNumber() + expenseKey), currencyISO, balanceUp.getCurrencyISO()), date);
 
+                                currentData.getRef().child("balancesHistory").push().setValue(balanceHistory);
+                        }
 
                     }
                 });
+
 
             }
         }
@@ -373,9 +391,9 @@ public class Expense {
         /*update the history*/
         HistoryInfo historyInfo;
         if(state==State.TRANSFER)
-            historyInfo = new HistoryInfo(paidByName+" "+paidBySurname, name, 4l, cost, currencyISO, null);
+            historyInfo = new HistoryInfo(paidByName+" "+paidBySurname, name, 4L, cost, currencyISO, null, date);
         else
-            historyInfo = new HistoryInfo(paidByName+" "+paidBySurname, null, 0l, cost, currencyISO, null);
+            historyInfo = new HistoryInfo(paidByName+" "+paidBySurname, null, 0L, cost, currencyISO, null, date);
         mDatabaseRootRefenrence.child("history/"+groupId).push().setValue(historyInfo);
 
         return expenseKey;
