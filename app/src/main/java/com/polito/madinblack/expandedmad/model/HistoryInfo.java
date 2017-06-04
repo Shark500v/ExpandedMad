@@ -36,16 +36,6 @@ public class HistoryInfo {
         date = new Date();
     }
 
-    public HistoryInfo(String name, String expenseName, Long content, Double cost, Currency.CurrencyISO currencyISO, String paidTo, Date date){
-        this.name = name;
-        this.expenseName = expenseName;
-        this.content = content;
-        this.cost = cost;
-        this.currencyISO = currencyISO;
-        this.paidTo = paidTo;
-        this.date = date;
-    }
-
     public String getName() {
         return name;
     }
