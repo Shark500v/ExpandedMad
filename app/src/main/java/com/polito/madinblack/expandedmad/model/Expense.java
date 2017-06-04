@@ -357,7 +357,7 @@ public class Expense {
                             Balance balance = currentData.getValue(Balance.class);
                             for(MutableData currentDataChild : currentData.getChildren()){
                                 if(currentDataChild.getKey().equals("balance"))
-                                    currentDataChild.setValue(balance.getBalance() + Currency.convertCurrency(toUpdate.get(balance.getParentUserPhoneNumber() + expenseKey), currencyISO, balance.getCurrencyISO()));
+                                    currentDataChild.setValue(balance.getBalance() + Currency.convertCurrency(toUpdate.get(balance.getUserPhoneNumber() + expenseKey), currencyISO, balance.getCurrencyISO()));
                             }
 
                         }
@@ -372,9 +372,9 @@ public class Expense {
                             Balance balanceUp = currentData.getValue(Balance.class);
                             BalanceHistory balanceHistory;
                             if(state==State.TRANSFER)
-                                balanceHistory = new BalanceHistory(name, Type.STORNED, Currency.convertCurrency(toUpdate.get(balanceUp.getParentUserPhoneNumber() + expenseKey), currencyISO, balanceUp.getCurrencyISO()), date);
+                                balanceHistory = new BalanceHistory(name, Type.STORNED, Currency.convertCurrency(toUpdate.get(balanceUp.getUserPhoneNumber() + expenseKey), currencyISO, balanceUp.getCurrencyISO()), date);
                             else
-                                balanceHistory = new BalanceHistory(name, Type.NEW_EXPENSE, Currency.convertCurrency(toUpdate.get(balanceUp.getParentUserPhoneNumber() + expenseKey), currencyISO, balanceUp.getCurrencyISO()), date);
+                                balanceHistory = new BalanceHistory(name, Type.NEW_EXPENSE, Currency.convertCurrency(toUpdate.get(balanceUp.getUserPhoneNumber() + expenseKey), currencyISO, balanceUp.getCurrencyISO()), date);
 
                                 currentData.getRef().child("balancesHistory").push().setValue(balanceHistory);
                         }
