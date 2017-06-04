@@ -317,6 +317,14 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                         duplicato.add(postSnapshot.getValue(GroupForUser.class));
 
                     }
+
+                    if(getItemCount() != 0) {
+                        TextView emptyView = (TextView) findViewById(R.id.empty_view);
+                        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.group_list);
+                        emptyView.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
+                    }
+
                     notifyDataSetChanged();
                 }
 
