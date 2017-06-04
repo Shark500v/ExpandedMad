@@ -14,6 +14,8 @@ public class BalanceHistory {
     private Double value;
     private Date date;
 
+    public BalanceHistory(){}
+
 
     public BalanceHistory(String expenseName, Type type, Double value, Date date) {
         this.expenseName = expenseName;
@@ -57,7 +59,7 @@ public class BalanceHistory {
     public String convertDateToString(){
 
         SimpleDateFormat dateFormat;
-        if(Locale.getDefault()==Locale.ITALIAN){
+        if(Locale.getDefault().equals(Locale.ITALIAN)){
             dateFormat = new SimpleDateFormat("dd/MM/yy kk:mm", Locale.getDefault());
         }
         else{

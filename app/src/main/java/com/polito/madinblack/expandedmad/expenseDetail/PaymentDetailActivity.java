@@ -249,13 +249,13 @@ public class PaymentDetailActivity extends BaseActivity {
             setResult(RESULT_OK, intent);
             finish();
 
-        }else if(id == R.id.fill_all_paid){
+        }/*else if(id == R.id.fill_all_paid){
 
 
 
 
 
-        }else if(id == 16908332){
+        }*/else if(id == 16908332){
             Intent intent3 = new Intent(this, ExpenseDetailFragment.class);
             intent3.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
             navigateUpTo(intent3);

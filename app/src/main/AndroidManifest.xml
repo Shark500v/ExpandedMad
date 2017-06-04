@@ -292,7 +292,7 @@
         </activity>
 
         <activity
-            android:name="balanceDetail.BalanceDetailActivity"
+            android:name=".balanceDetail.BalanceDetailActivity"
             android:parentActivityName=".tabViewGroup.TabView"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

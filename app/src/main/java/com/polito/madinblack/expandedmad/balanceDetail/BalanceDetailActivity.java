@@ -49,12 +49,14 @@ public class BalanceDetailActivity extends BaseActivity {
     private RecyclerView recyclerView;
     private BalanceAdapter mAdapter;
     private DatabaseReference mDatabaseBalanceHistoryReference;
+    private TextView mTotValue;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.balance_detail);
+
 
 
         groupId             = getIntent().getStringExtra(ARG_GROUP_ID);
@@ -65,6 +67,8 @@ public class BalanceDetailActivity extends BaseActivity {
         mDatabaseBalanceHistoryReference = FirebaseDatabase.getInstance().getReference()
                 .child("groups/"+groupId+"/users/"+ MyApplication.getFirebaseId()+"/balances/"+balanceId+"/balancesHistory");
 
+        ((TextView) findViewById(R.id.balance_toward)).setText(getString(R.string.balance_towards)+" "+userBalanceName);
+        mTotValue = (TextView) findViewById(R.id.tot_value);
 
 
         //toolbar settings
@@ -85,6 +89,7 @@ public class BalanceDetailActivity extends BaseActivity {
     @Override
     public void onStart(){
         super.onStart();
+
 
         recyclerView = (RecyclerView) findViewById(R.id.balance_list);
         mAdapter = new BalanceAdapter(
@@ -144,7 +149,7 @@ public class BalanceDetailActivity extends BaseActivity {
                     // A new info has been added, add it to the displayed list
                     BalanceHistory balanceHistory = dataSnapshot.getValue(BalanceHistory.class);
 
-
+                    /*
                     // [START_EXCLUDE]
                     // Update RecyclerView
                     if(getItemCount() == 0){
@@ -153,6 +158,8 @@ public class BalanceDetailActivity extends BaseActivity {
                         tx.setVisibility(View.GONE);
                         recyclerView.setVisibility(View.VISIBLE);
                     }
+
+                    */
                     mValuesIds.add(0, dataSnapshot.getKey());
                     mValues.add(0, balanceHistory);
                     notifyItemInserted(0);
@@ -243,6 +250,20 @@ public class BalanceDetailActivity extends BaseActivity {
         @Override
         public void onBindViewHolder(BalanceAdapter.BalanceViewHolder balanceViewHolder, int i) {
             BalanceHistory balanceHistory = mValues.get(i);
+            totValue += balanceHistory.getValue();
+
+            if(totValue>0) {
+                mTotValue.setText(String.format(Locale.getDefault(), "+%.2f", Currency.convertCurrency(totValue, balanceCurrencyISO, MyApplication.getCurrencyISOFavorite()))+ " " + Currency.getSymbol(MyApplication.getCurrencyISOFavorite()));
+                mTotValue.setTextColor(Color.parseColor("#00c200"));
+            }
+            else if(totValue<0){
+                mTotValue.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(totValue, balanceCurrencyISO, MyApplication.getCurrencyISOFavorite()))+ " " + Currency.getSymbol(MyApplication.getCurrencyISOFavorite()));
+                mTotValue.setTextColor(Color.parseColor("#ff0000"));
+            }else{
+                mTotValue.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(totValue, balanceCurrencyISO, MyApplication.getCurrencyISOFavorite()))+ " " + Currency.getSymbol(MyApplication.getCurrencyISOFavorite()));
+            }
+
+
             String textType;
             balanceViewHolder.mExpenseName.setText(balanceHistory.getExpenseName());
             if(balanceHistory.getType()== Type.NEW_EXPENSE){
@@ -261,15 +282,15 @@ public class BalanceDetailActivity extends BaseActivity {
             balanceViewHolder.mType.setText(textType);
             if(balanceHistory.getValue()>0) {
                 balanceViewHolder.mValue.setText(String.format(Locale.getDefault(), "+%.2f", Currency.convertCurrency(balanceHistory.getValue(), balanceCurrencyISO, MyApplication.getCurrencyISOFavorite()))
-                        + Currency.getSymbol(MyApplication.getCurrencyISOFavorite()));
+                        + " " + Currency.getSymbol(MyApplication.getCurrencyISOFavorite()));
                 balanceViewHolder.mValue.setTextColor(Color.parseColor("#00c200"));
             }else if(balanceHistory.getValue()<0){
                 balanceViewHolder.mValue.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(balanceHistory.getValue(), balanceCurrencyISO, MyApplication.getCurrencyISOFavorite()))
-                        + Currency.getSymbol(MyApplication.getCurrencyISOFavorite()));
+                        + " " +  Currency.getSymbol(MyApplication.getCurrencyISOFavorite()));
                 balanceViewHolder.mValue.setTextColor(Color.parseColor("#ff0000"));
             }else{
                 balanceViewHolder.mValue.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(balanceHistory.getValue(), balanceCurrencyISO, MyApplication.getCurrencyISOFavorite()))
-                        + Currency.getSymbol(MyApplication.getCurrencyISOFavorite()));
+                        + " " + Currency.getSymbol(MyApplication.getCurrencyISOFavorite()));
             }
 
             balanceViewHolder.mDate.setText(balanceHistory.convertDateToString());
@@ -285,8 +306,8 @@ public class BalanceDetailActivity extends BaseActivity {
             View itemView = LayoutInflater.
                     from(viewGroup.getContext()).
                     inflate(R.layout.balance_list_item, viewGroup, false);
-
-            return new BalanceViewHolder(itemView);
+            View textView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.balance_list, viewGroup, false);
+            return new BalanceViewHolder(itemView, textView);
         }
 
         public void cleanupListener() {
@@ -302,7 +323,7 @@ public class BalanceDetailActivity extends BaseActivity {
             protected TextView mValue;
             protected TextView mDate;
 
-            public BalanceViewHolder(View v) {
+            public BalanceViewHolder(View v, View textView) {
                 super(v);
                 mType = (TextView)  v.findViewById(R.id.type);
                 mExpenseName = (TextView) v.findViewById(R.id.expense_name);

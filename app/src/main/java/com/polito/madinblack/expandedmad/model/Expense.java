@@ -253,7 +253,7 @@ public class Expense {
 
         final Expense expense = new Expense(expenseKey, name, tag, paidByName, paidBySurname, paidByFirebaseId, paidByPhoneNumber, cost, roundedCost, currencyISO, groupId, year, month, day, description, state);
         myExpenseRef.setValue(expense);
-        final Date date = new GregorianCalendar((int)(year + 1900), month.intValue(), day.intValue()).getTime();
+        final Date date = new Date();
 
         DatabaseReference myPaymentRef;
         String paymentKey;
@@ -354,15 +354,14 @@ public class Expense {
                     @Override
                     public Transaction.Result doTransaction(MutableData currentData) {
                         if (currentData.getValue() != null) {
-                            if (currentData.getValue() != null) {
-                                Balance balance = currentData.getValue(Balance.class);
-                                for(MutableData currentDataChild : currentData.getChildren()){
-                                    if(currentDataChild.getKey().equals("balance"))
-                                        currentDataChild.setValue(balance.getBalance() + Currency.convertCurrency(toUpdate.get(balance.getUserPhoneNumber() + expenseKey), currencyISO, balance.getCurrencyISO()));
-                                }
-
+                            Balance balance = currentData.getValue(Balance.class);
+                            for(MutableData currentDataChild : currentData.getChildren()){
+                                if(currentDataChild.getKey().equals("balance"))
+                                    currentDataChild.setValue(balance.getBalance() + Currency.convertCurrency(toUpdate.get(balance.getUserPhoneNumber() + expenseKey), currencyISO, balance.getCurrencyISO()));
                             }
+
                         }
+
                         return Transaction.success(currentData);
                     }
 
@@ -375,7 +374,7 @@ public class Expense {
                             if(state==State.TRANSFER)
                                 balanceHistory = new BalanceHistory(name, Type.STORNED, Currency.convertCurrency(toUpdate.get(balanceUp.getParentUserPhoneNumber() + expenseKey), currencyISO, balanceUp.getCurrencyISO()), date);
                             else
-                                balanceHistory = new BalanceHistory(name, Type.NEW_EXPENSE, Currency.convertCurrency(toUpdate.get(balanceUp.getParentUserPhoneNumber() + expenseKey), currencyISO, balanceUp.getCurrencyISO()), date);
+                                balanceHistory = new BalanceHistory(name, Type.NEW_EXPENSE, Currency.convertCurrency(toUpdate.get(balanceUp.getUserPhoneNumber() + expenseKey), currencyISO, balanceUp.getCurrencyISO()), date);
 
                                 currentData.getRef().child("balancesHistory").push().setValue(balanceHistory);
                         }
@@ -392,9 +391,9 @@ public class Expense {
         /*update the history*/
         HistoryInfo historyInfo;
         if(state==State.TRANSFER)
-            historyInfo = new HistoryInfo(paidByName+" "+paidBySurname, name, 4L, cost, currencyISO, null);
+            historyInfo = new HistoryInfo(paidByName+" "+paidBySurname, name, 4L, cost, currencyISO, null, date);
         else
-            historyInfo = new HistoryInfo(paidByName+" "+paidBySurname, null, 0L, cost, currencyISO, null);
+            historyInfo = new HistoryInfo(paidByName+" "+paidBySurname, null, 0L, cost, currencyISO, null, date);
         mDatabaseRootRefenrence.child("history/"+groupId).push().setValue(historyInfo);
 
         return expenseKey;

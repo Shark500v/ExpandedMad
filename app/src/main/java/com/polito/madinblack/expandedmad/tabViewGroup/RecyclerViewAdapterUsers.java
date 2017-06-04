@@ -96,7 +96,7 @@ public class RecyclerViewAdapterUsers extends RecyclerView.Adapter<RecyclerViewA
     @Override
     public void onBindViewHolder(final RecyclerViewAdapterUsers.ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);                           //singolo utente
-        holder.mId   = mValuesIds.get(position);
+        holder.mId  = mUsersIds.get(position);
 
         if(holder.mItem.getUserPhoneNumber().equals(MyApplication.getUserPhoneNumber()))
             holder.mIdView.setText(mContext.getString(R.string.you));
@@ -132,7 +132,7 @@ public class RecyclerViewAdapterUsers extends RecyclerView.Adapter<RecyclerViewA
             public void onClick(View v) {
                 Context context = v.getContext();
                 Intent intent = new Intent(context, BalanceDetailActivity.class);
-                intent.putExtra(BalanceDetailActivity.ARG_BALANCE_ID, holder.mId);
+
                 String [] nameSurname = holder.mItem.getFullName().split(" ");
                 String name;
                 if(nameSurname[0]!=null && !nameSurname[0].isEmpty())
@@ -141,6 +141,7 @@ public class RecyclerViewAdapterUsers extends RecyclerView.Adapter<RecyclerViewA
                     name = nameSurname[1];
                 intent.putExtra(BalanceDetailActivity.ARG_USER_BALANCE_NAME, name);
                 intent.putExtra(BalanceDetailActivity.ARG_GROUP_ID, mGroupId);
+                intent.putExtra(BalanceDetailActivity.ARG_BALANCE_ID, holder.mId);
                 intent.putExtra(BalanceDetailActivity.ARG_BALANCE_CURRENCY, holder.mItem.getCurrencyISO().name());
                 context.startActivity(intent);
 
