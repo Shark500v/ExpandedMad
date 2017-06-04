@@ -137,6 +137,7 @@ public class BalanceDetailActivity extends BaseActivity {
             dataref = dr;
             mContext = ct;
             totValue = 0D;
+            mTotValue.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(totValue, balanceCurrencyISO, MyApplication.getCurrencyISOFavorite()))+ " " + Currency.getSymbol(MyApplication.getCurrencyISOFavorite()));
 
 
             // Create child event listener
@@ -149,17 +150,18 @@ public class BalanceDetailActivity extends BaseActivity {
                     // A new info has been added, add it to the displayed list
                     BalanceHistory balanceHistory = dataSnapshot.getValue(BalanceHistory.class);
 
-                    /*
+
                     // [START_EXCLUDE]
                     // Update RecyclerView
                     if(getItemCount() == 0){
-                        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.cardList);
-                        TextView tx = (TextView) findViewById(R.id.textView);
+                        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.balance_list);
+                        TextView tx = (TextView) findViewById(R.id.no_movements);
                         tx.setVisibility(View.GONE);
                         recyclerView.setVisibility(View.VISIBLE);
+
                     }
 
-                    */
+
                     mValuesIds.add(0, dataSnapshot.getKey());
                     mValues.add(0, balanceHistory);
                     notifyItemInserted(0);

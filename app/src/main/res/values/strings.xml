@@ -243,4 +243,5 @@
     <string name="settle_up_of">Settle Up of</string>
     <string name="storned">Transfer of</string>
     <string name="balance_detail">Balance Detail</string>
+    <string name="no_movements">No movements yet</string>
 </resources>

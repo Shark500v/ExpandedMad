@@ -247,5 +247,6 @@
     <string name="settle_up_of">Pagamento di</string>
     <string name="storned">Storno di</string>
     <string name="balance_detail">Dettagli saldo</string>
+    <string name="no_movements">Nessun movimento</string>
 
 </resources>

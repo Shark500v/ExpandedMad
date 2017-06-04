@@ -38,6 +38,16 @@
             />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/no_movements"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/no_movements"
+        android:layout_below="@id/summary"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        />
+
 
 
 
@@ -45,12 +55,14 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/balance_list"
-        android:layout_below="@id/summary"
+        android:layout_below="@id/no_movements"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         app:layoutManager="LinearLayoutManager"
-        tools:listitem="@layout/balance_list_item" />
+        tools:listitem="@layout/balance_list_item"
+        android:visibility="gone"
+        />
 
 </RelativeLayout>
