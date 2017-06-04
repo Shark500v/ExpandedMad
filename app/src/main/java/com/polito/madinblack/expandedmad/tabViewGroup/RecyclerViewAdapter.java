@@ -39,7 +39,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private List<String> mValuesIds = new ArrayList<>();
     private Query dataref;
     private Context mContext;
-    private int numContest = 0;
     private ChildEventListener mEventListener;
 
     private static final String TAG = "MyBalanceActivity";
@@ -72,18 +71,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     Log.e(TAG, "Spesa duplicata: " + expenseForUser.getName());
                     return;
                 }
-                if(expenseForUser.getState() == Expense.State.CONTESTED){
-                    mValuesIds.add(0, dataSnapshot.getKey());
-                    mValues.add(0, expenseForUser);
-                    notifyItemInserted(numContest);
-                    numContest++;
-                    Log.e(TAG, "Spesa contesa: " + expenseForUser.getName());
-                }else{
-                    mValuesIds.add(numContest, dataSnapshot.getKey());
-                    mValues.add(numContest, expenseForUser);
-                    notifyItemInserted(mValues.size()-1);
-                    Log.e(TAG, "Spesa aggiunta in posizione : " + expenseForUser.getName() + " "+numContest);
-                }
+                mValuesIds.add(dataSnapshot.getKey());
+                mValues.add(expenseForUser);
+                notifyItemInserted(mValues.size()-1);
+                Log.e(TAG, "Spesa aggiunta in posizione : " + expenseForUser.getName() + " "+(mValues.size()-1));
+
                 // [END_EXCLUDE]
 
             }

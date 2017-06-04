@@ -90,7 +90,8 @@ public class ExpenseFillData extends AppCompatActivity {
     private DatabaseReference mDatabaseForLoadUrl;
     private StorageReference mStorage;
     private EditText inputName, inputAmount, inputRoundedAmount, inputRoundedCurrency;
-    private TextInputLayout inputLayoutName, inputLayoutAmount;
+    private TextInputLayout inputLayoutName, inputLayoutAmount, inputLayoutTag;
+    private Spinner tag_spinner;
     private LinearLayout layoutRounded;
     private Double amount;
     private String currencySymbol;
@@ -130,11 +131,13 @@ public class ExpenseFillData extends AppCompatActivity {
         //prepare instance variable
         inputLayoutName         = (TextInputLayout) findViewById(R.id.input_layout_title);
         inputLayoutAmount       = (TextInputLayout) findViewById(R.id.input_layout_amount);
+        inputLayoutTag          = (TextInputLayout) findViewById(R.id.input_layout_tag);
         layoutRounded           = (LinearLayout) findViewById(R.id.layout_rounded);
         inputName               = (EditText) findViewById(R.id.input_title);
         inputAmount             = (EditText) findViewById(R.id.input_amount);
         inputRoundedAmount      = (EditText) findViewById(R.id.input_rounded_cost);
         inputRoundedCurrency    = (EditText) findViewById(R.id.input_rounded_cost_currency);
+        tag_spinner     = (Spinner) findViewById(R.id.tag_spinner);
 
 
        //inputAmount.setFilters(new InputFilter[] { new DecimalDigitsInputFilter(2)});
@@ -163,6 +166,21 @@ public class ExpenseFillData extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
+
+        //add callback for tag_spinner
+        tag_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                inputLayoutTag.setErrorEnabled(false);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // do nothing
+            }
+
+        });
+
 
         inputRoundedCurrency.setText(MyApplication.getCurrencyISOFavorite().toString());
 
@@ -235,6 +253,9 @@ public class ExpenseFillData extends AppCompatActivity {
             if (!validateAmount()) {
                 return true;
             }
+            if (!validateTag()) {
+                return true;
+            }
 
             //Wrote by Alessio
             /*
@@ -249,8 +270,6 @@ public class ExpenseFillData extends AppCompatActivity {
             Currency.CurrencyISO currencyISO = Currency.CurrencyISO.valueOf(currency_spinner.getSelectedItem().toString());
 
 
-
-            Spinner tag_spinner = (Spinner) findViewById(R.id.tag_spinner);
             String tag = tag_spinner.getSelectedItem().toString();
 
             EditText data = (EditText) findViewById(R.id.input_date);
@@ -601,6 +620,19 @@ public class ExpenseFillData extends AppCompatActivity {
 
         return true;
     }
+
+    private boolean validateTag() {
+        int index = tag_spinner.getSelectedItemPosition();
+        if(index == 0){
+            inputLayoutTag.setError(getString(R.string.err_msg_tag));
+            requestFocus(tag_spinner);
+            return false;
+        } else {
+            inputLayoutTag.setErrorEnabled(false);
+        }
+        return true;
+    }
+
 
     private void requestFocus(View view) {
         if (view.requestFocus()) {

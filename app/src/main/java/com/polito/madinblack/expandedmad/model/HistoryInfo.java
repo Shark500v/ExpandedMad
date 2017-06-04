@@ -12,6 +12,7 @@ public class HistoryInfo {
      *  2: New User In Group
      *  3: Someone created the group
      *  4: Expense transfer
+     *  5: Contest Expense
      */
     private String name;
     private String expenseName;
@@ -33,16 +34,6 @@ public class HistoryInfo {
         this.currencyISO = currencyISO;
         this.paidTo = paidTo;
         date = new Date();
-    }
-
-    public HistoryInfo(String name, String expenseName, Long content, Double cost, Currency.CurrencyISO currencyISO, String paidTo, Date date){
-        this.name = name;
-        this.expenseName = expenseName;
-        this.content = content;
-        this.cost = cost;
-        this.currencyISO = currencyISO;
-        this.paidTo = paidTo;
-        this.date = date;
     }
 
     public String getName() {
