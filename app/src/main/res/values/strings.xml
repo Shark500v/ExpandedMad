@@ -171,7 +171,8 @@
     <string name="history_new_group">has created this group.</string>
     <string name="history_transfer_part1">has canceled the </string>
     <string name="history_transfer_part2">expense.</string>
-    <string name="history_expense">has added a new expense. Cost : </string>
+    <string name="history_expense_part1">has added the expense</string>
+    <string name="history_expense_part2">. Cost : </string>
     <string name="history_payment_part1">has paid to</string>
     <string name="history_payment_part2">. Cost :</string>
     <string name="history_new_memeber">has joined to the group.</string>

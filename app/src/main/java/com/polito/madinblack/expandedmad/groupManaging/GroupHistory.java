@@ -238,7 +238,8 @@ public class GroupHistory extends AppCompatActivity {
             long l = hi.getContent();
             switch ((int)l){
                 case 0:
-                    return getString(R.string.history_expense)+ " "+String.format(Locale.getDefault(), "%.2f",hi.getCost()) +" "+ Currency.toString(hi.getCurrencyISO());
+                    return getString(R.string.history_expense_part1)+ " " + hi.getName() + getString(R.string.history_expense_part2)
+                            +String.format(Locale.getDefault(), "%.2f",hi.getCost()) +" "+ Currency.toString(hi.getCurrencyISO());
                 case 1:
                     return getString(R.string.history_payment_part1)+ " "+ hi.getPaidTo()+ " "
                             +getString(R.string.history_payment_part2)+String.format(Locale.getDefault(), "%.2f",hi.getCost()) +" "+Currency.toString(hi.getCurrencyISO());
