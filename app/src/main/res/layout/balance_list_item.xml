@@ -6,81 +6,72 @@
     android:orientation="vertical"
     android:id="@+id/item_row">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:orientation="horizontal">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="42dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginLeft="4dp"
+        >
 
 
-        <LinearLayout
+        <RelativeLayout
+            android:id="@+id/container1"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:layout_centerVertical="true"
             >
 
             <TextView
                 android:id="@+id/type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
+                android:layout_marginBottom="2dp"
+                android:textSize="16sp"
                 tools:text = "New Expense:"
-                android:gravity="center_vertical"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
-                android:textAppearance="?attr/textAppearanceListItem"
-                />
+                android:textAppearance="?attr/textAppearanceListItem" />
 
             <TextView
                 android:id="@+id/date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="10sp"
+                android:textSize="8sp"
                 tools:text = "03/06/2017 14:30"
-                android:gravity="center_vertical"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
-                android:textAppearance="?attr/textAppearanceListItem"
-                />
+                android:layout_below="@id/type"
+                android:textAppearance="?attr/textAppearanceListItem" />
 
-
-
-        </LinearLayout>
+        </RelativeLayout>
 
 
 
         <TextView
             android:id="@+id/expense_name"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:textSize="15sp"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
             tools:text = "Pizza"
-            android:gravity="center"
-            android:layout_margin="5dp"
-            android:textAppearance="?attr/textAppearanceListItem"
-            />
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:paddingRight="56dp"
+            android:textAppearance="?attr/textAppearanceListItem" />
 
 
         <TextView
             android:id="@+id/value"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
             tools:text = "55€"
-            android:layout_marginEnd="5dp"
-            android:textAlignment="textEnd"
-            android:gravity="center"
-            android:textAppearance="?attr/textAppearanceListItem"
-            />
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:textAppearance="?attr/textAppearanceListItem" />
 
-
-
-    </LinearLayout>
+    </RelativeLayout>
 
     <View
         android:id="@+id/line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/dividerColor"/>
+
 </LinearLayout>
