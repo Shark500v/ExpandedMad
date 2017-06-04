@@ -244,9 +244,9 @@
     <string name="created_by">Created by</string>
     <string name="italy">Italy</string>
     <string name="balance_towards">Balance Towards</string>
-    <string name="new_expense">New Expense</string>
-    <string name="settle_up_of">Settle Up of</string>
-    <string name="storned">Cancellation of</string>
+    <string name="new_expense">Expense:</string>
+    <string name="settle_up_of">Settle Up of:</string>
+    <string name="storned">Delete of:</string>
     <string name="balance_detail">Balance Detail</string>
     <string name="no_movements">No movements yet</string>
 </resources>

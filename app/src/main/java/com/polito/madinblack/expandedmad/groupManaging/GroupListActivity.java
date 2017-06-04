@@ -89,8 +89,9 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         if(MyApplication.isVariablesAvailable()) {
             mDatabaseForUserUrl = mDatabaseRootReference.child("users").child(MyApplication.getUserPhoneNumber()).child(MyApplication.getFirebaseId()).child("urlImage");
             mUserGroupsReference = mDatabaseRootReference.child("users/" + MyApplication.getUserPhoneNumber() + "/" + MyApplication.getFirebaseId() + "/groups");
+            mQueryUserGroupsReference = mUserGroupsReference.orderByChild("timestamp");
         }
-        mQueryUserGroupsReference = mUserGroupsReference.orderByChild("timestamp");
+
 
         utils = new NotificationUtils(this);
         mRegistrationBroadcastReceiver = utils.getBroadcastReceiver();

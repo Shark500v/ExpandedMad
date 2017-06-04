@@ -248,9 +248,9 @@
     <string name="created_by">Creato da</string>
     <string name="italy">Italia</string>
     <string name="balance_towards">Saldo rispetto</string>
-    <string name="new_expense">Nuova spesa</string>
-    <string name="settle_up_of">Pagamento di</string>
-    <string name="storned">Storno di</string>
+    <string name="new_expense">Spesa:</string>
+    <string name="settle_up_of">Pagamento di:</string>
+    <string name="storned">Storno di:</string>
     <string name="balance_detail">Dettagli saldo</string>
     <string name="no_movements">Nessun movimento</string>+
 

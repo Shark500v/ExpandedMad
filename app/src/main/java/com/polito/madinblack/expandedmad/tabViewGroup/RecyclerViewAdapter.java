@@ -167,7 +167,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
         else{
             holder.mContentView.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(mValues.get(position).getMyBalance(),  mValues.get(position).getCurrencyISO(), MyApplication.getCurrencyISOFavorite())) + " " + Currency.getSymbol(MyApplication.getCurrencyISOFavorite()));
-            holder.mContentView.setTextColor(Color.parseColor("#000000"));
+            holder.mContentView.setTextColor(Color.BLACK);
         }
 
         SpannableStringBuilder str;
