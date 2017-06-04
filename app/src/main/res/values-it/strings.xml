@@ -207,8 +207,8 @@
 
     <string name="to_pay">Da pagare</string>
     <string name="Paid">Pagato</string>
-    <string name="new_to_pay">Nuova cifra da pagare</string>
-    <string name="new_paid">Nuova cifra pagata</string>
+    <string name="new_to_pay">Nuovo importo da pagare</string>
+    <string name="new_paid">Nuovo importo pagato</string>
     <string name="expense_cost">Costo spesa</string>
     <string name="old_paid_topay">Da pagare assegnati</string>
     <string name="currencyISO">Valuta ISO</string>
