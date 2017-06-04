@@ -219,7 +219,8 @@
     <string name="notifications">Notifications</string>
     <string name="ringtone">Ringtone</string>
     <string name="vibrate">Vibrate</string>
-    <string name="motivation">Motivation *</string>
+    <string name="motivation_hint">Motivation *</string>
+    <string name="motivation">Motivation</string>
     <string name="select_tag">Select Tag</string>
     <string name="related_to">related to</string>
     <string name="all_tags">All Tags</string>
