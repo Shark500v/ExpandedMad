@@ -177,7 +177,9 @@
         android:id="@+id/motivation_layout"
         android:layout_below="@+id/new_topay_layout"
         android:paddingBottom="16dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        tools:visibility="gone"
+        >
 
             <EditText
                 android:id="@+id/input_motivation"
@@ -187,7 +189,7 @@
                 android:gravity="top"
                 android:paddingTop="10dp"
                 android:paddingStart="10dp"
-                android:hint="@string/motivation"
+                android:hint="@string/motivation_hint"
                 android:background="@layout/rounded_border_edittext"/>
 
     </LinearLayout>
@@ -195,8 +197,39 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/confirm_delete_button_layout"
+        android:id="@+id/motivation_layout_after"
         android:layout_below="@+id/motivation_layout"
+        android:paddingBottom="16dp"
+        android:orientation="horizontal"
+
+
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/motivation"
+            android:textSize="20sp"
+            />
+
+        <TextView
+            android:id="@+id/motivation_after"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:layout_margin="16dp"
+            tools:text="Prova" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/confirm_delete_button_layout"
+        android:layout_below="@+id/motivation_layout_after"
         android:orientation="horizontal"
         android:visibility="gone"
         tools:visibility="visible"
