@@ -35,6 +35,7 @@ import com.polito.madinblack.expandedmad.login.BaseActivity;
 import com.polito.madinblack.expandedmad.model.CostUtil;
 import com.polito.madinblack.expandedmad.model.Currency;
 import com.polito.madinblack.expandedmad.model.Expense;
+import com.polito.madinblack.expandedmad.model.HistoryInfo;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.Payment;
 import com.polito.madinblack.expandedmad.model.PaymentFirebase;
@@ -288,6 +289,11 @@ public class ContestExpenseActivity extends BaseActivity {
                                             if(b){
                                                 setResult(RESULT_DELETED);
                                                 hideProgressDialog();
+
+                                                //add to history
+                                                HistoryInfo historyInfo = new HistoryInfo(MyApplication.getUserName() + " " + MyApplication.getUserSurname(), expenseName, 6L, 0d, null, null);
+                                                mDatabaseRootReference.child("history/"+groupId).push().setValue(historyInfo);
+
                                                 finish();
                                             }
                                             else {
@@ -521,6 +527,11 @@ public class ContestExpenseActivity extends BaseActivity {
                     if(b){
                         setResult(RESULT_OK);
                         hideProgressDialog();
+
+                        //add to history
+                        HistoryInfo historyInfo = new HistoryInfo(MyApplication.getUserName() + " " + MyApplication.getUserSurname(), expenseName, 5L, 0d, null, null);
+                        mDatabaseRootReference.child("history/"+groupId).push().setValue(historyInfo);
+
                         finish();
                     }
                     else {
