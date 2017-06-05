@@ -96,7 +96,7 @@ public class Group {
             mDatabaseRootReference.child("users/"+userForGroup.getPhoneNumber()+"/"+userForGroup.getFirebaseId()+"/groups/"+groupKey).setValue(groupForUser);
         }
 
-        HistoryInfo historyInfo = new HistoryInfo(userName, null, 3l, 0d, null, null);
+        HistoryInfo historyInfo = new HistoryInfo(userName, null, 3L, 0d, null, null);
         mDatabaseRootReference.child("history/"+groupKey).push().setValue(historyInfo);
 
         return groupKey;
