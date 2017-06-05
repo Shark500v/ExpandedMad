@@ -143,7 +143,7 @@ public class TabView extends AppCompatActivity {
         appBarLayout.setExpanded(true, true);
     }*/
 
-    
+
     @Override
     protected void onResume() {
         super.onResume();
