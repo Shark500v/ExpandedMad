@@ -242,7 +242,7 @@ public class TelephoneInsertion extends AppCompatActivity{
 
                 mPhoneNumber = mPrefix + mPhoneNumber;
                 MyApplication.setUserPhoneNumber(mPhoneNumber);
-
+                storeTelephoneInPref(mPhoneNumber);
                 //added for user token, useful for notification
                 String token = getUserToken();
 
