@@ -19,6 +19,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -155,9 +156,6 @@ public class ExpenseFillData extends AppCompatActivity {
         groupID = beginner.getStringExtra("groupIndex");   //id del gruppo, che devo considerare
         groupName = beginner.getStringExtra("groupName");
 
-        //this remove focus from edit text when activity starts
-        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
         //show current date
         showDate(new Date());
 
@@ -240,7 +238,9 @@ public class ExpenseFillData extends AppCompatActivity {
             }
         });
 
-
+        requestFocus(inputName);
+        //this remove focus from edit text when activity starts
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     @Override
