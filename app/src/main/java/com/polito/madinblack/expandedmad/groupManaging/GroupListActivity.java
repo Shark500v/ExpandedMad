@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -89,13 +90,9 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         if(MyApplication.isVariablesAvailable()) {
             mDatabaseForUserUrl = mDatabaseRootReference.child("users").child(MyApplication.getUserPhoneNumber()).child(MyApplication.getFirebaseId()).child("urlImage");
             mUserGroupsReference = mDatabaseRootReference.child("users/" + MyApplication.getUserPhoneNumber() + "/" + MyApplication.getFirebaseId() + "/groups");
-        }else {
-            Intent intent = new Intent(GroupListActivity.this, CheckLogIn.class);
-            startActivity(intent);
-            finish();
-
+            mQueryUserGroupsReference = mUserGroupsReference.orderByChild("timestamp");
         }
-        mQueryUserGroupsReference = mUserGroupsReference.orderByChild("timestamp");
+
 
         utils = new NotificationUtils(this);
         mRegistrationBroadcastReceiver = utils.getBroadcastReceiver();
@@ -140,14 +137,16 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             }
         });*/
 
-        tv1.setText(MyApplication.getUserName() + " " + MyApplication.getUserSurname());
-        tv2.setText(MyApplication.getUserPhoneNumber());
 
-        if(getIntent().getExtras()!=null){
-            groupIndex = getIntent().getExtras().getString("groupIndex");
-            groupName  = getIntent().getExtras().getString("groupName");
-            index = getIntent().getExtras().getInt("request");
+        if(MyApplication.isVariablesAvailable()) {
+            tv1.setText(MyApplication.getUserName() + " " + MyApplication.getUserSurname());
+            tv2.setText(MyApplication.getUserPhoneNumber());
         }
+            if (getIntent().getExtras() != null) {
+                groupIndex = getIntent().getExtras().getString("groupIndex");
+                groupName = getIntent().getExtras().getString("groupName");
+                index = getIntent().getExtras().getInt("request");
+            }
 
     }
 
@@ -166,6 +165,13 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         if(mQueryUserGroupsReference!=null) {
             mAdapter = new SimpleItemRecyclerViewAdapter(this, mQueryUserGroupsReference);
             ((RecyclerView) recyclerView).setAdapter(mAdapter);
+        }
+
+        if(!MyApplication.isVariablesAvailable()) {
+            Intent intent = new Intent(GroupListActivity.this, CheckLogIn.class);
+            startActivity(intent);
+            finish();
+
         }
     }
 
@@ -313,6 +319,14 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                         duplicato.add(postSnapshot.getValue(GroupForUser.class));
 
                     }
+
+                    if(getItemCount() != 0) {
+                        TextView emptyView = (TextView) findViewById(R.id.empty_view);
+                        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.group_list);
+                        emptyView.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
+                    }
+
                     notifyDataSetChanged();
                 }
 
@@ -355,6 +369,10 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                 holder.mNotification.setText(mValues.get(position).getNewExpenses().toString());
                 holder.mNotification.setVisibility(View.VISIBLE);
             }
+            if(holder.mItem.getTimestamp()==null)
+                holder.mContentView.setTextColor(Color.parseColor("#FF9800"));
+            else
+                holder.mContentView.setTextColor(Color.parseColor("#212121"));
             //sopra vengono settati i tre campi che costituisco le informazioni di ogni singolo gruppo, tutti pronti per essere mostriti nella gui
 
             holder.mView.setOnClickListener(new View.OnClickListener() {

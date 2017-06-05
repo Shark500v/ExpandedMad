@@ -131,10 +131,7 @@ public class PaymentDetailActivity extends BaseActivity {
 
         if (id == R.id.confirm_payment && changedPayments.size()>1) {
 
-
-
             showProgressDialog();
-
 
             Double totPaid = 0D;
             PaymentInfo paymentInfoUserPaid = changedPayments.remove(MyApplication.getUserPhoneNumber());
@@ -146,7 +143,7 @@ public class PaymentDetailActivity extends BaseActivity {
             final Date date = new Date();
             for(String paymentKey : paymentToUpdate.keySet()){
 
-                final PaymentInfo paymentInfo = paymentToUpdate.get(paymentKey);
+                PaymentInfo paymentInfo = paymentToUpdate.get(paymentKey);
                 totPaid += paymentInfo.getPaidNow();
 
                 mDatabaseRootReference
@@ -159,7 +156,7 @@ public class PaymentDetailActivity extends BaseActivity {
                                     Balance balance = currentData.getValue(Balance.class);
                                     for(MutableData currentDataChild : currentData.getChildren()){
                                         if(currentDataChild.getKey().equals("balance"))
-                                            currentDataChild.setValue(balance.getBalance() + Currency.convertCurrency(paymentToUpdate.get(balance.getUserPhoneNumber()).getPaidNow(), currencyISO, balance.getCurrencyISO()));
+                                            currentDataChild.setValue(balance.getBalance() + Currency.convertCurrency(paymentToUpdate.get(balance.getParentUserPhoneNumber()).getPaidNow(), currencyISO, balance.getCurrencyISO()));
                                     }
                                 }
                                 return Transaction.success(currentData);
@@ -171,7 +168,7 @@ public class PaymentDetailActivity extends BaseActivity {
 
                                 if(committed){
                                     Balance balanceUp = currentData.getValue(Balance.class);
-                                    BalanceHistory balanceHistory = new BalanceHistory(expenseName, Type.SETTLE_UP, Currency.convertCurrency(paymentToUpdate.get(balanceUp.getUserPhoneNumber()).getPaidNow(), currencyISO, balanceUp.getCurrencyISO()), date);
+                                    BalanceHistory balanceHistory = new BalanceHistory(expenseName, Type.SETTLE_UP, Currency.convertCurrency(paymentToUpdate.get(balanceUp.getParentUserPhoneNumber()).getPaidNow(), currencyISO, balanceUp.getCurrencyISO()), date);
                                     currentData.getRef().child("balancesHistory").push().setValue(balanceHistory);
                                 }
 
@@ -225,7 +222,7 @@ public class PaymentDetailActivity extends BaseActivity {
 
                 /*update the history*/
                 HistoryInfo historyInfo = new HistoryInfo(paymentInfo.getUserNameDisplayed(), null, 1L, paymentInfo.getPaidNow(),
-                                currencyISO, expenseUserName + " " + expenseUserSurname, date);
+                                currencyISO, expenseUserName + " " + expenseUserSurname);
                 mDatabaseRootReference.child("history/"+groupId).push().setValue(historyInfo);
 
 

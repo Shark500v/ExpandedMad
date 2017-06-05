@@ -72,8 +72,11 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -87,7 +90,8 @@ public class ExpenseFillData extends AppCompatActivity {
     private DatabaseReference mDatabaseForLoadUrl;
     private StorageReference mStorage;
     private EditText inputName, inputAmount, inputRoundedAmount, inputRoundedCurrency;
-    private TextInputLayout inputLayoutName, inputLayoutAmount;
+    private TextInputLayout inputLayoutName, inputLayoutAmount, inputLayoutTag;
+    private Spinner tag_spinner;
     private LinearLayout layoutRounded;
     private Double amount;
     private String currencySymbol;
@@ -127,11 +131,13 @@ public class ExpenseFillData extends AppCompatActivity {
         //prepare instance variable
         inputLayoutName         = (TextInputLayout) findViewById(R.id.input_layout_title);
         inputLayoutAmount       = (TextInputLayout) findViewById(R.id.input_layout_amount);
+        inputLayoutTag          = (TextInputLayout) findViewById(R.id.input_layout_tag);
         layoutRounded           = (LinearLayout) findViewById(R.id.layout_rounded);
         inputName               = (EditText) findViewById(R.id.input_title);
         inputAmount             = (EditText) findViewById(R.id.input_amount);
         inputRoundedAmount      = (EditText) findViewById(R.id.input_rounded_cost);
         inputRoundedCurrency    = (EditText) findViewById(R.id.input_rounded_cost_currency);
+        tag_spinner     = (Spinner) findViewById(R.id.tag_spinner);
 
 
        //inputAmount.setFilters(new InputFilter[] { new DecimalDigitsInputFilter(2)});
@@ -160,6 +166,21 @@ public class ExpenseFillData extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
+
+        //add callback for tag_spinner
+        tag_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                inputLayoutTag.setErrorEnabled(false);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // do nothing
+            }
+
+        });
+
 
         inputRoundedCurrency.setText(MyApplication.getCurrencyISOFavorite().toString());
 
@@ -232,6 +253,9 @@ public class ExpenseFillData extends AppCompatActivity {
             if (!validateAmount()) {
                 return true;
             }
+            if (!validateTag()) {
+                return true;
+            }
 
             //Wrote by Alessio
             /*
@@ -246,8 +270,6 @@ public class ExpenseFillData extends AppCompatActivity {
             Currency.CurrencyISO currencyISO = Currency.CurrencyISO.valueOf(currency_spinner.getSelectedItem().toString());
 
 
-
-            Spinner tag_spinner = (Spinner) findViewById(R.id.tag_spinner);
             String tag = tag_spinner.getSelectedItem().toString();
 
             EditText data = (EditText) findViewById(R.id.input_date);
@@ -599,6 +621,19 @@ public class ExpenseFillData extends AppCompatActivity {
         return true;
     }
 
+    private boolean validateTag() {
+        int index = tag_spinner.getSelectedItemPosition();
+        if(index == 0){
+            inputLayoutTag.setError(getString(R.string.err_msg_tag));
+            requestFocus(tag_spinner);
+            return false;
+        } else {
+            inputLayoutTag.setErrorEnabled(false);
+        }
+        return true;
+    }
+
+
     private void requestFocus(View view) {
         if (view.requestFocus()) {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
@@ -769,7 +804,7 @@ public class ExpenseFillData extends AppCompatActivity {
 
     private void showDate(Date data) {
         EditText dateText = (EditText)findViewById(R.id.input_date);
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         dateText.setText(dateFormat.format(data)); //16/11/2016
     }
 
@@ -797,8 +832,18 @@ public class ExpenseFillData extends AppCompatActivity {
                         users.clear();
                         for (DataSnapshot postSnapshot : snapshot.getChildren()) {
                             UserForGroup user = postSnapshot.getValue(UserForGroup.class);
-                            users.add(user);
+                            if(!user.getFirebaseId().equals(MyApplication.getFirebaseId()))
+                                users.add(user);
+                            else
+                                users.add(0, user);
                         }
+                        Collections.sort(users.subList(1, users.size()), new Comparator<UserForGroup>() {
+                            @Override
+                            public int compare(UserForGroup u1, UserForGroup u2) {
+                                return u1.getName().equals(u2.getName()) ? u1.getSurname().compareTo(u2.getSurname()) : u1.getName().compareTo(u2.getName());
+                            }
+                        });
+
 
                         List<Payment> payment = new ArrayList<>();
                         for(int i=0;i<users.size();i++){

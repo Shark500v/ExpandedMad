@@ -263,6 +263,7 @@ public class BalanceDetailActivity extends BaseActivity {
                 mTotValue.setTextColor(Color.parseColor("#ff0000"));
             }else{
                 mTotValue.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(totValue, balanceCurrencyISO, MyApplication.getCurrencyISOFavorite()))+ " " + Currency.getSymbol(MyApplication.getCurrencyISOFavorite()));
+                mTotValue.setTextColor(Color.BLACK);
             }
 
 

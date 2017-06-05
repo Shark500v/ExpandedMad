@@ -136,11 +136,11 @@ public class GroupHistory extends AppCompatActivity {
                         tx.setVisibility(View.GONE);
                         recyclerView.setVisibility(View.VISIBLE);
                     }
+
                     mValuesIds.add(0, dataSnapshot.getKey());
                     mValues.add(0, historyInfo);
                     notifyItemInserted(0);
                     // [END_EXCLUDE]
-
                 }
 
 
@@ -249,6 +249,9 @@ public class GroupHistory extends AppCompatActivity {
                 case 4:
                     return getString(R.string.history_transfer_part1) + " "+ hi.getExpenseName() + " "
                             + getString(R.string.history_transfer_part2);
+                case 5:
+                    return getString(R.string.history_contest_expense) + " "
+                            + hi.getExpenseName();
                 default:
                     return "Error";
             }

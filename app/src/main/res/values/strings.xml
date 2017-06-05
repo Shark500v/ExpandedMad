@@ -7,6 +7,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="balance">Balance</string>
     <string name="tag">Tag</string>
+    <string name="tag_new_expense">Tag *</string>
     <string name="cost">Cost</string>
     <string name="policy">Policy</string>
     <string name="description">Description</string>
@@ -70,6 +71,7 @@
     <string name="err_msg_title">Enter the expense name</string>
     <string name="err_msg_amount">Enter the amount</string>
     <string name="err_msg_correct_amount">Enter a correct amount</string>
+    <string name="err_msg_tag">Enter the expense tag</string>
     <string name="hint_phonenumber">Enter your phone number</string>
     <string name="hint_password">Enter your password</string>
     <string name="hint_password_confirm">Confirm your password</string>
@@ -173,6 +175,7 @@
     <string name="history_payment_part1">has paid to</string>
     <string name="history_payment_part2">. Cost :</string>
     <string name="history_new_memeber">has joined to the group.</string>
+    <string name="history_contest_expense">has contested the expense</string>
     <string name="no_detail">No detail available</string>
     <string name="pay_button">Pay</string>
     <string name="list_payment">Settle Up</string>
@@ -219,7 +222,8 @@
     <string name="notifications">Notifications</string>
     <string name="ringtone">Ringtone</string>
     <string name="vibrate">Vibrate</string>
-    <string name="motivation">Motivation *</string>
+    <string name="motivation_hint">Motivation *</string>
+    <string name="motivation">Motivation</string>
     <string name="select_tag">Select Tag</string>
     <string name="related_to">related to</string>
     <string name="all_tags">All Tags</string>
@@ -239,9 +243,9 @@
     <string name="created_by">Created by</string>
     <string name="italy">Italy</string>
     <string name="balance_towards">Balance Towards</string>
-    <string name="new_expense">New Expense</string>
-    <string name="settle_up_of">Settle Up of</string>
-    <string name="storned">Transfer of</string>
+    <string name="new_expense">Expense:</string>
+    <string name="settle_up_of">Settle Up of:</string>
+    <string name="storned">Delete of:</string>
     <string name="balance_detail">Balance Detail</string>
     <string name="no_movements">No movements yet</string>
     <string name="expense_image_already_set">You cannot modify an already set expense image</string>

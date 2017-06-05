@@ -179,6 +179,20 @@ public class ContactsToAddFragment extends Fragment {
             adapter = new UserToAddRecyclerViewAdapter(selectUsers, getContext(), groupMembers, userIds);
             recyclerView.setAdapter(adapter);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+            search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    adapter.filter(newText);
+                    return false;
+                }
+            });
         }
     }
 
@@ -189,20 +203,6 @@ public class ContactsToAddFragment extends Fragment {
         recyclerView = (RecyclerView) rootView.findViewById(R.id.list_to_add);
 
         search = (SearchView) rootView.findViewById(R.id.search_view);
-
-        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                adapter.filter(newText);
-                return false;
-            }
-        });
 
         return rootView;
     }

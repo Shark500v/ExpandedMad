@@ -111,6 +111,7 @@ public class RecyclerViewAdapterUsers extends RecyclerView.Adapter<RecyclerViewA
             holder.mContentView.setTextColor(Color.parseColor("#ff0000"));
         }else{
             holder.mContentView.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(mValues.get(position).getBalance(), mValues.get(position).getCurrencyISO(), MyApplication.getCurrencyISOFavorite())) + " " + Currency.getSymbol(MyApplication.getCurrencyISOFavorite()));
+            holder.mContentView.setTextColor(Color.BLACK);
         }
 
         mDatabaseForUserUrl = FirebaseDatabase.getInstance().getReference().child("users").child(holder.mItem.getUserPhoneNumber()).child(mUsersIds.get(position)).child("urlImage");
