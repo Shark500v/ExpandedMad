@@ -7,52 +7,39 @@
     android:id="@+id/item_row">
 
     <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="42dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginLeft="4dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         >
 
-
         <RelativeLayout
-            android:id="@+id/container1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_centerVertical="true"
-            >
+        android:id="@+id/central_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        >
 
-            <TextView
+        <TextView
                 android:id="@+id/type"
-                android:layout_width="wrap_content"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:textSize="16sp"
+                android:layout_marginBottom="8dp"
+                android:textSize="18sp"
                 tools:text = "New Expense:"
-                android:textAppearance="?attr/textAppearanceListItem" />
-
-            <TextView
-                android:id="@+id/date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="8sp"
-                tools:text = "03/06/2017 14:30"
-                android:layout_below="@id/type"
-                android:textAppearance="?attr/textAppearanceListItem" />
-
-        </RelativeLayout>
-
-
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+            />
 
         <TextView
             android:id="@+id/expense_name"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
-            tools:text = "Pizza"
+            android:layout_toRightOf="@id/type"
+            android:layout_marginLeft="4dp"
+            android:textSize="18sp"
+            tools:text = "Pizza kebab"
             android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:paddingRight="56dp"
             android:textAppearance="?attr/textAppearanceListItem" />
 
 
@@ -60,10 +47,21 @@
             android:id="@+id/value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
+            android:textSize="18sp"
             tools:text = "55€"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
+            android:textAppearance="?attr/textAppearanceListItem" />
+
+    </RelativeLayout>
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            tools:text = "03/06/2017 14:30"
+            android:layout_below="@id/central_content"
             android:textAppearance="?attr/textAppearanceListItem" />
 
     </RelativeLayout>
