@@ -115,5 +115,11 @@ public class CheckTelephone extends BaseActivity {
             return null;
     }
 
+    private String getUserPhone(){
+        SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
+        String phone = pref.getString("phone", null);
+        return phone;
+    }
+
 
 }

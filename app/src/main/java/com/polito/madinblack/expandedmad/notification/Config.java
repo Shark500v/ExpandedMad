@@ -1,14 +1,6 @@
 package com.polito.madinblack.expandedmad.notification;
 
-/**
- * Created by Ravi Tamada on 28/09/16.
- * www.androidhive.info
- */
-
 public class Config {
-
-    // global topic to receive app wide push notifications
-    public static final String TOPIC_GLOBAL = "global";
 
     // broadcast receiver intent filters
     public static final String REGISTRATION_COMPLETE = "registrationComplete";

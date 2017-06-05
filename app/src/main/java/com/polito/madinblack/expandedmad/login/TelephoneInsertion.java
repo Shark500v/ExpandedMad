@@ -310,6 +310,11 @@ public class TelephoneInsertion extends AppCompatActivity{
         }
     }
 
-
+    private void storeTelephoneInPref(String phone) {
+        SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("phone", phone);
+        editor.commit();
+    }
 
 }
