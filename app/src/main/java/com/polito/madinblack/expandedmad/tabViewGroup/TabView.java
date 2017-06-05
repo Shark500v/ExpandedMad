@@ -158,7 +158,6 @@ public class TabView extends AppCompatActivity {
             public void onPageSelected(int position) {
 
                 //expandToolbar();
-
                 if (position == 0) {
                     fab.hide();
                 } else if (position == 1) {
@@ -468,14 +467,18 @@ public class TabView extends AppCompatActivity {
             recyclerView = (RecyclerView) rootView.findViewById(R.id.expense_list2);
 
             final FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+            final ViewPager vp = (ViewPager) getActivity().findViewById(R.id.container);
 
             recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                    if(dy > 0){
-                        fab.hide();
-                    } else{
-                        fab.show();
+
+                    if(vp.getCurrentItem() == 1){
+                        if(dy > 0){
+                            fab.hide();
+                        } else{
+                            fab.show();
+                        }
                     }
 
                     super.onScrolled(recyclerView, dx, dy);

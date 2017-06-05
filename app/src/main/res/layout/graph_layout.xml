@@ -96,19 +96,6 @@
             android:entries="@array/tagsForGraph">
         </Spinner>
 
-        <!--<Button
-            android:id="@+id/show_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/year_spinner"
-            android:text="@string/show_graph"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:textAlignment="center"
-            android:background="@color/colorAccent"
-            />-->
-
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
