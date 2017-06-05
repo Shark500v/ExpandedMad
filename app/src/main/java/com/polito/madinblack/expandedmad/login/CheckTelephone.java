@@ -36,56 +36,8 @@ public class CheckTelephone extends BaseActivity {
         showProgressDialog();
         setContentView(R.layout.google_registration);
 
-
-
         mStatusTextView = (TextView) findViewById(R.id.status);
-
         mStatusTextView.setText(getString(R.string.signin_as) + " " + MyApplication.getUserName() + " " +MyApplication.getUserSurname());
-
-        mDatabaseTelephoneReference = FirebaseDatabase.getInstance().getReference().child("registration/"+MyApplication.getFirebaseId());
-
-        /*maybe better to know if user is logged yet*/
-        mValueListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    MyApplication.setUserPhoneNumber(dataSnapshot.getValue(String.class));
-
-
-                    //added for user token, useful for notification
-                    String token = getUserToken();
-                    saveTokenOnDb(token, MyApplication.getUserPhoneNumber());
-
-                    /*google login and number yet inserted jump to group page*/
-                    Intent intent = new Intent(CheckTelephone.this, GroupListActivity.class);
-                    if(getIntent().getExtras()!=null){
-                        groupIndex = getIntent().getExtras().getString("groupIndex");
-                        groupName  = getIntent().getExtras().getString("groupName");
-                        index = getIntent().getExtras().getInt("request");
-                        if(index == 1 || index == 2){
-                            intent.putExtra("groupIndex", groupIndex);
-                            intent.putExtra("groupName", groupName);
-                            intent.putExtra("request", index);
-                            startActivity(intent);
-                        }
-                    }
-                    startActivity(intent);
-                    finish();
-
-                }else{
-
-                    Intent intent = new Intent(CheckTelephone.this, TelephoneInsertion.class);
-                    startActivity(intent);
-                    finish();
-
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        };
 
 
     }
@@ -94,7 +46,38 @@ public class CheckTelephone extends BaseActivity {
     @Override
     public void onStart() {
         super.onStart();
-        mDatabaseTelephoneReference.addListenerForSingleValueEvent(mValueListener);
+        if(getUserPhone()!=null){
+            MyApplication.setUserPhoneNumber(getUserPhone());
+
+
+            //added for user token, useful for notification
+            String token = getUserToken();
+            saveTokenOnDb(token, MyApplication.getUserPhoneNumber());
+
+                    /*google login and number yet inserted jump to group page*/
+            Intent intent = new Intent(CheckTelephone.this, GroupListActivity.class);
+            if(getIntent().getExtras()!=null){
+                groupIndex = getIntent().getExtras().getString("groupIndex");
+                groupName  = getIntent().getExtras().getString("groupName");
+                index = getIntent().getExtras().getInt("request");
+                if(index == 1 || index == 2){
+                    intent.putExtra("groupIndex", groupIndex);
+                    intent.putExtra("groupName", groupName);
+                    intent.putExtra("request", index);
+                    startActivity(intent);
+                }
+            }
+            startActivity(intent);
+            finish();
+
+        }else{
+            Intent intent = new Intent(CheckTelephone.this, TelephoneInsertion.class);
+            startActivity(intent);
+            finish();
+
+
+
+        }
     }
 
     private String getUserToken() {
