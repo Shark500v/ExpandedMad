@@ -143,7 +143,7 @@ public class TabView extends AppCompatActivity {
         appBarLayout.setExpanded(true, true);
     }*/
 
-    
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -280,11 +280,11 @@ public class TabView extends AppCompatActivity {
         }
 
         public static ChatFragment newInstance(int sectionNumber) {
-            ChatFragment fragment = new ChatFragment();
+            //ChatFragment fragment = new ChatFragment();
             //Bundle args = new Bundle();
             //args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             //fragment.setArguments(args);
-            return fragment;
+            return new ChatFragment();
         }
 
 
@@ -509,11 +509,11 @@ public class TabView extends AppCompatActivity {
 
         //usato per instanziare un ogetto fragment
         public static MyBalanceFragment newInstance() {
-            MyBalanceFragment fragment = new MyBalanceFragment();
+            //MyBalanceFragment fragment = new MyBalanceFragment();
             //Bundle args = new Bundle();
             //args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             //fragment.setArguments(args);
-            return fragment;
+            return new MyBalanceFragment();
         }
 
         @Override
