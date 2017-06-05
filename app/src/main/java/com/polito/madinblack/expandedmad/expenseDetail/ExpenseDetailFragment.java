@@ -131,6 +131,7 @@ public class ExpenseDetailFragment extends Fragment {
                                 intent.putExtra(ContestExpenseActivity.ARG_EXPENSE_COST, expense.getRoundedCost().toString());
                                 intent.putExtra(ContestExpenseActivity.ARG_CURRENCY_ISO, expense.getCurrencyISO().name());
                                 intent.putExtra(ContestExpenseActivity.ARG_EXPENSE_STATE, expense.getState().name());
+                                intent.putExtra(ContestExpenseActivity.ARG_EXPENSE_NAME, expense.getName());
                                 intent.putExtra(ContestExpenseActivity.ARG_EXPENSE_USER_FIREBASEID, expense.getPaidByFirebaseId());
                                 startActivityForResult(intent, CONTENTION_REQUEST);
 
@@ -148,6 +149,7 @@ public class ExpenseDetailFragment extends Fragment {
                             public void onClick(View v) {
                                 Intent intent = new Intent(getContext(), ContestExpenseActivity.class);
                                 intent.putExtra(ContestExpenseActivity.ARG_EXPENSE_ID, expense.getId());
+                                intent.putExtra(ContestExpenseActivity.ARG_EXPENSE_NAME, expense.getName());
                                 intent.putExtra(ContestExpenseActivity.ARG_GROUP_ID, expense.getGroupId());
                                 intent.putExtra(ContestExpenseActivity.ARG_EXPENSE_COST, expense.getRoundedCost().toString());
                                 intent.putExtra(ContestExpenseActivity.ARG_CURRENCY_ISO, expense.getCurrencyISO().name());

@@ -46,8 +46,9 @@ import java.util.Locale;
 public class ContestExpenseActivity extends BaseActivity {
 
     public static final String ARG_EXPENSE_ID = "expenseId";
-    public static final String ARG_GROUP_ID ="expenseName";
+    public static final String ARG_GROUP_ID ="groupId";
     public static final String ARG_EXPENSE_COST ="expenseCost";
+    public static final String ARG_EXPENSE_NAME ="expenseName";
     public static final String ARG_CURRENCY_ISO ="currencyISO";
     public static final String ARG_EXPENSE_STATE = "expenseState";
     public static final String ARG_PAYMENT_CONTEST_ID = "paymentContestId";
@@ -81,6 +82,7 @@ public class ContestExpenseActivity extends BaseActivity {
     private List<PaymentFirebase> paymentFirebaseList;
     private List<Payment> paymentList;
     private String mPaymentContestId;
+    private String expenseName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +94,7 @@ public class ContestExpenseActivity extends BaseActivity {
         paymentList = new ArrayList<>();
 
         expenseId             = getIntent().getStringExtra(ARG_EXPENSE_ID);
+        expenseName           = getIntent().getStringExtra(ARG_EXPENSE_NAME);
         groupId               = getIntent().getStringExtra(ARG_GROUP_ID);
         expenseCost           = Double.valueOf(getIntent().getStringExtra(ARG_EXPENSE_COST));
         currencyISO           = Currency.CurrencyISO.valueOf(getIntent().getStringExtra(ARG_CURRENCY_ISO));
