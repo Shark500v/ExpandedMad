@@ -253,6 +253,9 @@ public class GroupHistory extends AppCompatActivity {
                 case 5:
                     return getString(R.string.history_contest_expense) + " "
                             + hi.getExpenseName();
+                case 6:
+                    return getString(R.string.history_cancellation_contest) + " "
+                            + hi.getExpenseName();
                 default:
                     return "Error";
             }
