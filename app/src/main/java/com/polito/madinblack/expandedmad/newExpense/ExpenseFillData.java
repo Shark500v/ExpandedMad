@@ -146,8 +146,6 @@ public class ExpenseFillData extends AppCompatActivity {
 
        //inputAmount.setFilters(new InputFilter[] { new DecimalDigitsInputFilter(2)});
 
-
-
         users = new ArrayList<>();
 
         mStorage = FirebaseStorage.getInstance().getReference();
@@ -181,7 +179,6 @@ public class ExpenseFillData extends AppCompatActivity {
             }
 
         });
-
 
         inputRoundedCurrency.setText(MyApplication.getCurrencyISOFavorite().toString());
 
@@ -869,7 +866,7 @@ public class ExpenseFillData extends AppCompatActivity {
 
 
     //questa classe la usa per fare il managing della lista che deve mostrare
-    public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
+    private class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
 
         public SimpleItemRecyclerViewAdapter(List<Payment> payments) {
