@@ -86,6 +86,7 @@ public class ExpenseDetailActivity extends AppCompatActivity {
                 Intent intent = new Intent(ExpenseDetailActivity.this, FullScreenImage.class);
                 intent.putExtra("imageUrl", url);
                 intent.putExtra("expenseName", expenseName);
+                intent.putExtra("expenseId", expenseId);
                 startActivity(intent);
             }
         });

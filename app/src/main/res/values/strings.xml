@@ -34,7 +34,7 @@
     </string-array>
     <string-array name="tagsForGraph">
         <item name="select_tag">Select Tag</item>
-        <item name="all_tags">All tags</item>
+        <item name="all_tags">All Tags</item>
         <item name="water_bill">Water_Bill</item>
         <item name="light_bill">Light_Bill</item>
         <item name="gas_bill">Gas_Bill</item>
@@ -251,4 +251,7 @@
     <string name="storned">Cancellation of:</string>
     <string name="balance_detail">Balance Detail</string>
     <string name="no_movements">No movements yet</string>
+    <string name="expense_image_already_set">You cannot modify an already set expense image</string>
+    <string name="expense_not_added_by_me">You cannot modify an image of an expense created by other members</string>
+    <string name="no_group_available">No group available. Create a new one from the ☰ menu.</string>
 </resources>

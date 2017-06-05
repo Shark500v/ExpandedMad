@@ -213,8 +213,8 @@
 
     <string name="to_pay">Da pagare</string>
     <string name="Paid">Pagato</string>
-    <string name="new_to_pay">Nuova cifra da pagare</string>
-    <string name="new_paid">Nuova cifra pagata</string>
+    <string name="new_to_pay">Nuovo importo da pagare</string>
+    <string name="new_paid">Nuovo importo pagato</string>
     <string name="expense_cost">Costo spesa</string>
     <string name="old_paid_topay">Da pagare assegnati</string>
     <string name="currencyISO">Valuta ISO</string>
@@ -254,7 +254,9 @@
     <string name="settle_up_of">Pagamento di:</string>
     <string name="storned">Storno di:</string>
     <string name="balance_detail">Dettagli saldo</string>
-    <string name="no_movements">Nessun movimento</string>+
-
+    <string name="no_movements">Nessun movimento</string>
+    <string name="expense_image_already_set">Non è possibile modificare l\'immagine precedentemente inserita</string>
+    <string name="expense_not_added_by_me">Non è possibile modificare l\'immagine di una spesa creata da altri partecipanti</string>
+    <string name="no_group_available">Nessun gruppo disponibile. Puoi crearne uno nuovo dal menu ☰.</string>
 
 </resources>

@@ -14,7 +14,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:textStyle="bold"
-        android:text="No group available. Create a new one from the ☰ menu." />
+        android:text="@string/no_group_available" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/group_list"
