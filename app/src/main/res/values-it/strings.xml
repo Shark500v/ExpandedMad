@@ -166,8 +166,9 @@
     <string name="history_new_group">ha creato questo gruppo.</string>
     <string name="history_transfer_part1">ha effettuato lo storno della spesa</string>
     <string name="history_transfer_part2">.</string>
+    <string name="history_expense">ha aggiunto una nuova spesa. Costo :</string>
     <string name="history_expense_part1">ha aggiunto la spesa</string>
-    <string name="history_expense_part2">. Cost : </string>
+    <string name="history_expense_part2">. Costo : </string>
     <string name="history_payment_part1">ha pagato</string>
     <string name="history_payment_part2">. Costo :</string>
     <string name="history_new_memeber">si è unito al gruppo.</string>
