@@ -269,6 +269,9 @@ public class ContestExpenseActivity extends BaseActivity {
                                                             .child("groups").child(groupId).child("expenses").child(expenseId).child("state").setValue(Expense.State.ONGOING);
                                                     mDatabaseRootReference.child("users").child(paymentFirebase.getUserPhoneNumber()).child(paymentFirebase.getUserFirebaseId())
                                                             .child("groups").child(groupId).child("expenses").child(expenseId).child("timestamp").setValue(timestamp);
+                                                    mDatabaseRootReference.child("users").child(paymentFirebase.getUserPhoneNumber()).child(paymentFirebase.getUserFirebaseId())
+                                                            .child("groups").child(groupId).child("timestamp").setValue(timestamp);
+
                                                 }
 
                                             }else{

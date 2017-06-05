@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -368,6 +369,10 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                 holder.mNotification.setText(mValues.get(position).getNewExpenses().toString());
                 holder.mNotification.setVisibility(View.VISIBLE);
             }
+            if(holder.mItem.getTimestamp()==null)
+                holder.mContentView.setTextColor(Color.parseColor("#FF9800"));
+            else
+                holder.mContentView.setTextColor(Color.parseColor("#212121"));
             //sopra vengono settati i tre campi che costituisco le informazioni di ogni singolo gruppo, tutti pronti per essere mostriti nella gui
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
