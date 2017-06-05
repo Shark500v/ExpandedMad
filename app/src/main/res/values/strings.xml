@@ -171,11 +171,14 @@
     <string name="history_new_group">has created this group.</string>
     <string name="history_transfer_part1">has canceled the </string>
     <string name="history_transfer_part2">expense.</string>
-    <string name="history_expense">has added a new expense. Cost : </string>
+    <string name="history_expense">has added e new expense. Cost :</string>
+    <string name="history_expense_part1">has added the expense</string>
+    <string name="history_expense_part2">. Cost : </string>
     <string name="history_payment_part1">has paid to</string>
     <string name="history_payment_part2">. Cost :</string>
     <string name="history_new_memeber">has joined to the group.</string>
     <string name="history_contest_expense">has contested the expense</string>
+    <string name="history_cancellation_contest">has delted the contest of expense</string>
     <string name="no_detail">No detail available</string>
     <string name="pay_button">Pay</string>
     <string name="list_payment">Settle Up</string>
@@ -245,7 +248,7 @@
     <string name="balance_towards">Balance Towards</string>
     <string name="new_expense">Expense:</string>
     <string name="settle_up_of">Settle Up of:</string>
-    <string name="storned">Delete of:</string>
+    <string name="storned">Cancellation of:</string>
     <string name="balance_detail">Balance Detail</string>
     <string name="no_movements">No movements yet</string>
 </resources>

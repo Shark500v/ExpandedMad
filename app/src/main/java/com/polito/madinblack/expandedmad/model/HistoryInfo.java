@@ -13,6 +13,7 @@ public class HistoryInfo {
      *  3: Someone created the group
      *  4: Expense transfer
      *  5: Contest Expense
+     *  6: Cancellation of contest
      */
     private String name;
     private String expenseName;
