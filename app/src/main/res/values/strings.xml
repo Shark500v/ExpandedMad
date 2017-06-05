@@ -187,7 +187,7 @@
     <string name="group">Group</string>
     <string name="all_groups">All Groups</string>
     <string name="year">Year</string>
-    <string name="select_group">Select a Group</string>
+    <string name="select_group">Select Group</string>
     <string name="select_year">Select Year</string>
     <string name="show_graph">SHOW</string>
     <string name="months">Months</string>

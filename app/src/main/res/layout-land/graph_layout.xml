@@ -2,10 +2,9 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
+
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
@@ -23,53 +22,84 @@
 
     <RelativeLayout
         android:id="@+id/spinner_items"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/app_bar"
-        android:layout_alignParentStart="true">
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/app_bar">
+
+        <TextView
+            android:id="@+id/group_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:text="@string/group" />
 
         <Spinner
             android:id="@+id/group_spinner"
-            android:layout_width="180dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/group_label"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:background="@drawable/spinner_item_border"
-            android:elevation="2dp"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+
             android:textAlignment="center">
         </Spinner>
 
+        <TextView
+            android:id="@+id/year_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:text="@string/year"
+            android:layout_below="@+id/group_spinner"
+            />
+
         <Spinner
             android:id="@+id/year_spinner"
-            android:layout_width="180dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_below="@+id/group_spinner"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_below="@+id/year_label"
             android:textAlignment="center"
-            android:background="@drawable/spinner_item_border"
-            android:elevation="2dp"
             android:entries="@array/years">
         </Spinner>
 
+        <TextView
+            android:id="@+id/tag_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:text="@string/tag"
+            android:layout_below="@id/year_spinner"
+            />
+
         <Spinner
             android:id="@+id/tag_spinner_graph"
-            android:layout_width="180dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_below="@id/year_spinner"
-            android:background="@drawable/spinner_item_border"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_below="@id/tag_label"
             android:textAlignment="center"
-            android:elevation="2dp"
             android:entries="@array/tagsForGraph">
         </Spinner>
 
     </RelativeLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/spinner_items">
+        android:layout_below="@+id/app_bar"
+        android:layout_toRightOf="@+id/spinner_items">
 
         <com.jjoe64.graphview.GraphView
             android:id="@+id/graph1"
@@ -79,8 +109,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            >
+            android:layout_marginRight="@dimen/activity_horizontal_margin">
 
         </com.jjoe64.graphview.GraphView>
 
@@ -91,6 +120,7 @@
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:textAlignment="center"
         android:id="@+id/snackbarPosition">
     </android.support.design.widget.CoordinatorLayout>
 
