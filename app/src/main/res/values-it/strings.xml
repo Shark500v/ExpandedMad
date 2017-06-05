@@ -248,5 +248,7 @@
     <string name="storned">Storno di</string>
     <string name="balance_detail">Dettagli saldo</string>
     <string name="no_movements">Nessun movimento</string>
+    <string name="expense_image_already_set">Non è possibile modificare l\'immagine precedentemente inserita</string>
+    <string name="expense_not_added_by_me">Non è possibile modificare l\'immagine di una spesa creata da altri partecipanti</string>
 
 </resources>
