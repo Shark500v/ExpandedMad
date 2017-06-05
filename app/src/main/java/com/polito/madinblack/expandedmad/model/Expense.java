@@ -393,7 +393,7 @@ public class Expense {
         if(state==State.TRANSFER)
             historyInfo = new HistoryInfo(paidByName+" "+paidBySurname, name, 4L, cost, currencyISO, null);
         else
-            historyInfo = new HistoryInfo(paidByName+" "+paidBySurname, null, 0L, cost, currencyISO, null);
+            historyInfo = new HistoryInfo(paidByName+" "+paidBySurname, name, 0L, cost, currencyISO, null);
         mDatabaseRootRefenrence.child("history/"+groupId).push().setValue(historyInfo);
 
         return expenseKey;

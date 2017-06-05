@@ -33,6 +33,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -91,6 +92,7 @@ public class ExpenseFillData extends AppCompatActivity {
     private StorageReference mStorage;
     private EditText inputName, inputAmount, inputRoundedAmount, inputRoundedCurrency;
     private TextInputLayout inputLayoutName, inputLayoutAmount, inputLayoutTag;
+    private ScrollView scrollView;
     private Spinner tag_spinner;
     private LinearLayout layoutRounded;
     private Double amount;
@@ -137,7 +139,8 @@ public class ExpenseFillData extends AppCompatActivity {
         inputAmount             = (EditText) findViewById(R.id.input_amount);
         inputRoundedAmount      = (EditText) findViewById(R.id.input_rounded_cost);
         inputRoundedCurrency    = (EditText) findViewById(R.id.input_rounded_cost_currency);
-        tag_spinner     = (Spinner) findViewById(R.id.tag_spinner);
+        tag_spinner             = (Spinner) findViewById(R.id.tag_spinner);
+        scrollView              = (ScrollView) findViewById(R.id.scrollView);
 
 
        //inputAmount.setFilters(new InputFilter[] { new DecimalDigitsInputFilter(2)});
@@ -592,6 +595,7 @@ public class ExpenseFillData extends AppCompatActivity {
         if (expenseName.isEmpty()) {
             inputLayoutName.setError(getString(R.string.err_msg_title));
             requestFocus(inputName);
+            scrollView.scrollTo(0,0);
             return false;
         } else {
             inputLayoutName.setErrorEnabled(false);
@@ -606,6 +610,7 @@ public class ExpenseFillData extends AppCompatActivity {
         if (amountS.isEmpty()) {
             inputLayoutAmount.setError(getString(R.string.err_msg_amount));
             requestFocus(inputAmount);
+            scrollView.scrollTo(0,0);
             return false;
         } else {
             try {
@@ -613,6 +618,7 @@ public class ExpenseFillData extends AppCompatActivity {
             } catch (NumberFormatException ex) {
                 inputLayoutAmount.setError(getString(R.string.err_msg_amount));
                 requestFocus(inputAmount);
+                scrollView.scrollTo(0,0);
                 return false;
             }
             inputLayoutAmount.setErrorEnabled(false);
@@ -626,6 +632,7 @@ public class ExpenseFillData extends AppCompatActivity {
         if(index == 0){
             inputLayoutTag.setError(getString(R.string.err_msg_tag));
             requestFocus(tag_spinner);
+            scrollView.scrollTo(0,250);
             return false;
         } else {
             inputLayoutTag.setErrorEnabled(false);
