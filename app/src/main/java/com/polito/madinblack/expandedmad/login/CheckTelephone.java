@@ -19,10 +19,6 @@ import com.polito.madinblack.expandedmad.tabViewGroup.TabView;
 
 import static com.polito.madinblack.expandedmad.notification.NotificationUtils.saveTokenOnDb;
 
-/**
- * Created by Ale on 01/05/2017.
- */
-
 public class CheckTelephone extends BaseActivity {
 
     private static final String TAG = "CheckTelephone";
@@ -117,8 +113,7 @@ public class CheckTelephone extends BaseActivity {
 
     private String getUserPhone(){
         SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
-        String phone = pref.getString("phone", null);
-        return phone;
+        return pref.getString("phone", null);
     }
 
 
