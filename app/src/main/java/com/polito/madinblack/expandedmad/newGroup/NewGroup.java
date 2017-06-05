@@ -91,7 +91,7 @@ public class NewGroup extends AppCompatActivity {
     private RecyclerView recyclerView;
     private GroupMembersRecyclerViewAdapter adapter;
 
-    private static int THUMBNAIL_SIZE = 256;
+    private static int THUMBNAIL_SIZE = 512;
 
     //a constant to track the file chooser intent
     private static int RESULT_LOAD_IMAGE = 1;

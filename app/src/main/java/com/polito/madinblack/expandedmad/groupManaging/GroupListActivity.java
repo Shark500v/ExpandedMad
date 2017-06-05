@@ -184,7 +184,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             mAdapter.cleanupListener();
 
         if(mDatabaseRootReference!=null && valueEventListener!=null)
-            mDatabaseRootReference.removeEventListener(valueEventListener);
+            mDatabaseForUserUrl.removeEventListener(valueEventListener);
     }
 
 

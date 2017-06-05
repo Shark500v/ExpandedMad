@@ -109,7 +109,7 @@ public class ExpenseFillData extends AppCompatActivity {
     private String groupName;
     private String pictureImagePath;
 
-    private static int THUMBNAIL_SIZE = 256;
+    private static int THUMBNAIL_SIZE = 512;
 
     private static int RESULT_LOAD_IMAGE = 1;
     private static int RESULT_REQUEST_CAMERA = 0;

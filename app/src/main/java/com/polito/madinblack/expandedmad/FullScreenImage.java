@@ -57,7 +57,7 @@ public class FullScreenImage extends AppCompatActivity{
     private DatabaseReference mDatabaseForUrl;
     private String permission;
     private CoordinatorLayout coordinatorLayout;
-    private static int THUMBNAIL_SIZE = 256;
+    private static int THUMBNAIL_SIZE = 512;
     private String pictureImagePath;
     private Uri uri;
     private Bitmap bitmap;
@@ -73,6 +73,12 @@ public class FullScreenImage extends AppCompatActivity{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fullscreen);
+
+        imageFromUrl = getIntent().getStringExtra("imageUrl");
+        expenseName = getIntent().getStringExtra("expenseName");
+        expenseId = getIntent().getStringExtra("expenseId");
+        imageView = (ImageView)findViewById(R.id.full_screen);
+
         //toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_fullscreen);
         toolbar.setTitle(expenseName);
@@ -84,12 +90,7 @@ public class FullScreenImage extends AppCompatActivity{
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        imageFromUrl = getIntent().getStringExtra("imageUrl");
-        expenseName = getIntent().getStringExtra("expenseName");
-        expenseId = getIntent().getStringExtra("expenseId");
-        imageView = (ImageView)findViewById(R.id.full_screen);
-
-        //coordinatorLayout = (CoordinatorLayout) findViewById(R.id.snackbarPos);
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.snackbar_pos);
         mDatabaseForUrl = FirebaseDatabase.getInstance().getReference().child("expenses").child(expenseId).child("urlImage");
 
         Glide.with(this).load(imageFromUrl).override(2048,2048).centerCrop().fitCenter().diskCacheStrategy(DiskCacheStrategy.RESULT).error(R.drawable.bill).into(imageView);
@@ -139,9 +140,9 @@ public class FullScreenImage extends AppCompatActivity{
                     selectImage();
                 }
                 else if(permission.equals(getString(R.string.expense_image_already_set))){
-                    Toast.makeText(this, getString(R.string.expense_image_already_set), Toast.LENGTH_LONG).show();
+                    Snackbar.make(coordinatorLayout, getString(R.string.expense_image_already_set), Snackbar.LENGTH_LONG).show();
                 }else if(permission.equals(getString(R.string.expense_not_added_by_me))){
-                    Toast.makeText(this, getString(R.string.expense_not_added_by_me), Toast.LENGTH_LONG).show();
+                    Snackbar.make(coordinatorLayout, getString(R.string.expense_not_added_by_me), Snackbar.LENGTH_LONG).show();
                 }
 
             default:
