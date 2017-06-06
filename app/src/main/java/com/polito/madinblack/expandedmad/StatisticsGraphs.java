@@ -59,6 +59,7 @@ public class StatisticsGraphs extends AppCompatActivity {
     private Integer counter = 2;
     private Currency.CurrencyISO myCurrency;
     private String myCurrencySymbol;
+    private boolean loaded = false;
     CoordinatorLayout coordinatorLayout;
     List<String> tagsEn = new ArrayList<>();
     List<String> tagsIt = new ArrayList<>();
@@ -121,6 +122,7 @@ public class StatisticsGraphs extends AppCompatActivity {
                 ArrayAdapter<String> groupAdapter = new ArrayAdapter<String>(StatisticsGraphs.this, android.R.layout.simple_spinner_item, groupArray);
                 groupAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
                 groupSpinner.setAdapter(groupAdapter);
+                loaded = true;
             }
 
             @Override
@@ -455,7 +457,7 @@ public class StatisticsGraphs extends AppCompatActivity {
     @Override
     public void onStart(){
         super.onStart();
-        if(mValueEventListener!=null)
+        if(mValueEventListener!=null && !loaded)
             mDatabaseGroupReference.addListenerForSingleValueEvent(mValueEventListener);
     }
 
