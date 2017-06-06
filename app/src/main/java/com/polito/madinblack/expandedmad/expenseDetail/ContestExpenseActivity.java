@@ -505,11 +505,12 @@ public class ContestExpenseActivity extends BaseActivity {
                         //mDatabaseRootReference.child("expenses/"+expenseId+"/timestamp/"+paymentFirebase.getId()+"/motivation");
                         mutableData.setValue(Expense.State.CONTESTED);
 
+                        Long timestamp = -1*System.currentTimeMillis();
                         for(PaymentFirebase paymentFirebase : paymentFirebaseList){
                             mDatabaseRootReference.child("users").child(paymentFirebase.getUserPhoneNumber()).child(paymentFirebase.getUserFirebaseId())
                                                 .child("groups").child(groupId).child("timestamp").setValue(null);
                             mDatabaseRootReference.child("users").child(paymentFirebase.getUserPhoneNumber()).child(paymentFirebase.getUserFirebaseId())
-                                    .child("groups").child(groupId).child("expenses").child(expenseId).child("timestamp").setValue(null);
+                                    .child("groups").child(groupId).child("expenses").child(expenseId).child("timestamp").setValue(timestamp);
                             mDatabaseRootReference.child("users").child(paymentFirebase.getUserPhoneNumber()).child(paymentFirebase.getUserFirebaseId())
                                     .child("groups").child(groupId).child("expenses").child(expenseId).child("state").setValue(Expense.State.CONTESTED);
                         }

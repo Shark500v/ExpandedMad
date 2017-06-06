@@ -41,7 +41,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private Context mContext;
     private ChildEventListener mEventListener;
     private int childMoved;
-    private int cntNull;
+    private int cntContested;
 
     private static final String TAG = "MyBalanceActivity";
 
@@ -49,14 +49,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         dataref = dr;
         mContext = ct;
         childMoved = 0;
-        cntNull = 0;
+        cntContested = 0;
 
         // Create child event listener
         // [START child_event_listener_recycler]
         ChildEventListener childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-                Log.d(TAG, "onChildAdded:" + dataSnapshot.getKey());
+
+                String dataSnapshotKey = dataSnapshot.getKey();
+                Log.d(TAG, "onChildAdded:" + dataSnapshotKey);
 
                 // A new info has been added, add it to the displayed list
                 ExpenseForUser expenseForUser = dataSnapshot.getValue(ExpenseForUser.class);
@@ -71,38 +73,33 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     recyclerView.setVisibility(View.VISIBLE);
                 }*/
 
-                if (mValuesIds.indexOf(dataSnapshot.getKey()) > -1) {
+                if (mValuesIds.indexOf(dataSnapshotKey) > -1) {
                     Log.e(TAG, "Spesa duplicata: " + expenseForUser.getName());
                     return;
                 }
-                if(getItemCount()==0){
-                    mValuesIds.add(dataSnapshot.getKey());
+
+                if(getItemCount()==0 || (expenseForUser.getState() != Expense.State.CONTESTED && mValues.get(mValues.size()-1).getTimestamp()<=expenseForUser.getTimestamp())){
+                    mValuesIds.add(dataSnapshotKey);
                     mValues.add(expenseForUser);
                     notifyItemInserted(mValues.size()-1);
                     Log.e(TAG, "Spesa aggiunta in posizione : " + expenseForUser.getName() + " "+(mValues.size()-1));
 
-                }else{
-                    boolean isNull;
-                    if((isNull=mValues.get(mValues.size()-1).getTimestamp()==null) ||  mValues.get(mValues.size()-1).getTimestamp()<expenseForUser.getTimestamp()){
-                        if(isNull)
-                            cntNull++;
-                        mValuesIds.add(dataSnapshot.getKey());
-                        mValues.add(expenseForUser);
-                        notifyItemInserted(mValues.size()-1);
-                        Log.e(TAG, "Spesa aggiunta in posizione : " + expenseForUser.getName() + " "+(mValues.size()-1));
-                    }else{
-                        mValuesIds.add(cntNull, dataSnapshot.getKey());
-                        mValues.add(cntNull, expenseForUser);
-                        notifyItemInserted(cntNull);
-                        Log.e(TAG, "Spesa aggiunta in posizione : " + expenseForUser.getName() + " "+ cntNull);
 
-                    }
-
+                }else if(mValues.get(mValues.size()-1).getTimestamp()>expenseForUser.getTimestamp()){
+                    mValuesIds.add(cntContested, dataSnapshotKey);
+                    mValues.add(cntContested, expenseForUser);
+                    notifyItemInserted(cntContested);
+                    Log.e(TAG, "Spesa aggiunta in posizione : " + expenseForUser.getName() + " " + cntContested);
+                }else {
+                    mValuesIds.add(cntContested, dataSnapshotKey);
+                    mValues.add(cntContested, expenseForUser);
+                    notifyItemInserted(cntContested);
+                    Log.e(TAG, "Spesa aggiunta in posizione : " + expenseForUser.getName() + " " + cntContested);
+                    cntContested++;
                 }
 
 
 
-                // [END_EXCLUDE]
 
             }
 
@@ -144,6 +141,28 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                 // A comment has changed position, use the key to determine if we are
                 // displaying this comment and if so move it.
+
+                ExpenseForUser expenseForUser = dataSnapshot.getValue(ExpenseForUser.class);
+                String infoKey = dataSnapshot.getKey();
+
+
+                int infoIndex = mValuesIds.indexOf(infoKey);
+                if (infoIndex > -1) {
+
+                    mValuesIds.add(0, infoKey);
+                    mValues.add(0, expenseForUser);
+
+                    mValuesIds.remove(infoIndex);
+                    mValues.remove(infoIndex);
+
+
+                    // Update the RecyclerView
+                    notifyItemMoved(infoIndex, 0);
+                    cntContested++;
+
+                } else {
+                    Log.w(TAG, "onChildChanged:unknown_child:" + infoKey);
+                }
 
             }
 
