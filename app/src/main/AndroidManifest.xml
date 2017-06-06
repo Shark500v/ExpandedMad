@@ -18,7 +18,6 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_wallet"
         android:supportsRtl="true"
-        android:configChanges="orientation|screenSize|locale"
         android:name=".AppMain"
         android:theme="@style/AppTheme">
 
@@ -48,7 +47,8 @@
         <activity
             android:name=".groupManaging.GroupListActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize|locale">
         <intent-filter>
             <action android:name="none" />
             <category android:name="android.intent.category.MONKEY"/>
@@ -59,7 +59,8 @@
             android:name=".tabViewGroup.TabView"
             android:label="Tab View"
             android:parentActivityName=".groupManaging.GroupListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize|locale">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.groupManaging.GroupListActivity" />
@@ -69,7 +70,8 @@
             android:name=".groupManaging.GroupDetailActivity"
             android:label="Group Details"
             android:parentActivityName=".tabViewGroup.TabView"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize|locale">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.tabViewGroup.TabView" />
@@ -79,7 +81,8 @@
             android:name=".expenseDetail.ExpenseDetailActivity"
             android:label="Expense Details"
             android:parentActivityName=".tabViewGroup.TabView"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize|locale">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.tabViewGroup.TabView" />
@@ -89,7 +92,8 @@
             android:name=".groupMembers.GroupMemebersActivity"
             android:label="Group Details"
             android:parentActivityName=".tabViewGroup.TabView"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize|locale">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.tabViewGroup.TabView" />
@@ -99,7 +103,8 @@
             android:name=".groupMembers.UserExpenses"
             android:label="Group User Details"
             android:parentActivityName=".groupMembers.GroupMemebersActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize|locale">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.groupMembers.GroupMemebersActivity" />
@@ -109,7 +114,8 @@
             android:name=".groupMembers.UserDebts"
             android:label="User Details"
             android:parentActivityName=".groupMembers.UserExpenses"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize|locale">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.groupMembers.UserExpenses" />
@@ -119,7 +125,8 @@
             android:name=".newExpense.ExpenseFillData"
             android:label="Add New Expense"
             android:parentActivityName=".tabViewGroup.TabView"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize|locale">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.tabViewGroup.TabView" />
@@ -127,11 +134,13 @@
 
         <activity
             android:name=".login.GoogleSignInActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize|locale"/>
 
         <activity
             android:name=".login.CheckLogIn"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize|locale">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -154,7 +163,8 @@
             android:name=".newGroup.SelectContact"
             android:label="Select Contact"
             android:parentActivityName=".groupManaging.GroupListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize|locale">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.groupManaging.GroupListActivity" />
@@ -164,7 +174,8 @@
             android:name=".newGroup.InviteActivity"
             android:label="Invite New Contacts"
             android:parentActivityName=".groupManaging.GroupListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize|locale">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.groupManaging.GroupListActivity" />
@@ -183,13 +194,15 @@
 
         <activity
             android:name=".login.CheckTelephone"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize|locale"/>
 
         <activity
             android:name=".login.TelephoneInsertion"
             android:label="Insert account details"
             android:parentActivityName=".login.GoogleSignInActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize|locale">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.login.GoogleSignInActivity" />
@@ -199,7 +212,8 @@
             android:name=".groupManaging.GroupHistory"
             android:label="@string/title_activity_group_history"
             android:parentActivityName=".tabViewGroup.TabView"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+            android:configChanges="orientation|screenSize|locale">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.tabViewGroup.TabView" />
@@ -209,7 +223,8 @@
             android:name=".expenseDetail.PaymentDetailActivity"
             android:label="@string/payments_detail"
             android:parentActivityName=".expenseDetail.ExpenseDetailActivity"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+            android:configChanges="orientation|screenSize|locale">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.expenseDetail.ExpenseDetailActivity" />
@@ -219,7 +234,8 @@
             android:name=".expenseDetail.ContestExpenseActivity"
             android:label="@string/contention"
             android:parentActivityName=".expenseDetail.ExpenseDetailActivity"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+            android:configChanges="orientation|screenSize|locale">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.expenseDetail.ExpenseDetailActivity" />
@@ -238,7 +254,8 @@
         <activity
             android:name=".addUserToGroup.SelectContactToAdd"
             android:parentActivityName=".groupManaging.GroupSettings"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize|locale">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.groupManaging.GroupSettings" />
@@ -247,7 +264,8 @@
         <activity
             android:name=".addUserToGroup.InviteActivityToAdd"
             android:parentActivityName=".groupManaging.GroupSettings"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize|locale">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.groupManaging.GroupSettings" />
@@ -266,7 +284,8 @@
         <activity
             android:name=".groupManaging.EditGroupName"
             android:parentActivityName=".groupManaging.GroupSettings"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize|locale">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.groupManaging.GroupSettings" />
@@ -275,7 +294,8 @@
         <activity
             android:name=".settings.SettingsActivity"
             android:parentActivityName=".groupManaging.GroupListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize|locale">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.groupManaging.GroupListActivity" />
@@ -294,7 +314,8 @@
         <activity
             android:name=".balanceDetail.BalanceDetailActivity"
             android:parentActivityName=".tabViewGroup.TabView"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize|locale">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.polito.madinblack.expandedmad.tabViewGroup.TabView" />
