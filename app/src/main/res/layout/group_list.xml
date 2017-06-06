@@ -15,6 +15,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:textStyle="bold"
+        android:textSize="18sp"
         android:text="@string/no_group_available" />
 
     <android.support.v7.widget.RecyclerView
