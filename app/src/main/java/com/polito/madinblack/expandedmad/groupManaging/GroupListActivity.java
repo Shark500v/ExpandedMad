@@ -297,12 +297,14 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
 
         private List<GroupForUser> mValues = new ArrayList<>();
         private List<GroupForUser> duplicato = new ArrayList<>();
-
+        private TextView emptyView;
+        private RecyclerView recyclerView;
 
         public SimpleItemRecyclerViewAdapter(final Context context, Query ref) {
             mContext = context;
             mQueryReference = ref;
-
+            emptyView = (TextView) findViewById(R.id.empty_view);
+            recyclerView = (RecyclerView) findViewById(R.id.group_list);
             // Create child event listener
             // [START child_event_listener_recycler]
             ValueEventListener eventListener = new ValueEventListener() {
@@ -321,10 +323,15 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                     }
 
                     if(getItemCount() != 0) {
-                        TextView emptyView = (TextView) findViewById(R.id.empty_view);
-                        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.group_list);
-                        emptyView.setVisibility(View.GONE);
-                        recyclerView.setVisibility(View.VISIBLE);
+                        if(emptyView.getVisibility()==View.VISIBLE)
+                            emptyView.setVisibility(View.GONE);
+                        if(recyclerView.getVisibility()==View.GONE)
+                            recyclerView.setVisibility(View.VISIBLE);
+                    }else {
+                        if(emptyView.getVisibility()==View.GONE)
+                            findViewById(R.id.empty_view).setVisibility(View.VISIBLE);
+                        if(recyclerView.getVisibility()==View.VISIBLE)
+                            recyclerView.setVisibility(View.GONE);
                     }
 
                     notifyDataSetChanged();

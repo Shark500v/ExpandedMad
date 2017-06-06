@@ -40,13 +40,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private Query dataref;
     private Context mContext;
     private ChildEventListener mEventListener;
+    private int childMoved;
+    private int cntNull;
 
     private static final String TAG = "MyBalanceActivity";
 
     public RecyclerViewAdapter(Context ct, Query dr) {
         dataref = dr;
         mContext = ct;
-
+        childMoved = 0;
+        cntNull = 0;
 
         // Create child event listener
         // [START child_event_listener_recycler]
@@ -67,14 +70,37 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     tx.setVisibility(View.GONE);
                     recyclerView.setVisibility(View.VISIBLE);
                 }*/
+
                 if (mValuesIds.indexOf(dataSnapshot.getKey()) > -1) {
                     Log.e(TAG, "Spesa duplicata: " + expenseForUser.getName());
                     return;
                 }
-                mValuesIds.add(dataSnapshot.getKey());
-                mValues.add(expenseForUser);
-                notifyItemInserted(mValues.size()-1);
-                Log.e(TAG, "Spesa aggiunta in posizione : " + expenseForUser.getName() + " "+(mValues.size()-1));
+                if(getItemCount()==0){
+                    mValuesIds.add(dataSnapshot.getKey());
+                    mValues.add(expenseForUser);
+                    notifyItemInserted(mValues.size()-1);
+                    Log.e(TAG, "Spesa aggiunta in posizione : " + expenseForUser.getName() + " "+(mValues.size()-1));
+
+                }else{
+                    boolean isNull;
+                    if((isNull=mValues.get(mValues.size()-1).getTimestamp()==null) ||  mValues.get(mValues.size()-1).getTimestamp()<expenseForUser.getTimestamp()){
+                        if(isNull)
+                            cntNull++;
+                        mValuesIds.add(dataSnapshot.getKey());
+                        mValues.add(expenseForUser);
+                        notifyItemInserted(mValues.size()-1);
+                        Log.e(TAG, "Spesa aggiunta in posizione : " + expenseForUser.getName() + " "+(mValues.size()-1));
+                    }else{
+                        mValuesIds.add(cntNull, dataSnapshot.getKey());
+                        mValues.add(cntNull, expenseForUser);
+                        notifyItemInserted(cntNull);
+                        Log.e(TAG, "Spesa aggiunta in posizione : " + expenseForUser.getName() + " "+ cntNull);
+
+                    }
+
+                }
+
+
 
                 // [END_EXCLUDE]
 
@@ -102,6 +128,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 } else {
                     Log.w(TAG, "onChildChanged:unknown_child:" + infoKey);
                 }
+
                 // [END_EXCLUDE]
             }
 
@@ -117,10 +144,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                 // A comment has changed position, use the key to determine if we are
                 // displaying this comment and if so move it.
-                //Group movedGroup = dataSnapshot.getValue(Group.class);
-                //String groupKey = dataSnapshot.getKey();
 
-                // ...
             }
 
             @Override
