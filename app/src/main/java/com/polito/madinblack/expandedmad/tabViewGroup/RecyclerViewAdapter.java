@@ -160,6 +160,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     notifyItemMoved(infoIndex, 0);
                     cntContested++;
 
+
                 } else {
                     Log.w(TAG, "onChildChanged:unknown_child:" + infoKey);
                 }
