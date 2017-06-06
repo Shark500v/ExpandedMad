@@ -83,8 +83,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     mValues.add(expenseForUser);
                     notifyItemInserted(mValues.size()-1);
                     Log.e(TAG, "Spesa aggiunta in posizione : " + expenseForUser.getName() + " "+(mValues.size()-1));
-
-
+                    if(getItemCount()==1 && expenseForUser.getState() == Expense.State.CONTESTED)
+                        cntContested++;
                 }else if(mValues.get(mValues.size()-1).getTimestamp()>expenseForUser.getTimestamp()){
                     mValuesIds.add(cntContested, dataSnapshotKey);
                     mValues.add(cntContested, expenseForUser);
