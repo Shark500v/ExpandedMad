@@ -83,8 +83,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     mValues.add(expenseForUser);
                     notifyItemInserted(mValues.size()-1);
                     Log.e(TAG, "Spesa aggiunta in posizione : " + expenseForUser.getName() + " "+(mValues.size()-1));
-
-
+                    if(getItemCount()==1 && expenseForUser.getState() == Expense.State.CONTESTED)
+                        cntContested++;
                 }else if(mValues.get(mValues.size()-1).getTimestamp()>expenseForUser.getTimestamp()){
                     mValuesIds.add(cntContested, dataSnapshotKey);
                     mValues.add(cntContested, expenseForUser);
@@ -159,6 +159,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     // Update the RecyclerView
                     notifyItemMoved(infoIndex, 0);
                     cntContested++;
+
 
                 } else {
                     Log.w(TAG, "onChildChanged:unknown_child:" + infoKey);
