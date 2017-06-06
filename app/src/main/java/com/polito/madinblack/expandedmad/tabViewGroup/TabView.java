@@ -64,6 +64,7 @@ public class TabView extends AppCompatActivity {
     private static DatabaseReference mDatabaseExpenseListReference;
     private static Query             mDatabaseExpenseListQuery;
 
+
     private MyBalanceFragment balanceFrag = MyBalanceFragment.newInstance();
 
     private ExpensesListFragment listFrag = ExpensesListFragment.newInstance();
@@ -412,6 +413,8 @@ public class TabView extends AppCompatActivity {
         RecyclerViewAdapter adapter;
         RecyclerView recyclerView;
         View rootView;
+        DatabaseReference mDatabaseNewExpenseReference;
+        ValueEventListener valueEventListener;
 
         public ExpensesListFragment() {
             // Required empty public constructor
@@ -430,25 +433,37 @@ public class TabView extends AppCompatActivity {
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             //upload newExpense
-            DatabaseReference mDatabaseNewExpenseReference = FirebaseDatabase.getInstance().getReference().child("users/" + MyApplication.getUserPhoneNumber() + "/" + MyApplication.getFirebaseId() + "/groups/" + groupIndex + "/newExpenses");
-
-            mDatabaseNewExpenseReference.runTransaction(new Transaction.Handler() {
-
+            mDatabaseNewExpenseReference = FirebaseDatabase.getInstance().getReference().child("users/" + MyApplication.getUserPhoneNumber() + "/" + MyApplication.getFirebaseId() + "/groups/" + groupIndex + "/newExpenses");
+            valueEventListener = new ValueEventListener() {
                 @Override
-                public Transaction.Result doTransaction(MutableData currentData) {
-                    if((Long) currentData.getValue()!=0)
-                        currentData.setValue(0L);
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    mDatabaseNewExpenseReference.runTransaction(new Transaction.Handler() {
 
-                    return Transaction.success(currentData);
+                        @Override
+                        public Transaction.Result doTransaction(MutableData currentData) {
+                            if((Long) currentData.getValue()!=0)
+                                currentData.setValue(0L);
+
+                            return Transaction.success(currentData);
+                        }
+
+                        @Override
+                        public void onComplete(DatabaseError databaseError,
+                                               boolean committed, DataSnapshot currentData) {
+                            //This method will be called once with the results of the transaction.
+                            //Update remove the user from the group
+                        }
+                    });
                 }
 
                 @Override
-                public void onComplete(DatabaseError databaseError,
-                                       boolean committed, DataSnapshot currentData) {
-                    //This method will be called once with the results of the transaction.
-                    //Update remove the user from the group
+                public void onCancelled(DatabaseError databaseError) {
+
                 }
-            });
+            };
+
+
+
 
         }
 
@@ -463,6 +478,10 @@ public class TabView extends AppCompatActivity {
         @Override
         public void onStart(){
             super.onStart();
+
+            if(mDatabaseNewExpenseReference!=null && valueEventListener!=null)
+                mDatabaseNewExpenseReference.addValueEventListener(valueEventListener);
+
             adapter = new RecyclerViewAdapter(getContext(), mDatabaseExpenseListQuery);
             recyclerView = (RecyclerView) rootView.findViewById(R.id.expense_list2);
 
@@ -492,10 +511,13 @@ public class TabView extends AppCompatActivity {
         @Override
         public void onStop() {
             super.onStop();
+            if(mDatabaseNewExpenseReference!=null && valueEventListener!=null)
+                mDatabaseNewExpenseReference.removeEventListener(valueEventListener);
 
             // Clean up comments listener
             if(adapter!=null)
                 adapter.cleanupListener();
+
         }
     }
 
