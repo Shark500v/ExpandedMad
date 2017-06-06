@@ -154,7 +154,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
     public void onStart(){
         super.onStart();
 
-        if(mDatabaseRootReference!=null && valueEventListener!=null)
+        if(mDatabaseForUserUrl!=null && valueEventListener!=null)
             mDatabaseForUserUrl.addValueEventListener(valueEventListener);
 
 
@@ -183,7 +183,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         if(mAdapter!=null)
             mAdapter.cleanupListener();
 
-        if(mDatabaseRootReference!=null && valueEventListener!=null)
+        if(mDatabaseForUserUrl!=null && valueEventListener!=null)
             mDatabaseForUserUrl.removeEventListener(valueEventListener);
     }
 
