@@ -300,6 +300,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
         private TextView emptyView;
         private RecyclerView recyclerView;
 
+
         public SimpleItemRecyclerViewAdapter(final Context context, Query ref) {
             mContext = context;
             mQueryReference = ref;
@@ -315,12 +316,21 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                     if(searchView!=null)
                         searchView.clearFocus();
 
+                    int cntContested=0;
                     for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
-
-                        mValues.add(postSnapshot.getValue(GroupForUser.class));
-                        duplicato.add(postSnapshot.getValue(GroupForUser.class));
+                        GroupForUser groupForUser = postSnapshot.getValue(GroupForUser.class);
+                        if(groupForUser.getContestedExpensesCounter()>0) {
+                            mValues.add(cntContested, postSnapshot.getValue(GroupForUser.class));
+                            duplicato.add(cntContested, postSnapshot.getValue(GroupForUser.class));
+                            cntContested++;
+                        }else {
+                            mValues.add(groupForUser);
+                            duplicato.add(groupForUser);
+                        }
 
                     }
+
+
 
                     if(getItemCount() != 0) {
                         if(emptyView.getVisibility()==View.VISIBLE)
@@ -376,7 +386,7 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                 holder.mNotification.setText(mValues.get(position).getNewExpenses().toString());
                 holder.mNotification.setVisibility(View.VISIBLE);
             }
-            if(holder.mItem.getTimestamp()==null)
+            if(holder.mItem.getContestedExpensesCounter()>0)
                 holder.mContentView.setTextColor(Color.parseColor("#FF9800"));
             else
                 holder.mContentView.setTextColor(Color.parseColor("#212121"));

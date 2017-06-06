@@ -140,7 +140,7 @@ public class ContestExpenseActivity extends BaseActivity {
         mExpenseCurrencySymbol.setText(Currency.getSymbol(currencyISO));
         mOldToPayCurrencySymbol.setText(Currency.getSymbol(currencyISO));
         mNewToPayCurrencySymbol.setText(Currency.getSymbol(currencyISO));
-        mExpenseCost.setText(expenseCost.toString());
+        mExpenseCost.setText(String.format(Locale.getDefault(), "%.2f", expenseCost));
         if(expenseState == Expense.State.ONGOING){
             mGeneratedByTextView.setText(getString(R.string.you));
         }
@@ -241,6 +241,7 @@ public class ContestExpenseActivity extends BaseActivity {
                                 mExpenseCurrencySymbol.setText(Currency.getSymbol(Currency.CurrencyISO.valueOf(item)));
                                 mOldToPayCurrencySymbol.setText(Currency.getSymbol(Currency.CurrencyISO.valueOf(item)));
                                 mNewToPayCurrencySymbol.setText(Currency.getSymbol(Currency.CurrencyISO.valueOf(item)));
+                                mNewToPay.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(paymentFirebase.getNewToPay(), currencyISO, Currency.CurrencyISO.valueOf(item))));
                                 mExpenseCost.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(expenseCost, currencyISO, Currency.CurrencyISO.valueOf(item))));
                                 if (paymentFirebase != null)
                                     mOldToPay.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(paymentFirebase.getToPay(), currencyISO, Currency.CurrencyISO.valueOf(item))));
@@ -271,6 +272,23 @@ public class ContestExpenseActivity extends BaseActivity {
                                                 for(PaymentFirebase paymentFirebase : paymentFirebaseList){
                                                     mDatabaseRootReference.child("users").child(paymentFirebase.getUserPhoneNumber()).child(paymentFirebase.getUserFirebaseId())
                                                             .child("groups").child(groupId).child("expenses").child(expenseId).child("state").setValue(Expense.State.ONGOING);
+                                                    mDatabaseRootReference.child("users").child(paymentFirebase.getUserPhoneNumber()).child(paymentFirebase.getUserFirebaseId())
+                                                            .child("groups").child(groupId).child("contestedExpensesCounter").runTransaction(new Transaction.Handler() {
+                                                        @Override
+                                                        public Transaction.Result doTransaction(MutableData mutableData) {
+                                                            if(mutableData.getValue(Long.class)==null){
+                                                                mutableData.setValue(0L);
+                                                            }else if(mutableData.getValue(Long.class)!=0){
+                                                                mutableData.setValue(mutableData.getValue(Long.class)-1L);
+                                                            }
+                                                            return Transaction.success(mutableData);
+                                                        }
+
+                                                        @Override
+                                                        public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+
+                                                        }
+                                                    });
                                                     mDatabaseRootReference.child("users").child(paymentFirebase.getUserPhoneNumber()).child(paymentFirebase.getUserFirebaseId())
                                                             .child("groups").child(groupId).child("expenses").child(expenseId).child("timestamp").setValue(timestamp);
                                                     mDatabaseRootReference.child("users").child(paymentFirebase.getUserPhoneNumber()).child(paymentFirebase.getUserFirebaseId())
@@ -327,6 +345,23 @@ public class ContestExpenseActivity extends BaseActivity {
                                                 for(PaymentFirebase paymentFirebase : paymentFirebaseList){
                                                     mDatabaseRootReference.child("users").child(paymentFirebase.getUserPhoneNumber()).child(paymentFirebase.getUserFirebaseId())
                                                             .child("groups").child(groupId).child("timestamp").setValue(timestamp);
+                                                    mDatabaseRootReference.child("users").child(paymentFirebase.getUserPhoneNumber()).child(paymentFirebase.getUserFirebaseId())
+                                                            .child("groups").child(groupId).child("contestedExpensesCounter").runTransaction(new Transaction.Handler() {
+                                                        @Override
+                                                        public Transaction.Result doTransaction(MutableData mutableData) {
+                                                            if(mutableData.getValue(Long.class)==null){
+                                                                mutableData.setValue(0L);
+                                                            }else if(mutableData.getValue(Long.class)!=0){
+                                                                mutableData.setValue(mutableData.getValue(Long.class)-1L);
+                                                            }
+                                                            return Transaction.success(mutableData);
+                                                        }
+
+                                                        @Override
+                                                        public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+
+                                                        }
+                                                    });
                                                     mDatabaseRootReference.child("users").child(paymentFirebase.getUserPhoneNumber()).child(paymentFirebase.getUserFirebaseId())
                                                             .child("groups").child(groupId).child("expenses").child(expenseId).child("timestamp").setValue(timestamp);
                                                     mDatabaseRootReference.child("users").child(paymentFirebase.getUserPhoneNumber()).child(paymentFirebase.getUserFirebaseId())
@@ -474,6 +509,19 @@ public class ContestExpenseActivity extends BaseActivity {
 
             }
 
+            String oldToPayString = CostUtil.replaceDecimalComma(mOldToPay.getText().toString());
+            if(oldToPayString==null || oldToPayString.isEmpty() || !CostUtil.isParsableAsDouble(oldToPayString) || Double.valueOf(oldToPayString).equals(Double.valueOf(newToPayString))){
+                mNewToPay.setError(getString(R.string.err_msg_equal_amount));
+                requestFocus(mNewToPay);
+                Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                // Vibrate for 250 milliseconds
+                vibrator.vibrate(250);
+                focusRequest = true;
+
+
+            }
+
+
             if(mMotivationEditText.getText().toString().isEmpty()){
                 mMotivationEditText.setError(getString(R.string.err_motivation));
                 if(!focusRequest) {
@@ -508,7 +556,24 @@ public class ContestExpenseActivity extends BaseActivity {
                         Long timestamp = -1*System.currentTimeMillis();
                         for(PaymentFirebase paymentFirebase : paymentFirebaseList){
                             mDatabaseRootReference.child("users").child(paymentFirebase.getUserPhoneNumber()).child(paymentFirebase.getUserFirebaseId())
-                                                .child("groups").child(groupId).child("timestamp").setValue(null);
+                                                .child("groups").child(groupId).child("timestamp").setValue(timestamp);
+                            mDatabaseRootReference.child("users").child(paymentFirebase.getUserPhoneNumber()).child(paymentFirebase.getUserFirebaseId())
+                                    .child("groups").child(groupId).child("contestedExpensesCounter").runTransaction(new Transaction.Handler() {
+                                @Override
+                                public Transaction.Result doTransaction(MutableData mutableData) {
+                                    if(mutableData.getValue(Long.class)==null){
+                                        mutableData.setValue(1L);
+                                    }else{
+                                        mutableData.setValue(mutableData.getValue(Long.class)+1L);
+                                    }
+                                    return Transaction.success(mutableData);
+                                }
+
+                                @Override
+                                public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+
+                                }
+                            });
                             mDatabaseRootReference.child("users").child(paymentFirebase.getUserPhoneNumber()).child(paymentFirebase.getUserFirebaseId())
                                     .child("groups").child(groupId).child("expenses").child(expenseId).child("timestamp").setValue(timestamp);
                             mDatabaseRootReference.child("users").child(paymentFirebase.getUserPhoneNumber()).child(paymentFirebase.getUserFirebaseId())
