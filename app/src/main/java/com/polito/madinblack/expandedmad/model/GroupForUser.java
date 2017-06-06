@@ -12,6 +12,7 @@ public class GroupForUser {
     private String  id;
     private Long    size;
     private Long    newExpenses;
+    private Long    contestedExpensesCounter;
     private Long    timestamp;
 
     public GroupForUser(){
@@ -23,6 +24,7 @@ public class GroupForUser {
         this.size        = group.getSize();
         this.id          = group.getId();
         this.newExpenses = 0L;
+        this.contestedExpensesCounter = 0L;
 
     }
 
@@ -31,6 +33,7 @@ public class GroupForUser {
         this.id = id;
         this.size = size;
         this.newExpenses = newExpenses;
+        this.contestedExpensesCounter = 0L;
     }
 
     public String getName(){ return name; }
@@ -58,6 +61,18 @@ public class GroupForUser {
 
     public void setTimestamp() {
         this.timestamp = -1*System.currentTimeMillis();
+    }
+
+    public void setTimestamp(Long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public Long getContestedExpensesCounter() {
+        return contestedExpensesCounter;
+    }
+
+    public void setContestedExpensesCounter(Long contestedExpensesCounter) {
+        this.contestedExpensesCounter = contestedExpensesCounter;
     }
 
 

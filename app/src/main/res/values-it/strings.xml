@@ -258,5 +258,6 @@
     <string name="expense_image_already_set">Non è possibile modificare l\'immagine precedentemente inserita</string>
     <string name="expense_not_added_by_me">Non è possibile modificare l\'immagine di una spesa creata da altri partecipanti</string>
     <string name="no_group_available">Nessun gruppo disponibile. Puoi crearne uno nuovo dal menu ☰.</string>
+    <string name="err_msg_equal_amount">Stesso valore di prima</string>
 
 </resources>
