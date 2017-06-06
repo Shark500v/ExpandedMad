@@ -19,6 +19,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -145,8 +146,6 @@ public class ExpenseFillData extends AppCompatActivity {
 
        //inputAmount.setFilters(new InputFilter[] { new DecimalDigitsInputFilter(2)});
 
-
-
         users = new ArrayList<>();
 
         mStorage = FirebaseStorage.getInstance().getReference();
@@ -154,9 +153,6 @@ public class ExpenseFillData extends AppCompatActivity {
         Intent beginner = getIntent();
         groupID = beginner.getStringExtra("groupIndex");   //id del gruppo, che devo considerare
         groupName = beginner.getStringExtra("groupName");
-
-        //this remove focus from edit text when activity starts
-        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         //show current date
         showDate(new Date());
@@ -183,7 +179,6 @@ public class ExpenseFillData extends AppCompatActivity {
             }
 
         });
-
 
         inputRoundedCurrency.setText(MyApplication.getCurrencyISOFavorite().toString());
 
@@ -240,7 +235,9 @@ public class ExpenseFillData extends AppCompatActivity {
             }
         });
 
-
+        requestFocus(inputName);
+        //this remove focus from edit text when activity starts
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     @Override
@@ -559,7 +556,7 @@ public class ExpenseFillData extends AppCompatActivity {
         }
     }
 
-    public Bitmap getThumbnail(Uri uri) throws FileNotFoundException, IOException{
+    public Bitmap getThumbnail(Uri uri) throws IOException{
         InputStream input = this.getContentResolver().openInputStream(uri);
 
         BitmapFactory.Options onlyBoundsOptions = new BitmapFactory.Options();
@@ -615,6 +612,8 @@ public class ExpenseFillData extends AppCompatActivity {
         } else {
             try {
                 amount = Double.valueOf(amountS);
+                if(amount == 0)
+                    throw new NumberFormatException();
             } catch (NumberFormatException ex) {
                 inputLayoutAmount.setError(getString(R.string.err_msg_amount));
                 requestFocus(inputAmount);
@@ -632,7 +631,7 @@ public class ExpenseFillData extends AppCompatActivity {
         if(index == 0){
             inputLayoutTag.setError(getString(R.string.err_msg_tag));
             requestFocus(tag_spinner);
-            scrollView.scrollTo(0,250);
+            scrollView.scrollTo(0,300);
             return false;
         } else {
             inputLayoutTag.setErrorEnabled(false);
@@ -869,10 +868,10 @@ public class ExpenseFillData extends AppCompatActivity {
 
 
     //questa classe la usa per fare il managing della lista che deve mostrare
-    public class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
+    private class SimpleItemRecyclerViewAdapter extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
 
-        public SimpleItemRecyclerViewAdapter(List<Payment> payments) {
+        private SimpleItemRecyclerViewAdapter(List<Payment> payments) {
             mValues = payments;
         }
 
@@ -909,13 +908,13 @@ public class ExpenseFillData extends AppCompatActivity {
 
         //questa è una classe di supporto che viene usata per creare la vista a schermo, non ho ben capito come funziona
         public class ViewHolder extends RecyclerView.ViewHolder {
-            public final View mView;
-            public final TextView mIdView;
-            public final TextView mNumber;
-            public final EditText partition;
-            public final Button plus;
-            public final Button minus;
-            public final TextView paymentSymbol;
+            private final View mView;
+            private final TextView mIdView;
+            private final TextView mNumber;
+            private final EditText partition;
+            private final Button plus;
+            private final Button minus;
+            private final TextView paymentSymbol;
 
             public Payment mItem;
 
