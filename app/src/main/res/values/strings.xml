@@ -253,6 +253,6 @@
     <string name="no_movements">No movements yet</string>
     <string name="expense_image_already_set">You cannot modify an already set expense image</string>
     <string name="expense_not_added_by_me">You cannot modify an image of an expense created by other members</string>
-    <string name="no_group_available">No group available. Create a new one from the ☰ menu.</string>
+    <string name="no_group_available">No group available. Create a new one from the ☰ menu</string>
     <string name="err_msg_equal_amount">Same value as before</string>
 </resources>
