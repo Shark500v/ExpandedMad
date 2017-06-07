@@ -46,15 +46,16 @@ public class RecyclerViewAdapterUsers extends RecyclerView.Adapter<RecyclerViewA
     private Context mContext;
     private ValueEventListener mEventListener;
     private String mGroupId;
+    private boolean mFlag;
 
     private static final String TAG = "MyBalanceActivity";
 
-    public RecyclerViewAdapterUsers(Context ct, Query dr, String groupId) {
+    public RecyclerViewAdapterUsers(Context ct, Query dr, String groupId, boolean flag) {
 
         dataref = dr;
         mContext = ct;
         mGroupId = groupId;
-
+        mFlag = flag;
         // Create child event listener
         // [START child_event_listener_recycler]
         ValueEventListener eventListener = new ValueEventListener() {
@@ -128,28 +129,29 @@ public class RecyclerViewAdapterUsers extends RecyclerView.Adapter<RecyclerViewA
             }
         });
 
-        holder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Context context = v.getContext();
-                Intent intent = new Intent(context, BalanceDetailActivity.class);
+        if(mFlag) {
+            holder.mView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Context context = v.getContext();
+                    Intent intent = new Intent(context, BalanceDetailActivity.class);
 
-                String [] nameSurname = holder.mItem.getFullName().split(" ");
-                String name;
-                if(nameSurname[0]!=null && !nameSurname[0].isEmpty())
-                    name = nameSurname[0];
-                else
-                    name = nameSurname[1];
-                intent.putExtra(BalanceDetailActivity.ARG_USER_BALANCE_NAME, name);
-                intent.putExtra(BalanceDetailActivity.ARG_GROUP_ID, mGroupId);
-                intent.putExtra(BalanceDetailActivity.ARG_BALANCE_ID, holder.mId);
-                intent.putExtra(BalanceDetailActivity.ARG_BALANCE_CURRENCY, holder.mItem.getCurrencyISO().name());
-                context.startActivity(intent);
+                    String[] nameSurname = holder.mItem.getFullName().split(" ");
+                    String name;
+                    if (nameSurname[0] != null && !nameSurname[0].isEmpty())
+                        name = nameSurname[0];
+                    else
+                        name = nameSurname[1];
+                    intent.putExtra(BalanceDetailActivity.ARG_USER_BALANCE_NAME, name);
+                    intent.putExtra(BalanceDetailActivity.ARG_GROUP_ID, mGroupId);
+                    intent.putExtra(BalanceDetailActivity.ARG_BALANCE_ID, holder.mId);
+                    intent.putExtra(BalanceDetailActivity.ARG_BALANCE_CURRENCY, holder.mItem.getCurrencyISO().name());
+                    context.startActivity(intent);
 
 
-            }
-        });
-
+                }
+            });
+        }
         /*mStorageReference = FirebaseStorage.getInstance().getReference().child("users").child(mUsersIds.get(position)).child("userProfilePicture.jpg");
         mStorageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override

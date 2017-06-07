@@ -622,7 +622,7 @@ public class TabView extends AppCompatActivity {
         @Override
         public void onStart(){
             super.onStart();
-            adapter = new RecyclerViewAdapterUsers(getContext(), mDatabaseBalancesQuery, groupIndex);
+            adapter = new RecyclerViewAdapterUsers(getContext(), mDatabaseBalancesQuery, groupIndex, true);
             recyclerView = (RecyclerView) rootView.findViewById(R.id.item_list);
             recyclerView.setAdapter(adapter);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
