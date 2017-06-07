@@ -726,6 +726,7 @@ public class ExpenseFillData extends AppCompatActivity {
             //hide with animation
             layoutRounded.startAnimation(AnimationUtils.loadAnimation(ExpenseFillData.this, android.R.anim.fade_out));
             layoutRounded.setVisibility(View.GONE);
+            roundedAmount = 0d;
         }
         isRounded = false;
         return netAmount;
