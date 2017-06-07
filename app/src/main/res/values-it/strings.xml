@@ -22,10 +22,10 @@
     </string-array>
     <string-array name="tags">
         <item name="select_tag">Seleziona tag</item>
-        <item name="water_bill">Bolletta_Acqua</item>
-        <item name="light_bill">Bolletta_Luce</item>
-        <item name="gas_bill">Bolletta_Gas</item>
-        <item name="flight">Volo_Aereo</item>
+        <item name="water_bill">Bolletta acqua</item>
+        <item name="light_bill">Bolletta luce</item>
+        <item name="gas_bill">Bolletta gas</item>
+        <item name="flight">Volo aereo</item>
         <item name="fuel">Carburante</item>
         <item name="drinks">Bevande</item>
         <item name="food">Alimentari</item>
@@ -35,10 +35,10 @@
     <string-array name="tagsForGraph">
         <item name="select_tag">Seleziona tag</item>
         <item name="all_tags">Tutti i tag</item>
-        <item name="water_bill">Bolletta_Acqua</item>
-        <item name="light_bill">Bolletta_Luce</item>
-        <item name="gas_bill">Bolletta_Gas</item>
-        <item name="flight">Volo_Aereo</item>
+        <item name="water_bill">Bolletta acqua</item>
+        <item name="light_bill">Bolletta luce</item>
+        <item name="gas_bill">Bolletta gas</item>
+        <item name="flight">Volo aereo</item>
         <item name="fuel">Carburante</item>
         <item name="drinks">Bevande</item>
         <item name="food">Alimentari</item>
