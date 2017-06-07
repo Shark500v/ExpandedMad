@@ -1,8 +1,6 @@
 package com.polito.madinblack.expandedmad.model;
 
 
-import android.util.Log;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -263,13 +261,14 @@ public class Expense {
         final Map<String, Double> toUpdate = new HashMap<>();
 
         /*Initiaze the map*/
-        for(Payment payment: paymentList)
-            if(!(payment.getUserFirebaseId().equals(paidByFirebaseId)))
-                if(state==State.TRANSFER)
-                    toUpdate.put(payment.getUserPhoneNumber()+expenseKey, -payment.getCredit());
+        for(Payment payment: paymentList) {
+            if (!(payment.getUserFirebaseId().equals(paidByFirebaseId))) {
+                if (state == State.TRANSFER)
+                    toUpdate.put(payment.getUserPhoneNumber() + expenseKey, -payment.getCredit());
                 else
-                    toUpdate.put(payment.getUserPhoneNumber()+expenseKey, payment.getDebit());
-
+                    toUpdate.put(payment.getUserPhoneNumber() + expenseKey, payment.getDebit());
+            }
+        }
 
         for(Payment payment : paymentList){
 
