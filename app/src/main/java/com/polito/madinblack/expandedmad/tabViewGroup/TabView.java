@@ -574,8 +574,6 @@ public class TabView extends AppCompatActivity {
 
             recyclerView.setAdapter(adapter);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
-
-
         }
 
         @Override
