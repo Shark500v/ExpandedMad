@@ -176,7 +176,7 @@
     <string name="history_expense_part2">. Cost : </string>
     <string name="history_payment_part1">has paid to</string>
     <string name="history_payment_part2">. Cost :</string>
-    <string name="history_new_memeber">has joined to the group.</string>
+    <string name="history_new_memeber">has joined the group.</string>
     <string name="history_contest_expense">has contested the expense</string>
     <string name="history_cancellation_contest">has delted the contest of expense</string>
     <string name="no_detail">No detail available</string>
@@ -241,7 +241,7 @@
     <string name="delete_contention">Delete Contention</string>
     <string name="contention_confermed">Contention confermed</string>
     <string name="contention_deleted">Contention deleted</string>
-    <string name="transfer">(Transfer)</string>
+    <string name="transfer">(Cancellation)</string>
     <string name="name_not_modified">Group name not modified</string>
     <string name="created_by">Created by</string>
     <string name="italy">Italy</string>
