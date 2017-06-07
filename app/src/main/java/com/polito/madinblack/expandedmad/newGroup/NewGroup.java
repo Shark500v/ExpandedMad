@@ -71,8 +71,6 @@ public class NewGroup extends AppCompatActivity {
     private DatabaseReference mDatabaseReferenceRoot;
     private StorageReference mStorage;
     private DatabaseReference mDatabaseForUrl;
-    private ValueEventListener mValueEventListener;
-    private DatabaseReference mDatabaseUsersReference;
     private List<SelectUser> groupM;
     private List<SelectUser> invite;
     private List<SelectUser> realMembers = new ArrayList<>();
@@ -85,7 +83,6 @@ public class NewGroup extends AppCompatActivity {
     private byte[] imageData;
     private boolean visible = false; //boolean per visualizzazione a schermo intero
     private String url;
-    private final Map<String,String> usersInDatabase = new HashMap<>();
     private String pictureImagePath;
 
     private RecyclerView recyclerView;
@@ -105,8 +102,6 @@ public class NewGroup extends AppCompatActivity {
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
-
         mStorage = FirebaseStorage.getInstance().getReference();
 
         groupM = (List<SelectUser>) getIntent().getSerializableExtra("Group Members");
@@ -117,26 +112,6 @@ public class NewGroup extends AppCompatActivity {
         btn_group_image = (CircleImageView)findViewById(R.id.btn_group_image);
         fullScreen = (ImageView)findViewById(R.id.full_screen);
 
-        mDatabaseUsersReference = FirebaseDatabase.getInstance().getReference().child("users");
-
-        mValueEventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(SelectUser selectUser : realMembers){
-                    String phone = selectUser.getPhone();
-                    String firebaseId = selectUser.getFirebaseId();
-                    User user = dataSnapshot.child(phone).child(firebaseId).getValue(User.class);
-                    String name = user.getName();
-                    String surname = user.getSurname();
-                    usersInDatabase.put(firebaseId, name + "," + surname);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        };
 
         //controllo per rotazione dello schermo che richiama la onCreate
         //serve per non far sparire l'immagine caricata nella ImageView quando ruoto il cell
@@ -212,14 +187,11 @@ public class NewGroup extends AppCompatActivity {
         }else {
             realMembers.addAll(groupM);
         }
-        if(mValueEventListener!=null)
-            mDatabaseUsersReference.addValueEventListener(mValueEventListener);
+
     }
 
     @Override
     protected void onStop() {
-        if(mValueEventListener!=null)
-            mDatabaseUsersReference.removeEventListener(mValueEventListener);
         super.onStop();
     }
 
@@ -346,39 +318,17 @@ public class NewGroup extends AppCompatActivity {
 
             for(SelectUser selectUser : realMembers){
 
-                /*String name = selectUser.getName();
-                String[] items = new String[2];
-                if(name.contains(" ")){
-                    items = name.split(" ");
-                    if(items[0] == null)
-                        items[0] = " ";
-                    if(items[1] == null) {
-                        items[1] = " ";
-                    }
-                }else if(name.length() >= 1){
-                    items[0] = name;
-                    items[1] = " ";
-                }else{
-                    items[0] = " ";
-                    items[1] = " ";
-                }*/
-                String nameSurname = usersInDatabase.get(selectUser.getFirebaseId());
-                String[] items = new String[2];
-                if(nameSurname.contains(",")) {
-                    items = nameSurname.split(",");
-                    if (items[0] == null)
-                        items[0] = " ";
-                    if (items[1] == null)
-                        items[1] = " ";
-                }
+                String name = selectUser.getName();
+                if(name==null)
+                    name ="";
+                String surname = selectUser.getSurname();
+                if(surname==null)
+                    surname ="";
 
-
-
-                UserForGroup userForGroup = new UserForGroup(selectUser.getPhone(), selectUser.getFirebaseId(), items[0], items[1]);
+                UserForGroup userForGroup = new UserForGroup(selectUser.getPhone(), selectUser.getFirebaseId(), name, surname);
                 for(int i=0; i<userForGroupList.size(); i++){
                     userForGroupList.get(i).connect(userForGroup);
                     userForGroup.connect(userForGroupList.get(i));
-
                 }
                 userForGroupList.add(userForGroup);
             }

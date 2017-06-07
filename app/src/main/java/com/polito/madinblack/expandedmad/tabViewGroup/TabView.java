@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -74,6 +75,10 @@ public class TabView extends AppCompatActivity {
     private FloatingActionButton fab;
     private Toolbar toolbar;
     private String groupImage;
+    private ValueEventListener valueEventListener;
+    private ValueEventListener valueEventListener2;
+    private DatabaseReference mDatabaseNewExpenseReference;
+    private DatabaseReference mDatabaseNewMessageReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,8 +92,8 @@ public class TabView extends AppCompatActivity {
         mDatabaseBalancesQuery = mDatabaseBalancesReference.orderByChild("fullName");
         mDatabaseExpenseListReference = FirebaseDatabase.getInstance().getReference().child("users/"+MyApplication.getUserPhoneNumber()+"/"+MyApplication.getFirebaseId()+"/groups/"+groupIndex+"/expenses");
         mDatabaseExpenseListQuery = mDatabaseExpenseListReference.orderByChild("timestamp");
-
-
+        mDatabaseNewExpenseReference = FirebaseDatabase.getInstance().getReference().child("users/" + MyApplication.getUserPhoneNumber() + "/" + MyApplication.getFirebaseId() + "/groups/" + groupIndex + "/newExpenses");
+        mDatabaseNewMessageReference = FirebaseDatabase.getInstance().getReference().child("users/" + MyApplication.getUserPhoneNumber() + "/" + MyApplication.getFirebaseId() + "/groups/" + groupIndex + "/newMessages");
         //toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(groupName);
@@ -101,6 +106,8 @@ public class TabView extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+
+
 
         //check what fragment to charge
         int index = getIntent().getExtras().getInt("request");
@@ -134,6 +141,81 @@ public class TabView extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+        valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(mViewPager.getCurrentItem()==0){
+                    if(dataSnapshot.exists())
+                        mSectionsPagerAdapter.updateTitleData(dataSnapshot.getValue(Long.class).intValue(), -1);
+                    else
+                        mSectionsPagerAdapter.updateTitleData(0, -1);
+                }else if(mViewPager.getCurrentItem()==1){
+                    mDatabaseNewExpenseReference.runTransaction(new Transaction.Handler() {
+
+                        @Override
+                        public Transaction.Result doTransaction(MutableData currentData) {
+                            if((Long) currentData.getValue()!=0)
+                                currentData.setValue(0L);
+
+                            return Transaction.success(currentData);
+                        }
+
+                        @Override
+                        public void onComplete(DatabaseError databaseError,
+                                               boolean committed, DataSnapshot currentData) {
+                        }
+                    });
+
+                }
+
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        valueEventListener2 = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(mViewPager.getCurrentItem()==1){
+                    if(dataSnapshot.exists())
+                        mSectionsPagerAdapter.updateTitleData(-1, dataSnapshot.getValue(Long.class).intValue());
+                    else
+                        mSectionsPagerAdapter.updateTitleData(-1, 0);
+                }else if(mViewPager.getCurrentItem()==2){
+                    mDatabaseNewMessageReference.runTransaction(new Transaction.Handler() {
+
+                        @Override
+                        public Transaction.Result doTransaction(MutableData currentData) {
+                            if((Long) currentData.getValue()!=0)
+                                currentData.setValue(0L);
+
+                            return Transaction.success(currentData);
+                        }
+
+                        @Override
+                        public void onComplete(DatabaseError databaseError,
+                                               boolean committed, DataSnapshot currentData) {
+                        }
+                    });
+
+                }
+
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
     }
 
     //show the toolbar
@@ -144,6 +226,27 @@ public class TabView extends AppCompatActivity {
         appBarLayout.setExpanded(true, true);
     }*/
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if(mDatabaseNewExpenseReference!=null && valueEventListener!=null)
+            mDatabaseNewExpenseReference.addValueEventListener(valueEventListener);
+        if(mDatabaseNewMessageReference!=null && valueEventListener2!=null)
+            mDatabaseNewMessageReference.addValueEventListener(valueEventListener2);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        if(mDatabaseNewExpenseReference!=null && valueEventListener!=null)
+            mDatabaseNewExpenseReference.removeEventListener(valueEventListener);
+
+        if(mDatabaseNewMessageReference!=null && valueEventListener2!=null)
+            mDatabaseNewMessageReference.removeEventListener(valueEventListener2);
+
+    }
 
     @Override
     protected void onResume() {
@@ -163,8 +266,43 @@ public class TabView extends AppCompatActivity {
                     fab.hide();
                 } else if (position == 1) {
                     fab.show();
+                    mDatabaseNewExpenseReference.runTransaction(new Transaction.Handler() {
+
+                        @Override
+                        public Transaction.Result doTransaction(MutableData currentData) {
+                            if((Long) currentData.getValue()!=0)
+                                currentData.setValue(0L);
+
+                            return Transaction.success(currentData);
+                        }
+
+                        @Override
+                        public void onComplete(DatabaseError databaseError,
+                                               boolean committed, DataSnapshot currentData) {
+                            if(committed)
+                               mSectionsPagerAdapter.updateTitleData(0, -1);
+                        }
+                    });
+
                 } else if (position == 2) {
                     fab.hide();
+                    mDatabaseNewMessageReference.runTransaction(new Transaction.Handler() {
+
+                        @Override
+                        public Transaction.Result doTransaction(MutableData currentData) {
+                            if((Long) currentData.getValue()!=0)
+                                currentData.setValue(0L);
+
+                            return Transaction.success(currentData);
+                        }
+
+                        @Override
+                        public void onComplete(DatabaseError databaseError,
+                                               boolean committed, DataSnapshot currentData) {
+                            if(committed)
+                                mSectionsPagerAdapter.updateTitleData(-1, 0);
+                        }
+                    });
                 }
             }
 
@@ -175,29 +313,11 @@ public class TabView extends AppCompatActivity {
         });
     }
 
+
+
     @Override
     public void onBackPressed()
     {
-        DatabaseReference mDatabaseNewExpenseReference = FirebaseDatabase.getInstance().getReference().child("users/" + MyApplication.getUserPhoneNumber() + "/" + MyApplication.getFirebaseId() + "/groups/" + groupIndex + "/newExpenses");
-
-        mDatabaseNewExpenseReference.runTransaction(new Transaction.Handler() {
-
-            @Override
-            public Transaction.Result doTransaction(MutableData currentData) {
-                if((Long) currentData.getValue()!=0)
-                    currentData.setValue(0L);
-
-                return Transaction.success(currentData);
-            }
-
-            @Override
-            public void onComplete(DatabaseError databaseError,
-                                   boolean committed, DataSnapshot currentData) {
-                //This method will be called once with the results of the transaction.
-                //Update remove the user from the group
-            }
-        });
-
         navigateUpTo(new Intent(this, GroupListActivity.class));    //definisco il parente verso cui devo tornare indietro
     }
 
@@ -219,25 +339,6 @@ public class TabView extends AppCompatActivity {
                 return true;
 
             case R.id.home:
-                DatabaseReference mDatabaseNewExpenseReference = FirebaseDatabase.getInstance().getReference().child("users/" + MyApplication.getUserPhoneNumber() + "/" + MyApplication.getFirebaseId() + "/groups/" + groupIndex + "/newExpenses");
-
-                mDatabaseNewExpenseReference.runTransaction(new Transaction.Handler() {
-
-                    @Override
-                    public Transaction.Result doTransaction(MutableData currentData) {
-                        if((Long) currentData.getValue()!=0)
-                            currentData.setValue(0L);
-
-                        return Transaction.success(currentData);
-                    }
-
-                    @Override
-                    public void onComplete(DatabaseError databaseError,
-                                           boolean committed, DataSnapshot currentData) {
-                        //This method will be called once with the results of the transaction.
-                        //Update remove the user from the group
-                    }
-                });
                 navigateUpTo(new Intent(this, GroupListActivity.class));    //definisco il parente verso cui devo tornare indietro
                 return true;
 
@@ -268,6 +369,8 @@ public class TabView extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
 
     public static class ChatFragment extends Fragment {
 
@@ -432,39 +535,6 @@ public class TabView extends AppCompatActivity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            //upload newExpense
-            mDatabaseNewExpenseReference = FirebaseDatabase.getInstance().getReference().child("users/" + MyApplication.getUserPhoneNumber() + "/" + MyApplication.getFirebaseId() + "/groups/" + groupIndex + "/newExpenses");
-            valueEventListener = new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    mDatabaseNewExpenseReference.runTransaction(new Transaction.Handler() {
-
-                        @Override
-                        public Transaction.Result doTransaction(MutableData currentData) {
-                            if((Long) currentData.getValue()!=0)
-                                currentData.setValue(0L);
-
-                            return Transaction.success(currentData);
-                        }
-
-                        @Override
-                        public void onComplete(DatabaseError databaseError,
-                                               boolean committed, DataSnapshot currentData) {
-                            //This method will be called once with the results of the transaction.
-                            //Update remove the user from the group
-                        }
-                    });
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            };
-
-
-
-
         }
 
         @Override
@@ -479,11 +549,8 @@ public class TabView extends AppCompatActivity {
         public void onStart(){
             super.onStart();
 
-            if(mDatabaseNewExpenseReference!=null && valueEventListener!=null)
-                mDatabaseNewExpenseReference.addValueEventListener(valueEventListener);
-
-            adapter = new RecyclerViewAdapter(getContext(), mDatabaseExpenseListQuery);
             recyclerView = (RecyclerView) rootView.findViewById(R.id.expense_list2);
+            adapter = new RecyclerViewAdapter(getContext(), mDatabaseExpenseListQuery, recyclerView);
 
             final FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
             final ViewPager vp = (ViewPager) getActivity().findViewById(R.id.container);
@@ -506,14 +573,13 @@ public class TabView extends AppCompatActivity {
 
             recyclerView.setAdapter(adapter);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+
         }
 
         @Override
         public void onStop() {
             super.onStop();
-            if(mDatabaseNewExpenseReference!=null && valueEventListener!=null)
-                mDatabaseNewExpenseReference.removeEventListener(valueEventListener);
-
             // Clean up comments listener
             if(adapter!=null)
                 adapter.cleanupListener();
@@ -527,6 +593,8 @@ public class TabView extends AppCompatActivity {
         RecyclerViewAdapterUsers adapter;
         RecyclerView recyclerView;
         View rootView;
+        ValueEventListener valueEventListener;
+        DatabaseReference mDatabaseNewExpenseReference;
 
         public MyBalanceFragment() {
             // Required empty public constructor
@@ -548,26 +616,24 @@ public class TabView extends AppCompatActivity {
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
             rootView = inflater.inflate(R.layout.user_list_fragment, container, false);
-
             return rootView;
         }
 
         @Override
         public void onStart(){
             super.onStart();
-
             adapter = new RecyclerViewAdapterUsers(getContext(), mDatabaseBalancesQuery, groupIndex);
             recyclerView = (RecyclerView) rootView.findViewById(R.id.item_list);
             recyclerView.setAdapter(adapter);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
         }
 
+
+
         @Override
         public void onStop() {
             super.onStop();
-
             // Clean up comments listener
             if(adapter!=null)
                 adapter.cleanupListener();
@@ -575,10 +641,15 @@ public class TabView extends AppCompatActivity {
     }
 
     //questa classe gestisce le singole pagine del tab view dentro le quali instazio fragment diversi
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
+
+        private int expenseNotification;
+        private int messageNotification;
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
+            expenseNotification = 0;
+
         }
 
         //usato per instanziare fragment diversi per ogni pagina del tabview
@@ -603,11 +674,21 @@ public class TabView extends AppCompatActivity {
             }
         }
 
+        public void updateTitleData(int expenseNotification, int messageNotification) {
+            if(expenseNotification >= 0)
+                this.expenseNotification = expenseNotification;
+            if(messageNotification >= 0)
+                this.messageNotification = messageNotification;
+            notifyDataSetChanged();
+        }
+
+
         @Override
         public int getCount() {
             // Show 3 total pages.
             return 3;
         }
+
 
         @Override
         public CharSequence getPageTitle(int position) {
@@ -615,9 +696,9 @@ public class TabView extends AppCompatActivity {
                 case 0:
                     return getString(R.string.my_balance);
                 case 1:
-                    return getString(R.string.expenses);
+                    return expenseNotification ==0 ? getString(R.string.expenses) : getString(R.string.expenses)+" ("+expenseNotification+")";
                 case 2:
-                    return getString(R.string.chat);
+                    return messageNotification == 0 ? getString(R.string.chat) : getString(R.string.chat)+" ("+messageNotification+")";
             }
             return null;
         }

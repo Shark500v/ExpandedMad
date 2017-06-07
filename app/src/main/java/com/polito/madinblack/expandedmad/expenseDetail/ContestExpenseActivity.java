@@ -296,18 +296,15 @@ public class ContestExpenseActivity extends BaseActivity {
 
                                                 }
 
-                                            }else{
-                                                return Transaction.abort();
                                             }
-
-
                                             return Transaction.success(mutableData);
 
                                         }
 
                                         @Override
                                         public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
-                                            if(b){
+                                            Expense.State expenseState = dataSnapshot.getValue(Expense.State.class);
+                                            if(b && expenseState== Expense.State.ONGOING){
                                                 setResult(RESULT_DELETED);
                                                 hideProgressDialog();
 
@@ -391,18 +388,15 @@ public class ContestExpenseActivity extends BaseActivity {
                                                 });
 
 
-                                            }else{
-                                                return Transaction.abort();
                                             }
-
-
                                             return Transaction.success(mutableData);
 
                                         }
 
                                         @Override
                                         public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
-                                            if(b){
+                                            Expense.State expenseState = dataSnapshot.getValue(Expense.State.class);
+                                            if(b && expenseState== Expense.State.REJECTED){
                                                 setResult(RESULT_OK);
                                                 hideProgressDialog();
                                                 finish();
@@ -582,8 +576,6 @@ public class ContestExpenseActivity extends BaseActivity {
 
 
 
-                    }else{
-                        return Transaction.abort();
                     }
 
 
@@ -593,7 +585,8 @@ public class ContestExpenseActivity extends BaseActivity {
 
                 @Override
                 public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
-                    if(b){
+                    Expense.State expenseState = dataSnapshot.getValue(Expense.State.class);
+                    if(b && expenseState== Expense.State.CONTESTED){
                         setResult(RESULT_OK);
                         hideProgressDialog();
 

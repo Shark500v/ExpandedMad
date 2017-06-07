@@ -38,6 +38,7 @@ public class SelectContactToAdd extends AppCompatActivity {
     private List<SelectUser> invite = new ArrayList<>();    //used to invite new membres to join the app
     private List<String> usersInGroup = new ArrayList<>();
     private final Map<String,String> usersInDatabase = new HashMap<>();
+    private Map<String, SelectUser> selectUserToAdd = new HashMap<>();
     private DatabaseReference mDatabaseReference;
     private DatabaseReference mDatabaseReferenceUserInGroup;
     private ValueEventListener mValueEventListener;
@@ -101,17 +102,17 @@ public class SelectContactToAdd extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if(mValueEventListener != null){
-            mDatabaseReferenceUserInGroup.addValueEventListener(mValueEventListener);
-        }
+        //if(mValueEventListener != null){
+         //   mDatabaseReferenceUserInGroup.addValueEventListener(mValueEventListener);
+        //}
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        if(mValueEventListener != null){
-            mDatabaseReferenceUserInGroup.removeEventListener(mValueEventListener);
-        }
+        //if(mValueEventListener != null){
+          //  mDatabaseReferenceUserInGroup.removeEventListener(mValueEventListener);
+        //}
     }
 
     @Override
@@ -143,26 +144,32 @@ public class SelectContactToAdd extends AppCompatActivity {
 
                 counter = new AtomicInteger(groupM.size());
                 invite.clear();
+                selectUserToAdd.clear();
 
-                for(final SelectUser selectUser : groupM){
+                for(SelectUser selectUser : groupM){
+                    selectUserToAdd.put(selectUser.getPhone(), selectUser);
+                }
+
+                for(SelectUser selectUser : groupM){
 
                     mDatabaseReference.child("users").child(selectUser.getPhone()).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
+                            String key = dataSnapshot.getKey();
                             if(!dataSnapshot.exists()){
                                 //groupM.remove(selectUser);
-                                invite.add(selectUser);
-                            }
-                            else{
+                                invite.add(selectUserToAdd.get(key));
+                            } else{
                                 for(DataSnapshot dataSnapshotChild : dataSnapshot.getChildren()){
                                     //int index = groupM.indexOf(selectUser);
                                     String userFirebaseId = dataSnapshotChild.getKey();
-                                    User user = dataSnapshot.child(userFirebaseId).getValue(User.class);
+                                    User user = dataSnapshotChild.getValue(User.class);
                                     String name = user.getName();
                                     String surname = user.getSurname();
-                                    selectUser.setFirebaseId(userFirebaseId);
+                                    selectUserToAdd.get(key).setFirebaseId(userFirebaseId);
+                                    selectUserToAdd.get(key).setName(name);
+                                    selectUserToAdd.get(key).setSurname(surname);
                                     //groupM.set(index, selectUser);
-                                    usersInDatabase.put(userFirebaseId, name + "," + surname);
                                 }
                             }
 
@@ -174,35 +181,16 @@ public class SelectContactToAdd extends AppCompatActivity {
                                 for(SelectUser selectUser : groupM) {
                                     if (!invite.contains(selectUser)){
 
-                                        /*String name = selectUser.getName();
-                                        String[] items = new String[2];
-                                        if(name.contains(" ")){
-                                            items = name.split(" ");
-                                            if(items[0] == null)
-                                                items[0] = " ";
-                                            if(items[1] == null) {
-                                                items[1] = " ";
-                                            }
-                                        }else if(name.length() >= 1){
-                                            items[0] = name;
-                                            items[1] = " ";
-                                        }else{
-                                            items[0] = " ";
-                                            items[1] = " ";
-                                        }*/
+                                        String name = selectUser.getName();
+                                        if(name==null)
+                                            name ="";
+                                        String surname = selectUser.getSurname();
+                                        if(surname==null)
+                                            surname ="";
 
-                                            String nameSurname = usersInDatabase.get(selectUser.getFirebaseId());
-                                        String[] items = new String[2];
-                                        if (nameSurname.contains(",")) {
-                                            items = nameSurname.split(",");
-                                            if (items[0] == null)
-                                                items[0] = " ";
-                                            if (items[1] == null)
-                                                items[1] = " ";
-                                        }
 
                                         if (selectUser.getFirebaseId() != null) {
-                                            UserForGroup userForGroup = new UserForGroup(selectUser.getPhone(), selectUser.getFirebaseId(), items[0], items[1]);
+                                            UserForGroup userForGroup = new UserForGroup(selectUser.getPhone(), selectUser.getFirebaseId(), name, surname);
                                             for (int i = 0; i < userForGroupList.size(); i++) {
                                                 userForGroupList.get(i).connect(userForGroup);
                                                 userForGroup.connect(userForGroupList.get(i));
@@ -214,16 +202,14 @@ public class SelectContactToAdd extends AppCompatActivity {
                                 }
 
                                 if(invite.isEmpty()) {
-                                    for(int i = 0; i < userForGroupList.size(); i++){
-                                        Group.writeUserToGroup(mDatabaseReference, groupId, groupName, userForGroupList.get(i).getFirebaseId(), userForGroupList.get(i).getPhoneNumber(), userForGroupList.get(i).getName(), userForGroupList.get(i).getSurname());
-                                    }
+                                    Group.writeUsersToGroup(mDatabaseReference, groupId, groupName, userForGroupList);
                                     Intent intent1 = new Intent(SelectContactToAdd.this, TabView.class);
                                     intent1.putExtra("groupIndex", groupId);
                                     intent1.putExtra("groupName", groupName);
                                     intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
                                     startActivity(intent1);
                                 }else {
-                                    //}else{
+
 
                                     //invito le persone che non sono ancora nel DB
                                     Bundle arguments = new Bundle();
@@ -236,7 +222,7 @@ public class SelectContactToAdd extends AppCompatActivity {
                                     fragment.setArguments(arguments);
                                     fragment.show(getSupportFragmentManager(), "InviteContacts");
                                 }
-                                //}
+
                             }
                         }
 
