@@ -1,245 +1,252 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp">
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="4dp"
-        android:id="@+id/generated_by_layout">
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/generated_by"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/generated_by_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:gravity="end"
-            tools:text="Alessandro Nicoletta" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/expense_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        android:layout_below="@+id/generated_by_layout">
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/expense_cost"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/expense_cost"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:gravity="end"
-            tools:text="55" />
-
-        <TextView
-            android:id="@+id/expense_currency"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:gravity="end"
-            tools:text="€" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/old_topay_layout"
-        android:layout_below="@+id/expense_layout"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/to_pay"
-            android:textSize="20sp"/>
-
-        <TextView
-            android:id="@+id/old_topay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:textSize="18sp"
-            android:textAlignment="textEnd"
-            tools:text="55" />
-
-        <TextView
-            android:id="@+id/old_topay_currency"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:gravity="end"
-            tools:text="€" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/currency_layout"
-        android:layout_below="@+id/old_topay_layout"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/currencyISO"
-            android:textSize="20sp"
-            android:layout_weight="1" />
-
-        <Spinner
-            android:id="@+id/currencyISO"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:layout_gravity="center" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/new_topay_layout"
-        android:layout_below="@+id/currency_layout"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/balance"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/new_to_pay"
-            android:textSize="20sp"/>
-
-        <EditText
-            android:id="@+id/new_topay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="0.00"
-            android:gravity="center"
-            android:inputType="numberDecimal"
-            android:digits="0123456789.,"
-            android:textSize="18sp"/>
-
-        <TextView
-            android:id="@+id/new_topay_currency"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:gravity="end"
-            tools:text="€" />
-
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/motivation_layout_after"
-        android:layout_below="@+id/new_topay_layout"
-        android:orientation="horizontal"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        >
-
-        <TextView
-            android:id="@+id/textView6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/motivation"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/motivation_after"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:gravity="center"
-            tools:text="Prova" />
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="4dp"
+            android:id="@+id/generated_by_layout">
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/generated_by"
+                android:textSize="20sp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/motivation_layout"
-        android:layout_below="@+id/motivation_layout_after"
-        android:orientation="horizontal"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        tools:visibility="visible"
-        >
+            <TextView
+                android:id="@+id/generated_by_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:gravity="end"
+                tools:text="Alessandro Nicoletta" />
 
-        <EditText
-            android:id="@+id/input_motivation"
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/expense_layout"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:inputType="textMultiLine"
-            android:gravity="top"
-            android:paddingTop="8dp"
-            android:paddingStart="8dp"
-            android:hint="@string/motivation_hint"
-            android:background="@layout/rounded_border_edittext"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/confirm_delete_button_layout"
-        android:layout_below="@+id/motivation_layout"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        tools:visibility="visible"
-        android:gravity="center">
-
-        <Button
-            android:id="@+id/confirm_delete_button"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_gravity="center"
-            tools:text = "Confirm Contention" />
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:layout_below="@+id/generated_by_layout">
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/expense_cost"
+                android:textSize="20sp" />
 
-</RelativeLayout>
+            <TextView
+                android:id="@+id/expense_cost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:gravity="end"
+                tools:text="55" />
+
+            <TextView
+                android:id="@+id/expense_currency"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:gravity="end"
+                tools:text="€" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/old_topay_layout"
+            android:layout_below="@+id/expense_layout"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/to_pay"
+                android:textSize="20sp"/>
+
+            <TextView
+                android:id="@+id/old_topay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textSize="18sp"
+                android:textAlignment="textEnd"
+                tools:text="55" />
+
+            <TextView
+                android:id="@+id/old_topay_currency"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:gravity="end"
+                tools:text="€" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/currency_layout"
+            android:layout_below="@+id/old_topay_layout"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/currencyISO"
+                android:textSize="20sp"
+                android:layout_weight="1" />
+
+            <Spinner
+                android:id="@+id/currencyISO"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:layout_gravity="center" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/new_topay_layout"
+            android:layout_below="@+id/currency_layout"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/balance"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/new_to_pay"
+                android:textSize="20sp"/>
+
+            <EditText
+                android:id="@+id/new_topay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="0.00"
+                android:gravity="center"
+                android:inputType="numberDecimal"
+                android:digits="0123456789.,"
+                android:textSize="18sp"/>
+
+            <TextView
+                android:id="@+id/new_topay_currency"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:gravity="end"
+                tools:text="€" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/motivation_layout_after"
+            android:layout_below="@+id/new_topay_layout"
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            >
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/motivation"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/motivation_after"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:gravity="center"
+                tools:text="Prova" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/motivation_layout"
+            android:layout_below="@+id/motivation_layout_after"
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            tools:visibility="visible"
+            >
+
+            <EditText
+                android:id="@+id/input_motivation"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:inputType="textMultiLine"
+                android:gravity="top"
+                android:paddingTop="8dp"
+                android:paddingStart="8dp"
+                android:hint="@string/motivation_hint"
+                android:background="@layout/rounded_border_edittext"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/confirm_delete_button_layout"
+            android:layout_below="@+id/motivation_layout"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/confirm_delete_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="center"
+                tools:text = "Confirm Contention" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</ScrollView>

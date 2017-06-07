@@ -18,6 +18,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_wallet"
         android:supportsRtl="true"
+        android:configChanges="orientation|screenSize|locale"
         android:name=".AppMain"
         android:theme="@style/AppTheme">
 
@@ -49,10 +50,10 @@
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation|screenSize|locale">
-        <intent-filter>
-            <action android:name="none" />
-            <category android:name="android.intent.category.MONKEY"/>
-        </intent-filter>
+            <intent-filter>
+                <action android:name="none" />
+                <category android:name="android.intent.category.MONKEY"/>
+            </intent-filter>
         </activity>
 
         <activity
