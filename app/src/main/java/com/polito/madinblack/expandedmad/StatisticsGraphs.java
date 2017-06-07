@@ -59,6 +59,7 @@ public class StatisticsGraphs extends AppCompatActivity {
     private Integer counter = 2;
     private Currency.CurrencyISO myCurrency;
     private String myCurrencySymbol;
+    private boolean loaded = false;
     CoordinatorLayout coordinatorLayout;
     List<String> tagsEn = new ArrayList<>();
     List<String> tagsIt = new ArrayList<>();
@@ -97,17 +98,18 @@ public class StatisticsGraphs extends AppCompatActivity {
         yearSelected = getString(R.string.select_year);
         tagSelected = getString(R.string.select_tag);
 
+        groupArray.add(getString(R.string.select_group)); //aggiungo all'array e alla mappa <groupName,groupId> il valore di default
+        groupArray.add(getString(R.string.all_groups));
+        groupMap.put(-1, getString(R.string.select_group));
+        groupMap.put(0, getString(R.string.select_group));
+        groupMap.put(1, getString(R.string.all_groups));
+
 
         mDatabaseGroupReference = FirebaseDatabase.getInstance().getReference().child("users").child(MyApplication.getUserPhoneNumber()).child(MyApplication.getFirebaseId()).child("groups").orderByChild("timestamp");
 
         mValueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                groupArray.add(getString(R.string.select_group)); //aggiungo all'array e alla mappa <groupName,groupId> il valore di default
-                groupArray.add(getString(R.string.all_groups));
-                groupMap.put(0, getString(R.string.select_group));
-                groupMap.put(1, getString(R.string.all_groups));
-
                 for (DataSnapshot groupSnapshot : dataSnapshot.getChildren()) {
                     GroupForUser groupForUser = groupSnapshot.getValue(GroupForUser.class);
                     String groupName = groupForUser.getName(); //prendo il groupForUser dal db e aggiungo i campi che mi servono all'array e alla mappa
@@ -120,6 +122,7 @@ public class StatisticsGraphs extends AppCompatActivity {
                 ArrayAdapter<String> groupAdapter = new ArrayAdapter<String>(StatisticsGraphs.this, android.R.layout.simple_spinner_item, groupArray);
                 groupAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
                 groupSpinner.setAdapter(groupAdapter);
+                loaded = true;
             }
 
             @Override
@@ -278,8 +281,8 @@ public class StatisticsGraphs extends AppCompatActivity {
             mDatabaseAllExpenseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    for(int i = 2; i < groupMap.size(); i++){             //parto da perche i primi 2 campi dell'array sono quello di default e "tutti i gruppi"
-                        String groupIdSelected = groupMap.get(i);
+                    for(int i = 2; i < groupMap.size()-1; i++){             //parto da perche i primi 2 campi dell'array sono quello di default e "tutti i gruppi"
+                        String groupIdSelected = groupMap.get(i);           //il -1 è per il valore nella mappa di errore con indice -1
                         for(DataSnapshot expenseSnapshot : dataSnapshot.child(groupIdSelected).child("expenses").getChildren()){
                             ExpenseForUser expenseForUser = expenseSnapshot.getValue(ExpenseForUser.class);
                             String yearStr = String.valueOf(expenseForUser.getYear());
@@ -454,7 +457,7 @@ public class StatisticsGraphs extends AppCompatActivity {
     @Override
     public void onStart(){
         super.onStart();
-        if(mValueEventListener!=null)
+        if(mValueEventListener!=null && !loaded)
             mDatabaseGroupReference.addListenerForSingleValueEvent(mValueEventListener);
     }
 

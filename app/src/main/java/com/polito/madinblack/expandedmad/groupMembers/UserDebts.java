@@ -32,17 +32,6 @@ public class UserDebts extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.personal_debts);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-
-        // Show the Up button in the action bar.
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(name + " " + surname + " " + getString(R.string.balance));
-        }
-
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
@@ -61,7 +50,17 @@ public class UserDebts extends AppCompatActivity {
             groupId = extras.getString("GROUP_ID");
             firebaseId = extras.getString("FIREBASE_ID");
 
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            toolbar.setTitle(name + " " + surname);
+            toolbar.setSubtitle(getString(R.string.balance));
+            setSupportActionBar(toolbar);
 
+            // Show the Up button in the action bar.
+            ActionBar actionBar = getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setDisplayHomeAsUpEnabled(true);
+                //actionBar.setTitle(name + " " + surname + " " + getString(R.string.balance));
+            }
 
             mDatabaseBalancesReference = FirebaseDatabase.getInstance().getReference().child("groups/"+groupId+"/users/"+firebaseId+"/balances");
 
