@@ -51,7 +51,7 @@
         <item name="custom_policy">Custom</item>
     </string-array>
     <string-array name="years">
-        <item name="select_year">Select year</item>
+        <item name="select_year">Select Year</item>
         <item name="all_years">All Years</item>
         <item name="2017">2017</item>
         <item name="2018">2018</item>
