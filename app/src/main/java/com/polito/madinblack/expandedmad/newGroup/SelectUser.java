@@ -9,7 +9,8 @@ import java.io.Serializable;
 
 //used to save the contant values each time I retrive a contact
 public class SelectUser implements Serializable{
-    String name;
+    private String name;
+    private String surname;
 
     public Bitmap getThumb() {
         //return thumb;
@@ -27,7 +28,7 @@ public class SelectUser implements Serializable{
     }
 
     //Bitmap thumb;
-    byte[] byteImg = null;
+    private byte[] byteImg = null;
 
     public String getPhone() {
         return phone;
@@ -37,7 +38,7 @@ public class SelectUser implements Serializable{
         this.phone = phone;
     }
 
-    String phone;
+    private String phone;
 
     public Boolean getCheckedBox() {
         return checkedBox;
@@ -47,7 +48,7 @@ public class SelectUser implements Serializable{
         this.checkedBox = checkedBox;
     }
 
-    Boolean checkedBox = false;
+    private Boolean checkedBox = false;
 
     public String getName() {
         return name;
@@ -57,7 +58,15 @@ public class SelectUser implements Serializable{
         this.name = name;
     }
 
-    String email;
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    private String email;
 
     public String getEmail() {
         return email;
@@ -67,7 +76,7 @@ public class SelectUser implements Serializable{
         this.email = email;
     }
 
-    String firebaseId;
+    private String firebaseId;
 
     public String getFirebaseId() { return firebaseId;  }
 

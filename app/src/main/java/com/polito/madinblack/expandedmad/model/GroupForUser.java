@@ -12,6 +12,7 @@ public class GroupForUser {
     private String  id;
     private Long    size;
     private Long    newExpenses;
+    private Long    newMessages;
     private Long    contestedExpensesCounter;
     private Long    timestamp;
 
@@ -24,6 +25,7 @@ public class GroupForUser {
         this.size        = group.getSize();
         this.id          = group.getId();
         this.newExpenses = 0L;
+        this.newMessages = 0L;
         this.contestedExpensesCounter = 0L;
 
     }
@@ -33,6 +35,7 @@ public class GroupForUser {
         this.id = id;
         this.size = size;
         this.newExpenses = newExpenses;
+        this.newMessages = 0L;
         this.contestedExpensesCounter = 0L;
     }
 
@@ -75,5 +78,11 @@ public class GroupForUser {
         this.contestedExpensesCounter = contestedExpensesCounter;
     }
 
+    public Long getNewMessages() {
+        return newMessages;
+    }
 
+    public void setNewMessages(Long newMessages) {
+        this.newMessages = newMessages;
+    }
 }

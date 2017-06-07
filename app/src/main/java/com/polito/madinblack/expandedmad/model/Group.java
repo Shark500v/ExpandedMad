@@ -76,7 +76,31 @@ public class Group {
 
     public void setCreatedByPhoneNumber(String createdByPhoneNumber) {
         this.createdByPhoneNumber = createdByPhoneNumber;
+
     }
+
+    public String getName(){ return name; }
+
+    public String getId(){
+        return id;
+    }
+
+    public Long   getSize(){ return size; }
+
+    public String getUrlImage() { return urlImage; }
+
+    public Map<String, UserForGroup> getUsers() { return users; }
+
+    public void   setName(String name) { this.name = name; }
+
+    public void   setId(String id) { this.id = id; }
+
+    public void   setSize(Long size) { this.size = size; }
+
+    public void   setUrlImage(String urlImage) {  this.urlImage = urlImage; }
+
+
+
 
     /*return of group id*/
     public static String writeNewGroup(DatabaseReference mDatabaseRootReference, String name, List<UserForGroup> usersForGroup, String userName, String userPhoneNumber) {
@@ -105,6 +129,7 @@ public class Group {
 
     /*to add single member to a group created yet*/
     public static void writeUserToGroup(final DatabaseReference mDatabaseRootReference, final String groupId, final String groupName, final String userFirebaseId, final String userPhoneNumber, final String userName, final String userSurname){
+
 
 
         mDatabaseRootReference.child("groups/"+groupId+"/users").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -215,24 +240,81 @@ public class Group {
     }
 
 
+    public static void writeUsersToGroup(final DatabaseReference mDatabaseRootReference, final String groupId, final String groupName, final List<UserForGroup> usersForGroup) {
 
-    public String getName(){ return name; }
+        mDatabaseRootReference.child("groups").child(groupId).child("users").runTransaction(new Transaction.Handler() {
+            @Override
+            public Transaction.Result doTransaction(MutableData dataSnapshot) {
+                if (dataSnapshot!=null) {
+                    Long timestamp = -1*System.currentTimeMillis();
+                    Long groupSize = 0L;
+                    for (MutableData singleUser : dataSnapshot.getChildren()) {
+                        groupSize++;
+                        UserForGroup userForGroup = singleUser.getValue(UserForGroup.class);
+                        for (UserForGroup userForGroupToAdd : usersForGroup) {
+                            userForGroupToAdd.connect(userForGroup);
+                            Balance balance = new Balance(userForGroupToAdd.getPhoneNumber(), userForGroupToAdd.getName(), userForGroupToAdd.getSurname(), 0D, MyApplication.getCurrencyISOFavorite());
+                            mDatabaseRootReference.child("groups").child(groupId).child("users").child(userForGroup.getFirebaseId()).child("balances").child(userForGroupToAdd.getFirebaseId()).setValue(balance);
+                        }
+                        mDatabaseRootReference.child("users").child(userForGroup.getPhoneNumber()).child(userForGroup.getFirebaseId()).child("groups").child(groupId).child("size").runTransaction(new Transaction.Handler() {
+                            @Override
+                            public Transaction.Result doTransaction(MutableData mutableData) {
+                                if (mutableData.getValue(Long.class) != null) {
+                                    mutableData.setValue(mutableData.getValue(Long.class) + usersForGroup.size());
+                                }
+                                return Transaction.success(mutableData);
+                            }
 
-    public String getId(){
-        return id;
+                            @Override
+                            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+
+                            }
+                        });
+
+
+                    }
+
+                    for (UserForGroup userForGroupToAdd : usersForGroup) {
+                        dataSnapshot.child(userForGroupToAdd.getFirebaseId()).setValue(userForGroupToAdd);
+
+                        GroupForUser groupForUser = new GroupForUser(groupName, groupId, groupSize + usersForGroup.size(), 0L);
+                        groupForUser.setTimestamp(timestamp);
+                        mDatabaseRootReference.child("users").child(userForGroupToAdd.getPhoneNumber()).child(userForGroupToAdd.getFirebaseId()).child("groups").child(groupId).setValue(groupForUser);
+
+                        /*update history*/
+                        HistoryInfo historyInfo = new HistoryInfo(userForGroupToAdd.getName()+" "+userForGroupToAdd.getSurname(), null, 2L, 0D, null, null);
+                        mDatabaseRootReference.child("history/"+groupId).push().setValue(historyInfo);
+                    }
+
+                    mDatabaseRootReference.child("groups").child(groupId).child("size").runTransaction(new Transaction.Handler() {
+                        @Override
+                        public Transaction.Result doTransaction(MutableData mutableData1) {
+                            if(mutableData1.getValue(Long.class)!=null)
+                                mutableData1.setValue(mutableData1.getValue(Long.class) + usersForGroup.size());
+                            return Transaction.success(mutableData1);
+                        }
+
+                        @Override
+                        public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+
+                        }
+                    });
+
+
+                }
+                return Transaction.success(dataSnapshot);
+
+            }
+
+            @Override
+            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+
+            }
+        });
+
     }
 
-    public Long   getSize(){ return size; }
 
-    public String getUrlImage() { return urlImage; }
 
-    public Map<String, UserForGroup> getUsers() { return users; }
 
-    public void   setName(String name) { this.name = name; }
-
-    public void   setId(String id) { this.id = id; }
-
-    public void   setSize(Long size) { this.size = size; }
-
-    public void   setUrlImage(String urlImage) {  this.urlImage = urlImage; }
 }

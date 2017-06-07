@@ -357,8 +357,8 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
                     }
                 }
             };
-            if(ref!=null)
-                ref.addValueEventListener(eventListener);
+            if(mQueryReference!=null)
+                mQueryReference.addValueEventListener(eventListener);
             // [END child_event_listener_recycler]
 
             // Store reference to listener so it can be removed on app stop
@@ -382,8 +382,9 @@ public class GroupListActivity extends AppCompatActivity implements NavigationVi
             }
             //holder.mImage.setImageBitmap(downlaoadGroupImage(mValues.get(position).getId()));
             holder.mContentView.setText(mValues.get(position).getName());
-            if (mValues.get(position).getNewExpenses() != 0) {
-                holder.mNotification.setText(mValues.get(position).getNewExpenses().toString());
+            if (mValues.get(position).getNewExpenses()+mValues.get(position).getNewMessages() != 0) {
+                Long totValue = mValues.get(position).getNewExpenses()+mValues.get(position).getNewMessages();
+                holder.mNotification.setText(totValue.toString());
                 holder.mNotification.setVisibility(View.VISIBLE);
             }
             if(holder.mItem.getContestedExpensesCounter()>0)

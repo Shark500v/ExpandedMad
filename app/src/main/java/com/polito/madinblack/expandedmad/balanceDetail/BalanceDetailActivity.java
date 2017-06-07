@@ -161,6 +161,18 @@ public class BalanceDetailActivity extends BaseActivity {
 
                     }
 
+                    totValue += balanceHistory.getValue();
+                    if(totValue>0) {
+                        mTotValue.setText(String.format(Locale.getDefault(), "+%.2f", Currency.convertCurrency(totValue, balanceCurrencyISO, MyApplication.getCurrencyISOFavorite()))+ " " + Currency.getSymbol(MyApplication.getCurrencyISOFavorite()));
+                        mTotValue.setTextColor(Color.parseColor("#00c200"));
+                    }
+                    else if(totValue<0){
+                        mTotValue.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(totValue, balanceCurrencyISO, MyApplication.getCurrencyISOFavorite()))+ " " + Currency.getSymbol(MyApplication.getCurrencyISOFavorite()));
+                        mTotValue.setTextColor(Color.parseColor("#ff0000"));
+                    }else{
+                        mTotValue.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(totValue, balanceCurrencyISO, MyApplication.getCurrencyISOFavorite()))+ " " + Currency.getSymbol(MyApplication.getCurrencyISOFavorite()));
+                        mTotValue.setTextColor(Color.BLACK);
+                    }
 
                     mValuesIds.add(0, dataSnapshot.getKey());
                     mValues.add(0, balanceHistory);
@@ -252,20 +264,6 @@ public class BalanceDetailActivity extends BaseActivity {
         @Override
         public void onBindViewHolder(BalanceAdapter.BalanceViewHolder balanceViewHolder, int i) {
             BalanceHistory balanceHistory = mValues.get(i);
-            totValue += balanceHistory.getValue();
-
-            if(totValue>0) {
-                mTotValue.setText(String.format(Locale.getDefault(), "+%.2f", Currency.convertCurrency(totValue, balanceCurrencyISO, MyApplication.getCurrencyISOFavorite()))+ " " + Currency.getSymbol(MyApplication.getCurrencyISOFavorite()));
-                mTotValue.setTextColor(Color.parseColor("#00c200"));
-            }
-            else if(totValue<0){
-                mTotValue.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(totValue, balanceCurrencyISO, MyApplication.getCurrencyISOFavorite()))+ " " + Currency.getSymbol(MyApplication.getCurrencyISOFavorite()));
-                mTotValue.setTextColor(Color.parseColor("#ff0000"));
-            }else{
-                mTotValue.setText(String.format(Locale.getDefault(), "%.2f", Currency.convertCurrency(totValue, balanceCurrencyISO, MyApplication.getCurrencyISOFavorite()))+ " " + Currency.getSymbol(MyApplication.getCurrencyISOFavorite()));
-                mTotValue.setTextColor(Color.BLACK);
-            }
-
 
             String textType;
             balanceViewHolder.mExpenseName.setText(balanceHistory.getExpenseName());
