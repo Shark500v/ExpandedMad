@@ -108,8 +108,7 @@ public class SelectContact extends AppCompatActivity {
                             if(!dataSnapshot.exists()){
                                 //groupM.remove(selectUser);
                                 invite.add(selectUserToAdd.get(key));
-                            }
-                            else{
+                            } else{
                                 for(DataSnapshot dataSnapshotChild : dataSnapshot.getChildren()){
                                     //int index = groupM.indexOf(selectUser);
                                     String userFirebaseId = dataSnapshotChild.getKey();
