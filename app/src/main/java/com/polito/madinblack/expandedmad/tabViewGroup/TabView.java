@@ -145,7 +145,7 @@ public class TabView extends AppCompatActivity {
         valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(mViewPager.getCurrentItem()==0){
+                if(mViewPager.getCurrentItem()==0 || mViewPager.getCurrentItem()==2){
                     if(dataSnapshot.exists())
                         mSectionsPagerAdapter.updateTitleData(dataSnapshot.getValue(Long.class).intValue(), -1);
                     else
@@ -182,7 +182,7 @@ public class TabView extends AppCompatActivity {
         valueEventListener2 = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(mViewPager.getCurrentItem()==0){
+                if(mViewPager.getCurrentItem()==0 || mViewPager.getCurrentItem()==1){
                     if(dataSnapshot.exists())
                         mSectionsPagerAdapter.updateTitleData(-1, dataSnapshot.getValue(Long.class).intValue());
                     else
