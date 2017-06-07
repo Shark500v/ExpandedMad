@@ -1,6 +1,8 @@
 package com.polito.madinblack.expandedmad.model;
 
 
+import android.util.Log;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -316,6 +318,7 @@ public class Expense {
 
                     @Override
                     public Transaction.Result doTransaction(MutableData currentData) {
+
                         if (currentData.getValue() != null) {
                             Balance balance = currentData.getValue(Balance.class);
                             for(MutableData currentDataChild : currentData.getChildren()){
