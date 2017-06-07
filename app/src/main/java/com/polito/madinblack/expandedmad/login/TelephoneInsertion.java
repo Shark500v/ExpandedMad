@@ -31,10 +31,13 @@ import com.polito.madinblack.expandedmad.model.CostUtil;
 import com.polito.madinblack.expandedmad.model.Group;
 import com.polito.madinblack.expandedmad.model.MyApplication;
 import com.polito.madinblack.expandedmad.model.User;
+import com.polito.madinblack.expandedmad.model.UserForGroup;
 import com.polito.madinblack.expandedmad.notification.Config;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -257,7 +260,9 @@ public class TelephoneInsertion extends AppCompatActivity{
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             if(dataSnapshot.exists()){
                                 String groupName = dataSnapshot.child("name").getValue(String.class);
-                                Group.writeUserToGroup(mDatabaseRoot, mInvitationCode, groupName, MyApplication.getFirebaseId(), MyApplication.getUserPhoneNumber(), MyApplication.getUserName(), MyApplication.getUserSurname());
+                                List<UserForGroup> userForGroupList = new ArrayList<>();
+                                userForGroupList.add(new UserForGroup(MyApplication.getUserPhoneNumber(), MyApplication.getFirebaseId(), MyApplication.getUserName(), MyApplication.getUserSurname()));
+                                Group.writeUsersToGroup(mDatabaseRoot, mInvitationCode, groupName, userForGroupList);
                                 Intent intent = new Intent(TelephoneInsertion.this, GroupListActivity.class);
                                 startActivity(intent);
                                 finish();
