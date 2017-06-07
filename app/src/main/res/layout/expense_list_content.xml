@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/text_margin"
         android:orientation="vertical"
+        android:layout_alignParentLeft="true"
         android:layout_centerVertical="true">
 
         <TextView
@@ -19,6 +20,7 @@
             android:textAppearance="?attr/textAppearanceListItem"
             android:textSize="20sp"
             android:textColor="@color/colorPrimary"
+            android:maxLines="1"
             tools:text="Spesa 1"
             />
 
@@ -41,6 +43,7 @@
         android:textSize="20sp"
         android:textAppearance="?attr/textAppearanceListItem"
         tools:text="+30"
+        android:layout_marginLeft="16dp"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"/>
 
