@@ -476,7 +476,7 @@ public class TabView extends AppCompatActivity {
                     for(DataSnapshot snapshot: dataSnapshot.getChildren()){
                         UserForGroup user = snapshot.getValue(UserForGroup.class);
                         if(!user.getFirebaseId().equals(MyApplication.getFirebaseId())){
-                            FirebaseDatabase.getInstance().getReference().child("users/"+user.getPhoneNumber()+"/"+user.getFirebaseId()+"/groups/"+groupIndex+"/newExpenses").runTransaction(new Transaction.Handler() {
+                            FirebaseDatabase.getInstance().getReference().child("users/"+user.getPhoneNumber()+"/"+user.getFirebaseId()+"/groups/"+groupIndex+"/newMessages").runTransaction(new Transaction.Handler() {
 
                                 @Override
                                 public Transaction.Result doTransaction(MutableData currentData) {
