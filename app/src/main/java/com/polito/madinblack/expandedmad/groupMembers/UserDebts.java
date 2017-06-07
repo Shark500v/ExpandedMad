@@ -72,7 +72,7 @@ public class UserDebts extends AppCompatActivity {
     public void onStart(){
         super.onStart();
 
-        adapter = new RecyclerViewAdapterUsers(this, mDatabaseBalancesReference, groupId);
+        adapter = new RecyclerViewAdapterUsers(this, mDatabaseBalancesReference, groupId, false);
 
         recyclerView = (RecyclerView) findViewById(R.id.item_list);
         recyclerView.setAdapter(adapter);

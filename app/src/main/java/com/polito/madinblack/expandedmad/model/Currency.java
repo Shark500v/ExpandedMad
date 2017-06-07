@@ -77,10 +77,9 @@ public class Currency {
         if(currencySymbolInt.containsKey(currencySource) && currencySymbolInt.containsKey(currencyDest)){
             double resultToRound = quantity * association[currencySymbolInt.get(currencySource)][currencySymbolInt.get(currencyDest)];
             return new BigDecimal(resultToRound).setScale(2, RoundingMode.HALF_UP).doubleValue();
-        }
-        else
+        } else {
             return -1;
-
+        }
     }
 
     public static String getSymbol(CurrencyISO ISOcode){
