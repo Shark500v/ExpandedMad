@@ -269,7 +269,7 @@ public class Expense {
                     toUpdate.put(payment.getUserPhoneNumber()+expenseKey, payment.getDebit());
 
 
-        for(final Payment payment : paymentList){
+        for(Payment payment : paymentList){
 
             myPaymentRef = myExpenseRef.child("payments").push();
             paymentKey = myPaymentRef.getKey();

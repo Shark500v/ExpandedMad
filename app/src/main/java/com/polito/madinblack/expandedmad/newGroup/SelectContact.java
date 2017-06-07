@@ -22,7 +22,9 @@ import com.polito.madinblack.expandedmad.R;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class SelectContact extends AppCompatActivity {
@@ -31,7 +33,8 @@ public class SelectContact extends AppCompatActivity {
     private List<SelectUser> invite = new ArrayList<>();    //used to invite new membres to join the app
     private DatabaseReference mDatabaseReference;
     private AtomicInteger counter;
-    private ContactsFragment fragment;                              //used to show the contact list
+    private ContactsFragment fragment; //used to show the contact list
+    private Map<String, SelectUser> selectUserToAdd = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,20 +93,31 @@ public class SelectContact extends AppCompatActivity {
                 counter = new AtomicInteger(groupM.size());
                 invite.clear();
 
-                for(final SelectUser selectUser : groupM){
+                selectUserToAdd.clear();
+
+                for(SelectUser selectUser : groupM){
+                    selectUserToAdd.put(selectUser.getPhone(), selectUser);
+                }
+
+                for(SelectUser selectUser : groupM){
 
                     mDatabaseReference.child("users").child(selectUser.getPhone()).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
+                            String key = dataSnapshot.getKey();
                             if(!dataSnapshot.exists()){
                                 //groupM.remove(selectUser);
-                                invite.add(selectUser);
+                                invite.add(selectUserToAdd.get(key));
                             }
                             else{
                                 for(DataSnapshot dataSnapshotChild : dataSnapshot.getChildren()){
                                     //int index = groupM.indexOf(selectUser);
                                     String userFirebaseId = dataSnapshotChild.getKey();
-                                    selectUser.setFirebaseId(userFirebaseId);
+                                    String name = dataSnapshotChild.child("name").getValue(String.class);
+                                    String surname = dataSnapshotChild.child("surname").getValue(String.class);
+                                    selectUserToAdd.get(key).setFirebaseId(userFirebaseId);
+                                    selectUserToAdd.get(key).setName(name);
+                                    selectUserToAdd.get(key).setSurname(surname);
                                     //groupM.set(index, selectUser);
                                 }
                             }

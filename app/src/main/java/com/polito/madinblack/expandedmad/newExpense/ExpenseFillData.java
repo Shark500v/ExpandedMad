@@ -631,7 +631,7 @@ public class ExpenseFillData extends AppCompatActivity {
         if(index == 0){
             inputLayoutTag.setError(getString(R.string.err_msg_tag));
             requestFocus(tag_spinner);
-            scrollView.scrollTo(0,300);
+            scrollView.scrollTo(0,350);
             return false;
         } else {
             inputLayoutTag.setErrorEnabled(false);

@@ -40,16 +40,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private Query dataref;
     private Context mContext;
     private ChildEventListener mEventListener;
-    private int childMoved;
     private int cntContested;
+    private RecyclerView recyclerView;
 
     private static final String TAG = "MyBalanceActivity";
 
-    public RecyclerViewAdapter(Context ct, Query dr) {
+    public RecyclerViewAdapter(Context ct, Query dr, final RecyclerView recyclerView) {
         dataref = dr;
         mContext = ct;
-        childMoved = 0;
         cntContested = 0;
+        this.recyclerView = recyclerView;
 
         // Create child event listener
         // [START child_event_listener_recycler]
@@ -89,6 +89,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     mValuesIds.add(cntContested, dataSnapshotKey);
                     mValues.add(cntContested, expenseForUser);
                     notifyItemInserted(cntContested);
+                    recyclerView.scrollToPosition(cntContested);
                     Log.e(TAG, "Spesa aggiunta in posizione : " + expenseForUser.getName() + " " + cntContested);
                 }else {
                     mValuesIds.add(cntContested, dataSnapshotKey);
@@ -121,6 +122,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                     // Update the RecyclerView
                     notifyItemChanged(infoIndex);
+                    recyclerView.scrollToPosition(infoIndex);
 
                 } else {
                     Log.w(TAG, "onChildChanged:unknown_child:" + infoKey);
