@@ -462,9 +462,6 @@ public class TabView extends AppCompatActivity {
                 }
             };
 
-
-
-
         }
 
         @Override
@@ -575,9 +572,9 @@ public class TabView extends AppCompatActivity {
     }
 
     //questa classe gestisce le singole pagine del tab view dentro le quali instazio fragment diversi
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    private class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        public SectionsPagerAdapter(FragmentManager fm) {
+        private SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
