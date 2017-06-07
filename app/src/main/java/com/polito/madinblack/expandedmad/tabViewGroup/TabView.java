@@ -182,7 +182,7 @@ public class TabView extends AppCompatActivity {
         valueEventListener2 = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(mViewPager.getCurrentItem()==1){
+                if(mViewPager.getCurrentItem()==0){
                     if(dataSnapshot.exists())
                         mSectionsPagerAdapter.updateTitleData(-1, dataSnapshot.getValue(Long.class).intValue());
                     else
@@ -495,6 +495,7 @@ public class TabView extends AppCompatActivity {
                                                        boolean committed, DataSnapshot currentData) {
                                     //This method will be called once with the results of the transaction.
                                     //Update remove the user from the group
+
 
                                 }
                             });
