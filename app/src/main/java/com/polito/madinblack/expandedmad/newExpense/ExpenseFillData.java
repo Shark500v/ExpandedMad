@@ -292,9 +292,13 @@ public class ExpenseFillData extends AppCompatActivity {
             }
 
             /*added to set Paid value*/
-            for(Payment payment : mValues){
+            for(int i =0; i<mValues.size(); i++){
+                Payment payment = mValues.get(i);
                 if(payment.getUserPhoneNumber().equals(MyApplication.getUserPhoneNumber())){
                     payment.setPaid(roundedAmount);
+                }
+                else if(payment.getToPay() == 0 ){
+                    mValues.remove(i);
                 }
             }
 
